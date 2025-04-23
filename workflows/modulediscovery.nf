@@ -15,7 +15,6 @@ include { VISUALIZEMODULES         } from '../modules/local/visualizemodules/mai
 include { VISUALIZEMODULESDRUGS    } from '../modules/local/visualizemodulesdrugs/main'
 include { GT2TSV as GT2TSV_Modules } from '../modules/local/gt2tsv/main'
 include { GT2TSV as GT2TSV_Network } from '../modules/local/gt2tsv/main'
-include { ADDHEADER                } from '../modules/local/addheader/main'
 include { DIGEST                   } from '../modules/local/digest/main'
 include { MODULEOVERLAP            } from '../modules/local/moduleoverlap/main'
 include { DRUGPREDICTIONS          } from '../modules/local/drugpredictions/main'
@@ -126,17 +125,11 @@ workflow MODULEDISCOVERY {
     ch_versions = Channel.empty()
     ch_multiqc_files = Channel.empty()
 
-    // Brach channel, so, GRAPHTOOLPARSER runs only for supported network formats, which are not already .gt files
-    ch_network_type = ch_network.branch {
-        gt: it[1].extension == "gt"
-        parse: true
-    }
-
-    // Run network parser for non .gt networks, supported by graph-tool
-    GRAPHTOOLPARSER(ch_network_type.parse, 'gt')
+    // Run network parser for  networks, supported by graph-tool
+    GRAPHTOOLPARSER(ch_network, 'gt')
     ch_versions = ch_versions.mix(GRAPHTOOLPARSER.out.versions)
     ch_multiqc_files = ch_multiqc_files.mix(GRAPHTOOLPARSER.out.multiqc)
-    ch_network_gt = GRAPHTOOLPARSER.out.network.mix(ch_network_type.gt)
+    ch_network_gt = GRAPHTOOLPARSER.out.network
 
 
     // Check input
@@ -154,6 +147,17 @@ workflow MODULEDISCOVERY {
         .collectFile(name: 'input_seeds_mqc.tsv', keepHeader: true)
     ch_multiqc_files = ch_multiqc_files.mix(ch_seeds_multiqc)
 
+    // Add seeds modules to module channel
+    // channel: [ val(meta[id,module_id,amim,seeds_id,network_id]), path(module)]
+    ch_modules = INPUTCHECK.out.seeds_module
+        .map{meta, path ->
+            def dup = meta.clone()
+            dup.amim = "no_tool"
+            dup.id = meta.id + "." + dup.amim
+            dup.module_id = dup.id
+            [ dup, path ]
+        }
+
 
     /*
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -163,7 +167,7 @@ workflow MODULEDISCOVERY {
 
     // Network expansion tools
     NETWORKEXPANSION(ch_seeds, ch_network_gt)
-    ch_modules = NETWORKEXPANSION.out.modules // channel: [ val(meta[id,module_id,amim,seeds_id,network_id]), path(module)]
+    ch_modules = ch_modules.mix(NETWORKEXPANSION.out.modules) // channel: [ val(meta[id,module_id,amim,seeds_id,network_id]), path(module)]
     ch_versions = ch_versions.mix(NETWORKEXPANSION.out.versions)
 
 
@@ -199,8 +203,13 @@ workflow MODULEDISCOVERY {
 
     // Annotation and BIOPAX conversion
     if(!params.skip_annotation){
-        GT_BIOPAX(ch_modules, id_space, validate_online)
-        ch_versions = ch_versions.mix(GT_BIOPAX.out.versions)
+        if( params.id_space != "symbol" & params.id_space != "ensembl" ){
+            GT_BIOPAX(ch_modules, id_space, validate_online)
+            ch_versions = ch_versions.mix(GT_BIOPAX.out.versions)
+        } else {
+            log.warn("Skipping annotation and BioPAX conversion (currently only uniprot or entrez IDs)")
+        }
+
     }
 
 
@@ -214,11 +223,9 @@ workflow MODULEDISCOVERY {
 
         GT2TSV_Modules(ch_modules)
         GT2TSV_Network(ch_network_gt)
-        ADDHEADER(ch_seeds, "gene_id")
 
         // channel: [ val(meta), path(nodes) ]
         ch_nodes = GT2TSV_Modules.out
-        ch_nodes = ch_nodes.mix(ADDHEADER.out)
 
         // Module overlap
         ch_overlap_input = ch_nodes
@@ -281,7 +288,11 @@ workflow MODULEDISCOVERY {
 
         // Seed permutation based evaluation
         if(params.run_seed_permutation){
-            GT_SEEDPERMUTATION(ch_modules, ch_seeds, ch_network_gt)
+            GT_SEEDPERMUTATION(
+                ch_modules.filter{ meta, path -> meta.amim != "no_tool" }, // Filter out no_tool modules
+                ch_seeds,
+                ch_network_gt
+            )
             ch_versions = ch_versions.mix(GT_SEEDPERMUTATION.out.versions)
             ch_multiqc_files = ch_multiqc_files
                 .mix(GT_SEEDPERMUTATION.out.multiqc_summary)
@@ -290,7 +301,12 @@ workflow MODULEDISCOVERY {
 
         // Network permutation based evaluation
         if(params.run_network_permutation){
-            GT_NETWORKPERMUTATION(ch_modules, ch_seeds, ch_network_gt, ch_permuted_networks)
+            GT_NETWORKPERMUTATION(
+                ch_modules.filter{ meta, path -> meta.amim != "no_tool" }, // Filter out no_tool modules
+                ch_seeds,
+                ch_network_gt,
+                ch_permuted_networks
+            )
             ch_versions = ch_versions.mix(GT_NETWORKPERMUTATION.out.versions)
             ch_multiqc_files = ch_multiqc_files
                 .mix(GT_NETWORKPERMUTATION.out.multiqc_summary)
@@ -355,7 +371,7 @@ workflow MODULEDISCOVERY {
 
     // Drug prioritization - Proximity
     if(params.run_proximity){
-        GT_PROXIMITY(ch_network, SAVEMODULES.out.nodes_tsv, ch_shortest_paths, proximity_dt)
+        GT_PROXIMITY(ch_network_gt, SAVEMODULES.out.nodes_tsv, ch_shortest_paths, proximity_dt)
         ch_versions = ch_versions.mix(GT_PROXIMITY.out.versions)
     }
 
@@ -364,7 +380,7 @@ workflow MODULEDISCOVERY {
     softwareVersionsToYAML(ch_versions)
         .collectFile(
             storeDir: "${params.outdir}/pipeline_info",
-            name:  ''  + 'pipeline_software_' +  'mqc_'  + 'versions.yml',
+            name:  'modulediscovery_software_'  + 'mqc_'  + 'versions.yml',
             sort: true,
             newLine: true
         ).set { ch_collated_versions }
