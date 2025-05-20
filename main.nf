@@ -1,9 +1,11 @@
 #!/usr/bin/env nextflow
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    REPO4EU/modulediscovery
+    nf-core/diseasemodulediscovery
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    Github : https://github.com/REPO4EU/modulediscovery
+    Github : https://github.com/nf-core/diseasemodulediscovery
+    Website: https://nf-co.re/diseasemodulediscovery
+    Slack  : https://nfcore.slack.com/channels/diseasemodulediscovery
 ----------------------------------------------------------------------------------------
 */
 
@@ -13,9 +15,9 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { MODULEDISCOVERY  } from './workflows/modulediscovery'
-include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_modulediscovery_pipeline'
-include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_modulediscovery_pipeline'
+include { DISEASEMODULEDISCOVERY  } from './workflows/diseasemodulediscovery'
+include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_diseasemodulediscovery_pipeline'
+include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_diseasemodulediscovery_pipeline'
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     NAMED WORKFLOWS FOR PIPELINE
@@ -25,7 +27,7 @@ include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_modu
 //
 // WORKFLOW: Run main analysis pipeline depending on type of input
 //
-workflow REPO4EU_MODULEDISCOVERY {
+workflow NFCORE_DISEASEMODULEDISCOVERY {
 
     take:
     ch_seeds                // channel: [ val(meta[id,seeds_id,network_id]), path(seeds) ]
@@ -41,20 +43,21 @@ workflow REPO4EU_MODULEDISCOVERY {
     // WORKFLOW: Run pipeline
     //
 
-    MODULEDISCOVERY (
+    DISEASEMODULEDISCOVERY (
         ch_seeds,
         ch_network,
         ch_shortest_paths,
         ch_permuted_networks
     )
-    ch_versions = ch_versions.mix(MODULEDISCOVERY.out.versions)
+    ch_versions = ch_versions.mix(DISEASEMODULEDISCOVERY.out.versions)
 
     emit:
-    seeds_empty_status              = MODULEDISCOVERY.out.seeds_empty_status             // channel: [id, boolean]
-    module_empty_status             = MODULEDISCOVERY.out.module_empty_status           // channel: [id, boolean]
-    visualization_skipped_status    = MODULEDISCOVERY.out.visualization_skipped_status  // channel: [id, boolean]
-    drugstone_skipped_status        = MODULEDISCOVERY.out.drugstone_skipped_status      // channel: [id, boolean]
-    multiqc_report                  = MODULEDISCOVERY.out.multiqc_report                // channel: /path/to/multiqc_report.html
+    multiqc_report                  = DISEASEMODULEDISCOVERY.out.multiqc_report // channel: /path/to/multiqc_report.html
+    seeds_empty_status              = DISEASEMODULEDISCOVERY.out.seeds_empty_status             // channel: [id, boolean]
+    module_empty_status             = DISEASEMODULEDISCOVERY.out.module_empty_status           // channel: [id, boolean]
+    visualization_skipped_status    = DISEASEMODULEDISCOVERY.out.visualization_skipped_status  // channel: [id, boolean]
+    drugstone_skipped_status        = DISEASEMODULEDISCOVERY.out.drugstone_skipped_status      // channel: [id, boolean]
+    multiqc_report                  = DISEASEMODULEDISCOVERY.out.multiqc_report                // channel: /path/to/multiqc_report.html
     versions                        = ch_versions                                       // channel: [version1, version2, ...]
 
 }
@@ -87,7 +90,7 @@ workflow {
     //
     // WORKFLOW: Run main workflow
     //
-    REPO4EU_MODULEDISCOVERY (PIPELINE_INITIALISATION.out.seeds, PIPELINE_INITIALISATION.out.network, PIPELINE_INITIALISATION.out.shortest_paths, PIPELINE_INITIALISATION.out.permuted_networks)
+    NFCORE_DISEASEMODULEDISCOVERY (PIPELINE_INITIALISATION.out.seeds, PIPELINE_INITIALISATION.out.network, PIPELINE_INITIALISATION.out.shortest_paths, PIPELINE_INITIALISATION.out.permuted_networks)
 
     //
     // SUBWORKFLOW: Run completion tasks
@@ -99,11 +102,11 @@ workflow {
         params.outdir,
         params.monochrome_logs,
         params.hook_url,
-        REPO4EU_MODULEDISCOVERY.out.multiqc_report,
-        REPO4EU_MODULEDISCOVERY.out.seeds_empty_status,
-        REPO4EU_MODULEDISCOVERY.out.module_empty_status,
-        REPO4EU_MODULEDISCOVERY.out.visualization_skipped_status,
-        REPO4EU_MODULEDISCOVERY.out.drugstone_skipped_status
+        NFCORE_DISEASEMODULEDISCOVERY.out.multiqc_report,
+        NFCORE_DISEASEMODULEDISCOVERY.out.seeds_empty_status,
+        NFCORE_DISEASEMODULEDISCOVERY.out.module_empty_status,
+        NFCORE_DISEASEMODULEDISCOVERY.out.visualization_skipped_status,
+        NFCORE_DISEASEMODULEDISCOVERY.out.drugstone_skipped_status
     )
 }
 

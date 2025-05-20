@@ -29,7 +29,7 @@ include { GT_SEEDPERMUTATION    } from '../subworkflows/local/gt_seedpermutation
 include { GT_NETWORKPERMUTATION } from '../subworkflows/local/gt_networkpermutation/main'
 include { GT_PROXIMITY          } from '../subworkflows/local/gt_proximity/main'
 
-include { readTsvAsListOfMaps   } from '../subworkflows/local/utils_nfcore_modulediscovery_pipeline/main'
+include { readTsvAsListOfMaps   } from '../subworkflows/local/utils_nfcore_diseasemodulediscovery_pipeline/main'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -45,8 +45,8 @@ include { MULTIQC                } from '../modules/nf-core/multiqc/main'
 include { paramsSummaryMap       } from 'plugin/nf-schema'
 include { paramsSummaryMultiqc   } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_modulediscovery_pipeline'
-include { multiqcTsvFromList     } from '../subworkflows/local/utils_nfcore_modulediscovery_pipeline'
+include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_diseasemodulediscovery_pipeline'
+include { multiqcTsvFromList     } from '../subworkflows/local/utils_nfcore_diseasemodulediscovery_pipeline'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -104,7 +104,7 @@ ch_modules: [ val(meta[id,module_id,amim,seeds_id,network_id]), path(module) ]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-workflow MODULEDISCOVERY {
+workflow DISEASEMODULEDISCOVERY {
 
 
     take:
@@ -507,7 +507,7 @@ workflow MODULEDISCOVERY {
     softwareVersionsToYAML(ch_versions)
         .collectFile(
             storeDir: "${params.outdir}/pipeline_info",
-            name:  'modulediscovery_software_'  + 'mqc_'  + 'versions.yml',
+            name: 'nf_core_'  +  'diseasemodulediscovery_software_'  + 'mqc_'  + 'versions.yml',
             sort: true,
             newLine: true
         ).set { ch_collated_versions }
