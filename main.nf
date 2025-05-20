@@ -52,8 +52,14 @@ workflow NFCORE_DISEASEMODULEDISCOVERY {
     ch_versions = ch_versions.mix(DISEASEMODULEDISCOVERY.out.versions)
 
     emit:
-    multiqc_report = DISEASEMODULEDISCOVERY.out.multiqc_report // channel: /path/to/multiqc_report.html
-    versions       = ch_versions                        // channel: [version1, version2, ...]
+    multiqc_report                  = DISEASEMODULEDISCOVERY.out.multiqc_report // channel: /path/to/multiqc_report.html
+    seeds_empty_status              = DISEASEMODULEDISCOVERY.out.seeds_empty_status             // channel: [id, boolean]
+    module_empty_status             = DISEASEMODULEDISCOVERY.out.module_empty_status           // channel: [id, boolean]
+    visualization_skipped_status    = DISEASEMODULEDISCOVERY.out.visualization_skipped_status  // channel: [id, boolean]
+    drugstone_skipped_status        = DISEASEMODULEDISCOVERY.out.drugstone_skipped_status      // channel: [id, boolean]
+    multiqc_report                  = DISEASEMODULEDISCOVERY.out.multiqc_report                // channel: /path/to/multiqc_report.html
+    versions                        = ch_versions                                       // channel: [version1, version2, ...]
+
 }
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -96,7 +102,11 @@ workflow {
         params.outdir,
         params.monochrome_logs,
         params.hook_url,
-        NFCORE_DISEASEMODULEDISCOVERY.out.multiqc_report
+        NFCORE_DISEASEMODULEDISCOVERY.out.multiqc_report,
+        NFCORE_DISEASEMODULEDISCOVERY.out.seeds_empty_status,
+        NFCORE_DISEASEMODULEDISCOVERY.out.module_empty_status,
+        NFCORE_DISEASEMODULEDISCOVERY.out.visualization_skipped_status,
+        NFCORE_DISEASEMODULEDISCOVERY.out.drugstone_skipped_status
     )
 }
 
