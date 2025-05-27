@@ -13,7 +13,10 @@ from biodigest.evaluation.d_utils.plotting_utils import (
 
 def run_analysis(target_set, target_type, network, network_type, output_directory):
     # ==== define required input ====
-    tar_set = pd.read_csv(target_set, header=0, sep="\t", dtype=str)["gene_id"]
+    df = pd.read_csv(target_set, header=0, sep="\t", dtype=str)
+    assert "name" in df.columns
+
+    tar_set = pd.read_csv(target_set, header=0, sep="\t", dtype=str)["name"]
     tar_id_type = target_type
     mode = "subnetwork"
 

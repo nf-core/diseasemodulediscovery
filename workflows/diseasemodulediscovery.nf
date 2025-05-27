@@ -406,9 +406,9 @@ workflow DISEASEMODULEDISCOVERY {
         // Digest
         if(!params.skip_digest){
 
-            ch_digest_input = ch_nodes
-                .map{ meta, path -> [meta.network_id, meta, path]}
-                .combine(ch_network_gt.map{meta, path -> [meta.id, path]}, by: 0)
+            ch_digest_input = ch_nodes_tsv_not_empty
+                .map{ meta, nodes -> [meta.network_id, meta, nodes]}
+                .combine(ch_network_gt.map{meta, network -> [meta.id, network]}, by: 0)
                 .multiMap{key, meta, nodes, network ->
                     nodes: [meta, nodes]
                     network: network
