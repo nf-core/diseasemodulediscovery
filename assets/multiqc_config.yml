@@ -29,13 +29,11 @@ custom_content:
     - overlap
     - jaccard_similarity
     - shared_nodes
+    - jaccard_similarity_no_seeds
+    - shared_nodes_no_seeds
     - digest
     - seed_permutation_jaccard
     - network_permutation_jaccard
-
-table_columns_visible:
-  topology:
-    nodes: false
 
 custom_data:
   topology:
@@ -150,7 +148,7 @@ custom_data:
   drugstone_link:
     id: "drugstone_link"
     section_name: "Drugstone Links"
-    description: "Using the links in this table you can see the modules visualized with the Drugst.One api"
+    description: "Using the links in this table you can see the modules visualized with the Drugst.One API"
     plot_type: "table"
     pconfig:
       id: "download_links_table"
@@ -229,7 +227,7 @@ custom_data:
     parent_id: overlap
     parent_name: "Overlap"
     section_name: "Jaccard similarity"
-    description: "Jaccard similarity between the gene sets of the modules"
+    description: "Jaccard similarity between the module node sets"
     plot_type: "heatmap"
     pconfig:
       title: "Module Jaccard similarity"
@@ -239,9 +237,29 @@ custom_data:
     parent_id: overlap
     parent_name: "Overlap"
     section_name: "Shared nodes"
-    description: "Number of shared nodes between the gene sets of the modules"
+    description: "Number of shared nodes between the modules"
     plot_type: "heatmap"
     pconfig:
       title: "Number of shared nodes"
+      zlab: "Number of shared nodes"
+      square: False
+  jaccard_similarity_no_seeds:
+    parent_id: overlap
+    parent_name: "Overlap"
+    section_name: "Jaccard similarity (without seeds)"
+    description: "Jaccard similarity between the gene sets of the modules, excluding the seeds"
+    plot_type: "heatmap"
+    pconfig:
+      title: "Module Jaccard similarity (without seeds)"
+      zlab: "Jaccard similarity"
+      square: False
+  shared_nodes_no_seeds:
+    parent_id: overlap
+    parent_name: "Overlap"
+    section_name: "Shared nodes (without seeds)"
+    description: "Number of shared nodes between the modules, excluding the seeds"
+    plot_type: "heatmap"
+    pconfig:
+      title: "Number of shared nodes (without seeds)"
       zlab: "Number of shared nodes"
       square: False
