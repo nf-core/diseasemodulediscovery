@@ -8,6 +8,7 @@ process DIGEST {
     val target_type
     path network
     val network_type
+    val mode
 
     output:
     tuple val(meta), path("${meta.id}")            , emit: outdir
@@ -16,7 +17,7 @@ process DIGEST {
 
     script:
     """
-    digest.py --target_file $target_file  --target_type $target_type   --network $network  --network_type $network_type --outdir ${meta.id}
+    digest.py --target_file $target_file  --target_type $target_type   --network $network  --network_type $network_type --mode $mode --outdir ${meta.id}
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         python: \$(python --version | sed 's/Python //g')

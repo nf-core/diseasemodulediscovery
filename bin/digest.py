@@ -11,14 +11,15 @@ from biodigest.evaluation.d_utils.plotting_utils import (
 )
 
 
-def run_analysis(target_set, target_type, network, network_type, output_directory):
+def run_analysis(
+    target_set, target_type, network, network_type, mode, output_directory
+):
     # ==== define required input ====
     df = pd.read_csv(target_set, header=0, sep="\t", dtype=str)
     assert "name" in df.columns
 
     tar_set = pd.read_csv(target_set, header=0, sep="\t", dtype=str)["name"]
     tar_id_type = target_type
-    mode = "subnetwork"
 
     # ==== define input for network integration ====
     network_data = {
@@ -91,6 +92,12 @@ if __name__ == "__main__":
     parser.add_argument("--target_type", required=True, help="Input target id")
     parser.add_argument("--network", required=True, help="Input network")
     parser.add_argument("--network_type", required=True, help="Input network id")
+    parser.add_argument(
+        "--mode",
+        default="subnetwork",
+        choices=["subnetwork", "subnetwork-set"],
+        help="Mode of analysis",
+    )
     parser.add_argument("--outdir", required=True, help="Name for output directory")
 
     args = parser.parse_args()
@@ -98,8 +105,11 @@ if __name__ == "__main__":
     target_type = args.target_type
     network = args.network
     network_type = args.network_type
+    mode = args.mode
     output_directory = os.path.splitext(os.path.basename(target_file))[0]
     output_directory = args.outdir
     os.makedirs(output_directory, exist_ok=True)
 
-    run_analysis(target_file, target_type, network, network_type, output_directory)
+    run_analysis(
+        target_file, target_type, network, network_type, mode, output_directory
+    )

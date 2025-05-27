@@ -414,7 +414,7 @@ workflow DISEASEMODULEDISCOVERY {
                     network: network
                 }
 
-            DIGEST (ch_digest_input.nodes, id_space, ch_digest_input.network, id_space)
+            DIGEST (ch_digest_input.nodes, id_space, ch_digest_input.network, id_space, "subnetwork")
             ch_versions = ch_versions.mix(DIGEST.out.versions)
             ch_multiqc_files = ch_multiqc_files.mix(
                 DIGEST.out.multiqc
