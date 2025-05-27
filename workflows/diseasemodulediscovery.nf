@@ -235,6 +235,9 @@ workflow DISEASEMODULEDISCOVERY {
 
     // Save modules
     SAVEMODULES(ch_modules)
+    ch_nodes_tsv_not_empty = SAVEMODULES.out.nodes_tsv
+        .filter{meta, module -> meta.nodes > 0} // Filter out empty modules
+
     ch_versions = ch_versions.mix(SAVEMODULES.out.versions)
 
     // Separate empty modules
@@ -473,8 +476,7 @@ workflow DISEASEMODULEDISCOVERY {
                 return true
             }
 
-        ch_drugstone_input = SAVEMODULES.out.nodes_tsv
-            .filter{meta, module -> meta.nodes > 0} // Filter out empty modules
+        ch_drugstone_input = ch_nodes_tsv_not_empty
             .branch {meta, module ->
                 fail: meta.nodes > params.drugstone_max_nodes
                 pass: true
@@ -496,7 +498,7 @@ workflow DISEASEMODULEDISCOVERY {
     if(params.run_proximity){
         GT_PROXIMITY(
             ch_network_gt,
-            SAVEMODULES.out.nodes_tsv.filter{meta, module -> meta.nodes > 0}, // Filter out empty modules
+            ch_nodes_tsv_not_empty,
             ch_shortest_paths,
             proximity_dt)
         ch_versions = ch_versions.mix(GT_PROXIMITY.out.versions)
