@@ -430,7 +430,7 @@ workflow DISEASEMODULEDISCOVERY {
 
             // Reference-based evaluation
             ch_digest_reference_based_input = ch_nodes_tsv_not_empty
-                .filter{ meta, nodes -> meta.amim != "no_tool" } // Filter "seed only" modules
+                .filter{ meta, nodes -> meta.amim != "no_tool" } // Filter out no_tool modules
                 .map{ meta, nodes -> [meta.network_id, meta, nodes]}
                 .combine(ch_network_gt.map{meta, network -> [meta.id, network]}, by: 0)
                 .multiMap{key, meta, nodes, network ->

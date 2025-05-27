@@ -2,13 +2,17 @@
 
 import argparse
 import os
+import sys
 import pandas as pd
 import numpy as np
+import logging
 from biodigest.single_validation import single_validation, save_results
 from biodigest.evaluation.d_utils.plotting_utils import (
     create_plots,
     create_extended_plots,
 )
+
+logger = logging.getLogger()
 
 
 def run_analysis(
@@ -34,6 +38,10 @@ def run_analysis(
         ref_set = df[df["is_seed"] == 1]["name"]
         ref_id_type = target_type
 
+        if tar_set.empty or ref_set.empty:
+            logger.warning("Target or reference set is empty. Exiting the program.")
+            sys.exit(0)
+
     else:
         raise ValueError(f"Unknown mode: {mode}")
 
@@ -50,7 +58,6 @@ def run_analysis(
         "network"  # for subnetwork mode the only option so it is set fixed
     )
     runs = 1000  # how many random runs for empirical p-value estimation
-    perc = 100  # how many % of the original input should be perturbated for the background model
     enriched = False  # Set True, if only enriched attributes of the reference set should be used (Only for set-set)
 
     # ==== define optional input influencing saving of results ====
@@ -76,7 +83,6 @@ def run_analysis(
     pvalues_df = pd.DataFrame(results["p_values"]["values"])
     pvalues_df = pvalues_df.transpose().applymap(lambda x: -np.log10(x))
     pvalues_df.insert(0, "ID", prefix)
-    print(pvalues_df)
     pvalues_df.to_csv(f"{prefix}.multiqc.tsv", sep="\t", index=False)
 
     pd.DataFrame(results["input_values"]["values"])
@@ -116,9 +122,19 @@ if __name__ == "__main__":
         choices=["subnetwork", "subnetwork-set"],
         help="Mode of analysis",
     )
+    parser.add_argument(
+        "-l",
+        "--log-level",
+        help="The desired log level (default WARNING).",
+        choices=("CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG"),
+        default="WARNING",
+    )
     parser.add_argument("--outdir", required=True, help="Name for output directory")
 
     args = parser.parse_args()
+    logging.basicConfig(level=args.log_level, format="[%(levelname)s] %(message)s")
+    logger.debug(f"{args=}")
+
     target_file = args.target_file
     target_type = args.target_type
     network = args.network

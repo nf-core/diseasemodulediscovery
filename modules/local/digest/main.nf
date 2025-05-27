@@ -12,7 +12,7 @@ process DIGEST {
 
     output:
     tuple val(meta), path("${meta.id}")            , emit: outdir
-    tuple val(meta), path("${meta.id}.multiqc.tsv"), emit: multiqc
+    tuple val(meta), path("${meta.id}.multiqc.tsv"), emit: multiqc, optional: true
     path "versions.yml"                            , emit: versions
 
     script:
