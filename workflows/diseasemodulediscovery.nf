@@ -373,7 +373,7 @@ workflow DISEASEMODULEDISCOVERY {
         ch_nodes = GT2TSV_Modules.out
 
         // Module overlap
-        ch_overlap_input = ch_nodes
+        ch_overlap_input = ch_nodes_tsv_not_empty
             .multiMap { meta, nodes ->
                 ids: meta.id
                 nodes: nodes
