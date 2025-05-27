@@ -15,11 +15,27 @@ def run_analysis(
     target_set, target_type, network, network_type, mode, output_directory
 ):
     # ==== define required input ====
-    df = pd.read_csv(target_set, header=0, sep="\t", dtype=str)
+    df = pd.read_csv(target_set, header=0, sep="\t")
     assert "name" in df.columns
+    df["name"] = df["name"].astype(str)
 
-    tar_set = pd.read_csv(target_set, header=0, sep="\t", dtype=str)["name"]
-    tar_id_type = target_type
+    if mode == "subnetwork":
+        tar_set = df["name"]
+        tar_id_type = target_type
+        ref_set = None
+        ref_id_type = None
+
+    elif mode == "subnetwork-set":
+        assert set(["name", "is_seed"]).issubset(df.columns)
+        assert df["is_seed"].isin([0, 1]).all()
+
+        tar_set = df[df["is_seed"] == 0]["name"]
+        tar_id_type = target_type
+        ref_set = df[df["is_seed"] == 1]["name"]
+        ref_id_type = target_type
+
+    else:
+        raise ValueError(f"Unknown mode: {mode}")
 
     # ==== define input for network integration ====
     network_data = {
@@ -45,6 +61,8 @@ def run_analysis(
     results = single_validation(
         tar=tar_set,
         tar_id=tar_id_type,
+        ref=ref_set,
+        ref_id=ref_id_type,
         mode=mode,
         runs=runs,
         background_model=background_model,

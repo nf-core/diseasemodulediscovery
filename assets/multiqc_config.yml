@@ -31,7 +31,8 @@ custom_content:
     - shared_nodes
     - jaccard_similarity_no_seeds
     - shared_nodes_no_seeds
-    - digest
+    - digest_reference_free
+    - digest_reference_based
     - seed_permutation_jaccard
     - network_permutation_jaccard
 
@@ -190,10 +191,43 @@ custom_data:
         title: "Duplicate edges"
         description: "Number of duplicate edges, e.g. (A, B) and (B, A)"
         format: "{:.0f}"
-  digest:
-    section_name: "DIGEST"
-    description: "Empirical -log10 p-values for functional coherence calculated with
-      <a href='https://digest-validation.net/documentation'>DIGEST</a>. Columns represent different gene set data sources."
+  digest_reference_free:
+    section_name: "DIGEST (reference-free)"
+    description: "Empirical -log10 p-values for functional coherence within the module. Calculated with
+      <a href='https://digest-validation.net/documentation'>DIGEST</a> (subnetwork mode). Columns represent different gene set data sources."
+    plot_type: "table"
+    pconfig:
+      title: "DIGEST p-values"
+      scale: "YlGn"
+    headers:
+      GO.BP:
+        title: "GO.BP"
+        description: "GO Biological Process"
+        format: "{:.3f}"
+        min: 0
+        max: 3
+      GO.CC:
+        title: "GO.CC"
+        description: "GO Cellular Component"
+        format: "{:.3f}"
+        min: 0
+        max: 3
+      GO.MF:
+        title: "GO.MF"
+        description: "GO Molecular Function"
+        format: "{:.3f}"
+        min: 0
+        max: 3
+      KEGG:
+        title: "KEGG"
+        description: "KEGG pathways"
+        format: "{:.3f}"
+        min: 0
+        max: 3
+  digest_reference_based:
+    section_name: "DIGEST (reference-based)"
+    description: "Empirical -log10 p-values for functional coherence between the seeds and added nodes. Calculated with
+      <a href='https://digest-validation.net/documentation'>DIGEST</a> (subnetwork-set mode). Columns represent different gene set data sources."
     plot_type: "table"
     pconfig:
       title: "DIGEST p-values"

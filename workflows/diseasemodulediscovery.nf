@@ -7,18 +7,19 @@
 //
 // MODULE: Loaded from modules/local/
 //
-include { INPUTCHECK               } from '../modules/local/inputcheck/main'
-include { GRAPHTOOLPARSER          } from '../modules/local/graphtoolparser/main'
-include { NETWORKANNOTATION        } from '../modules/local/networkannotation/main'
-include { SAVEMODULES              } from '../modules/local/savemodules/main'
-include { VISUALIZEMODULES         } from '../modules/local/visualizemodules/main'
-include { GT2TSV as GT2TSV_Modules } from '../modules/local/gt2tsv/main'
-include { GT2TSV as GT2TSV_Network } from '../modules/local/gt2tsv/main'
-include { DIGEST                   } from '../modules/local/digest/main'
-include { MODULEOVERLAP            } from '../modules/local/moduleoverlap/main'
-include { DRUGPREDICTIONS          } from '../modules/local/drugpredictions/main'
-include { TOPOLOGY                 } from '../modules/local/topology/main'
-include { DRUGSTONEEXPORT          } from '../modules/local/drugstoneexport/main'
+include { INPUTCHECK                        } from '../modules/local/inputcheck/main'
+include { GRAPHTOOLPARSER                   } from '../modules/local/graphtoolparser/main'
+include { NETWORKANNOTATION                 } from '../modules/local/networkannotation/main'
+include { SAVEMODULES                       } from '../modules/local/savemodules/main'
+include { VISUALIZEMODULES                  } from '../modules/local/visualizemodules/main'
+include { GT2TSV as GT2TSV_Modules          } from '../modules/local/gt2tsv/main'
+include { GT2TSV as GT2TSV_Network          } from '../modules/local/gt2tsv/main'
+include { DIGEST as DIGEST_REFERENCEFREE    } from '../modules/local/digest/main'
+include { DIGEST as DIGEST_REFERENCEBASED   } from '../modules/local/digest/main'
+include { MODULEOVERLAP                     } from '../modules/local/moduleoverlap/main'
+include { DRUGPREDICTIONS                   } from '../modules/local/drugpredictions/main'
+include { TOPOLOGY                          } from '../modules/local/topology/main'
+include { DRUGSTONEEXPORT                   } from '../modules/local/drugstoneexport/main'
 
 //
 // SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
@@ -406,7 +407,8 @@ workflow DISEASEMODULEDISCOVERY {
         // Digest
         if(!params.skip_digest){
 
-            ch_digest_input = ch_nodes_tsv_not_empty
+            // Reference-free evaluation
+            ch_digest_reference_free_input = ch_nodes_tsv_not_empty
                 .map{ meta, nodes -> [meta.network_id, meta, nodes]}
                 .combine(ch_network_gt.map{meta, network -> [meta.id, network]}, by: 0)
                 .multiMap{key, meta, nodes, network ->
@@ -414,15 +416,37 @@ workflow DISEASEMODULEDISCOVERY {
                     network: network
                 }
 
-            DIGEST (ch_digest_input.nodes, id_space, ch_digest_input.network, id_space, "subnetwork")
-            ch_versions = ch_versions.mix(DIGEST.out.versions)
+            DIGEST_REFERENCEFREE (ch_digest_reference_free_input.nodes, id_space, ch_digest_reference_free_input.network, id_space, "subnetwork")
+            ch_versions = ch_versions.mix(DIGEST_REFERENCEFREE.out.versions)
             ch_multiqc_files = ch_multiqc_files.mix(
-                DIGEST.out.multiqc
+                DIGEST_REFERENCEFREE.out.multiqc
                 .map{ meta, path -> path }
                 .collectFile(
                     cache: false,
                     storeDir: "${params.outdir}/mqc_summaries",
-                    name: 'digest_mqc.tsv',
+                    name: 'digest_reference_free_mqc.tsv',
+                    keepHeader: true)
+            )
+
+            // Reference-based evaluation
+            ch_digest_reference_based_input = ch_nodes_tsv_not_empty
+                .filter{ meta, nodes -> meta.amim != "no_tool" } // Filter "seed only" modules
+                .map{ meta, nodes -> [meta.network_id, meta, nodes]}
+                .combine(ch_network_gt.map{meta, network -> [meta.id, network]}, by: 0)
+                .multiMap{key, meta, nodes, network ->
+                    nodes: [meta, nodes]
+                    network: network
+                }
+
+            DIGEST_REFERENCEBASED (ch_digest_reference_based_input.nodes, id_space, ch_digest_reference_based_input.network, id_space, "subnetwork-set")
+            ch_versions = ch_versions.mix(DIGEST_REFERENCEBASED.out.versions)
+            ch_multiqc_files = ch_multiqc_files.mix(
+                DIGEST_REFERENCEBASED.out.multiqc
+                .map{ meta, path -> path }
+                .collectFile(
+                    cache: false,
+                    storeDir: "${params.outdir}/mqc_summaries",
+                    name: 'digest_reference_based_mqc.tsv',
                     keepHeader: true)
             )
         }
