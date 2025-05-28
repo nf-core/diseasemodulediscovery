@@ -408,7 +408,9 @@ workflow DISEASEMODULEDISCOVERY {
         if(!params.skip_digest){
 
             // Reference-free evaluation
-            ch_digest_reference_free_input = ch_nodes_tsv_not_empty
+            if(!params.skip_digest_reference_free){
+
+                ch_digest_reference_free_input = ch_nodes_tsv_not_empty
                 .map{ meta, nodes -> [meta.network_id, meta, nodes]}
                 .combine(ch_network_gt.map{meta, network -> [meta.id, network]}, by: 0)
                 .multiMap{key, meta, nodes, network ->
@@ -416,39 +418,45 @@ workflow DISEASEMODULEDISCOVERY {
                     network: network
                 }
 
-            DIGEST_REFERENCEFREE (ch_digest_reference_free_input.nodes, id_space, ch_digest_reference_free_input.network, id_space, "subnetwork")
-            ch_versions = ch_versions.mix(DIGEST_REFERENCEFREE.out.versions)
-            ch_multiqc_files = ch_multiqc_files.mix(
-                DIGEST_REFERENCEFREE.out.multiqc
-                .map{ meta, path -> path }
-                .collectFile(
-                    cache: false,
-                    storeDir: "${params.outdir}/mqc_summaries",
-                    name: 'digest_reference_free_mqc.tsv',
-                    keepHeader: true)
-            )
+                DIGEST_REFERENCEFREE (ch_digest_reference_free_input.nodes, id_space, ch_digest_reference_free_input.network, id_space, "subnetwork")
+                ch_versions = ch_versions.mix(DIGEST_REFERENCEFREE.out.versions)
+                ch_multiqc_files = ch_multiqc_files.mix(
+                    DIGEST_REFERENCEFREE.out.multiqc
+                    .map{ meta, path -> path }
+                    .collectFile(
+                        cache: false,
+                        storeDir: "${params.outdir}/mqc_summaries",
+                        name: 'digest_reference_free_mqc.tsv',
+                        keepHeader: true)
+                )
+
+            }
 
             // Reference-based evaluation
-            ch_digest_reference_based_input = ch_nodes_tsv_not_empty
-                .filter{ meta, nodes -> meta.amim != "no_tool" } // Filter out no_tool modules
-                .map{ meta, nodes -> [meta.network_id, meta, nodes]}
-                .combine(ch_network_gt.map{meta, network -> [meta.id, network]}, by: 0)
-                .multiMap{key, meta, nodes, network ->
-                    nodes: [meta, nodes]
-                    network: network
-                }
+            if(!params.skip_digest_reference_based){
+                ch_digest_reference_based_input = ch_nodes_tsv_not_empty
+                    .filter{ meta, nodes -> meta.amim != "no_tool" } // Filter out no_tool modules
+                    .map{ meta, nodes -> [meta.network_id, meta, nodes]}
+                    .combine(ch_network_gt.map{meta, network -> [meta.id, network]}, by: 0)
+                    .multiMap{key, meta, nodes, network ->
+                        nodes: [meta, nodes]
+                        network: network
+                    }
 
-            DIGEST_REFERENCEBASED (ch_digest_reference_based_input.nodes, id_space, ch_digest_reference_based_input.network, id_space, "subnetwork-set")
-            ch_versions = ch_versions.mix(DIGEST_REFERENCEBASED.out.versions)
-            ch_multiqc_files = ch_multiqc_files.mix(
-                DIGEST_REFERENCEBASED.out.multiqc
-                .map{ meta, path -> path }
-                .collectFile(
-                    cache: false,
-                    storeDir: "${params.outdir}/mqc_summaries",
-                    name: 'digest_reference_based_mqc.tsv',
-                    keepHeader: true)
-            )
+                DIGEST_REFERENCEBASED (ch_digest_reference_based_input.nodes, id_space, ch_digest_reference_based_input.network, id_space, "subnetwork-set")
+                ch_versions = ch_versions.mix(DIGEST_REFERENCEBASED.out.versions)
+                ch_multiqc_files = ch_multiqc_files.mix(
+                    DIGEST_REFERENCEBASED.out.multiqc
+                    .map{ meta, path -> path }
+                    .collectFile(
+                        cache: false,
+                        storeDir: "${params.outdir}/mqc_summaries",
+                        name: 'digest_reference_based_mqc.tsv',
+                        keepHeader: true)
+                )
+
+            }
+
         }
 
         // Seed permutation based evaluation
