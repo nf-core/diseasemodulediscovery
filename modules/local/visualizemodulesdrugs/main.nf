@@ -1,16 +1,15 @@
 process VISUALIZEMODULESDRUGS {
-    tag "$meta_drugs.id"
+    tag "$meta.id"
     label 'process_single'
 
     input:
-    tuple val(meta), path(module), val(meta_drugs), val(algorithm), path(drug_predictions)
-    val max_nodes
+    tuple val(meta), path(module), path(drug_predictions)
 
     output:
-    tuple val(meta_drugs), val(algorithm), path("${meta_drugs.id}.${algorithm}.pdf")  , emit: pdf  , optional: true
-    tuple val(meta_drugs), val(algorithm), path("${meta_drugs.id}.${algorithm}.png")  , emit: png  , optional: true
-    tuple val(meta_drugs), val(algorithm), path("${meta_drugs.id}.${algorithm}.svg")  , emit: svg  , optional: true
-    tuple val(meta_drugs), val(algorithm), path("${meta_drugs.id}.${algorithm}.html") , emit: html , optional: true
+    tuple val(meta), path("${meta.id}.pdf")  , emit: pdf
+    tuple val(meta), path("${meta.id}.png")  , emit: png
+    tuple val(meta), path("${meta.id}.svg")  , emit: svg
+    tuple val(meta), path("${meta.id}.html") , emit: html
     path "versions.yml" , emit: versions
 
     when:
@@ -18,7 +17,7 @@ process VISUALIZEMODULESDRUGS {
 
     script:
     """
-    visualize_modules.py -m "${module}" -p "${meta_drugs.id}.${algorithm}" -n ${max_nodes} -d ${drug_predictions} -l DEBUG
+    visualize_modules.py -m "${module}" -p "${meta.id}" -d ${drug_predictions} -l DEBUG
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

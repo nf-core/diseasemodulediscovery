@@ -1,7 +1,7 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://raw.githubusercontent.com/REPO4EU/modulediscovery/main/nextflow_schema.json",
-    "title": "REPO4EU/modulediscovery pipeline parameters",
+    "$id": "https://raw.githubusercontent.com/nf-core/diseasemodulediscovery/main/nextflow_schema.json",
+    "title": "nf-core/diseasemodulediscovery pipeline parameters",
     "description": "A pipeline for network-based disease module identification",
     "type": "object",
     "$defs": {
@@ -153,6 +153,12 @@
                     "type": "boolean",
                     "fa_icon": "fas fa-forward",
                     "description": "Flag for skipping the export to the Drugst.One platform"
+                },
+                "drugstone_max_nodes": {
+                    "type": "integer",
+                    "default": 500,
+                    "fa_icon": "fas fa-project-diagram",
+                    "description": "If a module has more nodes it will not be exported to the Drugst.One platform. Includes drug prioritization."
                 }
             }
         },
@@ -203,6 +209,16 @@
                     "description": "Flag for skipping DIGEST",
                     "fa_icon": "fas fa-forward"
                 },
+                "skip_digest_reference_free": {
+                    "type": "boolean",
+                    "fa_icon": "fas fa-forward",
+                    "description": "Flag for skipping only the reference-free mode of DIGEST"
+                },
+                "skip_digest_reference_based": {
+                    "type": "boolean",
+                    "fa_icon": "fas fa-forward",
+                    "description": "Flag for skipping only the reference-based mode of DIGEST"
+                },
                 "run_seed_permutation": {
                     "type": "boolean",
                     "fa_icon": "fas fa-caret-right",
@@ -215,7 +231,7 @@
                 },
                 "n_network_permutations": {
                     "type": "integer",
-                    "default": 1000,
+                    "default": 100,
                     "fa_icon": "fas fa-cogs",
                     "description": "Number of times the network will be permuted for the network permutation-based evaluation"
                 },
@@ -276,11 +292,6 @@
                     "description": "Drugst.One parameter for algorithms to be used. Comma separated list. Options: 'trustrank', 'degree' and 'closeness'.",
                     "default": "trustrank",
                     "fa_icon": "fas fa-list-ol"
-                },
-                "skip_visualization_drugs_drugstone": {
-                    "type": "boolean",
-                    "description": "Flag to skip the drug visualization for the drugstone drug predictions.",
-                    "fa_icon": "fas fa-forward"
                 }
             }
         },

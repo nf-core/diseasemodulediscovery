@@ -29,6 +29,44 @@ def compute_font_size(n, fmt):
     return max(1, font_size)
 
 
+def add_drugs(args, g, node_mapping):
+    drug_df = pd.read_csv(args.drugs, sep="\t")
+    assert "name" in drug_df.columns
+
+    if "drug_name" not in drug_df.columns:
+        logger.warning(
+            "The drug file does not contain a 'drug_name' column. Skipping drug addition."
+        )
+        return set()
+
+    drug_df.dropna(subset=["drug_name"], inplace=True)
+    drug_df["name"] = drug_df["name"].astype(str)
+    drug_df["drug_name"] = drug_df["drug_name"].astype(str)
+
+    gene2drugs = defaultdict(list)
+    drug_set = set(drug_df["drug_name"].unique())
+
+    for _, row in drug_df.iterrows():
+        if row["name"] not in gene2drugs:
+            gene2drugs[row["name"]] = []
+        if pd.notna(row["drug_name"]):
+            gene2drugs[row["name"]].append(row["drug_name"])
+    for name, drug_list in gene2drugs.items():
+        if name in node_mapping:
+            protein_vertex = node_mapping[name]
+        else:
+            logger.warning(f"Node {name} not found in the module")
+            continue
+        for drug in drug_list:
+            if drug not in node_mapping:
+                drug_vertex = g.add_vertex()
+                g.vp["name"][drug_vertex] = drug
+                node_mapping[drug] = drug_vertex
+            drug_vertex = node_mapping[drug]
+            g.add_edge(protein_vertex, drug_vertex)
+    return drug_set
+
+
 def parse_args(argv=None):
     """Define and immediately parse command line arguments."""
     parser = argparse.ArgumentParser(
@@ -54,12 +92,6 @@ def parse_args(argv=None):
         type=str,
     )
     parser.add_argument(
-        "-n",
-        "--max_nodes",
-        help="If the module has more nodes it will not be visualized.",
-        type=int,
-    )
-    parser.add_argument(
         "-l",
         "--log-level",
         help="The desired log level (default WARNING).",
@@ -81,17 +113,8 @@ def main(argv=None):
     # load the module file
     g = util.load_graph(str(args.module))
     node_mapping = util.name2index(g)
-
-    # check if module is small enough
-    if g.num_vertices() > args.max_nodes:
-        logger.warn(
-            f"Not visualizing {args.prefix} since it has too many ({g.num_vertices()}) nodes"
-        )
-        sys.exit(0)
-
-    gene2symbol = {}
     if args.drugs:
-        gene2symbol, drug_set = add_drugs(args, g, node_mapping)
+        drug_set = add_drugs(args, g, node_mapping)
 
     # color the seed genes red
     g.vp["color"] = g.new_vertex_property("string")
@@ -99,10 +122,7 @@ def main(argv=None):
     g.vp["shape"] = g.new_vertex_property("string")
     g.vp["text_color"] = g.new_vertex_property("string")
     for v in g.vertices():
-        if g.vp["name"][v] in gene2symbol:
-            g.vp["label_node"][v] = gene2symbol[g.vp["name"][v]]
-        else:
-            g.vp["label_node"][v] = g.vp["name"][v]
+        g.vp["label_node"][v] = g.vp["name"][v]
         if args.drugs and g.vp["name"][v] in drug_set:
             g.vp["color"][v] = "#90EE90"  # green for drugs
             g.vp["shape"][v] = "triangle"
@@ -153,6 +173,7 @@ def main(argv=None):
 
     nt = Network()
     nt.from_nx(nx_graph)
+
     # get vertex properties as dataframe
     vp_df = util.vp2df(g)
 
@@ -173,35 +194,6 @@ def main(argv=None):
     nt.show_buttons(filter_=["physics", "interaction", "manipulation"])
     # save as html
     nt.show(f"{args.prefix}.html")
-
-
-def add_drugs(args, g, node_mapping):
-    drugs = pd.read_csv(args.drugs, sep="\t")
-    gene2symbol = {}
-    gene2drugs = defaultdict(list)
-    drug_set = set(drugs["drug_name"].unique())
-
-    for _, row in drugs.iterrows():
-        if row["name"] not in gene2symbol:
-            gene2symbol[row["name"]] = row["symbol"]
-        if row["name"] not in gene2drugs:
-            gene2drugs[row["name"]] = []
-        if pd.notna(row["drug_name"]):
-            gene2drugs[row["name"]].append(row["drug_name"])
-    for name, drug_list in gene2drugs.items():
-        if name in node_mapping:
-            protein_vertex = node_mapping[name]
-        else:
-            logger.warn(f"Protein {name} not found in the module")
-            continue
-        for drug in drug_list:
-            if not drug in node_mapping:
-                drug_vertex = g.add_vertex()
-                g.vp["name"][drug_vertex] = drug
-                node_mapping[drug] = drug_vertex
-            drug_vertex = node_mapping[drug]
-            g.add_edge(protein_vertex, drug_vertex)
-    return gene2symbol, drug_set
 
 
 if __name__ == "__main__":
