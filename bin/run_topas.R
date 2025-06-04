@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript
 
 
-source('/tmp/src/TOPAS.R')
+source('/tmp/topas/src/TOPAS.R')
 
 library("optparse")
 option_list = list(

@@ -1,7 +1,7 @@
 process TOPAS{
     tag "$meta.id"
     label 'process_single'
-    container 'docker.io/motan04/topas:latest'
+    container 'ghcr.io/repo4eu/modulediscovery_topas_dependencies:latest'
 
     input:
     tuple val(meta), path(seeds), path(network)
