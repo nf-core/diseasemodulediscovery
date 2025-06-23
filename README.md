@@ -20,49 +20,47 @@
 
 ## Introduction
 
-**nf-core/diseasemodulediscovery** is a bioinformatics pipeline that ...
+**nf-core/diseasemodulediscovery** is a bioinformatics pipeline for network medicine hypothesis generation, designed for identifying active/disease modules. Developed and maintained by the [RePo4EU](https://repo4.eu/) consortium, it aims to characterize the molecular mechanisms of diseases by analyzing the local neighborhood of disease-associated genes or proteins (seeds) within the interactome. This approach can help identify potential drug targets for drug repurposing.
 
-<!-- TODO nf-core:
-   Complete this sentence with a 2-3 sentence summary of what types of data the pipeline ingests, a brief overview of the
-   major pipeline sections and the types of output it produces. You're giving an overview to someone new
-   to nf-core here, in 15-20 seconds. For an example, see https://github.com/nf-core/rnaseq/blob/master/README.md#introduction
--->
+![REPO4EU/modulediscovery metro map](docs/images/REPO4EU_modulediscovery_metro_map.png)
 
-<!-- TODO nf-core: Include a figure that guides the user through the major workflow steps. Many nf-core
-     workflows use the "tube map" design for that. See https://nf-co.re/docs/guidelines/graphic_design/workflow_diagrams#examples for examples.   -->
-<!-- TODO nf-core: Fill in short bullet-pointed list of the default steps in the pipeline -->2. Present QC for raw reads ([`MultiQC`](http://multiqc.info/))
+- Module inference (all enabled by default):
+  - [`DOMINO`](https://github.com/Shamir-Lab/DOMINO)
+  - [`DIAMOnD`](https://github.com/dinaghiassian/DIAMOnD)
+  - [`ROBUST`](https://github.com/bionetslab/robust)
+  - [`ROBUST bias aware`](https://github.com/bionetslab/robust_bias_aware)
+  - `first neighbors`
+  - `random walk with restart`
+- Visualization of the module networks ([`graph-tool`](https://graph-tool.skewed.de/), [`pyvis`](https://github.com/WestHealth/pyvis))
+- Export to the network medicine web visualization tool [`Drugst.One`](https://drugst.one/)
+- Annotation with biological data (targeting drugs, side effects, associated disorders, cellular localization) queried from [`NeDRexDB`](https://nedrex.net/) and conversion to [`BioPAX`](https://www.biopax.org/) format.
+- Evaluation
+  - Over-representation analysis ([`g:Profiler`](https://cran.r-project.org/web/packages/gprofiler2/index.html))
+  - Functional coherence analysis ([`DIGEST`](https://pypi.org/project/biodigest/))
+  - Network topology analysis ([`graph-tool`](https://graph-tool.skewed.de/))
+  - Seed set permutation-based evaluation (enabled by `--run_seed_permutation`)
+  - Network permutation-based evaluation (enabled by `--run_network_permutation`)
+- Drug prioritization using the API of [`Drugst.One`](https://drugst.one/)
+- Result and evaluation summary ([`MultiQC`](https://seqera.io/multiqc/))
 
 ## Usage
 
 > [!NOTE]
 > If you are new to Nextflow and nf-core, please refer to [this page](https://nf-co.re/docs/usage/installation) on how to set-up Nextflow. Make sure to [test your setup](https://nf-co.re/docs/usage/introduction#how-to-run-a-pipeline) with `-profile test` before running the workflow on actual data.
 
-<!-- TODO nf-core: Describe the minimum required steps to execute the pipeline, e.g. how to prepare samplesheets.
-     Explain what rows and columns represent. For instance (please edit as appropriate):
-
-First, prepare a samplesheet with your input data that looks as follows:
-
-`samplesheet.csv`:
-
-```csv
-sample,fastq_1,fastq_2
-CONTROL_REP1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz
-```
-
-Each row represents a fastq file (single-end) or a pair of fastq files (paired end).
-
--->
+### Running the pipeline
 
 Now, you can run the pipeline using:
 
-<!-- TODO nf-core: update the following command to include all required parameters for a minimal example -->
-
 ```bash
 nextflow run nf-core/diseasemodulediscovery \
-   -profile <docker/singularity/.../institute> \
-   --input samplesheet.csv \
+   -profile <docker/singularity> \
+   --seeds <SEED_FILE> \
+   --network <NETWORK_FILE> \
    --outdir <OUTDIR>
 ```
+
+This will run the pipeline based on the provided `<SEED_FILE>` and `<NETWORK_FILE>`. Results will be saved to the specified `<OUTDIR>`. Use `-profile` to set whether docker or singularity should be used for software deployment.
 
 > [!WARNING]
 > Please provide pipeline parameters via the CLI or Nextflow `-params-file` option. Custom config files including those provided by the `-c` Nextflow option can be used to provide any configuration _**except for parameters**_; see [docs](https://nf-co.re/docs/usage/getting_started/configuration#custom-configuration-files).
@@ -77,16 +75,21 @@ For more details about the output files and reports, please refer to the
 
 ## Credits
 
-nf-core/diseasemodulediscovery was originally written by REPO4EU.
+nf-core/diseasemodulediscovery was originally written by the [RePo4EU](https://repo4.eu/) consortium.
 
 We thank the following people for their extensive assistance in the development of this pipeline:
 
-<!-- TODO nf-core: If applicable, make list of people who have also contributed -->
+- [Johannes Kersting](https://github.com/JohannesKersting) (TUM)
+- [Lisa Spindler](https://github.com/lspindler2509) (TUM)
+- [Quirin Manz](https://github.com/quirinmanz) (TUM)
+- [Quim Aguirre](https://github.com/quimaguirre) (STALICLA)
+- [Chloé Bucheron](https://github.com/ChloeBubu) (University Vienna)
 
 ## Contributions and Support
 
 If you would like to contribute to this pipeline, please see the [contributing guidelines](.github/CONTRIBUTING.md).
 
+If you want to include an additional module identification approach, please see [this guide](docs/contributing.md).
 For further information or help, don't hesitate to get in touch on the [Slack `#diseasemodulediscovery` channel](https://nfcore.slack.com/channels/diseasemodulediscovery) (you can join with [this invite](https://nf-co.re/join/slack)).
 
 ## Citations

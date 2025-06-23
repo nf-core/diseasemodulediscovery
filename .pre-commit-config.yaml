@@ -25,3 +25,7 @@ repos:
               subworkflows/nf-core/.*|
               .*\.snap$
           )$
+  - repo: https://github.com/psf/black
+    rev: "24.1.1"
+    hooks:
+      - id: black
