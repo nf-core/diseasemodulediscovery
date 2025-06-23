@@ -209,6 +209,16 @@
                     "description": "Flag for skipping DIGEST",
                     "fa_icon": "fas fa-forward"
                 },
+                "skip_digest_reference_free": {
+                    "type": "boolean",
+                    "fa_icon": "fas fa-forward",
+                    "description": "Flag for skipping only the reference-free mode of DIGEST"
+                },
+                "skip_digest_reference_based": {
+                    "type": "boolean",
+                    "fa_icon": "fas fa-forward",
+                    "description": "Flag for skipping only the reference-based mode of DIGEST"
+                },
                 "run_seed_permutation": {
                     "type": "boolean",
                     "fa_icon": "fas fa-caret-right",
