@@ -21,7 +21,7 @@
 
 **nf-core/diseasemodulediscovery** is a bioinformatics pipeline for network medicine hypothesis generation, designed for identifying active/disease modules. Developed and maintained by the [RePo4EU](https://repo4.eu/) consortium, it aims to characterize the molecular mechanisms of diseases by analyzing the local neighborhood of disease-associated genes or proteins (seeds) within the interactome. This approach can help identify potential drug targets for drug repurposing.
 
-![REPO4EU/modulediscovery metro map](docs/images/REPO4EU_modulediscovery_metro_map.png)
+![REPO4EU/modulediscovery metro map](docs/images/nf-core-diseasemodulediscovery_metro_map.png)
 
 - Module inference (all enabled by default):
   - [`DOMINO`](https://github.com/Shamir-Lab/DOMINO)
