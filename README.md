@@ -28,18 +28,19 @@
   - [`DIAMOnD`](https://github.com/dinaghiassian/DIAMOnD)
   - [`ROBUST`](https://github.com/bionetslab/robust)
   - [`ROBUST bias aware`](https://github.com/bionetslab/robust_bias_aware)
-  - `first neighbors`
-  - `random walk with restart`
-- Visualization of the module networks ([`graph-tool`](https://graph-tool.skewed.de/), [`pyvis`](https://github.com/WestHealth/pyvis))
-- Export to the network medicine web visualization tool [`Drugst.One`](https://drugst.one/)
-- Annotation with biological data (targeting drugs, side effects, associated disorders, cellular localization) queried from [`NeDRexDB`](https://nedrex.net/) and conversion to [`BioPAX`](https://www.biopax.org/) format.
+  - `1st Neighbors`
+  - `random walk with restart (RWR)`
 - Evaluation
   - Over-representation analysis ([`g:Profiler`](https://cran.r-project.org/web/packages/gprofiler2/index.html))
   - Functional coherence analysis ([`DIGEST`](https://pypi.org/project/biodigest/))
   - Network topology analysis ([`graph-tool`](https://graph-tool.skewed.de/))
-  - Seed set permutation-based evaluation (enabled by `--run_seed_permutation`)
-  - Network permutation-based evaluation (enabled by `--run_network_permutation`)
+  - Overlaps between different disease modules
+  - Seed set permutation-based evaluation (robustness and seed rediscovery, enabled by `--run_seed_permutation`)
+  - Network permutation-based evaluation (robustness, enabled by `--run_network_permutation`)
+- Export to the network medicine web visualization tool [`Drugst.One`](https://drugst.one/)
 - Drug prioritization using the API of [`Drugst.One`](https://drugst.one/)
+- Visualization of the module networks ([`graph-tool`](https://graph-tool.skewed.de/), [`pyvis`](https://github.com/WestHealth/pyvis))
+- Annotation with biological data (targeting drugs, side effects, associated disorders, cellular localization) queried from [`NeDRexDB`](https://nedrex.net/) and conversion to [`BioPAX`](https://www.biopax.org/) format.
 - Result and evaluation summary ([`MultiQC`](https://seqera.io/multiqc/))
 
 ## Usage
