@@ -13,7 +13,7 @@
 The typical command for running the pipeline is as follows:
 
 ```bash
-nextflow run run nf-core/diseasemodulediscovery \
+nextflow run nf-core/diseasemodulediscovery \
    -profile docker \
    --seeds ./seeds.txt \
    --network ./ppi.csv \
