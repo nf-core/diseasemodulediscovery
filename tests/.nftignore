@@ -6,3 +6,12 @@ multiqc/multiqc_data/multiqc_software_versions.txt
 multiqc/multiqc_plots/{svg,pdf,png}/*.{svg,pdf,png}
 multiqc/multiqc_report.html
 pipeline_info/*.{html,json,txt,yml}
+reports/biopax-validator-report.html
+evaluation/**
+drug_prioritization/**
+input/**
+modules/**
+modules_visualized/**
+modules_visualized_with_drugs/**
+mqc_summaries/**
+multiqc/**
