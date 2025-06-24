@@ -19,5 +19,3 @@ process TOPOLOGY {
     END_VERSIONS
     """
 }
-
-

@@ -54,4 +54,3 @@ workflow GT_PROXIMITY {
     //proxout   = PROXIMITY.out.proxout
     versions = ch_versions
 }
-
