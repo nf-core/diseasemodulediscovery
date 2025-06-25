@@ -8,14 +8,18 @@ process SEEDPERMUTATIONVISUALIZATION {
     path (inputs)
 
     output:
-    path ("seed_rediscovery.*.png")
-    path ("seed_rediscovery.*.pdf")
-    path ("seed_rediscovery.*.tsv")
+    path ("*.seed_rediscovery.png")
+    path ("*.seed_rediscovery.pdf")
+    path ("*.seed_rediscovery.tsv")
+    path ("*.robustness.png")
+    path ("*.robustness.pdf")
+    path ("*.robustness.tsv")
 
     when:
     task.ext.when == null || task.ext.when
 
     script:
+    def args = task.ext.args ?: ''
     def concatenated_seed_ids = seed_ids.join(" ")
     def concatenated_network_ids = network_ids.join(" ")
     def concatenated_amim_ids = amim_ids.join(" ")
@@ -25,6 +29,6 @@ process SEEDPERMUTATIONVISUALIZATION {
         --network-ids ${concatenated_network_ids} \\
         --amim-ids ${concatenated_amim_ids} \\
         --inputs ${inputs} \\
-        --log-level DEBUG
+        ${args}
     """
 }
