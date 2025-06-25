@@ -158,7 +158,7 @@ def main(argv=None):
         # sort columns by sum of values
         group_df = group_df[group_df.sum(axis=0).sort_values(ascending=False).index]
         # save grouped data to a TSV file
-        group_df.to_csv(f"{output_prefix}.tsv", sep="\t", index=False, header=True)
+        group_df.to_csv(f"{output_prefix}.tsv", sep="\t", header=True)
 
         ax = plot_dynamic_heatmap(
             group_df,
@@ -188,7 +188,7 @@ def main(argv=None):
         # sort columns by sum of values
         group_df = group_df[group_df.sum(axis=0).sort_values(ascending=False).index]
         # save grouped data to a TSV file
-        group_df.to_csv(f"{output_prefix}.tsv", sep="\t", index=False, header=True)
+        group_df.to_csv(f"{output_prefix}.tsv", sep="\t", header=True)
 
         ax = plot_dynamic_heatmap(
             group_df,
