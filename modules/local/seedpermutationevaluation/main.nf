@@ -11,11 +11,11 @@ process SEEDPERMUTATIONEVALUATION {
     path(network)
 
     output:
-    tuple val(meta), path("${meta.id}.seed_permutation_evaluation_summary.tsv")
-    tuple val(meta), path("${meta.id}.seed_permutation_evaluation_detailed.tsv")
+    tuple val(meta), path("${meta.id}.seed_permutation_evaluation_summary.tsv")  , emit: summary
+    tuple val(meta), path("${meta.id}.seed_permutation_evaluation_detailed.tsv") , emit: detailed
     tuple val(meta), path("${meta.id}.seed_permutation_multiqc_summary.tsv")     , emit: multiqc_summary
     tuple val(meta), path("${meta.id}.seed_permutation_multiqc_jaccard.txt")     , emit: multiqc_jaccard
-    path "versions.yml"                                                     , emit: versions
+    path "versions.yml"                                                          , emit: versions
 
     when:
     task.ext.when == null || task.ext.when

@@ -29,13 +29,12 @@ custom_content:
     - overlap
     - jaccard_similarity
     - shared_nodes
-    - digest
+    - jaccard_similarity_no_seeds
+    - shared_nodes_no_seeds
+    - digest_reference_free
+    - digest_reference_based
     - seed_permutation_jaccard
     - network_permutation_jaccard
-
-table_columns_visible:
-  topology:
-    nodes: false
 
 custom_data:
   topology:
@@ -150,7 +149,7 @@ custom_data:
   drugstone_link:
     id: "drugstone_link"
     section_name: "Drugstone Links"
-    description: "Using the links in this table you can see the modules visualized with the Drugst.One api"
+    description: "Using the links in this table you can see the modules visualized with the Drugst.One API"
     plot_type: "table"
     pconfig:
       id: "download_links_table"
@@ -192,10 +191,43 @@ custom_data:
         title: "Duplicate edges"
         description: "Number of duplicate edges, e.g. (A, B) and (B, A)"
         format: "{:.0f}"
-  digest:
-    section_name: "DIGEST"
-    description: "Empirical -log10 p-values for functional coherence calculated with
-      <a href='https://digest-validation.net/documentation'>DIGEST</a>. Columns represent different gene set data sources."
+  digest_reference_free:
+    section_name: "DIGEST (reference-free)"
+    description: "Empirical -log10 p-values for functional coherence within the module. Calculated with
+      <a href='https://digest-validation.net/documentation'>DIGEST</a> (subnetwork mode). Columns represent different gene set data sources."
+    plot_type: "table"
+    pconfig:
+      title: "DIGEST p-values"
+      scale: "YlGn"
+    headers:
+      GO.BP:
+        title: "GO.BP"
+        description: "GO Biological Process"
+        format: "{:.3f}"
+        min: 0
+        max: 3
+      GO.CC:
+        title: "GO.CC"
+        description: "GO Cellular Component"
+        format: "{:.3f}"
+        min: 0
+        max: 3
+      GO.MF:
+        title: "GO.MF"
+        description: "GO Molecular Function"
+        format: "{:.3f}"
+        min: 0
+        max: 3
+      KEGG:
+        title: "KEGG"
+        description: "KEGG pathways"
+        format: "{:.3f}"
+        min: 0
+        max: 3
+  digest_reference_based:
+    section_name: "DIGEST (reference-based)"
+    description: "Empirical -log10 p-values for functional coherence between the seeds and added nodes. Calculated with
+      <a href='https://digest-validation.net/documentation'>DIGEST</a> (subnetwork-set mode). Columns represent different gene set data sources."
     plot_type: "table"
     pconfig:
       title: "DIGEST p-values"
@@ -229,7 +261,7 @@ custom_data:
     parent_id: overlap
     parent_name: "Overlap"
     section_name: "Jaccard similarity"
-    description: "Jaccard similarity between the gene sets of the modules"
+    description: "Jaccard similarity between the module node sets"
     plot_type: "heatmap"
     pconfig:
       title: "Module Jaccard similarity"
@@ -239,9 +271,29 @@ custom_data:
     parent_id: overlap
     parent_name: "Overlap"
     section_name: "Shared nodes"
-    description: "Number of shared nodes between the gene sets of the modules"
+    description: "Number of shared nodes between the modules"
     plot_type: "heatmap"
     pconfig:
       title: "Number of shared nodes"
+      zlab: "Number of shared nodes"
+      square: False
+  jaccard_similarity_no_seeds:
+    parent_id: overlap
+    parent_name: "Overlap"
+    section_name: "Jaccard similarity (without seeds)"
+    description: "Jaccard similarity between the gene sets of the modules, excluding the seeds"
+    plot_type: "heatmap"
+    pconfig:
+      title: "Module Jaccard similarity (without seeds)"
+      zlab: "Jaccard similarity"
+      square: False
+  shared_nodes_no_seeds:
+    parent_id: overlap
+    parent_name: "Overlap"
+    section_name: "Shared nodes (without seeds)"
+    description: "Number of shared nodes between the modules, excluding the seeds"
+    plot_type: "heatmap"
+    pconfig:
+      title: "Number of shared nodes (without seeds)"
       zlab: "Number of shared nodes"
       square: False
