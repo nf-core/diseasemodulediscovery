@@ -7,6 +7,7 @@ include { GT_DOMINO             } from '../gt_domino'
 include { GT_ROBUST             } from '../gt_robust'
 include { GT_ROBUSTBIASAWARE    } from '../gt_robust_bias_aware'
 include { GT_FIRSTNEIGHBOR      } from '../gt_firstneighbor'
+include { GT_HIERARCHICAL_HOTNET} from '../gt_hierarchical_hotnet'
 include { GT_RWR                } from '../gt_rwr'
 include { MODULEPARSER          } from '../../../modules/local/moduleparser/main'
 
@@ -68,6 +69,11 @@ workflow NETWORKEXPANSION {
         ch_raw_modules = ch_raw_modules.mix(GT_RWR.out.module)
     }
 
+    if(!params.skip_hierarchical_hotnet){
+        GT_HIERARCHICAL_HOTNET(ch_seeds, ch_network)
+        ch_versions = ch_versions.mix(GT_HIERARCHICAL_HOTNET.out.versions)
+        ch_raw_modules = ch_raw_modules.mix(GT_HIERARCHICAL_HOTNET.out.module)
+    }
     // channel: [ val(meta[id,module_id,amim,seeds_id,network_id]), path(module), path(seeds), path(network) ]
     ch_module_parser_input = ch_raw_modules
         .map{meta, module -> [meta.seeds_id, meta.network_id, meta, module]}
