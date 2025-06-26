@@ -3,11 +3,6 @@
         "content": [
             72,
             {
-                "${task.process}": {
-                    "r-base": "4.3.1",
-                    "r-ggplot2": "3.4.3",
-                    "r-gprofiler2": "0.2.2"
-                },
                 "BIOPAX_PARSER": {
                     "python": "3.12.7",
                     "graph-tool": "2.77 (commit 4ad25c62, )",
@@ -37,6 +32,10 @@
                 "DRUGSTONEEXPORT": {
                     "python": "3.12.7",
                     "graph-tool": "2.77 (commit 4ad25c62, )"
+                },
+                "GPROFILER2_GOST": {
+                    "r-ggplot2": "3.4.3",
+                    "r-gprofiler2": "0.2.2"
                 },
                 "GRAPHTOOLPARSER": {
                     "python": "3.12.7",
@@ -209,9 +208,12 @@
                 "evaluation/seed_permutation/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond.seed_permutation_evaluation_summary.tsv",
                 "evaluation/seed_permutation/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond.seed_permutation_multiqc_jaccard.txt",
                 "evaluation/seed_permutation/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond.seed_permutation_multiqc_summary.tsv",
-                "evaluation/seed_permutation/seed_rediscovery.entrez_seeds_1.entrez_ppi.pdf",
-                "evaluation/seed_permutation/seed_rediscovery.entrez_seeds_1.entrez_ppi.png",
-                "evaluation/seed_permutation/seed_rediscovery.entrez_seeds_1.entrez_ppi.tsv",
+                "evaluation/seed_permutation/entrez_seeds_1.entrez_ppi.robustness.pdf",
+                "evaluation/seed_permutation/entrez_seeds_1.entrez_ppi.robustness.png",
+                "evaluation/seed_permutation/entrez_seeds_1.entrez_ppi.robustness.tsv",
+                "evaluation/seed_permutation/entrez_seeds_1.entrez_ppi.seed_rediscovery.pdf",
+                "evaluation/seed_permutation/entrez_seeds_1.entrez_ppi.seed_rediscovery.png",
+                "evaluation/seed_permutation/entrez_seeds_1.entrez_ppi.seed_rediscovery.tsv",
                 "input",
                 "input/networks",
                 "input/networks/entrez_ppi.diamond.csv",
@@ -309,7 +311,7 @@
                             "main.nf:md5,c0503306e2cf4bf6f32c18e484446ef2"
                         ],
                         [
-                            "main.nf:md5,89916944d513b423174ea3db4e0bf6e3"
+                            "main.nf:md5,6b239ca11d81aee16c239ff5f9bc61d8"
                         ],
                         [
                             "main.nf:md5,1abc41275c99a05b0acbc268bf466e1c"
@@ -327,11 +329,16 @@
                     [
                         [
                             [
-                                "environment.yml:md5,a83ec060150802763486de895ddae855",
-                                "main.nf:md5,c3673c4fb46c6d464e06850d132affb2",
-                                "meta.yml:md5,e3ef141198ab09705a1c70e8aff00324",
+                                "environment.yml:md5,d56be896e649694d01ff46e4779bcd2a",
+                                "main.nf:md5,eb79261fb9bb66de82918c5cae97004e",
+                                "meta.yml:md5,34ca00351ef8593c5a135022bb288e9e",
                                 [
-                                    "gprofiler2_gost.R:md5,b03675ffcd50f6d78bf0b4f23d77c6ea"
+                                    "gprofiler2_gost.R:md5,a3c6dbefc85735c55fceba859c0d7ca6"
+                                ],
+                                [
+                                    "main.nf.test:md5,c19acdc07c115a80cdb41f0c41dce1d6",
+                                    "main.nf.test.snap:md5,b6d451462c4e12526f70999dc833c4aa",
+                                    "nextflow.config:md5,684f141dc7436b53314bc3c5212c2f60"
                                 ]
                             ]
                         ],
@@ -471,6 +478,6 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.4"
         },
-        "timestamp": "2025-06-24T10:16:12.460656306"
+        "timestamp": "2025-06-26T16:22:55.60089253"
     }
 }
