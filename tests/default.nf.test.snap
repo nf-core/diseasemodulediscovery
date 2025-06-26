@@ -476,13 +476,9 @@
                 "input_network_multiqc.tsv:md5,eedaf7f299c89a43429fa66dffb2bbc3",
                 "entrez_seeds_1.entrez_ppi.multiqc.tsv:md5,269d96ba266e5481c37a550fe4f13521",
                 "entrez_seeds_1.entrez_ppi.tsv:md5,1291b36e8add2d6ef0b8b72f7889016b",
-                "entrez_seeds_1.entrez_ppi.diamond.graphml:md5,ce920c8097d81eeb7d16c1c29160f94a",
                 "entrez_seeds_1.entrez_ppi.no_tool.graphml:md5,bfaed89376015c6ec3724a870fd86031",
-                "entrez_seeds_1.entrez_ppi.diamond.gt:md5,dbaf7e12985deb1f4ef54a2501553184",
                 "entrez_seeds_1.entrez_ppi.no_tool.gt:md5,5939c5390ea37756858e189b2f90462a",
-                "entrez_seeds_1.entrez_ppi.diamond.edges.tsv:md5,6222cdc367527add50c92c57e99825f2",
                 "entrez_seeds_1.entrez_ppi.no_tool.edges.tsv:md5,99cbfff7b59f45c1de3e5e6d36692099",
-                "entrez_seeds_1.entrez_ppi.diamond.nodes.tsv:md5,85fcf49dac72d534c99276ec16aceabb",
                 "entrez_seeds_1.entrez_ppi.no_tool.nodes.tsv:md5,e711b826c2117dfde768e65f44cac358"
             ]
         ],
@@ -490,6 +486,6 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.4"
         },
-        "timestamp": "2025-06-26T16:41:54.085873816"
+        "timestamp": "2025-06-26T16:55:42.302492384"
     }
 }
