@@ -15,5 +15,16 @@ modules_visualized/**
 modules_visualized_with_drugs/**
 evaluation/**
 drug_prioritization/**
-mqc_summaries/**
 multiqc/**
+mqc_summaries/drugstone_link_mqc.tsv
+mqc_summaries/jaccard_similarity_matrix_mqc.tsv
+mqc_summaries/network_permutation_mqc.tsv
+mqc_summaries/shared_nodes_matrix_mqc.tsv
+mqc_summaries/digest_reference_based_mqc.tsv
+mqc_summaries/digest_reference_free_mqc.tsv
+mqc_summaries/jaccard_similarity_no_seeds_matrix_mqc.tsv
+mqc_summaries/seed_permutation_jaccard_mqc.yaml
+mqc_summaries/seed_permutation_mqc.tsv
+mqc_summaries/topology_mqc.tsv
+mqc_summaries/shared_nodes_no_seeds_matrix_mqc.tsv
+mqc_summaries/network_permutation_jaccard_mqc.yaml
