@@ -19,6 +19,8 @@ include { DIGEST as DIGEST_REFERENCEFREE    } from '../modules/local/digest/main
 include { DIGEST as DIGEST_REFERENCEBASED   } from '../modules/local/digest/main'
 include { MODULEOVERLAP                     } from '../modules/local/moduleoverlap/main'
 include { DRUGPREDICTIONS                   } from '../modules/local/drugpredictions/main'
+include { DOWNLOADDRUGLIST                  } from '../modules/local/prioritizationevaluation/main'
+include { PRIORITIZATIONEVALUATION          } from '../modules/local/prioritizationevaluation/main'
 include { TOPOLOGY                          } from '../modules/local/topology/main'
 include { DRUGSTONEEXPORT                   } from '../modules/local/drugstoneexport/main'
 
@@ -541,7 +543,31 @@ workflow DISEASEMODULEDISCOVERY {
             VISUALIZEMODULESDRUGS(ch_drug_visualization_input)
             ch_versions = ch_versions.mix(VISUALIZEMODULESDRUGS.out.versions)
         }
+        if(params.true_drugs) {
+            DOWNLOADDRUGLIST()
+            // construct a channel that emits the actual file
+            def trueDrugsCh = Channel.fromPath( params.true_drugs )
+
+            PRIORITIZATIONEVALUATION(
+                DRUGPREDICTIONS.out.drug_predictions,
+                DOWNLOADDRUGLIST.out.drug_csv,
+                trueDrugsCh
+            )
+            // Collect all per‐run TSVs (with header only once) into a single summary file
+            ch_multiqc_files = ch_multiqc_files.mix(
+                PRIORITIZATIONEVALUATION.out.prioritization_evaluation
+                .map { meta, algorithm, tsv -> tsv }
+                .collectFile(
+                    cache: false,
+                    storeDir: "${params.outdir}/mqc_summaries",
+                    name: 'prioritizationevaluation_mqc.tsv',
+                    keepHeader: true
+                )
+            )
+        }
     }
+    
+
 
     // Drug prioritization - Proximity
     if(params.run_proximity){
