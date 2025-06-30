@@ -546,10 +546,10 @@ workflow DISEASEMODULEDISCOVERY {
         if(params.true_drugs) {
             DOWNLOADDRUGLIST()
             // construct a channel that emits the actual file
-            def trueDrugsCh = Channel.fromPath( params.true_drugs )
+            def trueDrugsCh = Channel.value( file(params.true_drugs) )
 
             PRIORITIZATIONEVALUATION(
-                DRUGPREDICTIONS.out.drug_predictions,
+                DRUGPREDICTIONS.out.drugstone_download,
                 DOWNLOADDRUGLIST.out.drug_csv,
                 trueDrugsCh
             )
