@@ -35,6 +35,7 @@ custom_content:
     - digest_reference_based
     - seed_permutation_jaccard
     - network_permutation_jaccard
+    - prioritizationevaluation
 
 custom_data:
   topology:
@@ -297,3 +298,4 @@ custom_data:
       title: "Number of shared nodes (without seeds)"
       zlab: "Number of shared nodes"
       square: False
+  prioritizationevaluation:
