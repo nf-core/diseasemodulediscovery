@@ -23,30 +23,30 @@ process DOWNLOADDRUGLIST {
 
 }
 process PRIORITIZATIONEVALUATION {
+
   tag "$meta.id"
   label 'process_single'
+
   publishDir "${params.outdir}/prioritizationevaluation",
-             mode: 'copy',           // copy rather than move
-             overwrite: true,        // overwrite existing files if any
+             mode: 'copy',
+             overwrite: true,
              pattern: "*.prioritization_evaluation.tsv"
 
   input:
-    tuple val(meta), val(algorithm), path(prediction_file)
-    path drug_csv
-    path true_drugs
+    tuple val(meta), val(algorithm), path(prediction_file), path(true_drugs)
+    path  drug_csv
 
   output:
     tuple val(meta), val(algorithm), path("${meta.id}.prioritization_evaluation.tsv"), emit: prioritization_evaluation
-
   script:
   """
   drug_validation.py \
-    --candidate-drugs ${prediction_file} \
-    --drug-list      ${drug_csv} \
-    --true-drugs     ${true_drugs} \
-    --out-dir        . \
-    --output-file    ${meta.id}.prioritization_evaluation.tsv
+      --candidate-drugs ${prediction_file} \
+      --drug-list       ${drug_csv} \
+      --true-drugs      ${true_drugs} \
+      --out-dir         . \
+      --permutation-count ${params.eval_permutations} \
+      ${params.includeNonApprovedDrugs ? '' : '--only-approved'} \
+      --output-file     ${meta.id}.prioritization_evaluation.tsv
   """
 }
-
-

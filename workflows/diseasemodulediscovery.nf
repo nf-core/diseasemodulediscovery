@@ -543,27 +543,49 @@ workflow DISEASEMODULEDISCOVERY {
             VISUALIZEMODULESDRUGS(ch_drug_visualization_input)
             ch_versions = ch_versions.mix(VISUALIZEMODULESDRUGS.out.versions)
         }
-        if(params.true_drugs) {
+
+        if( params.true_drugs ) {
             DOWNLOADDRUGLIST()
-            // construct a channel that emits the actual file
-            def trueDrugsCh = Channel.value( file(params.true_drugs) )
-            def nPerm = params.eval_permutations
-            PRIORITIZATIONEVALUATION(
-                DRUGPREDICTIONS.out.drugstone_download,
-                DOWNLOADDRUGLIST.out.drug_csv,
-                trueDrugsCh
-            )
-            // Collect all per‐run TSVs (with header only once) into a single summary file
-            ch_multiqc_files = ch_multiqc_files.mix(
-                PRIORITIZATIONEVALUATION.out.prioritization_evaluation
-                .map { meta, algorithm, tsv -> tsv }
-                .collectFile(
-                    cache: false,
-                    storeDir: "${params.outdir}/mqc_summaries",
-                    name: 'prioritizationevaluation_mqc.tsv',
-                    keepHeader: true
+
+            def seedFiles     = params.seeds.split(',').collect { it.trim() }
+            def trueDrugFiles = params.true_drugs.split(',').collect { it.trim() }
+
+            if( seedFiles.size() != trueDrugFiles.size() )
+                throw new IllegalArgumentException(
+                    "You supplied ${seedFiles.size()} --seeds files but " +
+                    "${trueDrugFiles.size()} --true-drugs files – counts must match."
                 )
+
+            def seedIdsOrdered = seedFiles.collect { new File(it).getName().replaceFirst(/(\.[^.]+)$/, '') }
+            def seedTruePairs  = seedIdsOrdered.withIndex().collect { sid, idx -> [ sid, file(trueDrugFiles[idx]) ] }
+
+            def ch_true_drugs_map = Channel.from( seedTruePairs )
+
+            def ch_prior_eval_input = DRUGPREDICTIONS.out.drugstone_download
+                .map    { meta, algorithm, prediction_file -> [ meta.seeds_id, [meta, algorithm, prediction_file] ] }
+                .combine( ch_true_drugs_map, by: 0 )
+                .map    { sid, left, true_drug ->
+                            def (meta, algorithm, prediction_file) = left
+                            [ meta, algorithm, prediction_file, true_drug ]
+                        }
+                //.view   { "PRIORITIZATIONEVALUATION INPUT ➜  meta:${it[0].id}   true:${it[3].getName()}" }
+
+            PRIORITIZATIONEVALUATION(
+                ch_prior_eval_input,                     
+                DOWNLOADDRUGLIST.out.drug_csv            
             )
+            ch_multiqc_files = ch_multiqc_files.mix(
+                        PRIORITIZATIONEVALUATION.out.prioritization_evaluation
+                        .map { meta, algorithm, tsv -> tsv }
+                        .collectFile(
+                            cache: false,
+                            storeDir: "${params.outdir}/mqc_summaries",
+                            name: 'prioritizationevaluation_mqc.tsv',
+                            keepHeader: true
+                        )
+                    )
+
+
         }
     }
     
