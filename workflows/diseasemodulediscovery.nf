@@ -547,7 +547,7 @@ workflow DISEASEMODULEDISCOVERY {
             DOWNLOADDRUGLIST()
             // construct a channel that emits the actual file
             def trueDrugsCh = Channel.value( file(params.true_drugs) )
-
+            def nPerm = params.eval_permutations
             PRIORITIZATIONEVALUATION(
                 DRUGPREDICTIONS.out.drugstone_download,
                 DOWNLOADDRUGLIST.out.drug_csv,
