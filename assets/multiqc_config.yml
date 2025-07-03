@@ -299,3 +299,4 @@ custom_data:
       zlab: "Number of shared nodes"
       square: False
   prioritizationevaluation:
+    description: "Empirical p-values and observed metrics for file prioritization evaluation."
