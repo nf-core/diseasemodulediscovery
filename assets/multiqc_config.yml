@@ -299,4 +299,37 @@ custom_data:
       zlab: "Number of shared nodes"
       square: False
   prioritizationevaluation:
+    section_name: "PRIORITIZATION EVALUATION"
     description: "Empirical p-values and observed metrics for file prioritization evaluation."
+    plot_type: "table"
+    pconfig:
+      title: "Prioritization Evaluation"
+    headers:
+      ID:
+        title: "ID"
+        description: "Identifier of the model or method evaluated"
+        format: "{}"
+      empirical_DCG_based_p_value:
+        title: "Empirical DCG-based p-value"
+        description: "Empirical p-value calculated based on DCG"
+        format: "{:.4f}"
+      empirical_p_value_without_considering_ranks:
+        title: "Empirical p-value (no ranks)"
+        description: "Empirical p-value without considering rank information"
+        format: "{:.4f}"
+      observed_DCG:
+        title: "Observed DCG"
+        description: "Observed discounted cumulative gain"
+        format: "{:.4f}"
+      observed_overlap:
+        title: "Observed overlap"
+        description: "Observed overlap count"
+        format: "{:.0f}"
+      dcg_exceed_count:
+        title: "DCG exceed count"
+        description: "Number of times the permutation DCG exceeded the observed value"
+        format: "{:.0f}"
+      overlap_exceed_count:
+        title: "Overlap exceed count"
+        description: "Number of times the permutation overlap exceeded the observed value"
+        format: "{:.0f}"
