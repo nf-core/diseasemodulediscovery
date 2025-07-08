@@ -394,12 +394,12 @@ workflow DISEASEMODULEDISCOVERY {
                 .combine(GT2TSV_Network.out.map{meta, path -> [meta.id, path]}, by: 0)
                 .multiMap{key, meta, nodes, network ->
                     nodes: [meta, nodes]
-                    network: network
+                    network: [meta, network]
                 }
 
             GPROFILER2_GOST (
                 ch_gprofiler_input.nodes,
-                [],
+                [[],[]],
                 ch_gprofiler_input.network
             )
             ch_versions = ch_versions.mix(GPROFILER2_GOST.out.versions)
