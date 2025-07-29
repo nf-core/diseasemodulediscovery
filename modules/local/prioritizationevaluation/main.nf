@@ -2,26 +2,32 @@ process DOWNLOADDRUGLIST {
     label 'process_single'
     tag   'download_drug_list'
 
-    // Emit the final CSV for downstream channels
     output:
-        path 'drug.csv', emit: drug_csv
-//       TODO: possibly add ability to specify base url
+      path 'drug.csv', emit: drug_csv
+
     script:
     """
-    # 1. Generate a fresh API key
-    api_key=\$(generate_NEDREX_API_key.py \
-        --base-url https://api.nedrex.net/licensed/ \
+    #!/usr/bin/env bash
+
+    # 1) Choose endpoint based on license acceptance
+    BASE_URL='${ params.accept_license ? "https://api.nedrex.net/licensed/" : "https://api.nedrex.net/open/" }'
+
+    # 2) Conditionally generate API key
+    if [ "${params.accept_license}" = "true" ]; then
+      api_key=\$(generate_NEDREX_API_key.py \
+        --base-url "\$BASE_URL" \
         --print-key)
+    fi
 
-    # 2. Download the drug collection using that key
+    # 3) Download drug list
     nedrex_node_extraction.py \
-        --base-url https://api.nedrex.net/licensed/ \
-        --collections drug \
-        --output ./ \
-        --api-key "\$api_key"
+      --base-url "\$BASE_URL" \
+      --collections drug \\
+      --output ./ \
+      ${ params.accept_license ? '--api-key "\$api_key"' : '' }
     """
-
 }
+
 process PRIORITIZATIONEVALUATION {
 
   tag "$meta.id"

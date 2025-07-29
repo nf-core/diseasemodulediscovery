@@ -110,7 +110,7 @@ def main():
     parser.add_argument('-c', '--collections', nargs='+', required=True,
         help='One or more collection names to download')
     parser.add_argument('--output', '-o', required=True, help='Output directory to save CSV files')
-    parser.add_argument('--api-key', '-k', required=True, dest='api_key', help='API key for authentication')
+    parser.add_argument('--api-key', '-k', dest='api_key', help='API key for authentication')
     args = parser.parse_args()
     if args.api_key:
         api_key = args.api_key
