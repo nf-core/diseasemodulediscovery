@@ -301,6 +301,10 @@
                     "type": "integer",
                     "default": 10000,
                     "description": "Number of permutations to sample for drug validation evaluation"
+                },
+                "accept_license": {
+                    "type": "boolean",
+                    "description": "Whether to accept the Drugstone NeDRex License agreement https://raw.githubusercontent.com/repotrial/nedrex_platform_licence/main/licence.txt. By setting this parameter to true, you confirm that you have read the license and agree. Required to use licensed sources in the drug prediction and download drug list step."
                 }
             }
         },
