@@ -132,7 +132,8 @@ def main():
             'observed_DCG',
             'observed_overlap',
             'dcg_exceed_count',
-            'overlap_exceed_count'
+            'overlap_exceed_count',
+            'true_drugs_file'
         ]
         with open(output_file, 'w') as f:
             f.write('\t'.join(header) + '\n')
@@ -143,7 +144,8 @@ def main():
                 str(result['observed DCG']),
                 str(result['observed overlap']),
                 str(result['dcg exceed count']),
-                str(result['overlap exceed count'])
+                str(result['overlap exceed count']),
+                args.true_drugs
             ]
             f.write('\t'.join(row) + '\n')
         logger.info(f"Results successfully saved to '{output_file}'")
