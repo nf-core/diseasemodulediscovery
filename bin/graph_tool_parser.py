@@ -108,7 +108,7 @@ def save_hierarchical_hotnet(g, stem):
         for index, v in enumerate(g.vertices()):
             writer.writerow([(index + 1), g.vp["name"][v]])
             indexmap[v] = index + 1
-    with open(f"{stem}.hierarchical_hotnet.edges_list.tsv", "w") as file:
+    with open(f"{stem}.hierarchical_hotnet.edge_list.tsv", "w") as file:
         for e in g.edges():
             writer = csv.writer(file, lineterminator="\n", delimiter="\t")
             writer.writerow([indexmap[e.source()], indexmap[e.target()]])

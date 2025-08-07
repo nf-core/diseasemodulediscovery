@@ -18,7 +18,7 @@ process HIERARCHICAL_HOTNET_PERMUTE_SCORES {
     python hierarchical-hotnet/src/find_permutation_bins.py \
         -gsf ${node_scores} \\
         -igf \$node_list \\
-        -elf \$edge_list \\
+        // -elf \$edge_list \\
         -o ${meta.id}.score_bins.tsv
 
     for i in 'seq 0 4'
