@@ -19,7 +19,10 @@ include { DIGEST as DIGEST_REFERENCEFREE    } from '../modules/local/digest/main
 include { DIGEST as DIGEST_REFERENCEBASED   } from '../modules/local/digest/main'
 include { MODULEOVERLAP                     } from '../modules/local/moduleoverlap/main'
 include { DRUGPREDICTIONS                   } from '../modules/local/drugpredictions/main'
-include { DOWNLOADDRUGLIST                  } from '../modules/local/prioritizationevaluation/main'
+include { DOWNLOADDRUGLIST as DOWNLOAD_DRUG }              from '../modules/local/prioritizationevaluation/main'
+include { DOWNLOADDRUGLIST as DOWNLOAD_DRUG_HAS_TARGET }   from '../modules/local/prioritizationevaluation/main'
+include { DOWNLOADDRUGLIST as DOWNLOAD_DRUG_HAS_IND }      from '../modules/local/prioritizationevaluation/main'
+include { CREATETRUEDRUGFILE }      from '../modules/local/prioritizationevaluation/main'
 include { PRIORITIZATIONEVALUATION          } from '../modules/local/prioritizationevaluation/main'
 include { TOPOLOGY                          } from '../modules/local/topology/main'
 include { DRUGSTONEEXPORT                   } from '../modules/local/drugstoneexport/main'
@@ -545,21 +548,81 @@ workflow DISEASEMODULEDISCOVERY {
         }
 
         if( params.true_drugs ) {
-            def drug_ch = DOWNLOADDRUGLIST('drug')
+            def drug_ch = DOWNLOAD_DRUG('drug')
 
             def seedFiles     = params.seeds.split(',').collect { it.trim() }
-            def trueDrugFiles = params.true_drugs.split(',').collect { it.trim() }
+            def trueDrugInputs   = params.true_drugs.split(',').collect { it.trim() }
 
-            if( seedFiles.size() != trueDrugFiles.size() )
-                throw new IllegalArgumentException(
-                    "You supplied ${seedFiles.size()} --seeds files but " +
-                    "${trueDrugFiles.size()} --true-drugs files – counts must match."
+            boolean inputsAreFiles
+            try {
+                file(trueDrugInputs[0], checkIfExists: true)   // throws if it doesn't exist
+                inputsAreFiles = true
+            }
+            catch(Throwable ignore) {
+                inputsAreFiles = false
+            }
+
+            // 3) Unify to a list of files (stubbed else-branch for future resolver/downloader)
+            
+            if( seedFiles.size() != trueDrugInputs.size() )
+                    throw new IllegalArgumentException(
+                        "You supplied ${seedFiles.size()} --seeds files but " +
+                        "${trueDrugInputs.size()} --true-drugs files - counts must match."
+                    )
+                
+            if( inputsAreFiles ) {
+                // Keep the original behavior AND produce an (idx, path) channel for unification
+                true_drugs_idx_path_ch = Channel.from(
+                    trueDrugInputs.withIndex().collect { pathStr, idx -> tuple(idx, file(pathStr)) }
+                )
+            } else {
+
+                // Extra CSVs via your aliased modules
+                def drug_has_target_ch     = DOWNLOAD_DRUG_HAS_TARGET('drug_has_target')
+                def drug_has_indication_ch = DOWNLOAD_DRUG_HAS_IND('drug_has_indication')
+
+                // Attach an index to preserve original order
+                def diseases_idx_ch = Channel.from(
+                    trueDrugInputs.withIndex().collect { did, idx -> tuple(idx, did) }
                 )
 
-            def seedIdsOrdered = seedFiles.collect { new File(it).getName().replaceFirst(/(\.[^.]+)$/, '') }
-            def seedTruePairs  = seedIdsOrdered.withIndex().collect { sid, idx -> [ sid, file(trueDrugFiles[idx]) ] }
+                // Run builder once per disease; broadcast singletons via value channels
+                // Value channels are reused for each queue item
+                def truedrugs_idx_ch = CREATETRUEDRUGFILE(
+                    diseases_idx_ch,
+                    drug_ch.first(),                // value channel
+                    drug_has_target_ch.first(),     // value channel
+                    drug_has_indication_ch.first()  // value channel
+                )
 
-            def ch_true_drugs_map = Channel.from( seedTruePairs )
+                // For downstream unification after the if/else
+                true_drugs_idx_path_ch = truedrugs_idx_ch
+
+                // Optional debug
+                // true_drugs_idx_path_ch.view { idx, p -> "TRUE_DRUG_FILE[${idx}] -> ${p}" }
+            }
+
+
+            // if( seedFiles.size() != trueDrugFiles.size() )
+            //     throw new IllegalArgumentException(
+            //         "You supplied ${seedFiles.size()} --seeds files but " +
+            //         "${trueDrugFiles.size()} --true-drugs files – counts must match."
+            //     )
+
+            // Build (idx, seedId) from seeds in their original order
+            def seed_ids_idx_ch = Channel.from(
+                seedFiles.collect { new File(it).getName().replaceFirst(/(\.[^.]+)$/, '') }
+                        .withIndex()
+                        .collect { sid, idx -> tuple(idx, sid) }
+            )
+
+            // If we’re in the “build” branch, we already assigned true_drugs_idx_path_ch above.
+            // If we’re in the “files already” branch, we set it there too.
+            // Now join by idx -> (seedId, trueDrugPath), preserving the original ordering
+            def ch_true_drugs_map = seed_ids_idx_ch
+                .join(true_drugs_idx_path_ch)              // join on idx
+                .map { idx, sid, tf -> tuple(sid, tf) }    // shape: (seedId, file)
+
 
             def ch_prior_eval_input = DRUGPREDICTIONS.out.drugstone_download
                 .map    { meta, algorithm, prediction_file -> [ meta.seeds_id, [meta, algorithm, prediction_file] ] }
@@ -568,7 +631,7 @@ workflow DISEASEMODULEDISCOVERY {
                             def (meta, algorithm, prediction_file) = left
                             [ meta, algorithm, prediction_file, true_drug ]
                         }
-                //.view   { "PRIORITIZATIONEVALUATION INPUT ➜  meta:${it[0].id}   true:${it[3].getName()}" }
+                // .view   { "PRIORITIZATIONEVALUATION INPUT ➜  meta:${it[0].id}   true:${it[3].getName()}" }
 
             PRIORITIZATIONEVALUATION(
                 ch_prior_eval_input,                     

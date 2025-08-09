@@ -1,6 +1,6 @@
 process DOWNLOADDRUGLIST {
     label 'process_single'
-    tag   'download_drug_list'
+    tag   "download_${collection}"
 
     input:
       val collection
@@ -57,5 +57,31 @@ process PRIORITIZATIONEVALUATION {
       --permutation-count ${params.eval_permutations} \
       ${params.includeNonApprovedDrugs ? '' : '--only-approved'} \
       --output-file     ${meta.id}.prioritization_evaluation.tsv
+  """
+}
+
+process CREATETRUEDRUGFILE {
+  label 'process_single'
+  tag   "true_${disease_id}"
+
+  input:
+    tuple val(idx), val(disease_id)
+    path drug_csv
+    path drug_has_target_csv
+    path drug_has_indication_csv
+
+  output:
+    tuple val(idx), path("${disease_id}.csv")
+
+  script:
+  """
+  create_true_drug_file.py \
+    --drug-has-indication ${drug_has_indication_csv} \
+    --drug-has-target     ${drug_has_target_csv} \
+    --drug-csv            ${drug_csv} \
+    --disease-id          ${disease_id} \
+    ${ params.includeNonApprovedDrugs ? '' : '--only-approved' } \
+    --output-folder       . \
+    --output-file         ${disease_id}.csv
   """
 }
