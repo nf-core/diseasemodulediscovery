@@ -333,3 +333,11 @@ custom_data:
         title: "Overlap exceed count"
         description: "Number of times the permutation overlap exceeded the observed value"
         format: "{:.0f}"
+      candidate_count:
+        title: "Candidate drug count"
+        description: "Number of candidate drugs considered in the evaluation"
+        format: "{:.0f}"
+      percent_true_drugs_found:
+        title: "Percent true drugs found"
+        description: "Percentage of true drugs found in the candidate set"
+        format: "{:.2f}"
