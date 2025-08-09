@@ -2,8 +2,11 @@ process DOWNLOADDRUGLIST {
     label 'process_single'
     tag   'download_drug_list'
 
+    input:
+      val collection
+
     output:
-      path 'drug.csv', emit: drug_csv
+      path "${collection}.csv", emit: csv_out
 
     script:
     """
@@ -22,7 +25,7 @@ process DOWNLOADDRUGLIST {
     # 3) Download drug list
     nedrex_node_extraction.py \
       --base-url "\$BASE_URL" \
-      --collections drug \\
+      --collections "$collection" \
       --output ./ \
       ${ params.accept_license ? '--api-key "\$api_key"' : '' }
     """

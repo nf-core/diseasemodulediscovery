@@ -545,7 +545,7 @@ workflow DISEASEMODULEDISCOVERY {
         }
 
         if( params.true_drugs ) {
-            DOWNLOADDRUGLIST()
+            def drug_ch = DOWNLOADDRUGLIST('drug')
 
             def seedFiles     = params.seeds.split(',').collect { it.trim() }
             def trueDrugFiles = params.true_drugs.split(',').collect { it.trim() }
@@ -572,7 +572,7 @@ workflow DISEASEMODULEDISCOVERY {
 
             PRIORITIZATIONEVALUATION(
                 ch_prior_eval_input,                     
-                DOWNLOADDRUGLIST.out.drug_csv            
+                drug_ch            
             )
             ch_multiqc_files = ch_multiqc_files.mix(
                         PRIORITIZATIONEVALUATION.out.prioritization_evaluation
