@@ -133,6 +133,8 @@ def main():
             'observed_overlap',
             'dcg_exceed_count',
             'overlap_exceed_count',
+            'candidate_count',
+            'percent_true_drugs_found',
             'true_drugs_file'
         ]
         with open(output_file, 'w') as f:
@@ -145,6 +147,8 @@ def main():
                 str(result['observed overlap']),
                 str(result['dcg exceed count']),
                 str(result['overlap exceed count']),
+                str(result['candidate count']),
+                str(result['percent true drugs found']),
                 args.true_drugs
             ]
             f.write('\t'.join(row) + '\n')
@@ -192,8 +196,16 @@ def drug_list_validation(drugs_df: pd.DataFrame, true_drugs: List[str], candidat
     # number of exceeding cases
     logger.info(f"Number of random DCG values exceeding observed: {exceed_dcg} out of {permutation_count}")
     logger.info("Validation completed successfully")
-    return {"empirical DCG-based p-value": p_value_dcg, "empirical p-value without considering ranks": p_value_overlap,
-            "observed DCG": dcg_observed, "observed overlap": observed_overlap,"dcg exceed count": exceed_dcg,"overlap exceed count": exceed_overlap}
+    return {
+        "empirical DCG-based p-value": p_value_dcg,
+        "empirical p-value without considering ranks": p_value_overlap,
+        "observed DCG": dcg_observed,
+        "observed overlap": observed_overlap,
+        "dcg exceed count": exceed_dcg,
+        "overlap exceed count": exceed_overlap,
+        "candidate count": len(candidates),
+        "percent true drugs found": (observed_overlap / len(true_drugs) * 100) if candidates else 0.0
+    }
 
 
 if __name__ == '__main__':
