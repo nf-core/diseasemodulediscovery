@@ -295,7 +295,7 @@
                 },
                 "true_drugs": {
                     "type": "string",
-                    "description": "Comma separated list of ground truth known true drug files for the input seeds. Order is matches to order of --seeds inputs."
+                    "description": "Comma separated list of ground truth known true drug files for the input seeds. Order is matches to order of --seeds inputs. You can provide the files directly, or just the mondo disease ids (with mondo. prefix) to have them automatically queried."
                 },
                 "eval_permutations": {
                     "type": "integer",
