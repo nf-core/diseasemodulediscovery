@@ -179,11 +179,7 @@ nextflow run <PATH_TO_REPO>/modulediscovery/main.nf \
    -resume
 ```
 
-To see the full list of skipping options, please run:
-
-```bash
-nextflow run <PATH_TO_REPO>/modulediscovery/main.nf --help
-```
+To see the full list of skipping options, please refer to the [parameter documentation](https://nf-co.re/diseasemodulediscovery/parameters).
 
 ### Updating the pipeline
 
