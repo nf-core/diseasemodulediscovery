@@ -23,9 +23,32 @@ nextflow run nf-core/diseasemodulediscovery \
 
 This will launch the pipeline with the `docker` configuration profile. See below for more information about profiles.
 
-`--seeds` has to point to a text file with seed genes or proteins, without a header and one line per entry.
+`--seeds` has to point to a text file with seed genes or proteins, without a header and one line per entry. Format example:
 
-`--network` has to point to file containing a background network. This can be a CSV edge list (without header), or a .gt, .graphml, or .dot file. Alternatively, you can choose one of the available background networks (see below).
+```csv title="seeds.txt"
+2717
+175
+4669
+4125
+348
+4126
+411
+```
+
+`--network` has to point to file containing a background network. This can be a CSV edge list (without header), or a .gt, .graphml, or .dot file. Alternatively, you can choose one of the available background networks ([see below](#available-networks)). Format example:
+
+```csv title="ppi.csv"
+3920,5476
+113457,4214
+113457,7132
+113457,1326
+113457,1147
+113457,3551
+113457,29110
+113457,8717
+113457,9641
+113457,9020
+```
 
 `--id_space` has to indicate the ID space your genes or proteins are using. For genes Entrez IDs, Ensembl IDs, and HGNC Symbols are supported. For proteins UniProt-AC IDs are supported.
 
