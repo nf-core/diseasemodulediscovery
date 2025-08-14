@@ -136,9 +136,7 @@ If multiple files are provided for both options, the pipeline will run for every
 
 In case you are only interested in specific combinations, seeds-network pairs can be specified via a CSV samplesheet:
 
-`samplesheet.csv`:
-
-```csv
+```csv, title="samplesheet.csv"
 seeds,network
 seed_file_1.csv,network_1.csv
 seed_file_2.csv,network_2.csv
@@ -180,6 +178,34 @@ nextflow run <PATH_TO_REPO>/modulediscovery/main.nf \
 ```
 
 To see the full list of skipping options, please refer to the [parameter documentation](https://nf-co.re/diseasemodulediscovery/parameters).
+
+### Perturbation-based analyses
+
+Since the input perturbation-based analyses workflows can be computationally expensive, the pipeline does not run them by default.
+
+Use `--run_seed_permutation` to perform a leave-one-out analysis. This option sequentially removes each seed gene or protein from the seed file input. The module identification methods are then rerun on these perturbed datasets to evaluate their robustness to small input changes and their ability to reintegrate the omitted seeds.
+
+Use `--run_network_permutation` to repeatedly rewire the edges of the input network while preserving the degree of each node. The pipeline then reruns the module identification methods on these rewired networks. If rewiring has little effect, it suggests that the modules are driven mainly by node degree rather than by specific edge connections.
+
+The pipeline saves the rewired networks (please refer to the [output documentation](https://nf-co.re/diseasemodulediscovery/output)), which can be reused in future analyses with the same original input network. To do so, provide the path to the folder containing the rewired networks via the `--permuted_networks` parameter. If multiple networks are used, the folders specified in `--permuted_networks` must be given in the same order as the corresponding input networks.
+
+```bash
+nextflow run <PATH_TO_REPO>/modulediscovery/main.nf \
+   -profile <docker/singularity> \
+   --seeds <SEED_FILE_> \
+   --network <NETWORK_FILE_1,NETWORK_FILE_2,...> \
+   --permuted_networks <PATH_TO_PERMUTED_NETWORK_FOLDER_1,PATH_TO_PERMUTED_NETWORK_FOLDER_1,...> \
+   --outdir <OUTDIR>
+```
+
+Alternatively, they can be specified using the samplesheet:
+
+```csv, title="samplesheet.csv"
+seeds,network,permuted_networks
+seed_file_1.csv,network_1.csv,/path/to/permuted/networks/network_1
+seed_file_2.csv,network_2.csv,/path/to/permuted/networks/network_2
+seed_file_2.csv,network_1.csv,/path/to/permuted/networks/network_1
+```
 
 ### Updating the pipeline
 
