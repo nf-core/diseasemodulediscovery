@@ -343,12 +343,12 @@
                             ]
                         ],
                         [
-                            "environment.yml:md5,6006cbc680bc2efbb1c5c43b016594fb",
-                            "main.nf:md5,5187fd85e3ce0bf3e80aebdfc5439062",
-                            "meta.yml:md5,6d799ad3aefd3ec7157157aa1d3f060c",
+                            "environment.yml:md5,2a2234acfe4f1ceced80419ab8161e49",
+                            "main.nf:md5,0cc2dc5b777daa80dc73cc5e87209d7f",
+                            "meta.yml:md5,e20ec2d6ae5b7b5e2e65a00f9cfd29c4",
                             [
                                 "main.nf.test:md5,f780adb58f1db8c1e19ddd1d8c7e62e9",
-                                "main.nf.test.snap:md5,a447aa14d79279b77f65a18338ac4e10",
+                                "main.nf.test.snap:md5,ff282dac5a46f273a4c110a6150c5668",
                                 "nextflow.config:md5,f2390ff2bd4fca9242630f5b25597e34",
                                 "tags.yml:md5,30a41ee7ffdbe32e2ec8ab6dcb203fcb"
                             ]
@@ -413,6 +413,7 @@
                 "mqc_summaries/topology_mqc.tsv",
                 "multiqc",
                 "multiqc/multiqc_data",
+                "multiqc/multiqc_data/BETA-multiqc.parquet",
                 "multiqc/multiqc_data/multiqc.log",
                 "multiqc/multiqc_data/multiqc_citations.txt",
                 "multiqc/multiqc_data/multiqc_data.json",
@@ -435,7 +436,6 @@
                 "multiqc/multiqc_plots/pdf/digest_reference_based.pdf",
                 "multiqc/multiqc_plots/pdf/digest_reference_free.pdf",
                 "multiqc/multiqc_plots/pdf/download_links_table.pdf",
-                "multiqc/multiqc_plots/pdf/general_stats_table.pdf",
                 "multiqc/multiqc_plots/pdf/input-cnt.pdf",
                 "multiqc/multiqc_plots/pdf/input-pct.pdf",
                 "multiqc/multiqc_plots/pdf/input.pdf",
@@ -446,7 +446,6 @@
                 "multiqc/multiqc_plots/png/digest_reference_based.png",
                 "multiqc/multiqc_plots/png/digest_reference_free.png",
                 "multiqc/multiqc_plots/png/download_links_table.png",
-                "multiqc/multiqc_plots/png/general_stats_table.png",
                 "multiqc/multiqc_plots/png/input-cnt.png",
                 "multiqc/multiqc_plots/png/input-pct.png",
                 "multiqc/multiqc_plots/png/input.png",
@@ -457,7 +456,6 @@
                 "multiqc/multiqc_plots/svg/digest_reference_based.svg",
                 "multiqc/multiqc_plots/svg/digest_reference_free.svg",
                 "multiqc/multiqc_plots/svg/download_links_table.svg",
-                "multiqc/multiqc_plots/svg/general_stats_table.svg",
                 "multiqc/multiqc_plots/svg/input-cnt.svg",
                 "multiqc/multiqc_plots/svg/input-pct.svg",
                 "multiqc/multiqc_plots/svg/input.svg",
@@ -486,8 +484,8 @@
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "25.04.4"
+            "nextflow": "25.04.6"
         },
-        "timestamp": "2025-06-26T18:42:55.691565609"
+        "timestamp": "2025-07-08T16:34:04.504090254"
     }
 }
