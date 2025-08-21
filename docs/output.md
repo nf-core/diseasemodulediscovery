@@ -174,7 +174,52 @@ In addition to the inferred disease modules, the pipeline provides a dummy modul
 
 ### g:Profiler
 
+[g:Profiler](https://biit.cs.ut.ee/gprofiler/gost) is used via the R package [gprofiler2](https://cran.r-project.org/web/packages/gprofiler2/index.html) to perform over-representation analysis (ORA), i.e., to find gene sets of pathways the module nodes are enriched in. For this, the module nodes are used as foreground, and all nodes of the corresponding input network as background.
+
+<details markdown="1">
+<summary>Output files</summary>
+
+Output file documentation is based on the nf-core module [gprofiler2_gost](https://nf-co.re/modules/gprofiler2_gost/).
+
+- `evaluation/gprofiler/<seeds>.<network>.<amim>/`
+  - `<seeds>.<network>.<amim>.gprofiler2.all_enriched_pathways.tsv`: Table listing all enriched pathways that were found.
+  - `<seeds>.<network>.<amim>.gprofiler2.gostplot.html`: Interactive Manhattan plot of all enriched pathways.
+  - `<seeds>.<network>.<amim>.gprofiler2.gostplot.png`: Manhattan plot of all enriched pathways.
+  - `<seeds>.<network>.<amim>.gprofiler2.gost_results.rds`: R object containing the results of the gost query.
+  - `<seeds>.<network>.<amim>.gprofiler2.<source>.sub_enriched_pathways.tsv`: Table listing enriched pathways that were found from one particular source.
+  - `<seeds>.<network>.<amim>.gprofiler2.<source>.sub_enriched_pathways.png`: Bar plot showing the fraction of genes that were found enriched in each pathway.
+  - `*ENSG_filtered.gmt`: GMT file that was provided as input or that was downloaded from g:profiler if no input GMT file was given; filtered for the selected datasources.
+  - `R_sessionInfo.log`: Log file containing information about the R session that was run for this module.
+
+</details>
+
 ### DIGEST
+
+[DIGEST](https://github.com/bionetslab/digest) is a tool designed to evaluate the functional coherence of disease modules. It assumes that genes within a module should participate in related biological processes, as indicated by annotations from Gene Ontology (GO) — including Biological Process (GO.BP), Cellular Component (GO.CC), and Molecular Function (GO.MF) — as well as from KEGG pathways.
+
+DIGEST is executed in two modes:
+
+- Reference-free mode (`subnetwork`) – evaluates the functional coherence among all genes in the module.
+- Reference-based mode (`subnetwork-set`) – compares the coherence of the original seed genes with the genes added during module expansion.
+
+Both modes use Jaccard similarity to measure functional overlap and generate 1,000 random modules from the input network(s) to perform permutation-based significance testing. The resulting empirical p-values are summarized in the MultiQC report.
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `evaluation/digest/{reference-free,reference-based}/<seeds>.<network>.<amim>/`
+  - `<seeds>.<network>.<amim>_p-value_validation.csv`: Table with empirical functional coherence p-values for each gene set / pathway source.
+  - `<seeds>.<network>.<amim>_JI-based_p-value.png`: Scatter plot visualizing the empirical functional coherence p-values.
+  - `<seeds>.<network>.<amim>_input_validation.csv`: Table with the functional coherence scores.
+  - `<seeds>.<network>.<amim>_result.json`: Full results as JSON file.
+  - `<seeds>.<network>.<amim>_<source>_annotation_distribution.png`: Histogram showing the distribution of the number of associated gene sets / pathways for each query node.
+  - `<seeds>.<network>.<amim>_<source>_sankey.png`: Sankey plot showing the top 10 most frequent gene sets / pathways linked to the query nodes.
+  - `<seeds>.<network>.<amim>_JI-based_<source>_distribution.png`: Histogram of the distribution of the functional coherence score based on randomized data. The functional coherence score of the input is marked through a red vertical line.
+  - `<seeds>.<network>.<amim>_mappability.png`: Bar plot showing the fraction of query nodes that were mappable to the different gene set / pathway sources.
+
+- `mqc_summaries/`
+  - `digest_{reference-free,reference-based}_mqc.tsv`: Summary of the empirical functional coherence p-values for the MultiQC report.
+  </details>
 
 ### Network topology
 
