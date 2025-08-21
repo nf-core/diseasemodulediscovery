@@ -25,6 +25,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
   - [Prepare network](#prepare-network)
   - [Check seed file](#check-seed-file)
 - [Disease module inference](#disease-module-inference)
+  - [Only seeds](#only-seeds)
   - [DOMINO](#domino)
   - [DIAMOnD](#diamond)
   - [ROBUST](#robust)
@@ -85,17 +86,89 @@ The format of the input seed file(s) is validated, and any seed nodes not presen
 
 ## Disease module inference
 
+The inferred disease modules are exported in multiple formats, including [`.gt`](https://graph-tool.skewed.de/static/docs/stable/gt_format.html), [`.graphml`](https://de.wikipedia.org/wiki/GraphML), and node and edge lists in `.tsv`. If a method returns only a node list rather than a full network, the connecting edges are extracted from the input network. Module nodes are annotated with their seed status (`is_seed`), their subnetwork participation degree ([`spd`](https://nedrex.net/tutorial/availableFunctions.html)), and a component identifier (`component_id`) to indicate which connected component they belong to. Additionally, tool-specific node properties are added, which are explained in the sections below.
+
+### Only seeds
+
+In addition to the inferred disease modules, the pipeline provides a dummy module inference method that returns only the seed nodes and the edges connecting them in the input network. This serves as a baseline, enabling comparisons between modules containing additional nodes and the core set of seed nodes.
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `modules/{gt,graphml,tsv_nodes,tsv_edges}/`
+  - `<seeds>.<network>.no_tool.{gt,grahml,nodes.tsv,edges.tsv}`: Module containing only the seed nodes in different formats.
+
+</details>
+
 ### DOMINO
+
+[DOMINO](https://github.com/Shamir-Lab/DOMINO) starts by partitioning the input network into disjoint slices using Louvain clustering. Slices that are enriched for seed nodes, as determined by a hypergeometric test, are selected for further analysis. The selected slices are refined by solving the Prize Collecting Steiner Tree (PCST) problem, and subsequently subdivided into putative modules containing no more than 10 nodes each. Each resulting module is then tested again for seed enrichment using a hypergeometric test. DOMINO can produce multiple non-overlapping modules for a single input seed set. The pipeline reports all modules in a single output file, with individual modules distinguished by the node property `submodule`.
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `modules/{gt,graphml,tsv_nodes,tsv_edges}/`
+  - `<seeds>.<network>.domino.{gt,grahml,nodes.tsv,edges.tsv}`: DOMINO module in different formats.
+
+</details>
 
 ### DIAMOnD
 
+[DIAMOnD](https://github.com/dinaghiassian/DIAMOnD) iteratively expands the initial set of seed nodes by adding one node at a time. At each step, the algorithm selects the node with the highest connectivity significance to the current seed set, as determined by a hypergeometric test. This process continues until a predefined number of nodes have been incorporated. DIAMOnD itself only return the nodes added to the module, which is why the pipeline adds the seed nodes to the module at the end. DIAMOnD returns only the nodes added to the module, so the pipeline appends the original seed nodes to the module at the end. Each node is annotated with the order in which it was added (`rank`) and the corresponding hypergeometric test p-value (`p_hyper`). Both values are 0 for seed nodes.
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `modules/{gt,graphml,tsv_nodes,tsv_edges}/`
+  - `<seeds>.<network>.diamond.{gt,grahml,nodes.tsv,edges.tsv}`: DIAMOnD module in different formats.
+
+</details>
+
 ### ROBUST
+
+[ROBUST](https://github.com/bionetslab/robust) repeatedly connects seed nodes by solving the Prize Collecting Steiner Tree (PCST) problem. In each iteration, nodes that were included in previous solutions are penalized, lowering their chance of being selected again. The final disease module consists of nodes that appear in a sufficient number of solutions, enhancing robustness. ROBUST annotates module nodes with a connected component ID (`connected_components_id`), seed status (`isSeed`), the number of solutions the node participated in (`nrOfOccurrences`), the fraction of all solutions the node appeared in (`significance`), and the list of `trees` the node was part of.
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `modules/{gt,graphml,tsv_nodes,tsv_edges}/`
+  - `<seeds>.<network>.robust.{gt,grahml,nodes.tsv,edges.tsv}`: ROBUST module in different formats.
+
+</details>
 
 ### ROBUST (bias aware)
 
+[ROBUST (bias aware)](https://github.com/bionetslab/robust_bias_aware) follows the same strategy as [ROBUST](#robust) but increases edge costs for nodes that are frequently used as baits in PPI detection experiments. This penalization helps to mitigate study bias present in current PPI networks. The added node annotations are the same as for ROBUST.
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `modules/{gt,graphml,tsv_nodes,tsv_edges}/`
+  - `<seeds>.<network>.robust_bias_aware.{gt,grahml,nodes.tsv,edges.tsv}`: ROBUST (bias aware) module in different formats.
+
+</details>
+
 ### RWR
 
+<details markdown="1">
+<summary>Output files</summary>
+
+- `modules/{gt,graphml,tsv_nodes,tsv_edges}/`
+  - `<seeds>.<network>.rwr.{gt,grahml,nodes.tsv,edges.tsv}`: RWR module in different formats.
+
+</details>
+
 ### 1st Neighbors
+
+1st Neighbors includes all network nodes that are directly connected to at least one seed node.
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `modules/{gt,graphml,tsv_nodes,tsv_edges}/`
+  - `<seeds>.<network>.firstneighbor.{gt,grahml,nodes.tsv,edges.tsv}`: 1st Neighbors module in different formats.
+
+</details>
 
 ## Disease module evaluation
 
