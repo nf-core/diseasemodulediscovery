@@ -208,8 +208,8 @@ Both modes use Jaccard similarity to measure functional overlap and generate 1,0
 <summary>Output files</summary>
 
 - `evaluation/digest/{reference-free,reference-based}/<seeds>.<network>.<amim>/`
-  - `<seeds>.<network>.<amim>_p-value_validation.csv`: Table with empirical functional coherence p-values for each gene set / pathway source.
   - `<seeds>.<network>.<amim>_JI-based_p-value.png`: Scatter plot visualizing the empirical functional coherence p-values.
+  - `<seeds>.<network>.<amim>_p-value_validation.csv`: Table with empirical functional coherence p-values for each gene set / pathway source.
   - `<seeds>.<network>.<amim>_input_validation.csv`: Table with the functional coherence scores.
   - `<seeds>.<network>.<amim>_result.json`: Full results as JSON file.
   - `<seeds>.<network>.<amim>_<source>_annotation_distribution.png`: Histogram showing the distribution of the number of associated gene sets / pathways for each query node.
