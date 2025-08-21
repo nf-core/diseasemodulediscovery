@@ -1,13 +1,12 @@
 process HIERARCHICAL_HOTNET_CONSTRUCT_HIERARCHIES {
     tag "$meta.id"
     label 'process_single'
-    container "docker.io/motan04/hierarchical-hotnet:latest"
+    container "docker.io/motan04/hierarchical_hotnet:latest"
 
     input:
-    tuple val(meta), path(nodes), path(edges), path(original_score), path(permuted_scores), path(similarity_matrix)
-
+    tuple val(meta), path(nodes), path(edges), path(similarity_matrix), path(node_score)
     output:
-    tuple val(meta), path("${meta.id}.hierarchies"), emit: hierarchies
+    tuple val(meta), path("${meta.id}.hierarchy_edge_list.tsv"), path("${meta.id}.hierarchy_node_list.tsv"), emit: hierarchy
     path "versions.yml"                            , emit: versions
 
     when:
@@ -15,21 +14,12 @@ process HIERARCHICAL_HOTNET_CONSTRUCT_HIERARCHIES {
 
     script:
     """
-    for i in 'seq 0 4'
-    do
-        python hierarchical-hotnet/src/construct_hierarchiy.py \\
-            -smf ${similarity_matrix} \\
-            -igf ${nodes} \\
-            -gsf ${permuted_scores}.permuted_scores.\$i.tsv \\
-            -helf ${meta.id}.hierarchies/hierarchy_edge_list_\$i.tsv \\
-            -higf ${meta.id}.hierarchies/hierarchy_node_list_\$i.tsv \\
-    done
-    python hierarchical-hotnet/src/construct_hierarchiy.py \\
-        -smf ${similarity_matrix} \\
-        -igf ${nodes} \\
-        -gsf ${original_score} \\
-        -helf ${meta.id}.hierarchies/hierarchy_edge_list_original.tsv \\
-        -higf ${meta.id}.hierarchies/hierarchy_node_list_original.tsv
+    python /tmp/hierarchical-hotnet/src/construct_hierarchy.py \
+        -smf ${similarity_matrix} \
+        -igf ${nodes} \
+        -gsf ${node_score} \
+        -helf ${meta.id}.hierarchy_edge_list.tsv \
+        -higf ${meta.id}.hierarchy_node_list.tsv
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         python: \$(python --version | sed 's/Python //g')

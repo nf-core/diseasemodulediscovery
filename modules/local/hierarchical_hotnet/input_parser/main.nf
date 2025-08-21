@@ -6,8 +6,7 @@ process HIERARCHICAL_HOTNET_INPUT_PARSER {
     tuple val(meta), (path(network))
     
     output:
-    tuple val(meta), path("*hierarchical_hotnet.node_list.tsv") , emit: node_list
-    tuple val(meta), path("*hierarchical_hotnet.edge_list.tsv") , emit: edge_list
+    tuple val(meta), path("*.node_list.tsv"), path("*.edge_list.tsv") , emit: network
     path "versions.yml"                                         , emit: versions 
 
     when:

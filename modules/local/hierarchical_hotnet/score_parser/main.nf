@@ -12,7 +12,6 @@ process HIERARCHICAL_HOTNET_SCORE_PARSER {
 
     script:
     """
-
     awk 'NR==FNR{a[\$1]=1; next} {print \$2"\t"(a[\$2]?1:0)}' "${seeds}" "${node_list}" > "${meta.id}.node_scores.tsv"
     """
 }
