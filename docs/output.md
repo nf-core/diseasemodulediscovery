@@ -234,6 +234,19 @@ The [graph-tool](https://graph-tool.skewed.de/) library is used to compute summa
 
 ### Overlap
 
+The pipeline calculates pairwise overlaps between the node sets of all modules, to assess similarities between different seed sets, networks or methods. For each pair of modules, it reports both the number of shared nodes between their node sets (`A ∩ B`) and their Jaccard similarity (`|A ∩ B| / |A ∪ B|`). To specifically assess similarities among the added nodes, the same measures are also computed on the sets `A \ S` and `B \ S`, where `S` denotes the set of seed nodes. The overlaps are visualized as heatmaps in the MultiQC report.
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `mqc_summaries/`
+  - `jaccard_similarity_matrix_mqc.tsv`: Pairwise Jaccard similarities between the node sets of the disease modules for the MultiQC report.
+  - `jaccard_similarity_no_seeds_matrix_mqc.tsv`: Pairwise Jaccard similarities between the node sets of the disease modules for the MultiQC report, excluding the seed nodes for the calculation.
+  - `shared_nodes_matrix_mqc.tsv`: Pairwise counts of shared nodes between the node sets of the disease modules are for the MultiQC report.
+  - `shared_nodes_no_seeds_matrix_mqc.tsv`: Pairwise counts of shared nodes between the node sets of the disease modules are for the MultiQC report, excluding the seed nodes for the calculation.
+
+  </details>
+
 ### Seed permutation
 
 ### Network permutation
