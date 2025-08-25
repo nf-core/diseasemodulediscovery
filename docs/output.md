@@ -223,6 +223,15 @@ Both modes use Jaccard similarity to measure functional overlap and generate 1,0
 
 ### Network topology
 
+The [graph-tool](https://graph-tool.skewed.de/) library is used to compute summary statistics describing the topology of the disease modules. These include the number of nodes and edges, the count of the included seed nodes, the [diameter](https://graph-tool.skewed.de/static/docs/stable/autosummary/graph_tool.topology.pseudo_diameter.html#graph_tool.topology.pseudo_diameter), the number of connected components, the size of the largest component, the number of isolated nodes (nodes without edges), and the maximum shortest-path distance from any added node to its nearest seed node. These statistics are summarized in the `General Statistics` section of the MultiQC report.
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `mqc_summaries/`
+  - `topology_mqc.tsv`: Network topology measures of the disease modules for the MultiQC report.
+  </details>
+
 ### Overlap
 
 ### Seed permutation
