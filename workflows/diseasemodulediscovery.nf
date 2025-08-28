@@ -18,6 +18,7 @@ include { GT2TSV as GT2TSV_Network          } from '../modules/local/gt2tsv/main
 include { DIGEST as DIGEST_REFERENCEFREE    } from '../modules/local/digest/main'
 include { DIGEST as DIGEST_REFERENCEBASED   } from '../modules/local/digest/main'
 include { MODULEOVERLAP                     } from '../modules/local/moduleoverlap/main'
+include { GENEFREQUENCY                     } from '../modules/local/genefrequency/main'
 include { DRUGPREDICTIONS                   } from '../modules/local/drugpredictions/main'
 include { TOPOLOGY                          } from '../modules/local/topology/main'
 include { DRUGSTONEEXPORT                   } from '../modules/local/drugstoneexport/main'
@@ -385,6 +386,22 @@ workflow DISEASEMODULEDISCOVERY {
             ch_overlap_input.nodes.collect()
         )
         ch_multiqc_files = ch_multiqc_files.mix(MODULEOVERLAP.out)
+
+        // Gene frequency analysis
+        ch_genefrequency_input = ch_nodes_tsv_not_empty
+            .multiMap { meta, nodes, ### ->
+                ids: meta.id
+                nodes: nodes
+                nodes_perturbed_ppi: ###
+                nodes_perturbed_seed: ###
+            }
+        GENEFREQUENCY(
+            ch_overlap_input.ids.collect(),
+            ch_overlap_input.nodes.collect(),
+            ch_genefrequency_input.nodes_perturbed_ppi.collect(),
+            ch_genefrequency_input.nodes_perturbed_seed.collect()
+        )
+        ch_multiqc_files = ch_multiqc_files.mix(GENEFREQUENCY.out)
 
         // Overrepresentation analysis
         if(!params.skip_gprofiler){
