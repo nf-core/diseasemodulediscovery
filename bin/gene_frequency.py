@@ -157,7 +157,7 @@ def main(argv=None):
     
     upset_data = from_contents(module_map)
     plt.figure(figsize=(10, 6))
-    UpSet(upset_data, subset_size='count').plot()
+    UpSet(upset_data, subset_size='count', show_counts=True).plot()
     plt.title("Distribution of Genes in Original Modules")
     plt.savefig("upset_gene_frequency.pdf")
     plt.savefig("upset_gene_frequency.png")
