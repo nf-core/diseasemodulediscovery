@@ -49,9 +49,22 @@
 > [!NOTE]
 > If you are new to Nextflow and nf-core, please refer to [this page](https://nf-co.re/docs/usage/installation) on how to set-up Nextflow. Make sure to [test your setup](https://nf-co.re/docs/usage/introduction#how-to-run-a-pipeline) with `-profile test` before running the workflow on actual data.
 
+> [!WARNING]
+> The pipeline is still under development. In order to run it, please use the option `-r dev`
+
+### Test your setup
+
+```bash
+nextflow run nf-core/diseasemodulediscovery \
+   -profile <docker/singularity>,test \
+   --outdir <OUTDIR>
+```
+
+This will run the pipeline with a small test dataset. Results will be saved to the specified `<OUTDIR>`. Use `-profile` to set whether docker or singularity should be used for software deployment.
+
 ### Running the pipeline
 
-Now, you can run the pipeline using:
+Now, you can run the pipeline with your own data using:
 
 ```bash
 nextflow run nf-core/diseasemodulediscovery \
