@@ -114,7 +114,7 @@ In addition to the inferred disease modules, the pipeline provides a dummy modul
 
 ### DIAMOnD
 
-[DIAMOnD](https://github.com/dinaghiassian/DIAMOnD) iteratively expands the initial set of seed nodes by adding one node at a time. At each step, the algorithm selects the node with the highest connectivity significance to the current seed set, as determined by a hypergeometric test. This process continues until a predefined number of nodes have been incorporated. DIAMOnD itself only return the nodes added to the module, which is why the pipeline adds the seed nodes to the module at the end. DIAMOnD returns only the nodes added to the module, so the pipeline appends the original seed nodes to the module at the end. Each node is annotated with the order in which it was added (`rank`) and the corresponding hypergeometric test p-value (`p_hyper`). Both values are 0 for seed nodes.
+[DIAMOnD](https://github.com/dinaghiassian/DIAMOnD) iteratively expands the initial set of seed nodes by adding one node at a time. At each step, the algorithm selects the node with the highest connectivity significance to the current seed set, as determined by a hypergeometric test. This process continues until a predefined number of nodes have been incorporated. DIAMOnD itself only returns the nodes added to the module, which is why the pipeline adds the seed nodes to the module at the end. DIAMOnD returns only the nodes added to the module, so the pipeline appends the original seed nodes to the module at the end. Each node is annotated with the order in which it was added (`rank`) and the corresponding hypergeometric test p-value (`p_hyper`). Both values are 0 for seed nodes.
 
 <details markdown="1">
 <summary>Output files</summary>
@@ -174,7 +174,7 @@ In addition to the inferred disease modules, the pipeline provides a dummy modul
 
 ### g:Profiler
 
-[g:Profiler](https://biit.cs.ut.ee/gprofiler/gost) is used via the R package [gprofiler2](https://cran.r-project.org/web/packages/gprofiler2/index.html) to perform over-representation analysis (ORA), i.e., to find gene sets of pathways the module nodes are enriched in. For this, the module nodes are used as foreground, and all nodes of the corresponding input network as background.
+[g:Profiler](https://biit.cs.ut.ee/gprofiler/gost) is used via the R package [gprofiler2](https://cran.r-project.org/web/packages/gprofiler2/index.html) to perform over-representation analysis (ORA), i.e., to find gene sets of pathways in which the module nodes are enriched. For this, the module nodes are used as foreground, and all nodes of the corresponding input network as background.
 
 <details markdown="1">
 <summary>Output files</summary>
@@ -209,13 +209,13 @@ Both modes use Jaccard similarity to measure functional overlap and generate 1,0
 
 - `evaluation/digest/{reference-free,reference-based}/<seeds>.<network>.<amim>/`
   - `<seeds>.<network>.<amim>_JI-based_p-value.png`: Scatter plot visualizing the empirical functional coherence p-values.
-  - `<seeds>.<network>.<amim>_p-value_validation.csv`: Table with empirical functional coherence p-values for each gene set / pathway source.
+  - `<seeds>.<network>.<amim>_p-value_validation.csv`: Table with empirical functional coherence p-values for each gene set/pathway source.
   - `<seeds>.<network>.<amim>_input_validation.csv`: Table with the functional coherence scores.
   - `<seeds>.<network>.<amim>_result.json`: Full results as JSON file.
-  - `<seeds>.<network>.<amim>_<source>_annotation_distribution.png`: Histogram showing the distribution of the number of associated gene sets / pathways for each query node.
-  - `<seeds>.<network>.<amim>_<source>_sankey.png`: Sankey plot showing the top 10 most frequent gene sets / pathways linked to the query nodes.
+  - `<seeds>.<network>.<amim>_<source>_annotation_distribution.png`: Histogram showing the distribution of the number of associated gene sets/pathways for each query node.
+  - `<seeds>.<network>.<amim>_<source>_sankey.png`: Sankey plot showing the top 10 most frequent gene sets/pathways linked to the query nodes.
   - `<seeds>.<network>.<amim>_JI-based_<source>_distribution.png`: Histogram of the distribution of the functional coherence score based on randomized data. The functional coherence score of the input is marked through a red vertical line.
-  - `<seeds>.<network>.<amim>_mappability.png`: Bar plot showing the fraction of query nodes that were mappable to the different gene set / pathway sources.
+  - `<seeds>.<network>.<amim>_mappability.png`: Bar plot showing the fraction of query nodes that were mappable to the different gene set/pathway sources.
 
 - `mqc_summaries/`
   - `digest_{reference-free,reference-based}_mqc.tsv`: Summary of the empirical functional coherence p-values for the MultiQC report.
@@ -235,7 +235,7 @@ The [graph-tool](https://graph-tool.skewed.de/) library is used to compute summa
 
 ### Overlap
 
-The pipeline calculates pairwise overlaps between the node sets of all modules, to assess similarities between different seed sets, networks or methods. For each pair of modules, it reports both the number of shared nodes between their node sets (`A ∩ B`) and their Jaccard similarity (`|A ∩ B| / |A ∪ B|`). To specifically assess similarities among the added nodes, the same measures are also computed on the sets `A \ S` and `B \ S`, where `S` denotes the set of seed nodes. The overlaps are visualized as heatmaps in the MultiQC report.
+The pipeline calculates pairwise overlaps between the node sets of all modules to assess similarities between different seed sets, networks, or methods. For each pair of modules, it reports both the number of shared nodes between their node sets (`A ∩ B`) and their Jaccard similarity (`|A ∩ B| / |A ∪ B|`). To specifically assess similarities among the added nodes, the same measures are also computed on the sets `A \ S` and `B \ S`, where `S` denotes the set of seed nodes. The overlaps are visualized as heatmaps in the MultiQC report.
 
 <details markdown="1">
 <summary>Output files</summary>
@@ -250,13 +250,13 @@ The pipeline calculates pairwise overlaps between the node sets of all modules, 
 
 ### Seed permutation
 
-If provided with the `--run_seed_permutation` parameter the pipeline runs a leave-one-out analysis, to check how robust a module discovery method is against small changes in the seed set and to calculate a rediscovery rate. Starting with the original seed set, the pipeline creates new versions of the set by leaving out one seed at a time. For each of these perturbed seed sets, a new disease module is inferred using the same method.
+If provided with the `--run_seed_permutation` parameter, the pipeline runs a leave-one-out analysis to check how robust a module discovery method is against small changes in the seed set and to calculate a rediscovery rate. Starting with the original seed set, the pipeline creates new versions of the set by leaving out one seed at a time. For each of these perturbed seed sets, a new disease module is inferred using the same method.
 
 #### Robustness
 
 Each perturbed module is compared to the original module to see how similar they are, using the Jaccard index (`|A ∩ B| / |A ∪ B|`) of the node sets. The higher the Jaccard similarities, the more robust the module is to small input perturbations.
 
-The corresponding distribution as well as its mean value are part of the MultiQC report.
+The corresponding distribution, as well as its mean value, is part of the MultiQC report.
 
 #### Rediscovery rate
 
@@ -264,7 +264,7 @@ This procedure also allows calculation of a seed rediscovery rate — the likeli
 
 Because larger modules are more likely to include an omitted seed by chance, the normalized rediscovery rate is adjusted for module size, i.e., divided by the number of nodes in the original module. This makes the rediscovery measure fairer and easier to compare across different modules.
 
-Both normalized and raw rediscovery rate are summarized in the `General Statistics` section of the MultiQC report.
+Both normalized and raw rediscovery rates are summarized in the `General Statistics` section of the MultiQC report.
 
 <details markdown="1">
 <summary>Output files</summary>
@@ -276,8 +276,8 @@ Both normalized and raw rediscovery rate are summarized in the `General Statisti
 - `evaluation/seed_permutation/`
   - `<seeds>.<network>.robustness.{png,pdf}`: Heatmap visualizing the robustness (indicated through the Jaccard index) of different AMIMs on the level of individual seed nodes. Rows are sorted by the row sum, columns are sorted by the column sum.
   - `<seeds>.<network>.robustness.tsv`: Table reporting the robustness (indicated through the Jaccard index) of different AMIMs on the level of individual seed nodes.
-  - `<seeds>.<network>.seed_rediscovery.{png,pdf}`: Heatmap visualizing whether different AMIMs were able ro recover individual seeds. Rows are sorted by the row sum, columns are sorted by the column sum.
-  - `<seeds>.<network>.seed_rediscovery.tsv`: Table reporting whether different AMIMs were able ro recover individual seeds.
+  - `<seeds>.<network>.seed_rediscovery.{png,pdf}`: Heatmap visualizing whether different AMIMs were able to recover individual seeds. Rows are sorted by the row sum, columns are sorted by the column sum.
+  - `<seeds>.<network>.seed_rediscovery.tsv`: Table reporting whether different AMIMs were able to recover individual seeds.
 
 - `mqc_summaries/`
   - `seed_permutation_mqc.tsv`: Summaries of the mean Jaccard index, raw rediscovery rate, and normalized rediscovery rate for the MultiQC report.
@@ -293,7 +293,7 @@ The network rewiring is performed using the [graph-tool](https://graph-tool.skew
 
 If the resulting modules are similar to those from the original network (indicated through a high Jaccard index), this indicates that the methods rely mainly on node degree rather than on the specific edge connections.
 
-The corresponding distribution as well as its mean value are part of the MultiQC report.
+The corresponding distribution, as well as its mean value, is part of the MultiQC report.
 
 <details markdown="1">
 <summary>Output files</summary>
@@ -323,8 +323,8 @@ More details on these algorithms are available in the [supplementary material of
 <summary>Output files</summary>
 
 - `drug_prioritization/drugstone/`
-  - `<seeds>.<network>.<amim>.<drug_algorithm>.drug_predictions.tsv`: Table containing disease module node annotations merged with the drug-prioritization results. The first columns correspond to the existing disease module node annotations. Additional columns indicate the prioritized compounds through their [DrugBank](https://go.drugbank.com/) ID (`drug_id`), a prioritization `score` depending on the used algorithm, the name of the compound (`drug_name`). If a single module node is targeted by multiple compounds,
-  - `<seeds>.<network>.<amim>.<drug_algorithm>.csv`: Table containing the raw Drugst.One request result.
+  - `<seeds>.<network>.<amim>.<drug_algorithm>.drug_predictions.tsv`: Table containing disease module node annotations merged with the drug-prioritization results. The first columns correspond to the existing disease module node annotations. Additional columns indicate the prioritized compounds through their [DrugBank](https://go.drugbank.com/) ID (`drug_id`), a prioritization `score` depending on the used algorithm, and the name of the compound (`drug_name`). If a single module node is targeted by multiple compounds,
+  - `<seeds>.<network>.<amim>.<drug_algorithm>.csv`: Table containing the raw Drugst.One request results.
 
   </details>
 
@@ -332,7 +332,7 @@ More details on these algorithms are available in the [supplementary material of
 
 ### Drugst.One export
 
-The MultiQC report lists export links for each disesae module to visualize and manipulate them directly through the [Drugst.One web interface](https://drugst.one/home).
+The MultiQC report lists export links for each disease module to visualize and manipulate them directly through the [Drugst.One web interface](https://drugst.one/home).
 
 <details markdown="1">
 <summary>Output files</summary>
@@ -353,7 +353,7 @@ Visual network representations of the inferred modules — both with and without
   - `<seeds>.<network>.<amim>.{html,pdf,svg,png}`: Network visualizations of the disease modules in different formats.
 
 - `results/modules_visualized_with_drugs/{html,pdf,svg,png}/`
-  - `<seeds>.<network>.<amim>.{html,pdf,svg,png}`: Network visualizations of the disease modules in different formats including drug nodes. Will only be generated if drug prioritization was performed.
+  - `<seeds>.<network>.<amim>.{html,pdf,svg,png}`: Network visualizations of the disease modules in different formats, including drug nodes. It will only be generated if drug prioritization was performed.
 
 </details>
 
@@ -375,15 +375,15 @@ The resulting files have the following structure:
 - Protein encoded by gene as RelationshipXref
 - Gene associated with disorder as RelationshipXref
 - Drug targets protein as RelationshipXref
-- Drug has sideeffect as RelationshipXref
-- Protein is in cellular component as RelationshipXref
+- Drug has side effects as RelationshipXref
+- Protein is in a cellular component as RelationshipXref
 
 **Interactions**
 
 - Protein interactions as MolecularInteraction
 
 > [!NOTE]
-> If the network hands over uniprot-ids, only those are used and mapped to the encoding genes. If entrez-ids are given, all encoded proteins by those genes are considered.
+> If the network hands over UniProt-IDs, only those are used and mapped to the encoding genes. If Entrez-IDs are given, all encoded proteins by those genes are considered.
 
 <details markdown="1">
 <summary>Output files</summary>
