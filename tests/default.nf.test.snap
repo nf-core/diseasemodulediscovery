@@ -198,16 +198,10 @@
                 "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.no_tool/entrez_seeds_1.entrez_ppi.no_tool.gprofiler2.gostplot.html",
                 "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.no_tool/entrez_seeds_1.entrez_ppi.no_tool.gprofiler2.gostplot.png",
                 "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.no_tool/gprofiler_full_hsapiens.GO_WP_REAC_KEGG.ENSG_filtered.gmt",
-                "evaluation/network_permutation",
-                "evaluation/network_permutation/entrez_seeds_1.entrez_ppi.diamond",
-                "evaluation/network_permutation/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond.network_permutation_multiqc_jaccard.txt",
-                "evaluation/network_permutation/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond.network_permutation_multiqc_summary.tsv",
                 "evaluation/seed_permutation",
                 "evaluation/seed_permutation/entrez_seeds_1.entrez_ppi.diamond",
                 "evaluation/seed_permutation/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond.seed_permutation_evaluation_detailed.tsv",
                 "evaluation/seed_permutation/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond.seed_permutation_evaluation_summary.tsv",
-                "evaluation/seed_permutation/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond.seed_permutation_multiqc_jaccard.txt",
-                "evaluation/seed_permutation/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond.seed_permutation_multiqc_summary.tsv",
                 "evaluation/seed_permutation/entrez_seeds_1.entrez_ppi.robustness.pdf",
                 "evaluation/seed_permutation/entrez_seeds_1.entrez_ppi.robustness.png",
                 "evaluation/seed_permutation/entrez_seeds_1.entrez_ppi.robustness.tsv",
@@ -218,14 +212,13 @@
                 "input/networks",
                 "input/networks/entrez_ppi.diamond.csv",
                 "input/networks/entrez_ppi.gt",
-                "input/networks/input_network_multiqc.tsv",
                 "input/permuted_networks",
                 "input/permuted_networks/entrez_ppi",
                 "input/permuted_networks/entrez_ppi/entrez_ppi.perm_0.gt",
                 "input/permuted_networks/entrez_ppi/entrez_ppi.perm_1.gt",
                 "input/permuted_networks/entrez_ppi/entrez_ppi.perm_2.gt",
                 "input/seeds",
-                "input/seeds/entrez_seeds_1.entrez_ppi.multiqc.tsv",
+                "input/seeds/entrez_seeds_1.entrez_ppi.no_tool.gt",
                 "input/seeds/entrez_seeds_1.entrez_ppi.tsv",
                 "input/shortest_paths",
                 "input/shortest_paths/entrez_ppi.shortest_paths.pkl",
@@ -480,8 +473,7 @@
             [
                 "entrez_ppi.diamond.csv:md5,59c734eaa00f2265dd1bb896f2aee772",
                 "entrez_ppi.gt:md5,c908f353a8a0e0cb04aa9cb67121521d",
-                "input_network_multiqc.tsv:md5,eedaf7f299c89a43429fa66dffb2bbc3",
-                "entrez_seeds_1.entrez_ppi.multiqc.tsv:md5,269d96ba266e5481c37a550fe4f13521",
+                "entrez_seeds_1.entrez_ppi.no_tool.gt:md5,e19b2d65dfd9fd20f1a8f843d52c1235",
                 "entrez_seeds_1.entrez_ppi.tsv:md5,1291b36e8add2d6ef0b8b72f7889016b",
                 "entrez_seeds_1.entrez_ppi.no_tool.graphml:md5,bfaed89376015c6ec3724a870fd86031",
                 "entrez_seeds_1.entrez_ppi.no_tool.gt:md5,5939c5390ea37756858e189b2f90462a",
@@ -495,6 +487,6 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.6"
         },
-        "timestamp": "2025-08-26T10:47:10.035404512"
+        "timestamp": "2025-08-29T16:48:49.240891262"
     }
 }
