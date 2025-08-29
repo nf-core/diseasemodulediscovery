@@ -230,6 +230,7 @@ The [graph-tool](https://graph-tool.skewed.de/) library is used to compute summa
 
 - `mqc_summaries/`
   - `topology_mqc.tsv`: Network topology measures of the disease modules for the MultiQC report.
+
   </details>
 
 ### Overlap
@@ -249,7 +250,62 @@ The pipeline calculates pairwise overlaps between the node sets of all modules, 
 
 ### Seed permutation
 
+If provided with the `--run_seed_permutation` parameter the pipeline runs a leave-one-out analysis, to check how robust a module discovery method is against small changes in the seed set and to calculate a rediscovery rate. Starting with the original seed set, the pipeline creates new versions of the set by leaving out one seed at a time. For each of these perturbed seed sets, a new disease module is inferred using the same method.
+
+#### Robustness
+
+Each perturbed module is compared to the original module to see how similar they are, using the Jaccard index (`|A ∩ B| / |A ∪ B|`) of the node sets. The higher the Jaccard similarities, the more robust the module is to small input perturbations.
+
+The corresponding distribution as well as its mean value are part of the MultiQC report.
+
+#### Rediscovery rate
+
+This procedure also allows calculation of a seed rediscovery rate — the likelihood that a left-out seed is added back into the resulting module. This metric reflects how well the method can recover disease-associated genes or proteins that were not provided in the input. On the other hand, if the rediscovery rate is consistently low across different methods, it may indicate that the left-out seed has weak or uncertain relevance.
+
+Because larger modules are more likely to include an omitted seed by chance, the normalized rediscovery rate is adjusted for module size, i.e., divided by the number of nodes in the original module. This makes the rediscovery measure fairer and easier to compare across different modules.
+
+Both normalized and raw rediscovery rate are summarized in the `General Statistics` section of the MultiQC report.
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `evaluation/seed_permutation/<seeds>.<network>.<amim>/`
+  - `<seeds>.<network>.<amim>.seed_permutation_evaluation_summary.tsv`: Leave-one-out analysis results aggregated across all iterations. Includes the mean Jaccard index, raw rediscovery rate, and normalized rediscovery rate.
+  - `<seeds>.<network>.<amim>.seed_permutation_evaluation_detailed.tsv`: Leave-one-out analysis results on the level of individual iterations. Includes the mean Jaccard index, raw rediscovery rate, and normalized rediscovery rate.
+
+- `evaluation/seed_permutation/`
+  - `<seeds>.<network>.robustness.{png,pdf}`: Heatmap visualizing the robustness (indicated through the Jaccard index) of different AMIMs on the level of individual seed nodes. Rows are sorted by the row sum, columns are sorted by the column sum.
+  - `<seeds>.<network>.robustness.tsv`: Table reporting the robustness (indicated through the Jaccard index) of different AMIMs on the level of individual seed nodes.
+  - `<seeds>.<network>.seed_rediscovery.{png,pdf}`: Heatmap visualizing whether different AMIMs were able ro recover individual seeds. Rows are sorted by the row sum, columns are sorted by the column sum.
+  - `<seeds>.<network>.seed_rediscovery.tsv`: Table reporting whether different AMIMs were able ro recover individual seeds.
+
+- `mqc_summaries/`
+  - `seed_permutation_mqc.tsv`: Summaries of the mean Jaccard index, raw rediscovery rate, and normalized rediscovery rate for the MultiQC report.
+  - `seed_permutation_jaccard_mqc.yaml`: Jaccard index distributions for the MultiQC report.
+
+  </details>
+
 ### Network permutation
+
+Use the `--run_network_permutation` option to repeatedly rewire the edges of the input network while preserving each node’s degree. The pipeline then reruns the module identification methods on these permuted networks.
+
+The network rewiring is performed using the [graph-tool](https://graph-tool.skewed.de/) function [`random_rewire`](https://graph-tool.skewed.de/static/docs/stable/autosummary/graph_tool.generation.random_rewire.html) with `"constrained-configuration"` as model and 100 full sweeps over all edges.
+
+If the resulting modules are similar to those from the original network (indicated through a high Jaccard index), this indicates that the methods rely mainly on node degree rather than on the specific edge connections.
+
+The corresponding distribution as well as its mean value are part of the MultiQC report.
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `mqc_summaries/`
+  - `network_permutation_mqc.tsv`: Summaries of the mean Jaccard index for the MultiQC report.
+  - `network_permutation_jaccard_mqc.yaml`: Jaccard index distributions for the MultiQC report.
+
+- `input/permuted_networks/<network>/`
+  - `<network>.*.gt`: The rewired networks. Can be reused for repeated analyses.
+
+  </details>
 
 ## Drug prioritization
 
