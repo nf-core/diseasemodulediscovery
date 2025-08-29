@@ -311,13 +311,90 @@ The corresponding distribution as well as its mean value are part of the MultiQC
 
 ### Drugst.One
 
+The [Drugst.One Python package](https://github.com/drugst-one/python-package) identifies potential drug candidates targeting nodes in the disease modules. To prioritize these compounds, different algorithms are available:
+
+- Degree centrality – ranks compounds by the number of module nodes they target.
+- Harmonic centrality – considers the average shortest path from each compound to all module nodes.
+- TrustRank – uses network propagation to rank compounds based on their relevance within the network.
+
+More details on these algorithms are available in the [supplementary material of the Drugst.One publication](https://oup.silverchair-cdn.com/oup/backfile/Content_public/Journal/nar/52/W1/10.1093_nar_gkae388/1/gkae388_supplemental_file.pdf?Expires=1758252323&Signature=w75gGflGquYhahJdf6tLUUdy~NviTBrSrgcu-qeLvQ4~7ZW4gFMzpC~4Os7TnIvCyMfSKUgVTCGdswYv8xk6dQDXXqP-3LJTk1dE25BGibMX2eDgok2T1cTz8X078xkzrueyF-F2MBtD5hpPNPpu704o2DMJLVxL-olWbDkulCeLj8KCz29GOLZjUd7fg39zgU7O1IYJFtYFL2NDydGzDgZ8NjG6SozGC9H0OIVc6IHCiyvdzqG4dlb6NvsphhX3NUkqAXp1QqlNhXKZPJ6uWtkVDUgIYLrRgkK8V11JxtDPJpwBalzU9~wn0fP0cMpdZhU5vrVrHSnqTVNU~xcjrg__&Key-Pair-Id=APKAIE5G5CRDK6RD3PGA).
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `drug_prioritization/drugstone/`
+  - `<seeds>.<network>.<amim>.<drug_algorithm>.drug_predictions.tsv`: Table containing disease module node annotations merged with the drug-prioritization results. The first columns correspond to the existing disease module node annotations. Additional columns indicate the prioritized compounds through their [DrugBank](https://go.drugbank.com/) ID (`drug_id`), a prioritization `score` depending on the used algorithm, the name of the compound (`drug_name`). If a single module node is targeted by multiple compounds,
+  - `<seeds>.<network>.<amim>.<drug_algorithm>.csv`: Table containing the raw Drugst.One request result.
+
+  </details>
+
 ## Other
 
 ### Drugst.One export
 
+The MultiQC report lists export links for each disesae module to visualize and manipulate them directly through the [Drugst.One web interface](https://drugst.one/home).
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `mqc_summaries/`
+  - `drugstone_link_mqc.tsv`: Table with export links for the MultiQC report.
+
+  </details>
+
 ### Network visualization
 
+Visual network representations of the inferred modules — both with and without assigned drugs — are generated using the [graph-tool](https://graph-tool.skewed.de/static/docs/stable/draw.html) package and are available in PNG, SVG, and PDF formats. Additionally, interactive HTML visualizations are produced using the [pyvis](https://github.com/WestHealth/pyvis) package. Coloring distinguishes seed nodes from the added module nodes.
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `results/modules_visualized/{html,pdf,svg,png}/`
+  - `<seeds>.<network>.<amim>.{html,pdf,svg,png}`: Network visualizations of the disease modules in different formats.
+
+- `results/modules_visualized_with_drugs/{html,pdf,svg,png}/`
+  - `<seeds>.<network>.<amim>.{html,pdf,svg,png}`: Network visualizations of the disease modules in different formats including drug nodes. Will only be generated if drug prioritization was performed.
+
+</details>
+
 ### Annotation
+
+The disease modules are annotated with supplementary biological information queried from [NeDRex database](https://nedrex.net/).
+The annotated modules are saved using [BioPax](http://www.biopax.org/release/biopax-level3-documentation.pdf), short for Biological Pathway Exchange. BioPax is a standard language and format for representing biological pathway knowledge. The format of the files is validated using the [BioPax Validator](https://github.com/BioPAX/validator).
+
+The resulting files have the following structure:
+
+**Entities**
+
+- Proteins with UnificationXref and ProteinReference
+- Genes with UnificationXref
+- SmallMolecules as drugs with UnificationXref and SmallMoleculeReference
+
+**Relationships**
+
+- Protein encoded by gene as RelationshipXref
+- Gene associated with disorder as RelationshipXref
+- Drug targets protein as RelationshipXref
+- Drug has sideeffect as RelationshipXref
+- Protein is in cellular component as RelationshipXref
+
+**Interactions**
+
+- Protein interactions as MolecularInteraction
+
+> [!NOTE]
+> If the network hands over uniprot-ids, only those are used and mapped to the encoding genes. If entrez-ids are given, all encoded proteins by those genes are considered.
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `modules/biopax/`
+  - `<seeds>.<network>.<amim>.owl`: BioPax-files for each module in BioPax-format.
+
+- `reports/`
+  - `biopax-validator-report.html`: HTML file with the BioPax-validator results that can be viewed in your web browser.
+
+</details>
 
 ## Reporting
 
@@ -336,46 +413,6 @@ The corresponding distribution as well as its mean value are part of the MultiQC
 [MultiQC](http://multiqc.info) is a visualization tool that generates a single HTML report summarising all samples in your project. Most of the pipeline QC results are visualised in the report and further statistics are available in the report data directory.
 
 Results generated by MultiQC collate pipeline QC from supported tools e.g. FastQC. The pipeline has special steps which also allow the software versions to be reported in the MultiQC output for future traceability. For more information about how to use MultiQC reports, see <http://multiqc.info>.
-
-## BioPax
-
-<details markdown="1">
-<summary>Output files</summary>
-
-- `biopax/`
-  - `*.owl`: BioPax-files for each module in BioPax-format.
-  - `biopax-validator-report.html`: a HTML file with the BioPax-validator results that can be viewed in your web browser.
-
-</details>
-
-[BioPax](http://www.biopax.org/release/biopax-level3-documentation.pdf), short for Biological Pathway Exchange,
-is a standard language and format for representing biological pathway knowledge. This is how the created .owl files are structured:
-
-### Entities
-
-- Proteins with UnificationXref and ProteinReference
-- Genes with UnificationXref
-- SmallMolecules as drugs with UnificationXref and SmallMoleculeReference
-
-### Relationships
-
-- Protein encoded by gene as RelationshipXref
-- Gene associated with disorder as RelationshipXref
-- Drug targets protein as RelationshipXref
-- Drug has sideeffect as RelationshipXref
-- Protein is in cellular component as RelationshipXref
-
-### Interactions
-
-- Protein interactions as MolecularInteraction
-
-### Notes
-
-If the network hands over uniprot-ids, only those are used and mapped to the encoding genes. If entrez-ids are given, all encoded proteins by those genes are considered.
-
-### Validator
-
-The BioPax-validator validates the created BioPax-files and generates a report in HTML-format in order to check on errors or warnings in the files.
 
 ### Pipeline information
 
