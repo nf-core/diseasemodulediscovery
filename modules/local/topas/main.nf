@@ -1,7 +1,7 @@
 process TOPAS{
     tag "$meta.id"
     label 'process_single'
-    container 'ghcr.io/repo4eu/modulediscovery_topas_dependencies:latest'
+    container 'ghcr.io/repo4eu/modulediscovery_topas_dependencies:v0.1.0'
 
     input:
     tuple val(meta), path(seeds), path(network)
