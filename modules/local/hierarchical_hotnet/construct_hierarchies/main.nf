@@ -14,7 +14,7 @@ process HIERARCHICAL_HOTNET_CONSTRUCT_HIERARCHIES {
 
     script:
     """
-    python /tmp/hierarchical-hotnet/src/construct_hierarchy.py \
+    python /hierarchical-hotnet/src/construct_hierarchy.py \
         -smf ${similarity_matrix} \
         -igf ${nodes} \
         -gsf ${node_score} \

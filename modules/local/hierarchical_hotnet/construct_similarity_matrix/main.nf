@@ -13,7 +13,7 @@ process HIERARCHICAL_HOTNET_CONSTRUCT_SIMILARITY_MATRIX {
     task.ext.when == null || task.ext.when
     script:
     """
-    python /tmp/hierarchical-hotnet/src/construct_similarity_matrix.py \
+    python /hierarchical-hotnet/src/construct_similarity_matrix.py \
         -i ${edge_list} \
         -o "${meta.id}.similarity_matrix.h5" \
         -bof "${meta.id}.beta.txt"

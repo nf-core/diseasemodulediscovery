@@ -13,7 +13,7 @@ process HIERARCHICAL_HOTNET_PROCESS_HIERARCHIES {
 
     script:
     """
-    python /tmp/hierarchical-hotnet/src/process_hierarchies.py \
+    python /hierarchical-hotnet/src/process_hierarchies.py \
         --observed_edge_list_file ${original_hierarchy_edges} \
         --observed_index_gene_file ${original_hierarchy_nodes} \
         --permuted_edge_list_files ${permuted_hierarchy_edges} \
