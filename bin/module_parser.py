@@ -96,7 +96,7 @@ def filter_topas(g, module, filter_column):
         v = gt.find_vertex(g, g.vp.name, gene)[0]
         g.vp[filter_column][v] = True
     return g
-        
+
 
 def filter_g(g, tool, module, seeds):
     """
@@ -113,7 +113,7 @@ def filter_g(g, tool, module, seeds):
     elif tool == "rwr":
         g = filter_rwr(g, module, filter_column)
     elif tool == "topas":
-        g = filter_topas(g,module, filter_column)
+        g = filter_topas(g, module, filter_column)
     else:
         logger.critical(f"Unknown tool: {tool}")
         sys.exit(1)
