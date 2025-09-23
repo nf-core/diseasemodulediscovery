@@ -56,6 +56,21 @@ def filter_domino(g, module, filter_column):
     return g
 
 
+def filter_hiearchical_hotnet(g, module, filter_column):
+    gene_set = set()
+    with open(module, "r") as file:
+        for line in file.readlines():
+            if line.startswith("#"):
+                continue
+            else:
+                line = line.strip().split("\t")
+                for gene in line:
+                    gene_set.add(gene)
+    for gene in gene_set:
+        v = gt.find_vertex(g, g.vp.name, gene)[0]
+        g.vp[filter_column][v] = True
+    return g
+
 def filter_robust(g, module, filter_column):
     import numpy as np
 
@@ -93,6 +108,8 @@ def filter_g(g, tool, module, seeds):
         g = filter_diamond(g, module, filter_column, seeds)
     elif tool == "domino":
         g = filter_domino(g, module, filter_column)
+    elif tool == "hierarchical_hotnet":
+        g = filter_hiearchical_hotnet(g, module, filter_column)
     elif tool == "robust" or tool == "robust_bias_aware":
         g = filter_robust(g, module, filter_column)
     elif tool == "rwr":
@@ -168,7 +185,7 @@ def parse_args(argv=None):
         "-t",
         "--tool",
         help="The tool, that generated the module.",
-        choices=("diamond", "domino", "robust", "robust_bias_aware", "rwr"),
+        choices=("diamond", "domino", "hierarchical_hotnet", "robust", "robust_bias_aware", "rwr"),
     )
     parser.add_argument(
         "-m",

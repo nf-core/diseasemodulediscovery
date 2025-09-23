@@ -6,7 +6,7 @@ process HIERARCHICAL_HOTNET_PERMUTE_SCORES {
     input:
     tuple val(meta), path(node_list), path(edge_list), path(node_scores)
     output:
-    tuple val(meta), path("${meta.id}.permuted_scores*"), emit: permuted_scores
+    tuple val(meta), path("${meta.id}.score_permutation*"), emit: permuted_scores
     path "versions.yml"                                , emit: versions
     when:
     task.ext.when == null || task.ext.when
@@ -25,7 +25,7 @@ process HIERARCHICAL_HOTNET_PERMUTE_SCORES {
             -i ${node_scores} \
             -bf ${meta.id}.score_bins.tsv \
             -s "\$i" \
-            -o ${meta.id}.permuted_scores.\$i.tsv
+            -o ${meta.id}.score_permutation_\$i.tsv
     done
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

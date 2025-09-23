@@ -5,7 +5,7 @@ include { HIERARCHICAL_HOTNET_CONSTRUCT_SIMILARITY_MATRIX } from '../../../modul
 include { HIERARCHICAL_HOTNET_PERMUTE_SCORES} from '../../../modules/local/hierarchical_hotnet/permute_scores/main'
 include { HIERARCHICAL_HOTNET_CONSTRUCT_HIERARCHIES } from '../../../modules/local/hierarchical_hotnet/construct_hierarchies/main'
 include { HIERARCHICAL_HOTNET_CONSTRUCT_HIERARCHIES as PERMUTED_HIERARCHIES} from '../../../modules/local/hierarchical_hotnet/construct_hierarchies/main' 
-
+include { HIERARCHICAL_HOTNET_PROCESS_HIERARCHIES } from '../../../modules/local/hierarchical_hotnet/process_hierarchies/main'
 workflow GT_HIERARCHICAL_HOTNET {
     take:
     ch_seeds
@@ -32,21 +32,35 @@ workflow GT_HIERARCHICAL_HOTNET {
         .map{ meta, _seeds, node_list, edge_list -> [meta, node_list, edge_list]} 
         .join(HIERARCHICAL_HOTNET_SCORE_PARSER.out)
     HIERARCHICAL_HOTNET_PERMUTE_SCORES(ch_permutation_input)
+
     ch_parsed_inputs = ch_parsed_inputs
         .map{ meta, _seeds, node_list, edge_list -> [meta, node_list, edge_list]}
         .join(HIERARCHICAL_HOTNET_CONSTRUCT_SIMILARITY_MATRIX.out.similarity_matrix)
 
     ch_permuted_hierarchy_input = ch_parsed_inputs
-        .join(HIERARCHICAL_HOTNET_PERMUTE_SCORES.out.permuted_scores.transpose(), by: 0)
+        .combine(HIERARCHICAL_HOTNET_PERMUTE_SCORES.out.permuted_scores
+            .transpose()
+            .map{
+                meta, permuted_scores -> 
+                    def permutation = permuted_scores.toString().tokenize('.')[2]
+                    [meta, permuted_scores, permutation]
+                }
+        , by: 0)
     PERMUTED_HIERARCHIES(ch_permuted_hierarchy_input)
-    PERMUTED_HIERARCHIES.out.hierarchy.view()
     ch_hierarchy_input = ch_parsed_inputs
         .join(HIERARCHICAL_HOTNET_SCORE_PARSER.out, by: 0)
-        
-    
-
-    
+        .map{
+            meta, node_list, edge_list, similarity_matrix, node_score ->
+                [meta, node_list, edge_list, similarity_matrix, node_score, "original"]
+        }
+    HIERARCHICAL_HOTNET_CONSTRUCT_HIERARCHIES(ch_hierarchy_input)
+    PERMUTED_HIERARCHIES.out.hierarchy.groupTuple()
+    ch_hierarchies = HIERARCHICAL_HOTNET_CONSTRUCT_HIERARCHIES.out.hierarchy
+        .join(PERMUTED_HIERARCHIES.out.hierarchy.groupTuple())
+        .view()
+    HIERARCHICAL_HOTNET_PROCESS_HIERARCHIES(ch_hierarchies)
+    HIERARCHICAL_HOTNET_PROCESS_HIERARCHIES.out.modules.view()
     emit:
-    module = Channel.empty()
+    module = HIERARCHICAL_HOTNET_PROCESS_HIERARCHIES.out.modules
     versions = ch_versions
 }
