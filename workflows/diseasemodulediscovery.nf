@@ -555,14 +555,14 @@ workflow DISEASEMODULEDISCOVERY {
 
             boolean inputsAreFiles
             try {
-                file(trueDrugInputs[0], checkIfExists: true)   // throws if it doesn't exist
+                file(trueDrugInputs[0], checkIfExists: true)   
                 inputsAreFiles = true
             }
             catch(Throwable ignore) {
                 inputsAreFiles = false
             }
 
-            // 3) Unify to a list of files (stubbed else-branch for future resolver/downloader)
+            
             
             if( seedFiles.size() != trueDrugInputs.size() )
                     throw new IllegalArgumentException(
@@ -571,7 +571,6 @@ workflow DISEASEMODULEDISCOVERY {
                     )
                 
             if( inputsAreFiles ) {
-                // Keep the original behavior AND produce an (idx, path) channel for unification
                 true_drugs_idx_path_ch = Channel.from(
                     trueDrugInputs.withIndex().collect { pathStr, idx -> tuple(idx, file(pathStr)) }
                 )
@@ -586,28 +585,22 @@ workflow DISEASEMODULEDISCOVERY {
                     trueDrugInputs.withIndex().collect { did, idx -> tuple(idx, did) }
                 )
 
-                // Run builder once per disease; broadcast singletons via value channels
-                // Value channels are reused for each queue item
+                
                 def truedrugs_idx_ch = CREATETRUEDRUGFILE(
                     diseases_idx_ch,
-                    drug_ch.first(),                // value channel
-                    drug_has_target_ch.first(),     // value channel
-                    drug_has_indication_ch.first()  // value channel
+                    drug_ch.first(),                
+                    drug_has_target_ch.first(),     
+                    drug_has_indication_ch.first()  
                 )
 
-                // For downstream unification after the if/else
+                
                 true_drugs_idx_path_ch = truedrugs_idx_ch
 
-                // Optional debug
-                // true_drugs_idx_path_ch.view { idx, p -> "TRUE_DRUG_FILE[${idx}] -> ${p}" }
+                
             }
 
 
-            // if( seedFiles.size() != trueDrugFiles.size() )
-            //     throw new IllegalArgumentException(
-            //         "You supplied ${seedFiles.size()} --seeds files but " +
-            //         "${trueDrugFiles.size()} --true-drugs files – counts must match."
-            //     )
+            
 
             // Build (idx, seedId) from seeds in their original order
             def seed_ids_idx_ch = Channel.from(
@@ -631,7 +624,6 @@ workflow DISEASEMODULEDISCOVERY {
                             def (meta, algorithm, prediction_file) = left
                             [ meta, algorithm, prediction_file, true_drug ]
                         }
-                // .view   { "PRIORITIZATIONEVALUATION INPUT ➜  meta:${it[0].id}   true:${it[3].getName()}" }
 
             PRIORITIZATIONEVALUATION(
                 ch_prior_eval_input,                     
