@@ -18,6 +18,7 @@ process HIERARCHICAL_HOTNET_PROCESS_HIERARCHIES {
         --observed_index_gene_file ${original_hierarchy_nodes} \
         --permuted_edge_list_files ${permuted_hierarchy_edges} \
         --permuted_index_gene_files ${permuted_hierarchy_nodes} \
+        -lsb 1 \
         --cluster_file ${meta.id}.module
      cat <<-END_VERSIONS > versions.yml
     "${task.process}":

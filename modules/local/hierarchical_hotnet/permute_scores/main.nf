@@ -19,12 +19,12 @@ process HIERARCHICAL_HOTNET_PERMUTE_SCORES {
         -elf ${edge_list} \
         -o ${meta.id}.score_bins.tsv
 
-    for i in \$(seq 1 4)
+    for i in `seq 100`
     do
         python /hierarchical-hotnet/src/permute_scores.py \
             -i ${node_scores} \
             -bf ${meta.id}.score_bins.tsv \
-            -s "\$i" \
+            -s \$i \
             -o ${meta.id}.score_permutation_\$i.tsv
     done
     cat <<-END_VERSIONS > versions.yml
