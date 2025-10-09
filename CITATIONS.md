@@ -14,6 +14,11 @@
 
 > Ewels P, Magnusson M, Lundin S, Käller M. MultiQC: summarize analysis results for multiple tools and samples in a single report. Bioinformatics. 2016 Oct 1;32(19):3047-8. doi: 10.1093/bioinformatics/btw354. Epub 2016 Jun 16. PubMed PMID: 27312411; PubMed Central PMCID: PMC5039924.
 
+- [NeDRex](https://www.nature.com/articles/s41467-021-27138-2)
+
+> Sadegh, S., Skelton, J., Anastasi, E. et al. Network medicine for disease module identification and drug repurposing with the NeDRex platform. Nat Commun 12, 6848 (2021). https://doi.org/10.1038/s41467-021-27138-2
+
+
 ## Software packaging/containerisation tools
 
 - [Anaconda](https://anaconda.com)
