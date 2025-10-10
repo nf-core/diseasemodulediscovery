@@ -42,7 +42,8 @@ workflow GT_HIERARCHICAL_HOTNET {
             .transpose()
             .map{
                 meta, permuted_scores -> 
-                    def permutation = permuted_scores.toString().tokenize('.')[2]
+                    def tokens = permuted_scores.toString().tokenize('.')
+                    def permutation = tokens[-2]
                     [meta, permuted_scores, permutation]
                 }
         , by: 0)
