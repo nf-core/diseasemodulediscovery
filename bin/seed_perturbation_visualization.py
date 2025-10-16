@@ -17,7 +17,7 @@ def parse_args(argv=None):
     """Define and immediately parse command line arguments."""
     parser = argparse.ArgumentParser(
         description="Calculate overlap matrices",
-        epilog="Example: python seed_permutation_visualization.py --seed_ids seed_id_1 seed_id_2 --network_ids network_id_1 network_id_2 --amim_ids amim_id1 amim_id2 --inputs file1 file2",
+        epilog="Example: python seed_perturbation_visualization.py --seed_ids seed_id_1 seed_id_2 --network_ids network_id_1 network_id_2 --amim_ids amim_id1 amim_id2 --inputs file1 file2",
     )
     parser.add_argument(
         "--seed-ids",
@@ -42,7 +42,7 @@ def parse_args(argv=None):
     )
     parser.add_argument(
         "--inputs",
-        help="A list of TSV files providing seed permutation evaluations.",
+        help="A list of TSV files providing seed perturbation evaluations.",
         type=Path,
         nargs="+",
         required=True,

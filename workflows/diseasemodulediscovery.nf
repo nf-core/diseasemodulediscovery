@@ -27,8 +27,8 @@ include { DRUGSTONEEXPORT                   } from '../modules/local/drugstoneex
 //
 include { GT_BIOPAX             } from '../subworkflows/local/gt_biopax/main'
 include { NETWORKEXPANSION      } from '../subworkflows/local/networkexpansion/main'
-include { GT_SEEDPERMUTATION    } from '../subworkflows/local/gt_seedpermutation/main'
-include { GT_NETWORKPERMUTATION } from '../subworkflows/local/gt_networkpermutation/main'
+include { GT_SEEDPERTURBATION    } from '../subworkflows/local/gt_seedperturbation/main'
+include { GT_NETWORKPERTURBATION } from '../subworkflows/local/gt_networkperturbation/main'
 include { GT_PROXIMITY          } from '../subworkflows/local/gt_proximity/main'
 
 include { readTsvAsListOfMaps   } from '../subworkflows/local/utils_nfcore_diseasemodulediscovery_pipeline/main'
@@ -113,7 +113,7 @@ workflow DISEASEMODULEDISCOVERY {
     ch_seeds                // channel: [ val(meta[id,seeds_id,network_id]), path(seeds) ]
     ch_network              // channel: [ val(meta[id,network_id]), path(network) ]
     ch_shortest_paths       // channel: [ val(meta[id,network_id]), path(shortest_paths) ]
-    ch_permuted_networks    // channel: [ val(meta[id,network_id]), [path(permuted_networks)] ]
+    ch_perturbed_networks    // channel: [ val(meta[id,network_id]), [path(perturbed_networks)] ]
 
     main:
 
@@ -460,31 +460,31 @@ workflow DISEASEMODULEDISCOVERY {
 
         }
 
-        // Seed permutation based evaluation
-        if(params.run_seed_permutation){
-            GT_SEEDPERMUTATION(
+        // Seed perturbation based evaluation
+        if(params.run_seed_perturbation){
+            GT_SEEDPERTURBATION(
                 ch_modules.filter{ meta, path -> meta.amim != "no_tool" }, // Filter out no_tool modules
                 ch_seeds,
                 ch_network_gt
             )
-            ch_versions = ch_versions.mix(GT_SEEDPERMUTATION.out.versions)
+            ch_versions = ch_versions.mix(GT_SEEDPERTURBATION.out.versions)
             ch_multiqc_files = ch_multiqc_files
-                .mix(GT_SEEDPERMUTATION.out.multiqc_summary)
-                .mix(GT_SEEDPERMUTATION.out.multiqc_jaccard)
+                .mix(GT_SEEDPERTURBATION.out.multiqc_summary)
+                .mix(GT_SEEDPERTURBATION.out.multiqc_jaccard)
         }
 
-        // Network permutation based evaluation
-        if(params.run_network_permutation){
-            GT_NETWORKPERMUTATION(
+        // Network perturbation based evaluation
+        if(params.run_network_perturbation){
+            GT_NETWORKPERTURBATION(
                 ch_modules.filter{ meta, path -> meta.amim != "no_tool" }, // Filter out no_tool modules
                 ch_seeds,
                 ch_network_gt,
-                ch_permuted_networks
+                ch_perturbed_networks
             )
-            ch_versions = ch_versions.mix(GT_NETWORKPERMUTATION.out.versions)
+            ch_versions = ch_versions.mix(GT_NETWORKPERTURBATION.out.versions)
             ch_multiqc_files = ch_multiqc_files
-                .mix(GT_NETWORKPERMUTATION.out.multiqc_summary)
-                .mix(GT_NETWORKPERMUTATION.out.multiqc_jaccard)
+                .mix(GT_NETWORKPERTURBATION.out.multiqc_summary)
+                .mix(GT_NETWORKPERTURBATION.out.multiqc_jaccard)
         }
 
     }

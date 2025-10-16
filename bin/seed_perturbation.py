@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-"""Permute a input seed file."""
+"""Perturbe a input seed file."""
 
 import argparse
 import logging
@@ -14,7 +14,7 @@ def parse_args(argv=None):
     """Define and immediately parse command line arguments."""
     parser = argparse.ArgumentParser(
         description="Parse the modules of different tools.",
-        epilog="Example: python seed_permutations.py --seeds seeds.txt",
+        epilog="Example: python seed_perturbations.py --seeds seeds.txt",
     )
     parser.add_argument(
         "-s",

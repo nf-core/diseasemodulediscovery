@@ -36,8 +36,8 @@
   - Functional coherence analysis ([`DIGEST`](https://pypi.org/project/biodigest/))
   - Network topology analysis ([`graph-tool`](https://graph-tool.skewed.de/))
   - Overlaps between different disease modules
-  - Seed set permutation-based evaluation (robustness and seed rediscovery, enabled by `--run_seed_permutation`)
-  - Network permutation-based evaluation (robustness, enabled by `--run_network_permutation`)
+  - Seed set perturbation-based evaluation (robustness and seed rediscovery, enabled by `--run_seed_perturbation`)
+  - Network perturbation-based evaluation (robustness, enabled by `--run_network_perturbation`)
 - Export to the network medicine web visualization tool [`Drugst.One`](https://drugst.one/)
 - Drug prioritization using the API of [`Drugst.One`](https://drugst.one/)
 - Visualization of the module networks ([`graph-tool`](https://graph-tool.skewed.de/), [`pyvis`](https://github.com/WestHealth/pyvis))

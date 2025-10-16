@@ -1,5 +1,5 @@
 
-process NETWORKPERMUTATION {
+process NETWORKPERTURBATION {
     tag "${meta.id}"
     label 'process_single'
 
@@ -7,7 +7,7 @@ process NETWORKPERMUTATION {
     tuple val(meta), path(network), val(output_name)
 
     output:
-    tuple val(meta), path("${output_name}"), emit: permuted_network
+    tuple val(meta), path("${output_name}"), emit: perturbed_network
     path "versions.yml"                    , emit: versions
 
     when:

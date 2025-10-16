@@ -24,7 +24,7 @@ def read_input(args):
     reference_candidates = [g_init.vp["name"][v] for v in g_init.iter_vertices()]
 
     lists_candidates = []
-    for g in args.permuted_modules:
+    for g in args.perturbed_modules:
         graph = gt.load_graph(g)
         l_cand = [graph.vp["name"][v] for v in graph.iter_vertices()]
         lists_candidates.append(l_cand)
@@ -41,7 +41,7 @@ def read_input(args):
         original_seeds.append(seed_gene)
 
     perturbed_seeds = []
-    for k in args.permuted_seeds:
+    for k in args.perturbed_seeds:
         l_seeds = []
         for line in open(k, "r"):
             # lines starting with '#' will be ignored
@@ -95,12 +95,12 @@ def retrieval_score_from_removed_gene(
     genes over all cases of missing seed(s).
 
     Return:
-        scores:                 frequency of seed retrieval for all permutations
-        avg_scores:             frequency of seed retrieval averaged over all permutations
+        scores:                 frequency of seed retrieval for all perturbations
+        avg_scores:             frequency of seed retrieval averaged over all perturbations
         std_scores:             corresponding standard deviation
-        scores_normalized:      frequency of seed retrieval for all permutations
+        scores_normalized:      frequency of seed retrieval for all perturbations
                                 normalized w.r.t. the size of the perturbed lists
-        avg_scores_normalized:  frequency of seed retrieval averaged over all permutations
+        avg_scores_normalized:  frequency of seed retrieval averaged over all perturbations
                                 normalized w.r.t. the size of the perturbed lists
         std_scores_normalized:  corresponding standard deviation
     """
@@ -147,12 +147,12 @@ def retrieval_score_from_removed_gene(
 def jaccard_index(lists_candidates, reference_candidates):
     """
     Robustness measure: Compute the Jaccard index between the reference module and all
-    permuted modules.
+    perturbed modules.
 
     Return:
-        scores_Jaccard:     Jaccard index between the reference module and all permuted modules separately
-        avg_score_Jaccard:  average Jaccard index between the reference module and all permuted modules
-        std_score_Jaccard:  standard deviation of Jaccard index between the reference module and all permuted modules
+        scores_Jaccard:     Jaccard index between the reference module and all perturbed modules separately
+        avg_score_Jaccard:  average Jaccard index between the reference module and all perturbed modules
+        std_score_Jaccard:  standard deviation of Jaccard index between the reference module and all perturbed modules
     """
 
     scores_Jaccard = []
@@ -177,7 +177,7 @@ def jaccard_index(lists_candidates, reference_candidates):
 def topological_measures(reference_candidates, G, lists_candidates):
     """
     Robustness measure: Compute four topological measures to compare the reference module with the
-    permutated modules:
+    perturbed modules:
         - the size of the largest connected component
         - the number of connected genes in the module
         - the number of edges in the module normalized w.r.t the number of possible connections
@@ -185,8 +185,8 @@ def topological_measures(reference_candidates, G, lists_candidates):
         - the modularity of the module (module VS the rest of the network)
 
     Return:
-        l_results: list of results for the 4 topological measures for all permutations
-        l_mu:      list of the 4 averaged topological measures (average over permutations)
+        l_results: list of results for the 4 topological measures for all perturbations
+        l_mu:      list of the 4 averaged topological measures (average over perturbations)
         l_std:     list of the 4 corresponding standard deviations
         l_zscore:  list of the 4 z-scores for the topological measures
     """
@@ -236,7 +236,7 @@ def topological_measures(reference_candidates, G, lists_candidates):
             l_interconnected_genes.append(0)
             l_random_edgibility.append(0)
             l_random_modularity.append(0)
-            logger.warning("Empty list of permuted candidates")
+            logger.warning("Empty list of perturbed candidates")
             continue
 
         G_sub = nx.subgraph(G, l)
@@ -286,7 +286,7 @@ def topological_measures(reference_candidates, G, lists_candidates):
         round(edgibility, 4),
         round(modularity, 4),
     ]
-    l_results_permuted = [
+    l_results_perturbed = [
         l_random_lcc,
         l_interconnected_genes,
         l_random_edgibility,
@@ -311,14 +311,14 @@ def topological_measures(reference_candidates, G, lists_candidates):
         round(z_modularity, 4),
     ]
 
-    return l_results, l_results_permuted, l_mu, l_std, l_zscore
+    return l_results, l_results_perturbed, l_mu, l_std, l_zscore
 
 
 def get_removed_seeds(original_seeds, perturbed_seeds):
     """
-    Compute the list of removed seeds for each permutation.
+    Compute the list of removed seeds for each perturbation.
     Return:
-        removed_seeds: list of lists of removed seeds for each permutation
+        removed_seeds: list of lists of removed seeds for each perturbation
     """
     removed_seeds = []
     for l in perturbed_seeds:
@@ -364,16 +364,16 @@ def parse_args(argv=None):
     )
 
     parser.add_argument(
-        "--permuted_modules",
-        help="The permuted module files in gt format.",
+        "--perturbed_modules",
+        help="The perturbed module files in gt format.",
         type=str,
         required=True,
         nargs="+",
     )
 
     parser.add_argument(
-        "--permuted_seeds",
-        help="The permuted seed files in gt format.",
+        "--perturbed_seeds",
+        help="The perturbed seed files in gt format.",
         type=str,
         required=True,
         nargs="+",
@@ -424,7 +424,7 @@ def main(argv=None):
     )
 
     # ROBUSTNESS - TOPOLOGICAL SIMILARITY OF THE MODULES
-    l_results, l_results_permuted, l_mu, l_std, l_zscore = topological_measures(
+    l_results, l_results_perturbed, l_mu, l_std, l_zscore = topological_measures(
         reference_candidates, G, lists_candidates
     )
 
@@ -444,22 +444,22 @@ def main(argv=None):
         "Modularity",
     ]
 
-    # create a table with the detailed results of all permutations
+    # create a table with the detailed results of all perturbations
     data_full = [
         removed_seeds,
         scores,
         scores_normalized,
         scores_Jaccard,
-        l_results_permuted[0],
-        l_results_permuted[1],
-        l_results_permuted[2],
-        l_results_permuted[3],
+        l_results_perturbed[0],
+        l_results_perturbed[1],
+        l_results_perturbed[2],
+        l_results_perturbed[3],
     ]
 
-    file_name_full = f"{args.prefix}.seed_permutation_evaluation_detailed.tsv"
+    file_name_full = f"{args.prefix}.seed_perturbation_evaluation_detailed.tsv"
     write_output_tsv_file(np.transpose(data_full), data_headers, file_name_full)
 
-    # create a table with the summarized results of the permutations
+    # create a table with the summarized results of the perturbations
     data_summary = [
         ["average", "standard deviation", "z-score"],
         [avg_scores, std_scores, "-"],
@@ -471,11 +471,11 @@ def main(argv=None):
         [l_mu[3], l_std[3], l_zscore[3]],
     ]
 
-    file_name_summary = f"{args.prefix}.seed_permutation_evaluation_summary.tsv"
+    file_name_summary = f"{args.prefix}.seed_perturbation_evaluation_summary.tsv"
     write_output_tsv_file(np.transpose(data_summary), data_headers, file_name_summary)
 
     # write multiqc summary
-    with open(f"{args.prefix}.seed_permutation_multiqc_summary.tsv", "w") as f:
+    with open(f"{args.prefix}.seed_perturbation_multiqc_summary.tsv", "w") as f:
         f.write(
             "id\tavg_jaccard_index\trediscovery_rate\tnormalized_rediscovery_rate\n"
         )
@@ -484,7 +484,7 @@ def main(argv=None):
         )
 
     # write multiqc jaccard indices
-    with open(f"{args.prefix}.seed_permutation_multiqc_jaccard.txt", "w") as f:
+    with open(f"{args.prefix}.seed_perturbation_multiqc_jaccard.txt", "w") as f:
         f.write(f"{args.prefix}: {scores_Jaccard}\n")
 
 
