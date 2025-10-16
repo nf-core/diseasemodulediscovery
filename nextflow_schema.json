@@ -86,7 +86,7 @@
                 },
                 "skip_robust_bias_aware": {
                     "type": "boolean",
-                    "description": "Flag for skipping Robust-bias-aware",
+                    "description": "Flag for skipping Robust (bias-aware)",
                     "fa_icon": "fas fa-forward"
                 },
                 "skip_diamond": {

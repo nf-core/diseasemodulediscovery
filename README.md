@@ -28,7 +28,7 @@
   - [`DOMINO`](https://github.com/Shamir-Lab/DOMINO)
   - [`DIAMOnD`](https://github.com/dinaghiassian/DIAMOnD)
   - [`ROBUST`](https://github.com/bionetslab/robust)
-  - [`ROBUST (bias aware)`](https://github.com/bionetslab/robust_bias_aware)
+  - [`ROBUST (bias-aware)`](https://github.com/bionetslab/robust_bias_aware)
   - `1st Neighbors`
   - `random walk with restart (RWR)`
 - Evaluation

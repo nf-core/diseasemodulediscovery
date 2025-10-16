@@ -29,7 +29,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
   - [DOMINO](#domino)
   - [DIAMOnD](#diamond)
   - [ROBUST](#robust)
-  - [ROBUST (bias aware)](#robust-bias-aware)
+  - [ROBUST (bias-aware)](#robust-bias-aware)
   - [RWR](#rwr)
   - [1st Neighbors](#1st-neighbors)
 - [Disease module evaluation](#disease-module-evaluation)
@@ -62,7 +62,7 @@ The [graph-tool](https://graph-tool.skewed.de/) library is used to parse the inp
   - `<network>.gt`: Parsed input network in `.gt` format.
   - `<network>.domino.sif`: Input network in the format required for DOMINO. Only created if the method is used.
   - `<network>.diamond.csv`: Input network in the format required for DIAMOnD. Only created if the method is used.
-  - `<network>.robust.tsv`: Input network in the format required for ROBUST or ROBUST (bias aware). Only created if the methods are used.
+  - `<network>.robust.tsv`: Input network in the format required for ROBUST or ROBUST (bias-aware). Only created if the methods are used.
   - `<network>.rwr.csv`: Input network in the format required for RWR. Only created if the method is used.
 - `mqc_summaries/`
   - ` input_network_mqc.tsv`: Network summary statistics for the MultiQC report.
@@ -136,15 +136,15 @@ In addition to the inferred disease modules, the pipeline provides a dummy modul
 
 </details>
 
-### ROBUST (bias aware)
+### ROBUST (bias-aware)
 
-[ROBUST (bias aware)](https://github.com/bionetslab/robust_bias_aware) follows the same strategy as [ROBUST](#robust) but increases edge costs for nodes that are frequently used as baits in PPI detection experiments. This penalization helps to mitigate study bias present in current PPI networks. The added node annotations are the same as for ROBUST.
+[ROBUST (bias-aware)](https://github.com/bionetslab/robust_bias_aware) follows the same strategy as [ROBUST](#robust) but increases edge costs for nodes that are frequently used as baits in PPI detection experiments. This penalization helps to mitigate study bias present in current PPI networks. The added node annotations are the same as for ROBUST.
 
 <details markdown="1">
 <summary>Output files</summary>
 
 - `modules/{gt,graphml,tsv_nodes,tsv_edges}/`
-  - `<seeds>.<network>.robust_bias_aware.{gt,grahml,nodes.tsv,edges.tsv}`: ROBUST (bias aware) module in different formats.
+  - `<seeds>.<network>.robust_bias_aware.{gt,grahml,nodes.tsv,edges.tsv}`: ROBUST (bias-aware) module in different formats.
 
 </details>
 
