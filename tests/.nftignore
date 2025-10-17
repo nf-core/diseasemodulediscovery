@@ -7,7 +7,7 @@ multiqc/multiqc_data/multiqc_software_versions.txt
 multiqc/multiqc_plots/{svg,pdf,png}/*.{svg,pdf,png}
 multiqc/multiqc_report.html
 pipeline_info/*.{html,json,txt,yml}
-input/permuted_networks/**
+input/perturbed_networks/**
 input/shortest_paths/**
 modules/biopax/**
 modules/{graphml,gt,tsv_edges,tsv_nodes}/*{diamond}*.{gt,graphml,tsv}
@@ -19,13 +19,13 @@ drug_prioritization/**
 multiqc/**
 mqc_summaries/drugstone_link_mqc.tsv
 mqc_summaries/jaccard_similarity_matrix_mqc.tsv
-mqc_summaries/network_permutation_mqc.tsv
+mqc_summaries/network_perturbation_mqc.tsv
 mqc_summaries/shared_nodes_matrix_mqc.tsv
 mqc_summaries/digest_reference_based_mqc.tsv
 mqc_summaries/digest_reference_free_mqc.tsv
 mqc_summaries/jaccard_similarity_no_seeds_matrix_mqc.tsv
-mqc_summaries/seed_permutation_jaccard_mqc.yaml
-mqc_summaries/seed_permutation_mqc.tsv
+mqc_summaries/seed_perturbation_jaccard_mqc.yaml
+mqc_summaries/seed_perturbation_mqc.tsv
 mqc_summaries/topology_mqc.tsv
 mqc_summaries/shared_nodes_no_seeds_matrix_mqc.tsv
-mqc_summaries/network_permutation_jaccard_mqc.yaml
+mqc_summaries/network_perturbation_jaccard_mqc.yaml

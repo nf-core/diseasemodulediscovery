@@ -29,7 +29,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
   - [DOMINO](#domino)
   - [DIAMOnD](#diamond)
   - [ROBUST](#robust)
-  - [ROBUST (bias aware)](#robust-bias-aware)
+  - [ROBUST (bias-aware)](#robust-bias-aware)
   - [RWR](#rwr)
   - [1st Neighbors](#1st-neighbors)
 - [Disease module evaluation](#disease-module-evaluation)
@@ -37,8 +37,8 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
   - [DIGEST](#digest)
   - [Network topology](#topology)
   - [Overlap](#overlap)
-  - [Seed permutation](#seed-permutation)
-  - [Network permutation](#network-permutation)
+  - [Seed perturbation](#seed-perturbation)
+  - [Network perturbation](#network-perturbation)
 - [Drug prioritization](#drug-prioritization)
   - [Drugst.One](#drugstone)
 - [Other](#other)
@@ -62,7 +62,7 @@ The [graph-tool](https://graph-tool.skewed.de/) library is used to parse the inp
   - `<network>.gt`: Parsed input network in `.gt` format.
   - `<network>.domino.sif`: Input network in the format required for DOMINO. Only created if the method is used.
   - `<network>.diamond.csv`: Input network in the format required for DIAMOnD. Only created if the method is used.
-  - `<network>.robust.tsv`: Input network in the format required for ROBUST or ROBUST (bias aware). Only created if the methods are used.
+  - `<network>.robust.tsv`: Input network in the format required for ROBUST or ROBUST (bias-aware). Only created if the methods are used.
   - `<network>.rwr.csv`: Input network in the format required for RWR. Only created if the method is used.
 - `mqc_summaries/`
   - ` input_network_mqc.tsv`: Network summary statistics for the MultiQC report.
@@ -136,15 +136,15 @@ In addition to the inferred disease modules, the pipeline provides a dummy modul
 
 </details>
 
-### ROBUST (bias aware)
+### ROBUST (bias-aware)
 
-[ROBUST (bias aware)](https://github.com/bionetslab/robust_bias_aware) follows the same strategy as [ROBUST](#robust) but increases edge costs for nodes that are frequently used as baits in PPI detection experiments. This penalization helps to mitigate study bias present in current PPI networks. The added node annotations are the same as for ROBUST.
+[ROBUST (bias-aware)](https://github.com/bionetslab/robust_bias_aware) follows the same strategy as [ROBUST](#robust) but increases edge costs for nodes that are frequently used as baits in PPI detection experiments. This penalization helps to mitigate study bias present in current PPI networks. The added node annotations are the same as for ROBUST.
 
 <details markdown="1">
 <summary>Output files</summary>
 
 - `modules/{gt,graphml,tsv_nodes,tsv_edges}/`
-  - `<seeds>.<network>.robust_bias_aware.{gt,grahml,nodes.tsv,edges.tsv}`: ROBUST (bias aware) module in different formats.
+  - `<seeds>.<network>.robust_bias_aware.{gt,grahml,nodes.tsv,edges.tsv}`: ROBUST (bias-aware) module in different formats.
 
 </details>
 
@@ -202,7 +202,7 @@ DIGEST is executed in two modes:
 - Reference-free mode (`subnetwork`) – evaluates the functional coherence among all genes in the module.
 - Reference-based mode (`subnetwork-set`) – compares the coherence of the original seed genes with the genes added during module expansion.
 
-Both modes use Jaccard similarity to measure functional overlap and generate 1,000 random modules from the input network(s) to perform permutation-based significance testing. The resulting empirical p-values are summarized in the MultiQC report.
+Both modes use Jaccard similarity to measure functional overlap and generate 1,000 random modules from the input network(s) to perform perturbation-based significance testing. The resulting empirical p-values are summarized in the MultiQC report.
 
 <details markdown="1">
 <summary>Output files</summary>
@@ -248,9 +248,9 @@ The pipeline calculates pairwise overlaps between the node sets of all modules t
 
   </details>
 
-### Seed permutation
+### Seed perturbation
 
-If provided with the `--run_seed_permutation` parameter, the pipeline runs a leave-one-out analysis to check how robust a module discovery method is against small changes in the seed set and to calculate a rediscovery rate. Starting with the original seed set, the pipeline creates new versions of the set by leaving out one seed at a time. For each of these perturbed seed sets, a new disease module is inferred using the same method.
+If provided with the `--run_seed_perturbation` parameter, the pipeline runs a leave-one-out analysis to check how robust a module discovery method is against small changes in the seed set and to calculate a rediscovery rate. Starting with the original seed set, the pipeline creates new versions of the set by leaving out one seed at a time. For each of these perturbed seed sets, a new disease module is inferred using the same method.
 
 #### Robustness
 
@@ -269,25 +269,25 @@ Both normalized and raw rediscovery rates are summarized in the `General Statist
 <details markdown="1">
 <summary>Output files</summary>
 
-- `evaluation/seed_permutation/<seeds>.<network>.<amim>/`
-  - `<seeds>.<network>.<amim>.seed_permutation_evaluation_summary.tsv`: Leave-one-out analysis results aggregated across all iterations. Includes the mean Jaccard index, raw rediscovery rate, and normalized rediscovery rate.
-  - `<seeds>.<network>.<amim>.seed_permutation_evaluation_detailed.tsv`: Leave-one-out analysis results on the level of individual iterations. Includes the mean Jaccard index, raw rediscovery rate, and normalized rediscovery rate.
+- `evaluation/seed_perturbation/<seeds>.<network>.<amim>/`
+  - `<seeds>.<network>.<amim>.seed_perturbation_evaluation_summary.tsv`: Leave-one-out analysis results aggregated across all iterations. Includes the mean Jaccard index, raw rediscovery rate, and normalized rediscovery rate.
+  - `<seeds>.<network>.<amim>.seed_perturbation_evaluation_detailed.tsv`: Leave-one-out analysis results on the level of individual iterations. Includes the mean Jaccard index, raw rediscovery rate, and normalized rediscovery rate.
 
-- `evaluation/seed_permutation/`
+- `evaluation/seed_perturbation/`
   - `<seeds>.<network>.robustness.{png,pdf}`: Heatmap visualizing the robustness (indicated through the Jaccard index) of different AMIMs on the level of individual seed nodes. Rows are sorted by the row sum, columns are sorted by the column sum.
   - `<seeds>.<network>.robustness.tsv`: Table reporting the robustness (indicated through the Jaccard index) of different AMIMs on the level of individual seed nodes.
   - `<seeds>.<network>.seed_rediscovery.{png,pdf}`: Heatmap visualizing whether different AMIMs were able to recover individual seeds. Rows are sorted by the row sum, columns are sorted by the column sum.
   - `<seeds>.<network>.seed_rediscovery.tsv`: Table reporting whether different AMIMs were able to recover individual seeds.
 
 - `mqc_summaries/`
-  - `seed_permutation_mqc.tsv`: Summaries of the mean Jaccard index, raw rediscovery rate, and normalized rediscovery rate for the MultiQC report.
-  - `seed_permutation_jaccard_mqc.yaml`: Jaccard index distributions for the MultiQC report.
+  - `seed_perturbation_mqc.tsv`: Summaries of the mean Jaccard index, raw rediscovery rate, and normalized rediscovery rate for the MultiQC report.
+  - `seed_perturbation_jaccard_mqc.yaml`: Jaccard index distributions for the MultiQC report.
 
   </details>
 
-### Network permutation
+### Network perturbation
 
-Use the `--run_network_permutation` option to repeatedly rewire the edges of the input network while preserving each node’s degree. The pipeline then reruns the module identification methods on these permuted networks.
+Use the `--run_network_perturbation` option to repeatedly rewire the edges of the input network while preserving each node’s degree. The pipeline then reruns the module identification methods on these perturbed networks.
 
 The network rewiring is performed using the [graph-tool](https://graph-tool.skewed.de/) function [`random_rewire`](https://graph-tool.skewed.de/static/docs/stable/autosummary/graph_tool.generation.random_rewire.html) with `"constrained-configuration"` as model and 100 full sweeps over all edges.
 
@@ -299,10 +299,10 @@ The corresponding distribution, as well as its mean value, is part of the MultiQ
 <summary>Output files</summary>
 
 - `mqc_summaries/`
-  - `network_permutation_mqc.tsv`: Summaries of the mean Jaccard index for the MultiQC report.
-  - `network_permutation_jaccard_mqc.yaml`: Jaccard index distributions for the MultiQC report.
+  - `network_perturbation_mqc.tsv`: Summaries of the mean Jaccard index for the MultiQC report.
+  - `network_perturbation_jaccard_mqc.yaml`: Jaccard index distributions for the MultiQC report.
 
-- `input/permuted_networks/<network>/`
+- `input/perturbed_networks/<network>/`
   - `<network>.*.gt`: The rewired networks. Can be reused for repeated analyses.
 
   </details>

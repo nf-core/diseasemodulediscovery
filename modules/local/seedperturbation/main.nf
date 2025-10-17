@@ -1,5 +1,5 @@
 
-process SEEDPERMUTATION {
+process SEEDPERTURBATION {
     tag "$meta.id"
     label 'process_single'
 
@@ -7,7 +7,7 @@ process SEEDPERMUTATION {
     tuple val(meta), path(seeds)
 
     output:
-    tuple val(meta), path("${meta.seeds_id}.*.${seeds.extension}") , emit: permuted_seeds
+    tuple val(meta), path("${meta.seeds_id}.*.${seeds.extension}") , emit: perturbed_seeds
     path "versions.yml"                                            , emit: versions
 
     when:
@@ -15,7 +15,7 @@ process SEEDPERMUTATION {
 
     script:
     """
-    seed_permutation.py --seeds ${seeds} --prefix ${meta.seeds_id}
+    seed_perturbation.py --seeds ${seeds} --prefix ${meta.seeds_id}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

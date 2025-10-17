@@ -33,8 +33,8 @@ custom_content:
     - shared_nodes_no_seeds
     - digest_reference_free
     - digest_reference_based
-    - seed_permutation_jaccard
-    - network_permutation_jaccard
+    - seed_perturbation_jaccard
+    - network_perturbation_jaccard
 
 custom_data:
   topology:
@@ -80,12 +80,12 @@ custom_data:
           description: "Number of nodes without any edges to other nodes"
           format: "{:.0f}"
           placement: 1007
-  seed_permutation:
+  seed_perturbation:
     plot_type: "generalstats"
     pconfig:
       - avg_jaccard_index:
-          title: "Robustness (seeds permutation)"
-          description: "Average Jaccard index between the original and permuted modules."
+          title: "Robustness (seeds perturbation)"
+          description: "Average Jaccard index between the original and perturbed modules."
           format: "{:.2f}"
           scale: "RdYlGn"
           placement: 2000
@@ -101,12 +101,12 @@ custom_data:
           format: "{:.4f}"
           scale: "RdYlGn"
           placement: 2002
-  network_permutation:
+  network_perturbation:
     plot_type: "generalstats"
     pconfig:
       - avg_jaccard_index:
-          title: "Robustness (network permutation)"
-          description: "Average Jaccard index between the original and permuted modules."
+          title: "Robustness (network perturbation)"
+          description: "Average Jaccard index between the original and perturbed modules."
           format: "{:.2f}"
           scale: "RdYlGn-rev"
           placement: 3000
