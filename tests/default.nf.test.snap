@@ -1,7 +1,6 @@
 {
     "-profile test": {
         "content": [
-            72,
             {
                 "BIOPAX_PARSER": {
                     "python": "3.12.7",
@@ -336,12 +335,12 @@
                             ]
                         ],
                         [
-                            "environment.yml:md5,0fbf6355293ab8f5887641bd17082eee",
-                            "main.nf:md5,176476aeb47d0e4e1f6312a05c41dee8",
+                            "environment.yml:md5,0593e8d229aa38564da1684eba129ec2",
+                            "main.nf:md5,5a2c752e9c362d327f87eed461cadd2b",
                             "meta.yml:md5,e20ec2d6ae5b7b5e2e65a00f9cfd29c4",
                             [
                                 "main.nf.test:md5,f780adb58f1db8c1e19ddd1d8c7e62e9",
-                                "main.nf.test.snap:md5,b48532f03a21198db5ed6741dc7cb01b",
+                                "main.nf.test.snap:md5,1eafa18ce2c05f66d76e6bbe1176fd34",
                                 "nextflow.config:md5,f2390ff2bd4fca9242630f5b25597e34"
                             ]
                         ]
@@ -405,9 +404,9 @@
                 "mqc_summaries/topology_mqc.tsv",
                 "multiqc",
                 "multiqc/multiqc_data",
-                "multiqc/multiqc_data/BETA-multiqc.parquet",
                 "multiqc/multiqc_data/llms-full.txt",
                 "multiqc/multiqc_data/multiqc.log",
+                "multiqc/multiqc_data/multiqc.parquet",
                 "multiqc/multiqc_data/multiqc_citations.txt",
                 "multiqc/multiqc_data/multiqc_data.json",
                 "multiqc/multiqc_data/multiqc_digest_reference_based.txt",
@@ -484,9 +483,9 @@
             ]
         ],
         "meta": {
-            "nf-test": "0.9.2",
-            "nextflow": "25.04.6"
+            "nf-test": "0.9.3",
+            "nextflow": "25.04.8"
         },
-        "timestamp": "2025-10-16T23:16:12.062169294"
+        "timestamp": "2025-10-20T16:27:16.781952293"
     }
 }

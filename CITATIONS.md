@@ -58,23 +58,23 @@
 
 ## Included networks
 
-- [STRING]( https://doi.org/10.1093/nar/gkac1000)
+- [STRING](https://doi.org/10.1093/nar/gkac1000)
 
 > Szklarczyk D, Kirsch R, Koutrouli M, Nastou K, Mehryary F, Hachilif R, et al. The STRING database in 2023: protein-protein association networks and functional enrichment analyses for any sequenced genome of interest. Nucleic Acids Res. 2023;51: D638–D646.
 
-- [BioGRID]( https://doi.org/10.1002/pro.3978)
+- [BioGRID](https://doi.org/10.1002/pro.3978)
 
 > Oughtred R, Rust J, Chang C, Breitkreutz B-J, Stark C, Willems A, et al. The BioGRID database: A comprehensive biomedical resource of curated protein, genetic, and chemical interactions. Protein Sci. 2021;30: 187–200.
 
-- [HIPPIE]( https://doi.org/10.1093/nar/gkw985)
+- [HIPPIE](https://doi.org/10.1093/nar/gkw985)
 
 > Alanis-Lobato G, Andrade-Navarro MA, Schaefer MH. HIPPIE v2.0: enhancing meaningfulness and reliability of protein-protein interaction networks. Nucleic Acids Res. 2017;45: D408–D414.
 
-- [IID]( https://doi.org/10.1093/nar/gkab1034)
+- [IID](https://doi.org/10.1093/nar/gkab1034)
 
 > Kotlyar M, Pastrello C, Ahmed Z, Chee J, Varyova Z, Jurisica I. IID 2021: towards context-specific protein interaction analyses by increased coverage, enhanced annotation and enrichment analysis. Nucleic Acids Res. 2022;50: D640–D647.
 
-- [NeDRex]( https://doi.org/10.1038/s41467-021-27138-2)
+- [NeDRex](https://doi.org/10.1038/s41467-021-27138-2)
 
 > Sadegh S, Skelton J, Anastasi E, Bernett J, Blumenthal DB, Galindez G, et al. Network medicine for disease module identification and drug repurposing with the NeDRex platform. Nat Commun. 2021;12: 6848.
 
