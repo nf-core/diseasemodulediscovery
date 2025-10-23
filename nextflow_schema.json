@@ -30,7 +30,7 @@
                 },
                 "network": {
                     "type": "string",
-                    "description": "Path(s) to one or multiple PPI network(s) in gt, csv, graphml, xml, dot, or gml format.",
+                    "description": "Path(s) to one or multiple PPI network(s) in gt, csv, tsv, graphml, xml, dot, or gml format.",
                     "format": "file-path",
                     "fa_icon": "fas fa-file-csv",
                     "help_text": "Multiple files have to be \",\" separated."
