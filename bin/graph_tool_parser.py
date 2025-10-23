@@ -130,7 +130,9 @@ def load(file_in, extension):
         g = gt.load_graph(str(file_in))
     elif extension in [".csv", ".tsv"]:
         delimiter = "," if extension == ".csv" else "\t"
-        g = gt.load_graph_from_csv(str(file_in), csv_options={"delimiter": delimiter, "quotechar": '"'})
+        g = gt.load_graph_from_csv(
+            str(file_in), csv_options={"delimiter": delimiter, "quotechar": '"'}
+        )
     else:
         logger.error(f"Unknown input file extension: {extension}")
         sys.exit(1)
