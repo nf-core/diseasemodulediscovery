@@ -33,7 +33,7 @@ workflow NFCORE_DISEASEMODULEDISCOVERY {
     ch_seeds                // channel: [ val(meta[id,seeds_id,network_id]), path(seeds) ]
     ch_network              // channel: [ val(meta[id,network_id]), path(network) ]
     ch_shortest_paths       // channel: [ val(meta[id,network_id]), path(shortest_paths) ]
-    ch_permuted_networks    // channel: [ val(meta[id,network_id]), [path(permuted_networks)] ]
+    ch_perturbed_networks    // channel: [ val(meta[id,network_id]), [path(perturbed_networks)] ]
 
     main:
 
@@ -47,7 +47,7 @@ workflow NFCORE_DISEASEMODULEDISCOVERY {
         ch_seeds,
         ch_network,
         ch_shortest_paths,
-        ch_permuted_networks
+        ch_perturbed_networks
     )
     ch_versions = ch_versions.mix(DISEASEMODULEDISCOVERY.out.versions)
 
@@ -80,17 +80,20 @@ workflow {
         args,
         params.outdir,
         params.input,
+        params.help,
+        params.help_full,
+        params.show_hidden,
         params.seeds,
         params.network,
         params.shortest_paths,
-        params.permuted_networks,
+        params.perturbed_networks,
         params.id_space
     )
 
     //
     // WORKFLOW: Run main workflow
     //
-    NFCORE_DISEASEMODULEDISCOVERY (PIPELINE_INITIALISATION.out.seeds, PIPELINE_INITIALISATION.out.network, PIPELINE_INITIALISATION.out.shortest_paths, PIPELINE_INITIALISATION.out.permuted_networks)
+    NFCORE_DISEASEMODULEDISCOVERY (PIPELINE_INITIALISATION.out.seeds, PIPELINE_INITIALISATION.out.network, PIPELINE_INITIALISATION.out.shortest_paths, PIPELINE_INITIALISATION.out.perturbed_networks)
 
     //
     // SUBWORKFLOW: Run completion tasks

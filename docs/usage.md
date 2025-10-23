@@ -23,9 +23,32 @@ nextflow run nf-core/diseasemodulediscovery \
 
 This will launch the pipeline with the `docker` configuration profile. See below for more information about profiles.
 
-`--seeds` has to point to a text file with seed genes or proteins, without a header and one line per entry.
+`--seeds` has to point to a text file with seed genes or proteins, without a header and one line per entry. Format example:
 
-`--network` has to point to file containing a background network. This can be a CSV edge list (without header), or a .gt, .graphml, or .dot file. Alternatively, you can choose one of the available background networks (see below).
+```csv title="seeds.txt"
+2717
+175
+4669
+4125
+348
+4126
+411
+```
+
+`--network` has to point to file containing a background network. This can be a CSV edge list (without header), or a .gt, .graphml, or .dot file. Alternatively, you can choose one of the available background networks ([see below](#available-networks)). Format example:
+
+```csv title="ppi.csv"
+3920,5476
+113457,4214
+113457,7132
+113457,1326
+113457,1147
+113457,3551
+113457,29110
+113457,8717
+113457,9641
+113457,9020
+```
 
 `--id_space` has to indicate the ID space your genes or proteins are using. For genes Entrez IDs, Ensembl IDs, and HGNC Symbols are supported. For proteins UniProt-AC IDs are supported.
 
@@ -113,9 +136,7 @@ If multiple files are provided for both options, the pipeline will run for every
 
 In case you are only interested in specific combinations, seeds-network pairs can be specified via a CSV samplesheet:
 
-`samplesheet.csv`:
-
-```csv
+```csv, title="samplesheet.csv"
 seeds,network
 seed_file_1.csv,network_1.csv
 seed_file_2.csv,network_2.csv
@@ -156,10 +177,34 @@ nextflow run <PATH_TO_REPO>/modulediscovery/main.nf \
    -resume
 ```
 
-To see the full list of skipping options, please run:
+To see the full list of skipping options, please refer to the [parameter documentation](https://nf-co.re/diseasemodulediscovery/parameters).
+
+### Perturbation-based analyses
+
+Since the input perturbation-based analyses workflows can be computationally expensive, the pipeline does not run them by default.
+
+Use `--run_seed_perturbation` to perform a leave-one-out analysis. This option sequentially removes each seed gene or protein from the seed file input. The module identification methods are then rerun on these perturbed datasets to evaluate their robustness to small input changes and their ability to reintegrate the omitted seeds.
+
+Use `--run_network_perturbation` to repeatedly rewire the edges of the input network while preserving the degree of each node. The pipeline then reruns the module identification methods on these rewired networks. If rewiring has little effect, it suggests that the modules are driven mainly by node degree rather than by specific edge connections.
+
+The pipeline saves the rewired networks (please refer to the [output documentation](https://nf-co.re/diseasemodulediscovery/output)), which can be reused in future analyses with the same original input network. To do so, provide the path to the folder containing the rewired networks via the `--perturbed_networks` parameter. If multiple networks are used, the folders specified in `--perturbed_networks` must be given in the same order as the corresponding input networks.
 
 ```bash
-nextflow run <PATH_TO_REPO>/modulediscovery/main.nf --help
+nextflow run <PATH_TO_REPO>/modulediscovery/main.nf \
+   -profile <docker/singularity> \
+   --seeds <SEED_FILE_> \
+   --network <NETWORK_FILE_1,NETWORK_FILE_2,...> \
+   --perturbed_networks <PATH_TO_PERTURBED_NETWORK_FOLDER_1,PATH_TO_PERTURBED_NETWORK_FOLDER_1,...> \
+   --outdir <OUTDIR>
+```
+
+Alternatively, they can be specified using the samplesheet:
+
+```csv, title="samplesheet.csv"
+seeds,network,perturbed_networks
+seed_file_1.csv,network_1.csv,/path/to/perturbed/networks/network_1
+seed_file_2.csv,network_2.csv,/path/to/perturbed/networks/network_2
+seed_file_2.csv,network_1.csv,/path/to/perturbed/networks/network_1
 ```
 
 ### Updating the pipeline
@@ -216,7 +261,7 @@ If `-profile` is not specified, the pipeline will run locally and expect all sof
 - `shifter`
   - A generic configuration profile to be used with [Shifter](https://nersc.gitlab.io/development/shifter/how-to-use/)
 - `charliecloud`
-  - A generic configuration profile to be used with [Charliecloud](https://hpc.github.io/charliecloud/)
+  - A generic configuration profile to be used with [Charliecloud](https://charliecloud.io/)
 - `apptainer`
   - A generic configuration profile to be used with [Apptainer](https://apptainer.org/)
 - `wave`

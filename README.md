@@ -5,12 +5,13 @@
   </picture>
 </h1>
 
-[![GitHub Actions CI Status](https://github.com/nf-core/diseasemodulediscovery/actions/workflows/ci.yml/badge.svg)](https://github.com/nf-core/diseasemodulediscovery/actions/workflows/ci.yml)
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new/nf-core/diseasemodulediscovery)
+[![GitHub Actions CI Status](https://github.com/nf-core/diseasemodulediscovery/actions/workflows/nf-test.yml/badge.svg)](https://github.com/nf-core/diseasemodulediscovery/actions/workflows/nf-test.yml)
 [![GitHub Actions Linting Status](https://github.com/nf-core/diseasemodulediscovery/actions/workflows/linting.yml/badge.svg)](https://github.com/nf-core/diseasemodulediscovery/actions/workflows/linting.yml)[![AWS CI](https://img.shields.io/badge/CI%20tests-full%20size-FF9900?labelColor=000000&logo=Amazon%20AWS)](https://nf-co.re/diseasemodulediscovery/results)[![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.XXXXXXX-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.XXXXXXX)
 [![nf-test](https://img.shields.io/badge/unit_tests-nf--test-337ab7.svg)](https://www.nf-test.com)
 
-[![Nextflow](https://img.shields.io/badge/version-%E2%89%A524.04.2-green?style=flat&logo=nextflow&logoColor=white&color=%230DC09D&link=https%3A%2F%2Fnextflow.io)](https://www.nextflow.io/)
-[![nf-core template version](https://img.shields.io/badge/nf--core_template-3.3.1-green?style=flat&logo=nfcore&logoColor=white&color=%2324B064&link=https%3A%2F%2Fnf-co.re)](https://github.com/nf-core/tools/releases/tag/3.3.1)
+[![Nextflow](https://img.shields.io/badge/version-%E2%89%A525.04.0-green?style=flat&logo=nextflow&logoColor=white&color=%230DC09D&link=https%3A%2F%2Fnextflow.io)](https://www.nextflow.io/)
+[![nf-core template version](https://img.shields.io/badge/nf--core_template-3.4.1-green?style=flat&logo=nfcore&logoColor=white&color=%2324B064&link=https%3A%2F%2Fnf-co.re)](https://github.com/nf-core/tools/releases/tag/3.4.1)
 [![run with conda](http://img.shields.io/badge/run%20with-conda-3EB049?labelColor=000000&logo=anaconda)](https://docs.conda.io/en/latest/)
 [![run with docker](https://img.shields.io/badge/run%20with-docker-0db7ed?labelColor=000000&logo=docker)](https://www.docker.com/)
 [![run with singularity](https://img.shields.io/badge/run%20with-singularity-1d355c.svg?labelColor=000000)](https://sylabs.io/docs/)
@@ -28,7 +29,7 @@
   - [`DOMINO`](https://github.com/Shamir-Lab/DOMINO)
   - [`DIAMOnD`](https://github.com/dinaghiassian/DIAMOnD)
   - [`ROBUST`](https://github.com/bionetslab/robust)
-  - [`ROBUST (bias aware)`](https://github.com/bionetslab/robust_bias_aware)
+  - [`ROBUST (bias-aware)`](https://github.com/bionetslab/robust_bias_aware)
   - `1st Neighbors`
   - `random walk with restart (RWR)`
 - Evaluation
@@ -36,8 +37,8 @@
   - Functional coherence analysis ([`DIGEST`](https://pypi.org/project/biodigest/))
   - Network topology analysis ([`graph-tool`](https://graph-tool.skewed.de/))
   - Overlaps between different disease modules
-  - Seed set permutation-based evaluation (robustness and seed rediscovery, enabled by `--run_seed_permutation`)
-  - Network permutation-based evaluation (robustness, enabled by `--run_network_permutation`)
+  - Seed set perturbation-based evaluation (robustness and seed rediscovery, enabled by `--run_seed_perturbation`)
+  - Network perturbation-based evaluation (robustness, enabled by `--run_network_perturbation`)
 - Export to the network medicine web visualization tool [`Drugst.One`](https://drugst.one/)
 - Drug prioritization using the API of [`Drugst.One`](https://drugst.one/)
 - Visualization of the module networks ([`graph-tool`](https://graph-tool.skewed.de/), [`pyvis`](https://github.com/WestHealth/pyvis))
@@ -49,9 +50,22 @@
 > [!NOTE]
 > If you are new to Nextflow and nf-core, please refer to [this page](https://nf-co.re/docs/usage/installation) on how to set-up Nextflow. Make sure to [test your setup](https://nf-co.re/docs/usage/introduction#how-to-run-a-pipeline) with `-profile test` before running the workflow on actual data.
 
+> [!WARNING]
+> The pipeline is still under development. In order to run it, please use the option `-r dev`
+
+### Test your setup
+
+```bash
+nextflow run nf-core/diseasemodulediscovery \
+   -profile <docker/singularity>,test \
+   --outdir <OUTDIR>
+```
+
+This will run the pipeline with a small test dataset. Results will be saved to the specified `<OUTDIR>`. Use `-profile` to set whether docker or singularity should be used for software deployment.
+
 ### Running the pipeline
 
-Now, you can run the pipeline using:
+Now, you can run the pipeline with your own data using:
 
 ```bash
 nextflow run nf-core/diseasemodulediscovery \

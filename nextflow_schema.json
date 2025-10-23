@@ -86,7 +86,7 @@
                 },
                 "skip_robust_bias_aware": {
                     "type": "boolean",
-                    "description": "Flag for skipping Robust-bias-aware",
+                    "description": "Flag for skipping Robust (bias-aware)",
                     "fa_icon": "fas fa-forward"
                 },
                 "skip_diamond": {
@@ -219,26 +219,26 @@
                     "fa_icon": "fas fa-forward",
                     "description": "Flag for skipping only the reference-based mode of DIGEST"
                 },
-                "run_seed_permutation": {
+                "run_seed_perturbation": {
                     "type": "boolean",
                     "fa_icon": "fas fa-caret-right",
-                    "description": "Flag for running the seed permutation-based evaluation"
+                    "description": "Flag for running the seed perturbation-based evaluation"
                 },
-                "run_network_permutation": {
+                "run_network_perturbation": {
                     "type": "boolean",
                     "fa_icon": "fas fa-caret-right",
-                    "description": "Flag for running the network permutation-base evaluation"
+                    "description": "Flag for running the network perturbation-base evaluation"
                 },
-                "n_network_permutations": {
+                "n_network_perturbations": {
                     "type": "integer",
                     "default": 100,
                     "fa_icon": "fas fa-cogs",
-                    "description": "Number of times the network will be permuted for the network permutation-based evaluation"
+                    "description": "Number of times the network will be perturbed for the network perturbation-based evaluation"
                 },
-                "permuted_networks": {
+                "perturbed_networks": {
                     "type": "string",
                     "fa_icon": "fas fa-folder-open",
-                    "description": "Path(s) to folder(s) with pre-computed permuted networks for the network permutation-based evaluation"
+                    "description": "Path(s) to folder(s) with pre-computed perturbed networks for the network perturbation-based evaluation"
                 }
             }
         },
@@ -450,6 +450,18 @@
                     "fa_icon": "far calendar",
                     "description": "Suffix to add to the trace report filename. Default is the date and time in the format yyyy-MM-dd_HH-mm-ss.",
                     "hidden": true
+                },
+                "help": {
+                    "type": ["boolean", "string"],
+                    "description": "Display the help message."
+                },
+                "help_full": {
+                    "type": "boolean",
+                    "description": "Display the full detailed help message."
+                },
+                "show_hidden": {
+                    "type": "boolean",
+                    "description": "Display hidden parameters in the help message (only works when --help or --help_full are provided)."
                 }
             }
         }

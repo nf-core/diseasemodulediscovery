@@ -20,7 +20,7 @@ def read_input(args):
     reference_candidates = [g_init.vp["name"][v] for v in g_init.iter_vertices()]
 
     lists_candidates = []
-    for g in args.permuted_modules:
+    for g in args.perturbed_modules:
         graph = gt.load_graph(g)
         l_cand = [graph.vp["name"][v] for v in graph.iter_vertices()]
         lists_candidates.append(l_cand)
@@ -37,12 +37,12 @@ def read_input(args):
 def jaccard_index(lists_candidates, reference_candidates):
     """
     Robustness measure: Compute the Jaccard index between the reference module and all
-    permuted modules.
+    perturbed modules.
 
     Return:
-        scores_Jaccard:     Jaccard index between the reference module and all permuted modules separately
-        avg_score_Jaccard:  average Jaccard index between the reference module and all permuted modules
-        std_score_Jaccard:  standard deviation of Jaccard index between the reference module and all permuted modules
+        scores_Jaccard:     Jaccard index between the reference module and all perturbed modules separately
+        avg_score_Jaccard:  average Jaccard index between the reference module and all perturbed modules
+        std_score_Jaccard:  standard deviation of Jaccard index between the reference module and all perturbed modules
     """
 
     scores_Jaccard = []
@@ -82,8 +82,8 @@ def parse_args(argv=None):
     )
 
     parser.add_argument(
-        "--permuted_modules",
-        help="The permuted module files in gt format.",
+        "--perturbed_modules",
+        help="The perturbed module files in gt format.",
         type=str,
         required=True,
         nargs="+",
@@ -113,12 +113,12 @@ def main(argv=None):
     )
 
     # write multiqc summary
-    with open(f"{args.prefix}.network_permutation_multiqc_summary.tsv", "w") as f:
+    with open(f"{args.prefix}.network_perturbation_multiqc_summary.tsv", "w") as f:
         f.write("id\tavg_jaccard_index\n")
         f.write(f"{args.prefix}\t{avg_score_Jaccard}\n")
 
     # write multiqc jaccard indices
-    with open(f"{args.prefix}.network_permutation_multiqc_jaccard.txt", "w") as f:
+    with open(f"{args.prefix}.network_perturbation_multiqc_jaccard.txt", "w") as f:
         f.write(f"{args.prefix}: {scores_Jaccard}\n")
 
 
