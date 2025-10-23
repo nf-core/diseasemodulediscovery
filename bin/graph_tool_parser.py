@@ -128,8 +128,12 @@ def load(file_in, extension):
     g = None
     if extension in [".gt", ".graphml", ".xml", ".dot", ".gml"]:
         g = gt.load_graph(str(file_in))
+    elif extension in [".csv", ".tsv"]:
+        delimiter = "," if extension == ".csv" else "\t"
+        g = gt.load_graph_from_csv(str(file_in), csv_options={"delimiter": delimiter, "quotechar": '"'})
     else:
-        g = gt.load_graph_from_csv(str(file_in))
+        logger.error(f"Unknown input file extension: {extension}")
+        sys.exit(1)
     assert g is not None, "Failed to load the graph!"
     assert g.num_vertices() > 0, "The loaded graph has no vertices!"
     assert g.num_edges() > 0, "The loaded graph has no edges!"
