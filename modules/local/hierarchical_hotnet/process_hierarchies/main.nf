@@ -3,7 +3,7 @@ process HIERARCHICAL_HOTNET_PROCESS_HIERARCHIES {
     label 'process_single'
     container "docker.io/motan04/hierarchical_hotnet:latest"
 
-    input: 
+    input:
     tuple val(meta), path(original_hierarchy_edges), path(original_hierarchy_nodes), path(permuted_hierarchy_edges), path(permuted_hierarchy_nodes)
     output:
     tuple val(meta), path("${meta.id}.module"), emit:modules

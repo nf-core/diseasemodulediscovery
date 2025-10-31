@@ -71,6 +71,7 @@ def filter_hiearchical_hotnet(g, module, filter_column):
         g.vp[filter_column][v] = True
     return g
 
+
 def filter_robust(g, module, filter_column):
     import numpy as np
 
@@ -185,7 +186,14 @@ def parse_args(argv=None):
         "-t",
         "--tool",
         help="The tool, that generated the module.",
-        choices=("diamond", "domino", "hierarchical_hotnet", "robust", "robust_bias_aware", "rwr"),
+        choices=(
+            "diamond",
+            "domino",
+            "hierarchical_hotnet",
+            "robust",
+            "robust_bias_aware",
+            "rwr",
+        ),
     )
     parser.add_argument(
         "-m",
