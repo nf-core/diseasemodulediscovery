@@ -57,18 +57,51 @@ def filter_domino(g, module, filter_column):
 
 
 def filter_hiearchical_hotnet(g, module, filter_column):
-    gene_set = set()
+    submodule_id = 0
     with open(module, "r") as file:
         for line in file.readlines():
-            if line.startswith("#"):
-                continue
-            else:
-                line = line.strip().split("\t")
-                for gene in line:
-                    gene_set.add(gene)
-    for gene in gene_set:
-        v = gt.find_vertex(g, g.vp.name, gene)[0]
-        g.vp[filter_column][v] = True
+            match line:
+                case line.startswith("#Observed cut height:"):
+                    g.gp["cut_height"] = g.new_graph_property("double")
+                    g.gp["cut_height"][g] = float(line.strip().split(": ")[1])
+                case line.startswith("# Observed size of largest cluster:"):
+                    g.gp["observed_largest_cluster_size"] = g.new_graph_property("int")
+                    g.gp["observed_largest_cluster_size"][g] = int(
+                        line.strip().split(": ")[1]
+                    )
+                case line.startswith(
+                    "# Expected size of largest cluster at observed cut height:"
+                ):
+                    g.gp["expected_largest_cluster_size"] = g.new_graph_property(
+                        "double"
+                    )
+                    g.gp["expected_largest_cluster_size"][g] = float(
+                        line.strip().split(": ")[1]
+                    )
+                case line.startswith("# Observed maximum ratio statistic:"):
+                    g.gp["observed_max_ratio_statistic"] = g.new_graph_property(
+                        "double"
+                    )
+                    g.gp["observed_max_ratio_statistic"][g] = float(
+                        line.strip().split(": ")[1]
+                    )
+                case line.startswith("# Expected maximum ratio statistic:"):
+                    g.gp["expected_max_ratio_statistic"] = g.new_graph_property(
+                        "double"
+                    )
+                    g.gp["expected_max_ratio_statistic"][g] = float(
+                        line.strip().split(": ")[1]
+                    )
+                case line.startswith("# p-value:"):
+                    g.gp["p_value"] = g.new_graph_property("double")
+                    g.gp["p_value"][g] = float(line.strip().split(": ")[1])
+                case _:
+                    submodule_id += 1
+                    module_nodes = [line.strip().split("\t")]
+                    for node in module_nodes:
+                        v = gt.find_vertex(g, g.vp.name, node)[0]
+                        g.vp[filter_column][v] = True
+                        g.vp["submodule"][v] = submodule_id
     return g
 
 
