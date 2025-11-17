@@ -4,7 +4,7 @@ include { HIERARCHICAL_HOTNET_SCORE_PARSER } from '../../../modules/local/hierar
 include { HIERARCHICAL_HOTNET_CONSTRUCT_SIMILARITY_MATRIX } from '../../../modules/local/hierarchical_hotnet/construct_similarity_matrix/main'
 include { HIERARCHICAL_HOTNET_PERMUTE_SCORES} from '../../../modules/local/hierarchical_hotnet/permute_scores/main'
 include { HIERARCHICAL_HOTNET_CONSTRUCT_HIERARCHIES } from '../../../modules/local/hierarchical_hotnet/construct_hierarchies/main'
-include { HIERARCHICAL_HOTNET_CONSTRUCT_HIERARCHIES as PERMUTED_HIERARCHIES} from '../../../modules/local/hierarchical_hotnet/construct_hierarchies/main' 
+include { HIERARCHICAL_HOTNET_CONSTRUCT_HIERARCHIES as PERMUTED_HIERARCHIES} from '../../../modules/local/hierarchical_hotnet/construct_hierarchies/main'
 include { HIERARCHICAL_HOTNET_PROCESS_HIERARCHIES } from '../../../modules/local/hierarchical_hotnet/process_hierarchies/main'
 workflow GT_HIERARCHICAL_HOTNET {
     take:
@@ -28,7 +28,7 @@ workflow GT_HIERARCHICAL_HOTNET {
     HIERARCHICAL_HOTNET_CONSTRUCT_SIMILARITY_MATRIX(ch_parsed_inputs.map{meta, _seeds, _node_list, edge_list -> [meta, edge_list] })
     ch_versions = ch_versions.mix(HIERARCHICAL_HOTNET_CONSTRUCT_SIMILARITY_MATRIX.out.versions)
     ch_permutation_input = ch_parsed_inputs
-        .map{ meta, _seeds, node_list, edge_list -> [meta, node_list, edge_list]} 
+        .map{ meta, _seeds, node_list, edge_list -> [meta, node_list, edge_list]}
         .join(HIERARCHICAL_HOTNET_SCORE_PARSER.out)
     HIERARCHICAL_HOTNET_PERMUTE_SCORES(ch_permutation_input)
     ch_versions = ch_versions.mix(HIERARCHICAL_HOTNET_PERMUTE_SCORES.out.versions)
@@ -41,7 +41,7 @@ workflow GT_HIERARCHICAL_HOTNET {
         .combine(HIERARCHICAL_HOTNET_PERMUTE_SCORES.out.permuted_scores
             .transpose()
             .map{
-                meta, permuted_scores -> 
+                meta, permuted_scores ->
                     def tokens = permuted_scores.toString().tokenize('.')
                     def permutation = tokens[-2]
                     [meta, permuted_scores, permutation]

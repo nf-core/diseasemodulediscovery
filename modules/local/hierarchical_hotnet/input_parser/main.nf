@@ -1,17 +1,17 @@
 process HIERARCHICAL_HOTNET_INPUT_PARSER {
     tag "meta.id"
     label 'process_single'
-    
+
     input:
     tuple val(meta), (path(network))
-    
+
     output:
     tuple val(meta), path("*.node_list.tsv"), path("*.edge_list.tsv") , emit: network
-    path "versions.yml"                                         , emit: versions 
+    path "versions.yml"                                         , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
-    
+
     script:
     """
     graph_tool_parser.py $network -f hierarchical_hotnet -l DEBUG
