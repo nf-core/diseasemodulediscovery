@@ -222,7 +222,6 @@ workflow DISEASEMODULEDISCOVERY {
         .join(ch_topology, by: 0, failOnDuplicate: true, failOnMismatch: true) // Join topology information to module metadata
         .map{meta, module, topology -> [meta + topology, module]}
 
-
     // Annotate with network properties
     // channel: [ val(meta[id,module_id,amim,seeds_id,network_id]), path(module), path(network) ]
     ch_module_network = ch_modules
@@ -462,9 +461,26 @@ workflow DISEASEMODULEDISCOVERY {
 
         // Seed perturbation based evaluation
         if(params.run_seed_perturbation){
+            ch_seed_pertubation_input = ch_modules
+                .filter{meta, _path -> meta.amim == "no_tool"} // Select only no_tool modules (seeds only)
+                .branch{meta, _path -> 
+                    fail: meta.nodes < 2
+                    pass: true
+                    }
+            ch_seed_pertubation_seeds = ch_seed_pertubation_input.pass
+                .map{meta, module ->
+                    def filteredMeta = [
+                        id: meta.seeds_id + "." + meta.network_id,
+                        seeds_id: meta.seeds_id,
+                        network_id: meta.network_id 
+                    ]
+                    [filteredMeta, module]
+                }.join(ch_seeds)
+                .map{meta, _module, seeds -> [meta, seeds]}
+            ch_seeds.view()
             GT_SEEDPERTURBATION(
                 ch_modules.filter{ meta, path -> meta.amim != "no_tool" }, // Filter out no_tool modules
-                ch_seeds,
+                ch_seed_pertubation_seeds,
                 ch_network_gt
             )
             ch_versions = ch_versions.mix(GT_SEEDPERTURBATION.out.versions)
