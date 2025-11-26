@@ -335,12 +335,12 @@
                             ]
                         ],
                         [
-                            "environment.yml:md5,0593e8d229aa38564da1684eba129ec2",
-                            "main.nf:md5,5a2c752e9c362d327f87eed461cadd2b",
+                            "environment.yml:md5,ccd03963ccb1852b204c9e1d6ca9ff5e",
+                            "main.nf:md5,1ea374957e5fbe6e5ad68a524d29a7ff",
                             "meta.yml:md5,e20ec2d6ae5b7b5e2e65a00f9cfd29c4",
                             [
                                 "main.nf.test:md5,f780adb58f1db8c1e19ddd1d8c7e62e9",
-                                "main.nf.test.snap:md5,1eafa18ce2c05f66d76e6bbe1176fd34",
+                                "main.nf.test.snap:md5,c74cfefd2569c0d49407ea58fde149b2",
                                 "nextflow.config:md5,f2390ff2bd4fca9242630f5b25597e34"
                             ]
                         ]
@@ -484,8 +484,8 @@
         ],
         "meta": {
             "nf-test": "0.9.3",
-            "nextflow": "25.04.8"
+            "nextflow": "25.10.0"
         },
-        "timestamp": "2025-10-20T16:27:16.781952293"
+        "timestamp": "2025-11-26T22:11:40.704535246"
     }
 }
