@@ -17,6 +17,7 @@ include { completionSummary         } from '../../nf-core/utils_nfcore_pipeline'
 include { imNotification            } from '../../nf-core/utils_nfcore_pipeline'
 include { UTILS_NFCORE_PIPELINE     } from '../../nf-core/utils_nfcore_pipeline'
 include { UTILS_NEXTFLOW_PIPELINE   } from '../../nf-core/utils_nextflow_pipeline'
+include { logColours                } from '../../nf-core/utils_nfcore_pipeline'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -36,6 +37,11 @@ workflow PIPELINE_INITIALISATION {
     help              // boolean: Display help message and exit
     help_full         // boolean: Show the full help message
     show_hidden       // boolean: Show hidden parameters in the help message
+    seeds             //  string: Path(s) to seed file(s)
+    network           //  string: Path(s) to network file(s)
+    shortest_paths    //  string: Path to shortest paths file
+    perturbed_networks //  string: Path to folder(s) with perturbed network files
+    id_space          //  string: ID space to use for prepared networks
 
     main:
 
@@ -92,33 +98,194 @@ workflow PIPELINE_INITIALISATION {
         nextflow_cli_args
     )
 
-    //
-    // Create channel from input file provided through params.input
-    //
+    ch_seeds = Channel.empty()          // channel: [ val(meta[id,seeds_id,network_id]), path(seeds) ]
+    ch_network = Channel.empty()        // channel: [ val(meta[id,network_id]), path(network) ]
+    ch_shortest_paths = Channel.empty() // channel: [ val(meta[id,network_id]), path(shortest_paths) ]
+    ch_perturbed_networks = Channel.empty() // channel: [ val(meta[id,network_id]), [path(perturbed_network)] ]
 
-    channel
-        .fromList(samplesheetToList(params.input, "${projectDir}/assets/schema_input.json"))
-        .map {
-            meta, fastq_1, fastq_2 ->
-                if (!fastq_2) {
-                    return [ meta.id, meta + [ single_end:true ], [ fastq_1 ] ]
-                } else {
-                    return [ meta.id, meta + [ single_end:false ], [ fastq_1, fastq_2 ] ]
+    seed_param_set = (params.seeds != null)
+    network_param_set = (params.network != null)
+    shortest_paths_param_set = (params.shortest_paths != null)
+    perturbed_networks_param_set = (params.perturbed_networks != null)
+
+    // prepare network channel, if parameter is set
+    if(network_param_set){
+        ch_network = Channel.fromList(params.network.split(',').flatten())
+            .map{network -> mapPreparedNetwork(network, params.id_space)}
+            .map{ it -> [ [ id: it.baseName, network_id: it.baseName ], it ] }
+    }
+
+    if(params.input){
+
+        //
+        // Create channel from input file provided through params.input
+        //
+
+        // channel: [ path(seeds), path(network), path(shortest_paths), path(perturbed_networks) ]
+        ch_input = Channel
+            .fromList(samplesheetToList(params.input, "${projectDir}/assets/schema_input.json"))
+            .map{seeds, network, shortest_paths, perturbed_networks ->
+                if((seeds.size()==0) ^ seed_param_set ){
+                    error("Seed genes have to specified through either the sample sheet OR the --seeds parameter")
                 }
+                if((network.size()==0) ^ network_param_set){
+                    error("Networks have to specified through either the sample sheet OR the --network parameter")
+                }
+                if(!(shortest_paths.size()==0) && shortest_paths_param_set ){
+                    error("Shortest paths have to specified through either the sample sheet OR the --shortest_path parameter")
+                }
+                if(!(perturbed_networks.size()==0) && perturbed_networks_param_set ){
+                    error("Precomputed network perturbations have to specified through either the sample sheet OR the --perturbed_networks parameter")
+                }
+                if(!(network.size()==0) && (shortest_paths_param_set || perturbed_networks_param_set) ){
+                    error("If the network is set via the sample sheet, shortest_paths or perturbed_networks must also be set via the sample sheet")
+                }
+                if((! shortest_paths.size()==0 || ! perturbed_networks.size()==0) && network_param_set ){
+                    error("If the shortest_paths or perturbed_networks are set via the sample sheet, the network must also be set via the sample sheet")
+                }
+                [seeds, network, shortest_paths, perturbed_networks]
+            }
+
+        // prepare network channel, if parameter is not set
+        if (!network_param_set){
+            ch_network = ch_input
+                .map{ it -> [it[1], it[2], it[3]]}
+                .map{ network, sp, perturbed_networks ->
+                    [ mapPreparedNetwork(network, params.id_space), sp, perturbed_networks ]
+                }
+                .map{ network, sp, perturbed_networks ->
+                    [ [ id: network.baseName, network_id: network.baseName ], network, sp, perturbed_networks ]
+                }
+                .unique()
         }
-        .groupTuple()
-        .map { samplesheet ->
-            validateInputSamplesheet(samplesheet)
+
+        if (seed_param_set && network_param_set) {
+
+            error("You need to specify either a sample sheet (--input) OR the seeds (--seeds) and network (--network) files")
+
+        } else if (!seed_param_set && !network_param_set) {
+
+            log.info("Creating network and seeds channels based on tuples in the sample sheet")
+
+            ch_seeds = ch_input
+                .map{ it ->
+                    seeds = it[0]
+                    network = it[1]
+                    network_id = mapPreparedNetwork(network, params.id_space).baseName
+                    [ [ id: seeds.baseName + "." + network_id, seeds_id: seeds.baseName, network_id: network_id ] , seeds ]
+                }
+
+        } else if (seed_param_set && !network_param_set) {
+
+            log.info("Creating network channel based on the sample sheet and seeds channel based on the seeds parameter")
+
+            ch_seeds = Channel
+                .fromPath(params.seeds.split(',').flatten(), checkIfExists: true)
+                .combine(ch_network.map{meta, network, sp, perturbed_networks -> meta.network_id})
+                .map{seeds, network_id ->
+                    [ [ id: seeds.baseName + "." + network_id, seeds_id: seeds.baseName, network_id: network_id ] , seeds ]
+                }
+
+        } else if (!seed_param_set && network_param_set) {
+
+            log.info("Creating network channel based on the network parameter and seeds channel based on the sample sheet")
+
+            ch_seeds = ch_input
+                .map{ it -> it[0]}
+                .combine(ch_network.map{meta, network -> meta.network_id})
+                .map{seeds, network_id ->
+                    [ [ id: seeds.baseName + "." + network_id, seeds_id: seeds.baseName, network_id: network_id ] , seeds ]
+                }
+
+            // Add sp files, if provided (currently does not check if the number of the shortest paths matches the number of the networks and does not work with missing values)
+            if(shortest_paths_param_set){
+                ch_network = ch_network.merge(
+                    Channel
+                    .fromPath(params.shortest_paths.split(',').flatten())
+                )
+            } else{
+                ch_network = ch_network.map{meta, network -> [meta, network, file("${projectDir}/assets/NO_FILE", checkIfExists: true)]}
+            }
+
+            // Add perturbed network folders, if provided (currently does not check if the number of the shortest paths matches the number of the networks and does not work with missing values)
+            if(perturbed_networks_param_set){
+                ch_network = ch_network.merge(
+                    Channel
+                    .fromPath(params.perturbed_networks.split(',').flatten())
+                )
+            } else{
+                ch_network = ch_network.map{meta, network, sp -> [meta, network, sp, []]}
+            }
+
         }
-        .map {
-            meta, fastqs ->
-                return [ meta, fastqs.flatten() ]
+
+
+    } else if (seed_param_set && network_param_set){
+
+        log.info("Creating network and seeds channels based on the combination of all seed and network files provided")
+
+        ch_seeds = Channel
+            .fromPath(params.seeds.split(',').flatten(), checkIfExists: true)
+            .combine(ch_network.map{meta, network -> meta.network_id})
+            .map{seeds, network_id ->
+                [ [ id: seeds.baseName + "." + network_id, seeds_id: seeds.baseName, network_id: network_id ] , seeds ]
+            }
+
+        // Add sp files, if provided (currently does not check if the number of the shortest paths matches the number of the networks and does not work with missing values)
+        if(shortest_paths_param_set){
+            ch_network = ch_network.merge(
+                Channel
+                .fromPath(params.shortest_paths.split(',').flatten())
+            )
+        } else{
+            ch_network = ch_network.map{meta, network -> [meta, network, file("${projectDir}/assets/NO_FILE", checkIfExists: true)]}
         }
-        .set { ch_samplesheet }
+
+        // Add perturbed network folders, if provided (currently does not check if the number of the shortest paths matches the number of the networks and does not work with missing values)
+        if(perturbed_networks_param_set){
+            ch_network = ch_network.merge(
+                Channel
+                .fromPath(params.perturbed_networks.split(',').flatten())
+            )
+        } else{
+            ch_network = ch_network.map{meta, network, sp -> [meta, network, sp, []]}
+        }
+
+    } else {
+        error("You need to specify either a sample sheet (--input) or the seeds (--seeds) and network (--network) files")
+    }
+
+    // check if IDs are unique
+    ch_network.map{ meta, network, sp, perturbed_networks -> [meta.id] }
+        .collect()
+        .subscribe { list ->
+            def unique = list.size() == list.toSet().size()
+            if (!unique) { error("IDs in ch_network are not unique.") }
+        }
+    ch_seeds.map{ meta, seeds -> [meta.id] }
+        .collect()
+        .subscribe { list ->
+            def unique = list.size() == list.toSet().size()
+            if (!unique) { error("IDs in ch_seeds are not unique.") }
+        }
+
+    // separate network channel into network, shoretes_paths, and perturbed_networks
+    ch_shortest_paths = ch_network.map{meta, network, sp, perturbed_networks ->
+        [meta, sp.size() > 0 ? sp : file("${projectDir}/assets/NO_FILE", checkIfExists: true)]
+    }
+
+    ch_perturbed_networks = ch_network.map{meta, network, sp, perturbed_networks ->
+        [meta, perturbed_networks.size() > 0 ? file(perturbed_networks+"/*.gt") : []]
+    }
+
+    ch_network = ch_network.map{meta, network, sp, perturbed_networks -> [meta, network]}
 
     emit:
-    samplesheet = ch_samplesheet
     versions    = ch_versions
+    seeds       = ch_seeds                      // channel: [ val(meta[id,seeds_id,network_id]), path(seeds) ]
+    network     = ch_network                    // channel: [ val(meta[id,network_id]), path(network) ]
+    shortest_paths = ch_shortest_paths          // channel: [ val(meta[id,network_id]), path(shortest_paths) ]
+    perturbed_networks = ch_perturbed_networks    // channel: [ val(meta[id,network_id]), [path(perturbed_network)] ]
 }
 
 /*
@@ -127,6 +294,10 @@ workflow PIPELINE_INITIALISATION {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
+def seeds_empty = [:]
+def module_empty = [:]
+def visualization_skipped = [:]
+def drugstone_skipped = [:]
 workflow PIPELINE_COMPLETION {
 
     take:
@@ -137,10 +308,35 @@ workflow PIPELINE_COMPLETION {
     monochrome_logs // boolean: Disable ANSI colour codes in log output
     hook_url        //  string: hook URL for notifications
     multiqc_report  //  string: Path to MultiQC report
+    seeds_empty_status           //  map: Empty/not empty status per seed file - network file combination
+    module_empty_status          //  map: Empty/not empty status per module
+    visualization_skipped_status //  map: Skipped/not skipped status per module
+    drugstone_skipped_status     //  map: Skipped/not skipped status per module
+
 
     main:
     summary_params = paramsSummaryMap(workflow, parameters_schema: "nextflow_schema.json")
     def multiqc_reports = multiqc_report.toList()
+
+    seeds_empty_status
+        .map{
+            id, status -> seeds_empty[id] = status
+        }
+    module_empty_status
+        .map{
+            id, status -> module_empty[id] = status
+        }
+
+    visualization_skipped_status
+        .map{
+            id, status -> visualization_skipped[id] = status
+        }
+
+    drugstone_skipped_status
+        .map{
+            id, status -> drugstone_skipped[id] = status
+        }
+
 
     //
     // Completion email and summary
@@ -158,6 +354,7 @@ workflow PIPELINE_COMPLETION {
             )
         }
 
+        logWarnings(monochrome_logs=monochrome_logs, seeds_empty=seeds_empty, module_empty=module_empty, visualization_skipped=visualization_skipped, drugstone_skipped=drugstone_skipped)
         completionSummary(monochrome_logs)
         if (hook_url) {
             imNotification(summary_params, hook_url)
@@ -174,6 +371,79 @@ workflow PIPELINE_COMPLETION {
     FUNCTIONS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
+
+prepared_networks_url = "https://zenodo.org/records/15049754/files/"
+network_map = [
+    string_min900: "string.human_links_v12_0_min900",
+    string_min700: "string.human_links_v12_0_min700",
+    string_physical_min900: "string.human_physical_links_v12_0_min900",
+    string_physical_min700: "string.human_physical_links_v12_0_min700",
+    biogrid: "biogrid.4_4_242_homo_sapiens",
+    hippie_high_confidence: "hippie.v2_3_high_confidence",
+    hippie_medium_confidence:"hippie.v2_3_medium_confidence",
+    iid: "iid.human",
+    nedrex: "nedrex.reviewed_proteins_exp",
+    nedrex_high_confidence: "nedrex.reviewed_proteins_exp_high_confidence",
+]
+id_space_map = [
+    entrez: "Entrez",
+    ensembl: "Ensembl",
+    symbol: "Symbol",
+    uniprot: "UniProtKB-AC",
+]
+
+//
+// Check if the network is a prepared network or a file
+//
+def mapPreparedNetwork(network, id_space) {
+    if (network_map.containsKey(network)) {
+        return file("${prepared_networks_url}${network_map[network]}.${id_space_map[id_space]}.gt", checkIfExists: true)
+    } else {
+        return file(network, checkIfExists: true)
+    }
+}
+
+//
+// Read a tsv file and return its content as a list of groovy maps
+//
+def List<Map<String, String>> readTsvAsListOfMaps(file) {
+    def lines = file.readLines()
+
+    if (lines.size() < 2) {
+        throw new IllegalArgumentException("TSV must have at least one header and one data row")
+    }
+
+    def headers = lines[0].split("\t")
+    def result = []
+
+    lines.tail().each { line ->
+        def values = line.split("\t")
+        if (values.size() != headers.size()) {
+            throw new IllegalArgumentException("Mismatch between header and data line: $line")
+        }
+
+        def rowMap = [:]
+        headers.eachWithIndex { header, idx ->
+            rowMap[header] = values[idx]
+        }
+        result << rowMap
+    }
+
+    return result
+}
+
+//
+// Create MultiQC tsv custom content from a list of values
+//
+def multiqcTsvFromList(tsv_data, header) {
+    def tsv_string = ""
+    if (tsv_data.size() > 0) {
+        tsv_string += "${header.join('\t')}\n"
+        tsv_string += tsv_data.join('\n')
+    }
+    return tsv_string
+}
+
 
 //
 // Validate channels from input samplesheet
@@ -251,4 +521,28 @@ def methodsDescriptionText(mqc_methods_yaml) {
     def description_html = engine.createTemplate(methods_text).make(meta)
 
     return description_html.toString()
+}
+
+def logWarnings(monochrome_logs=true, seeds_empty=[:], module_empty=[:], visualization_skipped=[:], drugstone_skipped=[:]) {
+    def colors = logColours(monochrome_logs)
+
+    def seeds_empty_count = seeds_empty.count  { key, value -> value == true }
+    def module_empty_count = module_empty.count  { key, value -> value == true }
+    def visualization_skipped_count = visualization_skipped.count  { key, value -> value == true }
+    def drugstone_skipped_count = drugstone_skipped.count  { key, value -> value == true }
+
+    if (workflow.success) {
+        if (seeds_empty_count > 0) {
+            log.info "-${colors.purple}[$workflow.manifest.name]${colors.red} Please check MultiQC report: ${seeds_empty_count}/${seeds_empty.size()} combinations of seed files and network files did not have any overlapping nodes and were not used in subsequent processes.${colors.reset}-"
+        }
+        if (module_empty_count > 0) {
+            log.info "-${colors.purple}[$workflow.manifest.name]${colors.red} Please check MultiQC report: ${module_empty_count}/${module_empty.size()} modules were empty and not used in subsequent processes.${colors.reset}-"
+        }
+        if (visualization_skipped_count > 0) {
+            log.info "-${colors.purple}[$workflow.manifest.name]${colors.red} Please check MultiQC report: ${visualization_skipped_count}/${visualization_skipped.size()} modules were too large for visualization (> ${params.visualization_max_nodes} nodes). You can adjust the threshold with the '--visualization_max_nodes' parameter.${colors.reset}-"
+        }
+        if (drugstone_skipped_count > 0) {
+            log.info "-${colors.purple}[$workflow.manifest.name]${colors.red} Please check MultiQC report: ${drugstone_skipped_count}/${drugstone_skipped.size()} modules were too large for Drugst.One (> ${params.drugstone_max_nodes} nodes). You can adjust the threshold with the '--drugstone_max_nodes' parameter.${colors.reset}-"
+        }
+    }
 }

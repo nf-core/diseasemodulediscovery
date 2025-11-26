@@ -121,7 +121,11 @@
         },
         {
             "@id": "main.nf",
-            "@type": ["File", "SoftwareSourceCode", "ComputationalWorkflow"],
+            "@type": [
+                "File",
+                "SoftwareSourceCode",
+                "ComputationalWorkflow"
+            ],
             "dateCreated": "",
             "dateModified": "2025-11-20T09:31:30Z",
             "dct:conformsTo": "https://bioschemas.org/profiles/ComputationalWorkflow/1.0-RELEASE/",
@@ -142,8 +146,12 @@
                 "systems-medicine",
                 "workfllow"
             ],
-            "license": ["MIT"],
-            "name": ["nf-core/diseasemodulediscovery"],
+            "license": [
+                "MIT"
+            ],
+            "name": [
+                "nf-core/diseasemodulediscovery"
+            ],
             "programmingLanguage": {
                 "@id": "https://w3id.org/workflowhub/workflow-ro-crate#nextflow"
             },
@@ -154,7 +162,9 @@
                 "https://github.com/nf-core/diseasemodulediscovery",
                 "https://nf-co.re/diseasemodulediscovery/dev/"
             ],
-            "version": ["1.0dev"]
+            "version": [
+                "1.0dev"
+            ]
         },
         {
             "@id": "https://w3id.org/workflowhub/workflow-ro-crate#nextflow",
