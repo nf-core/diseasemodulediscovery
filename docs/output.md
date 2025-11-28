@@ -124,6 +124,11 @@ In addition to the inferred disease modules, the pipeline provides a dummy modul
 
 </details>
 
+### HIERARCHICAL HOTNET
+
+[Hierarchical HotNet](https://github.com/raphael-group/hierarchical-hotnet) builds a hierarchy of subnetworks by propagating node scores over the input interaction network to compute a similarity matrix, followed by hierarchical clustering. The resulting hierarchies is cut at statistically supported heights determined by comparison to permutation based null models.
+For the reported hierarchy, Hierarchical HotNet records additional statistical metrics as graph properties including the observed cut height of the hierachy (`cut_height`), expected size of the largest cluster at observed cut height (`expected_largest_cluster_size`), observed maximum ratio statistic (`observed_max_ratio_statistic`), expected maximum ration statistic (`expected_max_ratio_statistic`) and the significance fo the cut (`p_value`). Each hierarchical level is saved as a separate submodule, with the node property (`submodule`) indicating the specific cluster nodes belong to.
+
 ### ROBUST
 
 [ROBUST](https://github.com/bionetslab/robust) repeatedly connects seed nodes by solving the Prize Collecting Steiner Tree (PCST) problem. In each iteration, nodes that were included in previous solutions are penalized, lowering their chance of being selected again. The final disease module consists of nodes that appear in a sufficient number of solutions, enhancing robustness. ROBUST annotates module nodes with a connected component ID (`connected_components_id`), seed status (`isSeed`), the number of solutions the node participated in (`nrOfOccurrences`), the fraction of all solutions the node appeared in (`significance`), and the list of `trees` the node was part of.
