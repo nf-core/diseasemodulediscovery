@@ -79,6 +79,11 @@
                     "description": "Flag for skipping DOMINO",
                     "fa_icon": "fas fa-forward"
                 },
+                "skip_hierarchical_hotnet": {
+                    "type": "boolean",
+                    "description": "Flag for skipping Hierarchical HotNet",
+                    "fa_icon": "fas fa-forward"
+                },
                 "skip_robust": {
                     "type": "boolean",
                     "description": "Flag for skipping Robust",
