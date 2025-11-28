@@ -12,13 +12,14 @@ process HIERARCHICAL_HOTNET_PROCESS_HIERARCHIES {
     task.ext.when == null || task.ext.when
 
     script:
+    def lower_size_bound = task.ext.args ?: ''
     """
     python /hierarchical-hotnet/src/process_hierarchies.py \
         --observed_edge_list_file ${original_hierarchy_edges} \
         --observed_index_gene_file ${original_hierarchy_nodes} \
         --permuted_edge_list_files ${permuted_hierarchy_edges} \
         --permuted_index_gene_files ${permuted_hierarchy_nodes} \
-        -lsb 1 \
+        --lower_size_bound $lower_size_bound \
         --cluster_file ${meta.id}.module
      cat <<-END_VERSIONS > versions.yml
     "${task.process}":

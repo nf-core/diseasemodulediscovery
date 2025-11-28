@@ -4,7 +4,7 @@ include { HIERARCHICAL_HOTNET_SCORE_PARSER } from '../../../modules/local/hierar
 include { HIERARCHICAL_HOTNET_CONSTRUCT_SIMILARITY_MATRIX } from '../../../modules/local/hierarchical_hotnet/construct_similarity_matrix/main'
 include { HIERARCHICAL_HOTNET_PERMUTE_SCORES} from '../../../modules/local/hierarchical_hotnet/permute_scores/main'
 include { HIERARCHICAL_HOTNET_CONSTRUCT_HIERARCHIES } from '../../../modules/local/hierarchical_hotnet/construct_hierarchies/main'
-include { HIERARCHICAL_HOTNET_CONSTRUCT_HIERARCHIES as PERMUTED_HIERARCHIES} from '../../../modules/local/hierarchical_hotnet/construct_hierarchies/main'
+include { HIERARCHICAL_HOTNET_CONSTRUCT_HIERARCHIES as CONSTRUCT_PERMUTED_HIERARCHIES} from '../../../modules/local/hierarchical_hotnet/construct_hierarchies/main'
 include { HIERARCHICAL_HOTNET_PROCESS_HIERARCHIES } from '../../../modules/local/hierarchical_hotnet/process_hierarchies/main'
 workflow GT_HIERARCHICAL_HOTNET {
     take:
@@ -47,8 +47,8 @@ workflow GT_HIERARCHICAL_HOTNET {
                     [meta, permuted_scores, permutation]
                 }
         , by: 0)
-    PERMUTED_HIERARCHIES(ch_permuted_hierarchy_input)
-    ch_versions = ch_versions.mix(PERMUTED_HIERARCHIES.out.versions)
+    CONSTRUCT_PERMUTED_HIERARCHIES(ch_permuted_hierarchy_input)
+    ch_versions = ch_versions.mix(CONSTRUCT_PERMUTED_HIERARCHIES.out.versions)
     ch_hierarchy_input = ch_parsed_inputs
         .join(HIERARCHICAL_HOTNET_SCORE_PARSER.out, by: 0)
         .map{
@@ -57,9 +57,9 @@ workflow GT_HIERARCHICAL_HOTNET {
         }
     HIERARCHICAL_HOTNET_CONSTRUCT_HIERARCHIES(ch_hierarchy_input)
     ch_versions = ch_versions.mix(HIERARCHICAL_HOTNET_CONSTRUCT_HIERARCHIES.out.versions)
-    PERMUTED_HIERARCHIES.out.hierarchy.groupTuple()
+   CONSTRUCT_PERMUTED_HIERARCHIES.out.hierarchy.groupTuple()
     ch_hierarchies = HIERARCHICAL_HOTNET_CONSTRUCT_HIERARCHIES.out.hierarchy
-        .join(PERMUTED_HIERARCHIES.out.hierarchy.groupTuple())
+        .join(CONSTRUCT_PERMUTED_HIERARCHIES.out.hierarchy.groupTuple())
     HIERARCHICAL_HOTNET_PROCESS_HIERARCHIES(ch_hierarchies)
     ch_versions = ch_versions.mix(HIERARCHICAL_HOTNET_PROCESS_HIERARCHIES.out.versions)
     emit:

@@ -12,6 +12,7 @@ process HIERARCHICAL_HOTNET_PERMUTE_SCORES {
     task.ext.when == null || task.ext.when
 
     script:
+    def num_permutations = task.ext.args ?: ''
     """
     python /hierarchical-hotnet/src/find_permutation_bins.py \
         -gsf ${node_scores} \
@@ -19,7 +20,7 @@ process HIERARCHICAL_HOTNET_PERMUTE_SCORES {
         -elf ${edge_list} \
         -o ${meta.id}.score_bins.tsv
 
-    for i in `seq 100`
+    for i in `seq $num_permutations`
     do
         python /hierarchical-hotnet/src/permute_scores.py \
             -i ${node_scores} \
