@@ -56,6 +56,63 @@ def filter_domino(g, module, filter_column):
     return g
 
 
+def filter_hiearchical_hotnet(g, module, filter_column):
+    submodule_id = 0
+    g.vp["submodule"] = g.new_vertex_property("int")
+    with open(module, "r") as file:
+        for line in file.readlines():
+            stripped = line.strip()
+            if stripped.startswith("# Observed cut height:"):
+                g.gp["cut_height"] = g.new_graph_property(
+                    "double", float(stripped.split(": ", 1)[1])
+                )
+                continue
+            elif stripped.startswith(
+                "# Observed size of largest cluster at observed cut height:"
+            ):
+                g.gp["observed_largest_cluster_size"] = g.new_graph_property(
+                    "int", int(stripped.split(": ", 1)[1])
+                )
+                continue
+            elif stripped.startswith(
+                "# Expected size of largest cluster at observed cut height:"
+            ):
+                g.gp["expected_largest_cluster_size"] = g.new_graph_property(
+                    "double", float(stripped.split(": ", 1)[1])
+                )
+                continue
+            elif stripped.startswith("# Observed maximum ratio statistic:"):
+                g.gp["observed_max_ratio_statistic"] = g.new_graph_property(
+                    "double", float(stripped.split(": ", 1)[1])
+                )
+                continue
+            elif stripped.startswith("# Expected maximum ratio statistic:"):
+                g.gp["expected_max_ratio_statistic"] = g.new_graph_property(
+                    "double", float(stripped.split(": ", 1)[1])
+                )
+                continue
+            elif stripped.startswith("# p-value:"):
+                g.gp["p_value"] = g.new_graph_property(
+                    "double", float(stripped.split(": ", 1)[1])
+                )
+                continue
+            elif stripped.startswith("# Clusters:"):
+                continue
+            else:
+                submodule_id += 1
+                module_nodes = stripped.split("\t")
+                for node in module_nodes:
+                    nodes = gt.find_vertex(g, g.vp.name, node)
+                    if not nodes:
+                        sys.exit(
+                            f"Node {node} from hierarchical_hotnet module not found in graph."
+                        )
+                    v = nodes[0]
+                    g.vp[filter_column][v] = True
+                    g.vp["submodule"][v] = submodule_id
+    return g
+
+
 def filter_robust(g, module, filter_column):
     import numpy as np
 
@@ -94,6 +151,8 @@ def filter_g(g, tool, module, seeds):
         g = filter_diamond(g, module, filter_column, seeds)
     elif tool == "domino":
         g = filter_domino(g, module, filter_column)
+    elif tool == "hierarchical_hotnet":
+        g = filter_hiearchical_hotnet(g, module, filter_column)
     elif tool == "robust" or tool == "robust_bias_aware":
         g = filter_robust(g, module, filter_column)
     elif tool == "rwr":
@@ -169,7 +228,14 @@ def parse_args(argv=None):
         "-t",
         "--tool",
         help="The tool, that generated the module.",
-        choices=("diamond", "domino", "robust", "robust_bias_aware", "rwr"),
+        choices=(
+            "diamond",
+            "domino",
+            "hierarchical_hotnet",
+            "robust",
+            "robust_bias_aware",
+            "rwr",
+        ),
     )
     parser.add_argument(
         "-m",

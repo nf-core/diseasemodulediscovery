@@ -101,6 +101,19 @@ def save_rwr(g, stem):
             )  # raw edge values are hashed vertex names
 
 
+def save_hierarchical_hotnet(g, stem):
+    indexmap = {}
+    with open(f"{stem}.hierarchical_hotnet.node_list.tsv", "w") as file:
+        writer = csv.writer(file, lineterminator="\n", delimiter="\t")
+        for index, v in enumerate(g.vertices()):
+            writer.writerow([(index + 1), g.vp["name"][v]])
+            indexmap[v] = index + 1
+    with open(f"{stem}.hierarchical_hotnet.edge_list.tsv", "w") as file:
+        for e in g.edges():
+            writer = csv.writer(file, lineterminator="\n", delimiter="\t")
+            writer.writerow([indexmap[e.source()], indexmap[e.target()]])
+
+
 def save(g, stem, format):
     """
     Saves a graph_tools Graph object in a specified format
@@ -116,6 +129,8 @@ def save(g, stem, format):
         save_robust(g=g, stem=stem)
     elif format == "rwr":
         save_rwr(g=g, stem=stem)
+    elif format == "hierarchical_hotnet":
+        save_hierarchical_hotnet(g=g, stem=stem)
     else:
         logger.critical(f"Unknown output format: {format}")
         sys.exit(1)
@@ -170,7 +185,7 @@ def parse_args(argv=None):
         "-f",
         "--format",
         help="Output format (default gt). If format it gt, a summary file for multiqc will be generated as well.",
-        choices=("gt", "diamond", "domino", "robust", "rwr"),
+        choices=("gt", "diamond", "domino", "robust", "rwr", "hierarchical_hotnet"),
         default="gt",
     )
     parser.add_argument(
