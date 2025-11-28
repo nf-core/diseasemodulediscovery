@@ -1,18 +1,18 @@
 {
-    "name": "REPO4EU/modulediscovery",
-    "homePage": "https://github.com/REPO4EU/modulediscovery",
+    "name": "nf-core/diseasemodulediscovery",
+    "homePage": "https://github.com/nf-core/diseasemodulediscovery",
     "repos": {
         "https://github.com/nf-core/modules.git": {
             "modules": {
                 "nf-core": {
                     "gprofiler2/gost": {
                         "branch": "master",
-                        "git_sha": "08108058ea36a63f141c25c4e75f9f872a5b2296",
+                        "git_sha": "100b1dc1ece11cf8d4fec100314d616a66a60875",
                         "installed_by": ["modules"]
                     },
                     "multiqc": {
                         "branch": "master",
-                        "git_sha": "f0719ae309075ae4a291533883847c3f7c441dad",
+                        "git_sha": "a4488d3d09244f29fb4606ba4eef85d59dcc6ad8",
                         "installed_by": ["modules"]
                     }
                 }
