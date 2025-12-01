@@ -32,9 +32,10 @@
                     "python": "3.12.7",
                     "graph-tool": "2.77 (commit 4ad25c62, )"
                 },
-                "GPROFILER2_GOST": {
+                "GPROFILER2_GOST\"": {
                     "r-ggplot2": "3.4.3",
-                    "r-gprofiler2": "0.2.2"
+                    "r-gprofiler2": "0.2.2",
+                    "gprofiler-data": "biomart: Ensembl\nbiomart_version: '113'\ndisplay_name: Human\ngenebuild: GRCh38.p14\ngprofiler_version: e113_eg59_p19_f6a03c19\norganism: hsapiens\nsources:\n  CORUM:\n    name: CORUM protein complexes\n    version: 28.11.2022 Corum 4.1\n  GO:BP:\n    name: biological process\n    version: |-\n      annotations: BioMart\n      classes: releases/2025-03-16\n  GO:CC:\n    name: cellular component\n    version: |-\n      annotations: BioMart\n      classes: releases/2025-03-16\n  GO:MF:\n    name: molecular function\n    version: |-\n      annotations: BioMart\n      classes: releases/2025-03-16\n  HP:\n    name: Human Phenotype Ontology\n    version: |-\n      annotations: 05.2025\n      classes: None\n  HPA:\n    name: Human Protein Atlas\n    version: |-\n      annotations: HPA website: 24-10-19\n      classes: script: 25-02-07\n  KEGG:\n    name: Kyoto Encyclopedia of Genes and Genomes\n    version: KEGG FTP Release 2024-01-22\n  MIRNA:\n    name: miRTarBase\n    version: Release 10.0\n  REAC:\n    name: Reactome\n    version: |-\n      annotations: BioMart\n      classes: 2025-5-23\n  TF:\n    name: Transfac\n    version: |-\n      annotations: TRANSFAC Release 2024.2\n      classes: v2\n  WP:\n    name: WikiPathways\n    version: '20250510'\ntaxonomy_id: '9606'\n"
                 },
                 "GRAPHTOOLPARSER": {
                     "python": "3.12.7",
@@ -322,25 +323,26 @@
                         [
                             [
                                 "environment.yml:md5,d56be896e649694d01ff46e4779bcd2a",
-                                "main.nf:md5,eb79261fb9bb66de82918c5cae97004e",
-                                "meta.yml:md5,34ca00351ef8593c5a135022bb288e9e",
+                                "main.nf:md5,b94a0f3db2722d765875cd0fda702b77",
+                                "meta.yml:md5,d4894f41ff2aaf5922b6846862ca1d3f",
                                 [
-                                    "gprofiler2_gost.R:md5,a3c6dbefc85735c55fceba859c0d7ca6"
+                                    "gprofiler2_gost.R:md5,9a5cfe533e0e867cf4440a72de14e8b0"
                                 ],
                                 [
-                                    "main.nf.test:md5,c19acdc07c115a80cdb41f0c41dce1d6",
-                                    "main.nf.test.snap:md5,b6d451462c4e12526f70999dc833c4aa",
+                                    "main.nf.test:md5,21b1e65a5fd8d2f85190074c1ef2c962",
+                                    "main.nf.test.snap:md5,7dbbb9b0a17e04c0c58ca21261d28e9c",
                                     "nextflow.config:md5,684f141dc7436b53314bc3c5212c2f60"
                                 ]
                             ]
                         ],
                         [
                             "environment.yml:md5,ccd03963ccb1852b204c9e1d6ca9ff5e",
-                            "main.nf:md5,1ea374957e5fbe6e5ad68a524d29a7ff",
-                            "meta.yml:md5,e20ec2d6ae5b7b5e2e65a00f9cfd29c4",
+                            "main.nf:md5,1e4d24e7145f99dc721411dd011267d0",
+                            "meta.yml:md5,27cc40273bf4bdaa0fcca7938136e742",
                             [
-                                "main.nf.test:md5,f780adb58f1db8c1e19ddd1d8c7e62e9",
-                                "main.nf.test.snap:md5,c74cfefd2569c0d49407ea58fde149b2",
+                                "custom_prefix.config:md5,8eb88d777062553b31b4871450d03bec",
+                                "main.nf.test:md5,1e79144f5ea9b0b9e64f4f3379343003",
+                                "main.nf.test.snap:md5,ea45a2be8d12e822a2122ec2abdcc594",
                                 "nextflow.config:md5,f2390ff2bd4fca9242630f5b25597e34"
                             ]
                         ]
@@ -486,6 +488,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.0"
         },
-        "timestamp": "2025-11-26T22:11:40.704535246"
+        "timestamp": "2025-11-26T23:11:59.702652515"
     }
 }
