@@ -112,7 +112,7 @@ In addition to the inferred disease modules, the pipeline provides a dummy modul
 
 ### DIAMOnD
 
-[DIAMOnD](https://github.com/dinaghiassian/DIAMOnD) iteratively expands the initial set of seed nodes by adding one node at a time. At each step, the algorithm selects the node with the highest connectivity significance to the current seed set, as determined by a hypergeometric test. This process continues until a predefined number of nodes have been incorporated. DIAMOnD itself only returns the nodes added to the module, which is why the pipeline adds the seed nodes to the module at the end. DIAMOnD returns only the nodes added to the module, so the pipeline appends the original seed nodes to the module at the end. Each node is annotated with the order in which it was added (`rank`) and the corresponding hypergeometric test p-value (`p_hyper`). Both values are 0 for seed nodes.
+[DIAMOnD](https://github.com/dinaghiassian/DIAMOnD) iteratively expands the initial set of seed nodes by adding one node at a time. At each step, the algorithm selects the node with the highest connectivity significance to the current seed set, as determined by a hypergeometric test. This process continues until a predefined number of nodes have been incorporated. DIAMOnD returns only the nodes added to the module, so the pipeline appends the original seed nodes to the module at the end. Each node is annotated with the order in which it was added (`rank`) and the corresponding hypergeometric test p-value (`p_hyper`). Both values are 0 for seed nodes.
 
 <details markdown="1">
 <summary>Output files</summary>
