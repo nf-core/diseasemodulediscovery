@@ -158,6 +158,13 @@ In addition to the inferred disease modules, the pipeline provides a dummy modul
 
 </details>
 
+### Seed Connector Algorithm (SCA)
+
+SCA grows an initial set of seed nodes into a connected diease module by iteratively adding the minimal number of connector nodes required to maximize the largest connected component of the seed-induced subnetwork. The final module contains all original seed nodes and the connector nodes (`connector`) selected during the iterative procedure. Each node is annotated whether it is an input seed (`seed`) or a connector (`connector`).
+
+
+
+
 ### 1st Neighbors
 
 1st Neighbors includes all network nodes that are directly connected to at least one seed node.
