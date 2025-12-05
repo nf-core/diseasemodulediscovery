@@ -1,0 +1,492 @@
+{
+    "-profile test": {
+        "content": [
+            72,
+            {
+                "BIOPAX_PARSER": {
+                    "python": "3.12.7",
+                    "graph-tool": "2.77 (commit 4ad25c62, )",
+                    "pybiopax": "0.1.4",
+                    "nedrex": "0.1.4"
+                },
+                "BIOPAX_VALIDATOR": {
+                    "java": "openjdk version \"20.0.2.1\" 2023-08-22",
+                    "biopax-validator": "/biopax-validator/lib/biopax-validator-6.0.0-SNAPSHOT.jar"
+                },
+                "DIAMOND": {
+                    "python": "3.8.5"
+                },
+                "DIGEST_REFERENCEBASED": {
+                    "python": "3.10.13",
+                    "biodigest": "0.2.16"
+                },
+                "DIGEST_REFERENCEFREE": {
+                    "python": "3.10.13",
+                    "biodigest": "0.2.16"
+                },
+                "DRUGPREDICTIONS": {
+                    "python": "3.12.7",
+                    "pandas": "2.2.3",
+                    "drugstone": "0.4.5"
+                },
+                "DRUGSTONEEXPORT": {
+                    "python": "3.12.7",
+                    "graph-tool": "2.77 (commit 4ad25c62, )"
+                },
+                "GPROFILER2_GOST": {
+                    "r-ggplot2": "3.4.3",
+                    "r-gprofiler2": "0.2.2"
+                },
+                "GRAPHTOOLPARSER": {
+                    "python": "3.12.7",
+                    "graph-tool": "2.77 (commit 4ad25c62, )"
+                },
+                "MODULEPARSER": {
+                    "python": "3.12.7",
+                    "graph-tool": "2.77 (commit 4ad25c62, )"
+                },
+                "NETWORKANNOTATION": {
+                    "python": "3.12.7",
+                    "graph-tool": "2.77 (commit 4ad25c62, )"
+                },
+                "NETWORKPERMUTATION": {
+                    "python": "3.12.7",
+                    "graph-tool": "2.77 (commit 4ad25c62, )"
+                },
+                "NETWORKPERMUTATIONEVALUATION": {
+                    "python": "3.12.7"
+                },
+                "PROXIMITY": {
+                    "python": "3.12.7",
+                    "numpy": "2.1.2",
+                    "pandas": "2.2.3",
+                    "networkx": 3.3
+                },
+                "SAVEMODULES": {
+                    "python": "3.12.7",
+                    "graph-tool": "2.77 (commit 4ad25c62, )",
+                    "pandas": "2.2.3"
+                },
+                "SEEDPERMUTATION": {
+                    "python": "3.12.7"
+                },
+                "SEEDPERMUTATIONEVALUATION": {
+                    "python": "3.12.7"
+                },
+                "SHORTEST_PATHS": {
+                    "python": "3.12.7",
+                    "networkx": 3.3
+                },
+                "TOPOLOGY": {
+                    "python": "3.12.7",
+                    "graph-tool": "2.77 (commit 4ad25c62, )"
+                },
+                "VISUALIZEMODULES": {
+                    "python": "3.12.7",
+                    "graph-tool": "2.77 (commit 4ad25c62, )",
+                    "networkx": 3.3,
+                    "pyintergraph": "1.3.3",
+                    "pyvis": "0.3.1"
+                },
+                "VISUALIZEMODULESDRUGS": {
+                    "python": "3.12.7",
+                    "graph-tool": "2.77 (commit 4ad25c62, )",
+                    "networkx": 3.3,
+                    "pyintergraph": "1.3.3",
+                    "pyvis": "0.3.1"
+                },
+                "Workflow": {
+                    "nf-core/diseasemodulediscovery": "v1.0dev"
+                }
+            },
+            [
+                "drug_prioritization",
+                "drug_prioritization/drugstone",
+                "drug_prioritization/drugstone/entrez_seeds_1.entrez_ppi.diamond.trustrank.csv",
+                "drug_prioritization/drugstone/entrez_seeds_1.entrez_ppi.diamond.trustrank.drug_predictions.tsv",
+                "drug_prioritization/drugstone/entrez_seeds_1.entrez_ppi.no_tool.trustrank.csv",
+                "drug_prioritization/drugstone/entrez_seeds_1.entrez_ppi.no_tool.trustrank.drug_predictions.tsv",
+                "drug_prioritization/proximity",
+                "drug_prioritization/proximity/entrez_seeds_1.entrez_ppi.diamond.proximity.tsv",
+                "drug_prioritization/proximity/entrez_seeds_1.entrez_ppi.no_tool.proximity.tsv",
+                "evaluation",
+                "evaluation/digest",
+                "evaluation/digest/reference-based",
+                "evaluation/digest/reference-based/entrez_seeds_1.entrez_ppi.diamond",
+                "evaluation/digest/reference-based/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond_GO.BP_annotation_distribution.png",
+                "evaluation/digest/reference-based/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond_GO.BP_sankey.png",
+                "evaluation/digest/reference-based/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond_GO.CC_annotation_distribution.png",
+                "evaluation/digest/reference-based/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond_GO.CC_sankey.png",
+                "evaluation/digest/reference-based/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond_GO.MF_annotation_distribution.png",
+                "evaluation/digest/reference-based/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond_GO.MF_sankey.png",
+                "evaluation/digest/reference-based/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond_JI-based_GO.BP_distribution.png",
+                "evaluation/digest/reference-based/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond_JI-based_GO.CC_distribution.png",
+                "evaluation/digest/reference-based/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond_JI-based_GO.MF_distribution.png",
+                "evaluation/digest/reference-based/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond_JI-based_KEGG_distribution.png",
+                "evaluation/digest/reference-based/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond_JI-based_p-value.png",
+                "evaluation/digest/reference-based/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond_KEGG_annotation_distribution.png",
+                "evaluation/digest/reference-based/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond_KEGG_sankey.png",
+                "evaluation/digest/reference-based/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond_input_validation.csv",
+                "evaluation/digest/reference-based/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond_mappability.png",
+                "evaluation/digest/reference-based/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond_p-value_validation.csv",
+                "evaluation/digest/reference-based/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond_result.json",
+                "evaluation/digest/reference-free",
+                "evaluation/digest/reference-free/entrez_seeds_1.entrez_ppi.diamond",
+                "evaluation/digest/reference-free/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond_GO.BP_annotation_distribution.png",
+                "evaluation/digest/reference-free/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond_GO.BP_sankey.png",
+                "evaluation/digest/reference-free/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond_GO.CC_annotation_distribution.png",
+                "evaluation/digest/reference-free/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond_GO.CC_sankey.png",
+                "evaluation/digest/reference-free/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond_GO.MF_annotation_distribution.png",
+                "evaluation/digest/reference-free/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond_GO.MF_sankey.png",
+                "evaluation/digest/reference-free/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond_JI-based_GO.BP_distribution.png",
+                "evaluation/digest/reference-free/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond_JI-based_GO.CC_distribution.png",
+                "evaluation/digest/reference-free/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond_JI-based_GO.MF_distribution.png",
+                "evaluation/digest/reference-free/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond_JI-based_KEGG_distribution.png",
+                "evaluation/digest/reference-free/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond_JI-based_p-value.png",
+                "evaluation/digest/reference-free/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond_KEGG_annotation_distribution.png",
+                "evaluation/digest/reference-free/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond_KEGG_sankey.png",
+                "evaluation/digest/reference-free/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond_input_validation.csv",
+                "evaluation/digest/reference-free/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond_mappability.png",
+                "evaluation/digest/reference-free/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond_p-value_validation.csv",
+                "evaluation/digest/reference-free/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond_result.json",
+                "evaluation/digest/reference-free/entrez_seeds_1.entrez_ppi.no_tool",
+                "evaluation/digest/reference-free/entrez_seeds_1.entrez_ppi.no_tool/entrez_seeds_1.entrez_ppi.no_tool_GO.BP_annotation_distribution.png",
+                "evaluation/digest/reference-free/entrez_seeds_1.entrez_ppi.no_tool/entrez_seeds_1.entrez_ppi.no_tool_GO.BP_sankey.png",
+                "evaluation/digest/reference-free/entrez_seeds_1.entrez_ppi.no_tool/entrez_seeds_1.entrez_ppi.no_tool_GO.CC_annotation_distribution.png",
+                "evaluation/digest/reference-free/entrez_seeds_1.entrez_ppi.no_tool/entrez_seeds_1.entrez_ppi.no_tool_GO.CC_sankey.png",
+                "evaluation/digest/reference-free/entrez_seeds_1.entrez_ppi.no_tool/entrez_seeds_1.entrez_ppi.no_tool_GO.MF_annotation_distribution.png",
+                "evaluation/digest/reference-free/entrez_seeds_1.entrez_ppi.no_tool/entrez_seeds_1.entrez_ppi.no_tool_GO.MF_sankey.png",
+                "evaluation/digest/reference-free/entrez_seeds_1.entrez_ppi.no_tool/entrez_seeds_1.entrez_ppi.no_tool_JI-based_GO.BP_distribution.png",
+                "evaluation/digest/reference-free/entrez_seeds_1.entrez_ppi.no_tool/entrez_seeds_1.entrez_ppi.no_tool_JI-based_GO.CC_distribution.png",
+                "evaluation/digest/reference-free/entrez_seeds_1.entrez_ppi.no_tool/entrez_seeds_1.entrez_ppi.no_tool_JI-based_GO.MF_distribution.png",
+                "evaluation/digest/reference-free/entrez_seeds_1.entrez_ppi.no_tool/entrez_seeds_1.entrez_ppi.no_tool_JI-based_KEGG_distribution.png",
+                "evaluation/digest/reference-free/entrez_seeds_1.entrez_ppi.no_tool/entrez_seeds_1.entrez_ppi.no_tool_JI-based_p-value.png",
+                "evaluation/digest/reference-free/entrez_seeds_1.entrez_ppi.no_tool/entrez_seeds_1.entrez_ppi.no_tool_KEGG_annotation_distribution.png",
+                "evaluation/digest/reference-free/entrez_seeds_1.entrez_ppi.no_tool/entrez_seeds_1.entrez_ppi.no_tool_KEGG_sankey.png",
+                "evaluation/digest/reference-free/entrez_seeds_1.entrez_ppi.no_tool/entrez_seeds_1.entrez_ppi.no_tool_input_validation.csv",
+                "evaluation/digest/reference-free/entrez_seeds_1.entrez_ppi.no_tool/entrez_seeds_1.entrez_ppi.no_tool_mappability.png",
+                "evaluation/digest/reference-free/entrez_seeds_1.entrez_ppi.no_tool/entrez_seeds_1.entrez_ppi.no_tool_p-value_validation.csv",
+                "evaluation/digest/reference-free/entrez_seeds_1.entrez_ppi.no_tool/entrez_seeds_1.entrez_ppi.no_tool_result.json",
+                "evaluation/gprofiler",
+                "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.diamond",
+                "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.diamond/R_sessionInfo.log",
+                "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond.gprofiler2.GO:BP.sub_enriched_pathways.png",
+                "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond.gprofiler2.GO:BP.sub_enriched_pathways.tsv",
+                "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond.gprofiler2.GO:CC.sub_enriched_pathways.png",
+                "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond.gprofiler2.GO:CC.sub_enriched_pathways.tsv",
+                "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond.gprofiler2.GO:MF.sub_enriched_pathways.png",
+                "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond.gprofiler2.GO:MF.sub_enriched_pathways.tsv",
+                "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond.gprofiler2.KEGG.sub_enriched_pathways.png",
+                "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond.gprofiler2.KEGG.sub_enriched_pathways.tsv",
+                "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond.gprofiler2.REAC.sub_enriched_pathways.png",
+                "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond.gprofiler2.REAC.sub_enriched_pathways.tsv",
+                "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond.gprofiler2.all_enriched_pathways.tsv",
+                "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond.gprofiler2.gost_results.rds",
+                "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond.gprofiler2.gostplot.html",
+                "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond.gprofiler2.gostplot.png",
+                "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.diamond/gprofiler_full_hsapiens.GO_WP_REAC_KEGG.ENSG_filtered.gmt",
+                "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.no_tool",
+                "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.no_tool/R_sessionInfo.log",
+                "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.no_tool/entrez_seeds_1.entrez_ppi.no_tool.gprofiler2.GO:CC.sub_enriched_pathways.png",
+                "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.no_tool/entrez_seeds_1.entrez_ppi.no_tool.gprofiler2.GO:CC.sub_enriched_pathways.tsv",
+                "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.no_tool/entrez_seeds_1.entrez_ppi.no_tool.gprofiler2.KEGG.sub_enriched_pathways.png",
+                "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.no_tool/entrez_seeds_1.entrez_ppi.no_tool.gprofiler2.KEGG.sub_enriched_pathways.tsv",
+                "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.no_tool/entrez_seeds_1.entrez_ppi.no_tool.gprofiler2.REAC.sub_enriched_pathways.png",
+                "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.no_tool/entrez_seeds_1.entrez_ppi.no_tool.gprofiler2.REAC.sub_enriched_pathways.tsv",
+                "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.no_tool/entrez_seeds_1.entrez_ppi.no_tool.gprofiler2.all_enriched_pathways.tsv",
+                "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.no_tool/entrez_seeds_1.entrez_ppi.no_tool.gprofiler2.gost_results.rds",
+                "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.no_tool/entrez_seeds_1.entrez_ppi.no_tool.gprofiler2.gostplot.html",
+                "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.no_tool/entrez_seeds_1.entrez_ppi.no_tool.gprofiler2.gostplot.png",
+                "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.no_tool/gprofiler_full_hsapiens.GO_WP_REAC_KEGG.ENSG_filtered.gmt",
+                "evaluation/seed_permutation",
+                "evaluation/seed_permutation/entrez_seeds_1.entrez_ppi.diamond",
+                "evaluation/seed_permutation/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond.seed_permutation_evaluation_detailed.tsv",
+                "evaluation/seed_permutation/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond.seed_permutation_evaluation_summary.tsv",
+                "evaluation/seed_permutation/entrez_seeds_1.entrez_ppi.robustness.pdf",
+                "evaluation/seed_permutation/entrez_seeds_1.entrez_ppi.robustness.png",
+                "evaluation/seed_permutation/entrez_seeds_1.entrez_ppi.robustness.tsv",
+                "evaluation/seed_permutation/entrez_seeds_1.entrez_ppi.seed_rediscovery.pdf",
+                "evaluation/seed_permutation/entrez_seeds_1.entrez_ppi.seed_rediscovery.png",
+                "evaluation/seed_permutation/entrez_seeds_1.entrez_ppi.seed_rediscovery.tsv",
+                "input",
+                "input/networks",
+                "input/networks/entrez_ppi.diamond.csv",
+                "input/networks/entrez_ppi.gt",
+                "input/permuted_networks",
+                "input/permuted_networks/entrez_ppi",
+                "input/permuted_networks/entrez_ppi/entrez_ppi.perm_0.gt",
+                "input/permuted_networks/entrez_ppi/entrez_ppi.perm_1.gt",
+                "input/permuted_networks/entrez_ppi/entrez_ppi.perm_2.gt",
+                "input/seeds",
+                "input/seeds/entrez_seeds_1.entrez_ppi.no_tool.gt",
+                "input/seeds/entrez_seeds_1.entrez_ppi.tsv",
+                "input/shortest_paths",
+                "input/shortest_paths/entrez_ppi.shortest_paths.pkl",
+                [
+                    [
+                        [
+                            [
+                                "main.nf:md5,edc7751f3b79557e4ba8e11b6416fbb1"
+                            ],
+                            [
+                                "main.nf:md5,d9fb50d9c46e26f8b16a460f3673ecba"
+                            ]
+                        ],
+                        [
+                            "main.nf:md5,fdabb73d541beda67124cfd57040b4f0"
+                        ],
+                        [
+                            "main.nf:md5,cf87998f3b287d151e8ed4bab5c019ba"
+                        ],
+                        [
+                            [
+                                "main.nf:md5,3c96242da24689ccb2a6b07ac5189f2f"
+                            ],
+                            [
+                                "main.nf:md5,65685b002d19c8a95b4ca4fb94760f9a"
+                            ]
+                        ],
+                        [
+                            "main.nf:md5,b8d27b931cf227907842f1b8eaff092c"
+                        ],
+                        [
+                            "main.nf:md5,e634b8b1a784d23d3aa4a622acbb8319"
+                        ],
+                        [
+                            "main.nf:md5,c63ef7440278f889ab5c6d56bce23e06"
+                        ],
+                        [
+                            "main.nf:md5,327a0603e66ea42ae169823255defe8b"
+                        ],
+                        [
+                            "main.nf:md5,5ce73fb515e141cf33ecc406b67e8851"
+                        ],
+                        [
+                            "main.nf:md5,613ea3cc0b2490fb6178a83dacfc5ffb"
+                        ],
+                        [
+                            "main.nf:md5,ef97ebabc1f88357db0d0140a59c4fd9"
+                        ],
+                        [
+                            "main.nf:md5,c22c94f52d7dfae36a4f8470c7818804"
+                        ],
+                        [
+                            "main.nf:md5,4096160de473fa9193366d82531ec0fe"
+                        ],
+                        [
+                            "main.nf:md5,69ef8de5a337d1ae7250311b65474a7c"
+                        ],
+                        [
+                            "main.nf:md5,7cb3d537bbefbe0713c340bd78d37393"
+                        ],
+                        [
+                            "main.nf:md5,e40e8af8083cda018aedcc5f18041017"
+                        ],
+                        [
+                            "main.nf:md5,a91047b99bc5341b26d18964a45b1ced"
+                        ],
+                        [
+                            "main.nf:md5,4fe1d1c6fbf57bd32978a99b76c24367"
+                        ],
+                        [
+                            "main.nf:md5,3a46f20d8845e296fef2dfd52257a0cc"
+                        ],
+                        [
+                            "main.nf:md5,d194d9b67b0cb53aa28ec135a981bdf4"
+                        ],
+                        [
+                            "main.nf:md5,1d19c2cf277a772abe2a9c9d76533425"
+                        ],
+                        [
+                            "main.nf:md5,002542068a9d81243c5b5ee5b059c5c2"
+                        ],
+                        [
+                            "main.nf:md5,c0503306e2cf4bf6f32c18e484446ef2"
+                        ],
+                        [
+                            "main.nf:md5,6b239ca11d81aee16c239ff5f9bc61d8"
+                        ],
+                        [
+                            "main.nf:md5,1abc41275c99a05b0acbc268bf466e1c"
+                        ],
+                        [
+                            "main.nf:md5,a6e9a76d5cd3b57be78127e22b9e156f"
+                        ],
+                        [
+                            "main.nf:md5,26e2a055dd8e000d9b2a56ca5191e99f"
+                        ],
+                        [
+                            "main.nf:md5,385dcf180a788ce1499624d86a363a90"
+                        ]
+                    ],
+                    [
+                        [
+                            [
+                                "environment.yml:md5,d56be896e649694d01ff46e4779bcd2a",
+                                "main.nf:md5,eb79261fb9bb66de82918c5cae97004e",
+                                "meta.yml:md5,34ca00351ef8593c5a135022bb288e9e",
+                                [
+                                    "gprofiler2_gost.R:md5,a3c6dbefc85735c55fceba859c0d7ca6"
+                                ],
+                                [
+                                    "main.nf.test:md5,c19acdc07c115a80cdb41f0c41dce1d6",
+                                    "main.nf.test.snap:md5,b6d451462c4e12526f70999dc833c4aa",
+                                    "nextflow.config:md5,684f141dc7436b53314bc3c5212c2f60"
+                                ]
+                            ]
+                        ],
+                        [
+                            "environment.yml:md5,0fbf6355293ab8f5887641bd17082eee",
+                            "main.nf:md5,176476aeb47d0e4e1f6312a05c41dee8",
+                            "meta.yml:md5,e20ec2d6ae5b7b5e2e65a00f9cfd29c4",
+                            [
+                                "main.nf.test:md5,f780adb58f1db8c1e19ddd1d8c7e62e9",
+                                "main.nf.test.snap:md5,b48532f03a21198db5ed6741dc7cb01b",
+                                "nextflow.config:md5,f2390ff2bd4fca9242630f5b25597e34"
+                            ]
+                        ]
+                    ]
+                ],
+                "modules/biopax",
+                "modules/biopax/entrez_seeds_1.entrez_ppi.diamond.owl",
+                "modules/biopax/entrez_seeds_1.entrez_ppi.no_tool.owl",
+                "modules/graphml",
+                "modules/graphml/entrez_seeds_1.entrez_ppi.diamond.graphml",
+                "modules/graphml/entrez_seeds_1.entrez_ppi.no_tool.graphml",
+                "modules/gt",
+                "modules/gt/entrez_seeds_1.entrez_ppi.diamond.gt",
+                "modules/gt/entrez_seeds_1.entrez_ppi.no_tool.gt",
+                "modules/tsv_edges",
+                "modules/tsv_edges/entrez_seeds_1.entrez_ppi.diamond.edges.tsv",
+                "modules/tsv_edges/entrez_seeds_1.entrez_ppi.no_tool.edges.tsv",
+                "modules/tsv_nodes",
+                "modules/tsv_nodes/entrez_seeds_1.entrez_ppi.diamond.nodes.tsv",
+                "modules/tsv_nodes/entrez_seeds_1.entrez_ppi.no_tool.nodes.tsv",
+                "modules_visualized",
+                "modules_visualized/html",
+                "modules_visualized/html/entrez_seeds_1.entrez_ppi.diamond.html",
+                "modules_visualized/html/entrez_seeds_1.entrez_ppi.no_tool.html",
+                "modules_visualized/pdf",
+                "modules_visualized/pdf/entrez_seeds_1.entrez_ppi.diamond.pdf",
+                "modules_visualized/pdf/entrez_seeds_1.entrez_ppi.no_tool.pdf",
+                "modules_visualized/png",
+                "modules_visualized/png/entrez_seeds_1.entrez_ppi.diamond.png",
+                "modules_visualized/png/entrez_seeds_1.entrez_ppi.no_tool.png",
+                "modules_visualized/svg",
+                "modules_visualized/svg/entrez_seeds_1.entrez_ppi.diamond.svg",
+                "modules_visualized/svg/entrez_seeds_1.entrez_ppi.no_tool.svg",
+                "modules_visualized_with_drugs",
+                "modules_visualized_with_drugs/html",
+                "modules_visualized_with_drugs/html/entrez_seeds_1.entrez_ppi.diamond.trustrank.html",
+                "modules_visualized_with_drugs/html/entrez_seeds_1.entrez_ppi.no_tool.trustrank.html",
+                "modules_visualized_with_drugs/pdf",
+                "modules_visualized_with_drugs/pdf/entrez_seeds_1.entrez_ppi.diamond.trustrank.pdf",
+                "modules_visualized_with_drugs/pdf/entrez_seeds_1.entrez_ppi.no_tool.trustrank.pdf",
+                "modules_visualized_with_drugs/png",
+                "modules_visualized_with_drugs/png/entrez_seeds_1.entrez_ppi.diamond.trustrank.png",
+                "modules_visualized_with_drugs/png/entrez_seeds_1.entrez_ppi.no_tool.trustrank.png",
+                "modules_visualized_with_drugs/svg",
+                "modules_visualized_with_drugs/svg/entrez_seeds_1.entrez_ppi.diamond.trustrank.svg",
+                "modules_visualized_with_drugs/svg/entrez_seeds_1.entrez_ppi.no_tool.trustrank.svg",
+                "mqc_summaries",
+                "mqc_summaries/digest_reference_based_mqc.tsv",
+                "mqc_summaries/digest_reference_free_mqc.tsv",
+                "mqc_summaries/drugstone_link_mqc.tsv",
+                "mqc_summaries/input_network_mqc.tsv",
+                "mqc_summaries/input_seeds_mqc.tsv",
+                "mqc_summaries/jaccard_similarity_matrix_mqc.tsv",
+                "mqc_summaries/jaccard_similarity_no_seeds_matrix_mqc.tsv",
+                "mqc_summaries/network_permutation_jaccard_mqc.yaml",
+                "mqc_summaries/network_permutation_mqc.tsv",
+                "mqc_summaries/seed_permutation_jaccard_mqc.yaml",
+                "mqc_summaries/seed_permutation_mqc.tsv",
+                "mqc_summaries/shared_nodes_matrix_mqc.tsv",
+                "mqc_summaries/shared_nodes_no_seeds_matrix_mqc.tsv",
+                "mqc_summaries/topology_mqc.tsv",
+                "multiqc",
+                "multiqc/multiqc_data",
+                "multiqc/multiqc_data/BETA-multiqc.parquet",
+                "multiqc/multiqc_data/llms-full.txt",
+                "multiqc/multiqc_data/multiqc.log",
+                "multiqc/multiqc_data/multiqc_citations.txt",
+                "multiqc/multiqc_data/multiqc_data.json",
+                "multiqc/multiqc_data/multiqc_digest_reference_based.txt",
+                "multiqc/multiqc_data/multiqc_digest_reference_free.txt",
+                "multiqc/multiqc_data/multiqc_download_links_table.txt",
+                "multiqc/multiqc_data/multiqc_general_stats.txt",
+                "multiqc/multiqc_data/multiqc_input_network.txt",
+                "multiqc/multiqc_data/multiqc_input_seeds.txt",
+                "multiqc/multiqc_data/multiqc_jaccard_similarity.txt",
+                "multiqc/multiqc_data/multiqc_jaccard_similarity_no_seeds.txt",
+                "multiqc/multiqc_data/multiqc_network_permutation_jaccard_box_plot.txt",
+                "multiqc/multiqc_data/multiqc_seed_permutation_jaccard_box_plot.txt",
+                "multiqc/multiqc_data/multiqc_shared_nodes.txt",
+                "multiqc/multiqc_data/multiqc_shared_nodes_no_seeds.txt",
+                "multiqc/multiqc_data/multiqc_software_versions.txt",
+                "multiqc/multiqc_data/multiqc_sources.txt",
+                "multiqc/multiqc_plots",
+                "multiqc/multiqc_plots/pdf",
+                "multiqc/multiqc_plots/pdf/digest_reference_based.pdf",
+                "multiqc/multiqc_plots/pdf/digest_reference_free.pdf",
+                "multiqc/multiqc_plots/pdf/download_links_table.pdf",
+                "multiqc/multiqc_plots/pdf/input_network.pdf",
+                "multiqc/multiqc_plots/pdf/input_seeds-cnt.pdf",
+                "multiqc/multiqc_plots/pdf/input_seeds-pct.pdf",
+                "multiqc/multiqc_plots/pdf/jaccard_similarity.pdf",
+                "multiqc/multiqc_plots/pdf/jaccard_similarity_no_seeds.pdf",
+                "multiqc/multiqc_plots/pdf/network_permutation_jaccard_box_plot.pdf",
+                "multiqc/multiqc_plots/pdf/seed_permutation_jaccard_box_plot.pdf",
+                "multiqc/multiqc_plots/pdf/shared_nodes.pdf",
+                "multiqc/multiqc_plots/pdf/shared_nodes_no_seeds.pdf",
+                "multiqc/multiqc_plots/png",
+                "multiqc/multiqc_plots/png/digest_reference_based.png",
+                "multiqc/multiqc_plots/png/digest_reference_free.png",
+                "multiqc/multiqc_plots/png/download_links_table.png",
+                "multiqc/multiqc_plots/png/input_network.png",
+                "multiqc/multiqc_plots/png/input_seeds-cnt.png",
+                "multiqc/multiqc_plots/png/input_seeds-pct.png",
+                "multiqc/multiqc_plots/png/jaccard_similarity.png",
+                "multiqc/multiqc_plots/png/jaccard_similarity_no_seeds.png",
+                "multiqc/multiqc_plots/png/network_permutation_jaccard_box_plot.png",
+                "multiqc/multiqc_plots/png/seed_permutation_jaccard_box_plot.png",
+                "multiqc/multiqc_plots/png/shared_nodes.png",
+                "multiqc/multiqc_plots/png/shared_nodes_no_seeds.png",
+                "multiqc/multiqc_plots/svg",
+                "multiqc/multiqc_plots/svg/digest_reference_based.svg",
+                "multiqc/multiqc_plots/svg/digest_reference_free.svg",
+                "multiqc/multiqc_plots/svg/download_links_table.svg",
+                "multiqc/multiqc_plots/svg/input_network.svg",
+                "multiqc/multiqc_plots/svg/input_seeds-cnt.svg",
+                "multiqc/multiqc_plots/svg/input_seeds-pct.svg",
+                "multiqc/multiqc_plots/svg/jaccard_similarity.svg",
+                "multiqc/multiqc_plots/svg/jaccard_similarity_no_seeds.svg",
+                "multiqc/multiqc_plots/svg/network_permutation_jaccard_box_plot.svg",
+                "multiqc/multiqc_plots/svg/seed_permutation_jaccard_box_plot.svg",
+                "multiqc/multiqc_plots/svg/shared_nodes.svg",
+                "multiqc/multiqc_plots/svg/shared_nodes_no_seeds.svg",
+                "multiqc/multiqc_report.html",
+                "pipeline_info",
+                "pipeline_info/nf_core_diseasemodulediscovery_software_mqc_versions.yml",
+                "reports",
+                "reports/biopax-validator-report.html"
+            ],
+            [
+                "entrez_ppi.diamond.csv:md5,59c734eaa00f2265dd1bb896f2aee772",
+                "entrez_ppi.gt:md5,c908f353a8a0e0cb04aa9cb67121521d",
+                "entrez_seeds_1.entrez_ppi.no_tool.gt:md5,e19b2d65dfd9fd20f1a8f843d52c1235",
+                "entrez_seeds_1.entrez_ppi.tsv:md5,1291b36e8add2d6ef0b8b72f7889016b",
+                "entrez_seeds_1.entrez_ppi.no_tool.graphml:md5,bfaed89376015c6ec3724a870fd86031",
+                "entrez_seeds_1.entrez_ppi.no_tool.gt:md5,5939c5390ea37756858e189b2f90462a",
+                "entrez_seeds_1.entrez_ppi.no_tool.edges.tsv:md5,99cbfff7b59f45c1de3e5e6d36692099",
+                "entrez_seeds_1.entrez_ppi.no_tool.nodes.tsv:md5,e711b826c2117dfde768e65f44cac358",
+                "input_network_mqc.tsv:md5,eedaf7f299c89a43429fa66dffb2bbc3",
+                "input_seeds_mqc.tsv:md5,269d96ba266e5481c37a550fe4f13521"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "25.04.6"
+        },
+        "timestamp": "2025-08-29T16:48:49.240891262"
+    }
+}

@@ -2,9 +2,10 @@
 // Runs seed permutation based evaluation of network expansion methods
 //
 
-include { NETWORKEXPANSION           } from '../networkexpansion'
-include { SEEDPERMUTATION            } from '../../../modules/local/seedpermutation/main'
-include { SEEDPERMUTATIONEVALUATION      } from '../../../modules/local/seedpermutationevaluation/main'
+include { NETWORKEXPANSION              } from '../networkexpansion'
+include { SEEDPERMUTATION               } from '../../../modules/local/seedpermutation/main'
+include { SEEDPERMUTATIONEVALUATION     } from '../../../modules/local/seedpermutationevaluation/main'
+include { SEEDPERMUTATIONVISUALIZATION  } from '../../../modules/local/seedpermutationvisualization/main'
 
 workflow GT_SEEDPERMUTATION {
     take:
@@ -104,15 +105,38 @@ workflow GT_SEEDPERMUTATION {
     ch_versions = ch_versions.mix(SEEDPERMUTATIONEVALUATION.out.versions)
     ch_multiqc_summary =  SEEDPERMUTATIONEVALUATION.out.multiqc_summary
         .map{ meta, path -> path }
-        .collectFile(name: 'seed_permutation_mqc.tsv', keepHeader: true)
+        .collectFile(
+            cache: false,
+            storeDir: "${params.outdir}/mqc_summaries",
+            name: 'seed_permutation_mqc.tsv',
+            keepHeader: true
+        )
     ch_multiqc_jaccard =
         SEEDPERMUTATIONEVALUATION.out.multiqc_jaccard
         .map{ meta, path -> path }
         .collectFile(
-            item -> "  " + item.text, name: 'seed_permutation_jaccard_mqc.yaml',
+            item -> "  " + item.text,
+            cache: false,
+            storeDir: "${params.outdir}/mqc_summaries",
+            name: 'seed_permutation_jaccard_mqc.yaml',
             sort: true,
             seed: new File("$projectDir/assets/seed_permutation_jaccard_header.yaml").text
         )
+
+    // Gene-level visualization
+    ch_visualization_input = SEEDPERMUTATIONEVALUATION.out.detailed
+        .multiMap { meta, path ->
+            seeds_id: meta.seeds_id
+            network_id: meta.network_id
+            amim: meta.amim
+            path: path
+        }
+    SEEDPERMUTATIONVISUALIZATION(
+        ch_visualization_input.seeds_id.collect(),
+        ch_visualization_input.network_id.collect(),
+        ch_visualization_input.amim.collect(),
+        ch_visualization_input.path.collect()
+    )
 
 
 
