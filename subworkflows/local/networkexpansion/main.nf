@@ -22,6 +22,9 @@ workflow NETWORKEXPANSION {
     diamond_n = Channel.value(params.diamond_n)
     diamond_alpha = Channel.value(params.diamond_alpha)
 
+    hierarchical_hotnet_permus = channel.value(params.hierarchical_hotnet_permus)
+    hierarchical_hotnet_lower_size_bound = channel.value(params.hierarchical_hotnet_lower_size_bound)
+
     rwr_scaling = Channel.value(params.rwr_scaling).map{it ? 1 : 0}
     rwr_symmetrical = Channel.value(params.rwr_symmetrical).map{it ? 1 : 0}
     rwr_r = Channel.value(params.rwr_r)
@@ -70,7 +73,7 @@ workflow NETWORKEXPANSION {
     }
 
     if(!params.skip_hierarchical_hotnet){
-        GT_HIERARCHICAL_HOTNET(ch_seeds, ch_network)
+        GT_HIERARCHICAL_HOTNET(ch_seeds, ch_network, hierarchical_hotnet_permus, hierarchical_hotnet_lower_size_bound)
         ch_versions = ch_versions.mix(GT_HIERARCHICAL_HOTNET.out.versions)
         ch_raw_modules = ch_raw_modules.mix(GT_HIERARCHICAL_HOTNET.out.module)
     }

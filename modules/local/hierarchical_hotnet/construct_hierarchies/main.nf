@@ -13,8 +13,10 @@ process HIERARCHICAL_HOTNET_CONSTRUCT_HIERARCHIES {
     task.ext.when == null || task.ext.when
 
     script:
+    def args = task.ext.args ?: ''
     """
     python /hierarchical-hotnet/src/construct_hierarchy.py \
+        $args \
         -smf ${similarity_matrix} \
         -igf ${nodes} \
         -gsf ${node_score} \

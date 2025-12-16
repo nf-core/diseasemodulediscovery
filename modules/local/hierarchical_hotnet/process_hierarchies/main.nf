@@ -5,6 +5,7 @@ process HIERARCHICAL_HOTNET_PROCESS_HIERARCHIES {
 
     input:
     tuple val(meta), path(original_hierarchy_edges), path(original_hierarchy_nodes), path(permuted_hierarchy_edges), path(permuted_hierarchy_nodes)
+    val(lower_size_bound)
     output:
     tuple val(meta), path("${meta.id}.module"), emit:modules
     path "versions.yml"                       , emit: versions
@@ -12,9 +13,10 @@ process HIERARCHICAL_HOTNET_PROCESS_HIERARCHIES {
     task.ext.when == null || task.ext.when
 
     script:
-    def lower_size_bound = task.ext.args ?: ''
+    def args = task.ext.args ?: ''
     """
     python /hierarchical-hotnet/src/process_hierarchies.py \
+        $args \
         --observed_edge_list_file ${original_hierarchy_edges} \
         --observed_index_gene_file ${original_hierarchy_nodes} \
         --permuted_edge_list_files ${permuted_hierarchy_edges} \

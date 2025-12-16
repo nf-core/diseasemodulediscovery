@@ -5,6 +5,7 @@ process HIERARCHICAL_HOTNET_PERMUTE_SCORES {
 
     input:
     tuple val(meta), path(node_list), path(edge_list), path(node_scores)
+    val(num_permutations)
     output:
     tuple val(meta), path("${meta.id}.score_permutation*"), emit: permuted_scores
     path "versions.yml"                                , emit: versions
@@ -12,7 +13,6 @@ process HIERARCHICAL_HOTNET_PERMUTE_SCORES {
     task.ext.when == null || task.ext.when
 
     script:
-    def num_permutations = task.ext.args ?: ''
     """
     python /hierarchical-hotnet/src/find_permutation_bins.py \
         -gsf ${node_scores} \

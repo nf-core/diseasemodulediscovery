@@ -10,7 +10,8 @@ workflow GT_HIERARCHICAL_HOTNET {
     take:
     ch_seeds
     ch_network
-
+    num_permutations
+    lower_size_bound
     main:
     ch_versions = Channel.empty()
     HIERARCHICAL_HOTNET_INPUT_PARSER(ch_network) //emits: [val(meta), node_list, edge_list]
@@ -30,7 +31,7 @@ workflow GT_HIERARCHICAL_HOTNET {
     ch_permutation_input = ch_parsed_inputs
         .map{ meta, _seeds, node_list, edge_list -> [meta, node_list, edge_list]}
         .join(HIERARCHICAL_HOTNET_SCORE_PARSER.out)
-    HIERARCHICAL_HOTNET_PERMUTE_SCORES(ch_permutation_input)
+    HIERARCHICAL_HOTNET_PERMUTE_SCORES(ch_permutation_input, num_permutations)
     ch_versions = ch_versions.mix(HIERARCHICAL_HOTNET_PERMUTE_SCORES.out.versions)
 
     ch_parsed_inputs = ch_parsed_inputs
@@ -60,7 +61,7 @@ workflow GT_HIERARCHICAL_HOTNET {
    CONSTRUCT_PERMUTED_HIERARCHIES.out.hierarchy.groupTuple()
     ch_hierarchies = HIERARCHICAL_HOTNET_CONSTRUCT_HIERARCHIES.out.hierarchy
         .join(CONSTRUCT_PERMUTED_HIERARCHIES.out.hierarchy.groupTuple())
-    HIERARCHICAL_HOTNET_PROCESS_HIERARCHIES(ch_hierarchies)
+    HIERARCHICAL_HOTNET_PROCESS_HIERARCHIES(ch_hierarchies, lower_size_bound)
     ch_versions = ch_versions.mix(HIERARCHICAL_HOTNET_PROCESS_HIERARCHIES.out.versions)
     emit:
     module = HIERARCHICAL_HOTNET_PROCESS_HIERARCHIES.out.modules

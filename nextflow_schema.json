@@ -84,6 +84,18 @@
                     "description": "Flag for skipping Hierarchical HotNet",
                     "fa_icon": "fas fa-forward"
                 },
+                "hierarchical_hotnet_permus": {
+                    "type": "integer",
+                    "default": 100,
+                    "description": "Number of score Permutations for Hierarchical Hotnet",
+                    "fa_icon": "fas fa-random"
+                },
+                "hierarchical_hotnet_lower_size_bound": {
+                    "type": "integer",
+                    "default": 10,
+                    "description": "Lower size bound for the clusters for Hierarchical Hotnet",
+                    "fa_icon": "fas fa-search-minus"
+                },
                 "skip_robust": {
                     "type": "boolean",
                     "description": "Flag for skipping Robust",
