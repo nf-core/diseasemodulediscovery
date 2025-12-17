@@ -1,4 +1,4 @@
-process SEEDPERMUTATIONVISUALIZATION {
+process SEEDPERTURBATIONVISUALIZATION {
     label 'process_single'
 
     input:
@@ -24,7 +24,7 @@ process SEEDPERMUTATIONVISUALIZATION {
     def concatenated_network_ids = network_ids.join(" ")
     def concatenated_amim_ids = amim_ids.join(" ")
     """
-    seed_permutation_visualization.py \\
+    seed_perturbation_visualization.py \\
         --seed-ids ${concatenated_seed_ids} \\
         --network-ids ${concatenated_network_ids} \\
         --amim-ids ${concatenated_amim_ids} \\
