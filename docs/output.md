@@ -157,6 +157,7 @@ In addition to the inferred disease modules, the pipeline provides a dummy modul
 </details>
 
 ### TOPAS
+
 [Topas] (https://bitbucket.org/sonnhammergroup/topas/src/master/) connects the maximum number of seed nodes in a top-down manner by selecting connector nodes that ensure the highest Random Walk with Restart flow across the network.
 
 <details markdown="1">

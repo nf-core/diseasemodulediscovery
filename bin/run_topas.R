@@ -50,4 +50,3 @@ if(is.null(module)){
 }
 
 readr::write_tsv(module, file = file.path(path.expand("./"), opt$output))
-
