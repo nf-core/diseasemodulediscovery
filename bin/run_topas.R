@@ -28,22 +28,26 @@ if(is.null(opt$output)){
 }
 
 ## Load network
-network_example =
+network =
     readr::read_tsv(file = opt$network,
                 col_names = c('V1','V2'),
                 col_types = 'cc')
 ## Seed gene set
-seeds_example =
+seeds =
     readr::read_table(file = opt$seeds,
                     col_names = 'V',
                     col_types = 'c')
 
-module_example =
+module =
     TOPAS(
-        network = network_example,
-        seeds = seeds_example$V,
+        network = network,
+        seeds = seeds$V,
         expansion_steps = 2,
         cores = 4
     )
+if(is.null(module)){
+  module = data.frame(V1 = character(0), V2 = character(0))
+}
 
-readr::write_tsv(module_example, file = file.path(path.expand("./"), opt$output))
+readr::write_tsv(module, file = file.path(path.expand("./"), opt$output))
+
