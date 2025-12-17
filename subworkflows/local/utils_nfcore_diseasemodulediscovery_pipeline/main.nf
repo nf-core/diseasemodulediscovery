@@ -11,6 +11,7 @@
 include { UTILS_NFSCHEMA_PLUGIN     } from '../../nf-core/utils_nfschema_plugin'
 include { paramsSummaryMap          } from 'plugin/nf-schema'
 include { samplesheetToList         } from 'plugin/nf-schema'
+include { paramsHelp                } from 'plugin/nf-schema'
 include { completionEmail           } from '../../nf-core/utils_nfcore_pipeline'
 include { completionSummary         } from '../../nf-core/utils_nfcore_pipeline'
 include { imNotification            } from '../../nf-core/utils_nfcore_pipeline'
@@ -32,16 +33,19 @@ workflow PIPELINE_INITIALISATION {
     monochrome_logs   // boolean: Do not use coloured log outputs
     nextflow_cli_args //   array: List of positional nextflow CLI args
     outdir            //  string: The output directory where the results will be saved
-    input             //  string: Path to sample sheet
+    input             //  string: Path to input samplesheet
+    help              // boolean: Display help message and exit
+    help_full         // boolean: Show the full help message
+    show_hidden       // boolean: Show hidden parameters in the help message
     seeds             //  string: Path(s) to seed file(s)
     network           //  string: Path(s) to network file(s)
     shortest_paths    //  string: Path to shortest paths file
-    permuted_networks //  string: Path to folder(s) with permuted network files
+    perturbed_networks //  string: Path to folder(s) with perturbed network files
     id_space          //  string: ID space to use for prepared networks
 
     main:
 
-    ch_versions = Channel.empty()
+    ch_versions = channel.empty()
 
     //
     // Print version and exit if required and dump pipeline parameters to JSON file
@@ -56,10 +60,35 @@ workflow PIPELINE_INITIALISATION {
     //
     // Validate parameters and generate parameter summary to stdout
     //
+    before_text = """
+-\033[2m----------------------------------------------------\033[0m-
+                                        \033[0;32m,--.\033[0;30m/\033[0;32m,-.\033[0m
+\033[0;34m        ___     __   __   __   ___     \033[0;32m/,-._.--~\'\033[0m
+\033[0;34m  |\\ | |__  __ /  ` /  \\ |__) |__         \033[0;33m}  {\033[0m
+\033[0;34m  | \\| |       \\__, \\__/ |  \\ |___     \033[0;32m\\`-._,-`-,\033[0m
+                                        \033[0;32m`._,._,\'\033[0m
+\033[0;35m  nf-core/diseasemodulediscovery ${workflow.manifest.version}\033[0m
+-\033[2m----------------------------------------------------\033[0m-
+"""
+    after_text = """${workflow.manifest.doi ? "\n* The pipeline\n" : ""}${workflow.manifest.doi.tokenize(",").collect { doi -> "    https://doi.org/${doi.trim().replace('https://doi.org/','')}"}.join("\n")}${workflow.manifest.doi ? "\n" : ""}
+* The nf-core framework
+    https://doi.org/10.1038/s41587-020-0439-x
+
+* Software dependencies
+    https://github.com/nf-core/diseasemodulediscovery/blob/main/CITATIONS.md
+"""
+    command = "nextflow run ${workflow.manifest.name} -profile <docker/singularity/.../institute> --input samplesheet.csv --outdir <OUTDIR>"
+
     UTILS_NFSCHEMA_PLUGIN (
         workflow,
         validate_params,
-        null
+        null,
+        help,
+        help_full,
+        show_hidden,
+        before_text,
+        after_text,
+        command
     )
 
     //
@@ -72,12 +101,12 @@ workflow PIPELINE_INITIALISATION {
     ch_seeds = Channel.empty()          // channel: [ val(meta[id,seeds_id,network_id]), path(seeds) ]
     ch_network = Channel.empty()        // channel: [ val(meta[id,network_id]), path(network) ]
     ch_shortest_paths = Channel.empty() // channel: [ val(meta[id,network_id]), path(shortest_paths) ]
-    ch_permuted_networks = Channel.empty() // channel: [ val(meta[id,network_id]), [path(permuted_network)] ]
+    ch_perturbed_networks = Channel.empty() // channel: [ val(meta[id,network_id]), [path(perturbed_network)] ]
 
     seed_param_set = (params.seeds != null)
     network_param_set = (params.network != null)
     shortest_paths_param_set = (params.shortest_paths != null)
-    permuted_networks_param_set = (params.permuted_networks != null)
+    perturbed_networks_param_set = (params.perturbed_networks != null)
 
     // prepare network channel, if parameter is set
     if(network_param_set){
@@ -92,10 +121,10 @@ workflow PIPELINE_INITIALISATION {
         // Create channel from input file provided through params.input
         //
 
-        // channel: [ path(seeds), path(network), path(shortest_paths), path(permuted_networks) ]
+        // channel: [ path(seeds), path(network), path(shortest_paths), path(perturbed_networks) ]
         ch_input = Channel
             .fromList(samplesheetToList(params.input, "${projectDir}/assets/schema_input.json"))
-            .map{seeds, network, shortest_paths, permuted_networks ->
+            .map{seeds, network, shortest_paths, perturbed_networks ->
                 if((seeds.size()==0) ^ seed_param_set ){
                     error("Seed genes have to specified through either the sample sheet OR the --seeds parameter")
                 }
@@ -105,27 +134,27 @@ workflow PIPELINE_INITIALISATION {
                 if(!(shortest_paths.size()==0) && shortest_paths_param_set ){
                     error("Shortest paths have to specified through either the sample sheet OR the --shortest_path parameter")
                 }
-                if(!(permuted_networks.size()==0) && permuted_networks_param_set ){
-                    error("Precomputed network permutations have to specified through either the sample sheet OR the --permuted_networks parameter")
+                if(!(perturbed_networks.size()==0) && perturbed_networks_param_set ){
+                    error("Precomputed network perturbations have to specified through either the sample sheet OR the --perturbed_networks parameter")
                 }
-                if(!(network.size()==0) && (shortest_paths_param_set || permuted_networks_param_set) ){
-                    error("If the network is set via the sample sheet, shortest_paths or permuted_networks must also be set via the sample sheet")
+                if(!(network.size()==0) && (shortest_paths_param_set || perturbed_networks_param_set) ){
+                    error("If the network is set via the sample sheet, shortest_paths or perturbed_networks must also be set via the sample sheet")
                 }
-                if((! shortest_paths.size()==0 || ! permuted_networks.size()==0) && network_param_set ){
-                    error("If the shortest_paths or permuted_networks are set via the sample sheet, the network must also be set via the sample sheet")
+                if((! shortest_paths.size()==0 || ! perturbed_networks.size()==0) && network_param_set ){
+                    error("If the shortest_paths or perturbed_networks are set via the sample sheet, the network must also be set via the sample sheet")
                 }
-                [seeds, network, shortest_paths, permuted_networks]
+                [seeds, network, shortest_paths, perturbed_networks]
             }
 
         // prepare network channel, if parameter is not set
         if (!network_param_set){
             ch_network = ch_input
                 .map{ it -> [it[1], it[2], it[3]]}
-                .map{ network, sp, permuted_networks ->
-                    [ mapPreparedNetwork(network, params.id_space), sp, permuted_networks ]
+                .map{ network, sp, perturbed_networks ->
+                    [ mapPreparedNetwork(network, params.id_space), sp, perturbed_networks ]
                 }
-                .map{ network, sp, permuted_networks ->
-                    [ [ id: network.baseName, network_id: network.baseName ], network, sp, permuted_networks ]
+                .map{ network, sp, perturbed_networks ->
+                    [ [ id: network.baseName, network_id: network.baseName ], network, sp, perturbed_networks ]
                 }
                 .unique()
         }
@@ -152,7 +181,7 @@ workflow PIPELINE_INITIALISATION {
 
             ch_seeds = Channel
                 .fromPath(params.seeds.split(',').flatten(), checkIfExists: true)
-                .combine(ch_network.map{meta, network, sp, permuted_networks -> meta.network_id})
+                .combine(ch_network.map{meta, network, sp, perturbed_networks -> meta.network_id})
                 .map{seeds, network_id ->
                     [ [ id: seeds.baseName + "." + network_id, seeds_id: seeds.baseName, network_id: network_id ] , seeds ]
                 }
@@ -178,11 +207,11 @@ workflow PIPELINE_INITIALISATION {
                 ch_network = ch_network.map{meta, network -> [meta, network, file("${projectDir}/assets/NO_FILE", checkIfExists: true)]}
             }
 
-            // Add permuted network folders, if provided (currently does not check if the number of the shortest paths matches the number of the networks and does not work with missing values)
-            if(permuted_networks_param_set){
+            // Add perturbed network folders, if provided (currently does not check if the number of the shortest paths matches the number of the networks and does not work with missing values)
+            if(perturbed_networks_param_set){
                 ch_network = ch_network.merge(
                     Channel
-                    .fromPath(params.permuted_networks.split(',').flatten())
+                    .fromPath(params.perturbed_networks.split(',').flatten())
                 )
             } else{
                 ch_network = ch_network.map{meta, network, sp -> [meta, network, sp, []]}
@@ -212,11 +241,11 @@ workflow PIPELINE_INITIALISATION {
             ch_network = ch_network.map{meta, network -> [meta, network, file("${projectDir}/assets/NO_FILE", checkIfExists: true)]}
         }
 
-        // Add permuted network folders, if provided (currently does not check if the number of the shortest paths matches the number of the networks and does not work with missing values)
-        if(permuted_networks_param_set){
+        // Add perturbed network folders, if provided (currently does not check if the number of the shortest paths matches the number of the networks and does not work with missing values)
+        if(perturbed_networks_param_set){
             ch_network = ch_network.merge(
                 Channel
-                .fromPath(params.permuted_networks.split(',').flatten())
+                .fromPath(params.perturbed_networks.split(',').flatten())
             )
         } else{
             ch_network = ch_network.map{meta, network, sp -> [meta, network, sp, []]}
@@ -227,7 +256,7 @@ workflow PIPELINE_INITIALISATION {
     }
 
     // check if IDs are unique
-    ch_network.map{ meta, network, sp, permuted_networks -> [meta.id] }
+    ch_network.map{ meta, network, sp, perturbed_networks -> [meta.id] }
         .collect()
         .subscribe { list ->
             def unique = list.size() == list.toSet().size()
@@ -240,23 +269,23 @@ workflow PIPELINE_INITIALISATION {
             if (!unique) { error("IDs in ch_seeds are not unique.") }
         }
 
-    // separate network channel into network, shoretes_paths, and permuted_networks
-    ch_shortest_paths = ch_network.map{meta, network, sp, permuted_networks ->
+    // separate network channel into network, shoretes_paths, and perturbed_networks
+    ch_shortest_paths = ch_network.map{meta, network, sp, perturbed_networks ->
         [meta, sp.size() > 0 ? sp : file("${projectDir}/assets/NO_FILE", checkIfExists: true)]
     }
 
-    ch_permuted_networks = ch_network.map{meta, network, sp, permuted_networks ->
-        [meta, permuted_networks.size() > 0 ? file(permuted_networks+"/*.gt") : []]
+    ch_perturbed_networks = ch_network.map{meta, network, sp, perturbed_networks ->
+        [meta, perturbed_networks.size() > 0 ? file(perturbed_networks+"/*.gt") : []]
     }
 
-    ch_network = ch_network.map{meta, network, sp, permuted_networks -> [meta, network]}
+    ch_network = ch_network.map{meta, network, sp, perturbed_networks -> [meta, network]}
 
     emit:
     versions    = ch_versions
     seeds       = ch_seeds                      // channel: [ val(meta[id,seeds_id,network_id]), path(seeds) ]
     network     = ch_network                    // channel: [ val(meta[id,network_id]), path(network) ]
     shortest_paths = ch_shortest_paths          // channel: [ val(meta[id,network_id]), path(shortest_paths) ]
-    permuted_networks = ch_permuted_networks    // channel: [ val(meta[id,network_id]), [path(permuted_network)] ]
+    perturbed_networks = ch_perturbed_networks    // channel: [ val(meta[id,network_id]), [path(perturbed_network)] ]
 }
 
 /*
