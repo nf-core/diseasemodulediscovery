@@ -18,6 +18,10 @@
 
 > Ghiassian SD, Menche J, Barabási A-L. A DIseAse MOdule Detection (DIAMOnD) algorithm derived from a systematic analysis of connectivity patterns of disease proteins in the human interactome. PLoS Comput Biol. 2015;11: e1004120.
 
+- [Hiearchical HotNet](https://doi.org/10.1093/bioinformatics/bty613)
+
+> Reyna MA, Leiserson MDM, Raphael BJ. Hierarchical HotNet: identifying hierarchies of altered subnetworks. Bioinformatics. 2018 Sep 1;34(17):i972-i980.
+
 - [ROBUST](https://doi.org/10.1093/bioinformatics/btab876)
 
 > Bernett J, Krupke D, Sadegh S, Baumbach J, Fekete SP, Kacprowski T, et al. Robust disease module mining via enumeration of diverse prize-collecting Steiner trees. Bioinformatics. 2022;38: 1600–1606.
