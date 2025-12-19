@@ -462,7 +462,7 @@ workflow DISEASEMODULEDISCOVERY {
         // Seed perturbation based evaluation
         if(params.run_seed_perturbation){
             // Only use seed files with at least two nodes for the seed perturbation analysis
-            // The information comes from the meta map of the "no_tool" disease modules, which are equivalent to the seed sets and 
+            // The information comes from the meta map of the "no_tool" disease modules, which are equivalent to the seed sets
             ch_filtered_seeds = ch_modules
                 .filter{meta, _path -> meta.amim == "no_tool"}
                 .map{meta, _module -> [meta.seeds_id, meta.network_id, meta.nodes]}
