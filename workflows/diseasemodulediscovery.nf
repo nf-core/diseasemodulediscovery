@@ -461,10 +461,12 @@ workflow DISEASEMODULEDISCOVERY {
 
         // Seed perturbation based evaluation
         if(params.run_seed_perturbation){
+            // Only use seed files with at least two nodes for the seed perturbation analysis
+            // The information comes from the meta map of the "no_tool" disease modules, which are equivalent to the seed sets and 
             ch_filtered_seeds = ch_modules
                 .filter{meta, _path -> meta.amim == "no_tool"}
                 .map{meta, _module -> [meta.seeds_id, meta.network_id, meta.nodes]}
-                .join(ch_seeds.map{meta, seeds -> [meta.seeds_id, meta.network_id, seeds]}, by: [0,1])
+                .join(ch_seeds.map{meta, seeds -> [meta.seeds_id, meta.network_id, seeds]}, by: [0,1], failOnDuplicate: true, failOnMismatch: true)
                 .branch{_seeds_id, _network_id, nodes, _seeds ->
                     fail: nodes < 2
                     pass: true
