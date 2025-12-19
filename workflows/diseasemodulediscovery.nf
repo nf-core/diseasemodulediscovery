@@ -466,22 +466,15 @@ workflow DISEASEMODULEDISCOVERY {
             ch_filtered_seeds = ch_modules
                 .filter{meta, _path -> meta.amim == "no_tool"}
                 .map{meta, _module -> [meta.seeds_id, meta.network_id, meta.nodes]}
-                .join(ch_seeds.map{meta, seeds -> [meta.seeds_id, meta.network_id, seeds]}, by: [0,1], failOnDuplicate: true, failOnMismatch: true)
-                .branch{_seeds_id, _network_id, nodes, _seeds ->
+                .join(ch_seeds.map{meta, seeds -> [meta.seeds_id, meta.network_id, meta, seeds]}, by: [0,1], failOnDuplicate: true, failOnMismatch: true)
+                .branch{_seeds_id, _network_id, nodes, _meta, _seeds ->
                     fail: nodes < 2
                     pass: true
                 }
-            ch_seed_pertubation_input  = ch_filtered_seeds.pass.map{ seeds_id, network_id, _nodes, seeds ->
-                    def meta = [
-                        id: seeds_id + "." + network_id,
-                        seeds_id: seeds_id,
-                        network_id: network_id
-                    ]
-                    [meta, seeds]
-                }
+            ch_seed_perturbation_input  = ch_filtered_seeds.pass.map{_seeds_id, _network_id, _nodes, meta, seeds -> [meta, seeds]}
             GT_SEEDPERTURBATION(
                 ch_modules.filter{ meta, path -> meta.amim != "no_tool" }, // Filter out no_tool modules
-                ch_seed_pertubation_input,
+                ch_seed_perturbation_input,
                 ch_network_gt
             )
             ch_versions = ch_versions.mix(GT_SEEDPERTURBATION.out.versions)
