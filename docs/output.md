@@ -164,7 +164,7 @@ SCA grows an initial set of seed nodes into a connected diease module by iterati
 <summary>Output files</summary>
 
 - `modules/{gt,graphml,tsv_nodes,tsv_edges}/`
-  - `<seeds>.<network>.sca.{gt,grahml,nodes.tsv,edges.tsv}`: sca module in different formats.
+  - `<seeds>.<network>.sca.{gt,grahml,nodes.tsv,edges.tsv}`: SCA module in different formats.
 
 </details>
 
