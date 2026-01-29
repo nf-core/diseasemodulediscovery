@@ -19,7 +19,10 @@ process HIERARCHICAL_HOTNET_CONSTRUCT_SIMILARITY_MATRIX {
         -bof "${meta.id}.beta.txt"
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        python: \$(python --version | sed 's/Python //g')
+        python: \$(python --version 2>&1 | sed 's/Python //g')
+        networkX: \$(python -c "import networkx; print(networkx.__version__)")
+        numpy: \$(python -c "import numpy; print(numpy.__version__)")
+        scipy: \$(python -c "import scipy; print(scipy.__version__)")
     END_VERSIONS
     """
 }
