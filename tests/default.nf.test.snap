@@ -56,12 +56,6 @@
                 "NETWORKPERTURBATIONEVALUATION": {
                     "python": "3.12.7"
                 },
-                "PROXIMITY": {
-                    "python": "3.12.7",
-                    "numpy": "2.1.2",
-                    "pandas": "2.2.3",
-                    "networkx": 3.3
-                },
                 "SAVEMODULES": {
                     "python": "3.12.7",
                     "graph-tool": "2.77 (commit 4ad25c62, )",
@@ -72,10 +66,6 @@
                 },
                 "SEEDPERTURBATIONEVALUATION": {
                     "python": "3.12.7"
-                },
-                "SHORTEST_PATHS": {
-                    "python": "3.12.7",
-                    "networkx": 3.3
                 },
                 "TOPOLOGY": {
                     "python": "3.12.7",
@@ -106,9 +96,6 @@
                 "drug_prioritization/drugstone/entrez_seeds_1.entrez_ppi.diamond.trustrank.drug_predictions.tsv",
                 "drug_prioritization/drugstone/entrez_seeds_1.entrez_ppi.no_tool.trustrank.csv",
                 "drug_prioritization/drugstone/entrez_seeds_1.entrez_ppi.no_tool.trustrank.drug_predictions.tsv",
-                "drug_prioritization/proximity",
-                "drug_prioritization/proximity/entrez_seeds_1.entrez_ppi.diamond.proximity.tsv",
-                "drug_prioritization/proximity/entrez_seeds_1.entrez_ppi.no_tool.proximity.tsv",
                 "evaluation",
                 "evaluation/digest",
                 "evaluation/digest/reference-based",
@@ -184,7 +171,6 @@
                 "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond.gprofiler2.gost_results.rds",
                 "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond.gprofiler2.gostplot.html",
                 "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond.gprofiler2.gostplot.png",
-                "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.diamond/gprofiler_full_hsapiens.GO_WP_REAC_KEGG.ENSG_filtered.gmt",
                 "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.no_tool",
                 "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.no_tool/R_sessionInfo.log",
                 "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.no_tool/entrez_seeds_1.entrez_ppi.no_tool.gprofiler2.GO:CC.sub_enriched_pathways.png",
@@ -220,8 +206,6 @@
                 "input/seeds",
                 "input/seeds/entrez_seeds_1.entrez_ppi.no_tool.gt",
                 "input/seeds/entrez_seeds_1.entrez_ppi.tsv",
-                "input/shortest_paths",
-                "input/shortest_paths/entrez_ppi.shortest_paths.pkl",
                 [
                     [
                         [
@@ -484,7 +468,7 @@
                 "input_seeds_mqc.tsv:md5,269d96ba266e5481c37a550fe4f13521"
             ]
         ],
-        "timestamp": "2026-02-19T11:42:00.522115426",
+        "timestamp": "2026-02-19T15:38:33.37393584",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
