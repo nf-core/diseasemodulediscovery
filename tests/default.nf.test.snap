@@ -35,7 +35,7 @@
                 "GPROFILER2_GOST\"": {
                     "r-ggplot2": "3.4.3",
                     "r-gprofiler2": "0.2.2",
-                    "gprofiler-data": "biomart: Ensembl\nbiomart_version: '113'\ndisplay_name: Human\ngenebuild: GRCh38.p14\ngprofiler_version: e113_eg59_p19_f6a03c19\norganism: hsapiens\nsources:\n  CORUM:\n    name: CORUM protein complexes\n    version: 28.11.2022 Corum 4.1\n  GO:BP:\n    name: biological process\n    version: |-\n      annotations: BioMart\n      classes: releases/2025-03-16\n  GO:CC:\n    name: cellular component\n    version: |-\n      annotations: BioMart\n      classes: releases/2025-03-16\n  GO:MF:\n    name: molecular function\n    version: |-\n      annotations: BioMart\n      classes: releases/2025-03-16\n  HP:\n    name: Human Phenotype Ontology\n    version: |-\n      annotations: 05.2025\n      classes: None\n  HPA:\n    name: Human Protein Atlas\n    version: |-\n      annotations: HPA website: 24-10-19\n      classes: script: 25-02-07\n  KEGG:\n    name: Kyoto Encyclopedia of Genes and Genomes\n    version: KEGG FTP Release 2024-01-22\n  MIRNA:\n    name: miRTarBase\n    version: Release 10.0\n  REAC:\n    name: Reactome\n    version: |-\n      annotations: BioMart\n      classes: 2025-5-23\n  TF:\n    name: Transfac\n    version: |-\n      annotations: TRANSFAC Release 2024.2\n      classes: v2\n  WP:\n    name: WikiPathways\n    version: '20250510'\ntaxonomy_id: '9606'\n"
+                    "gprofiler-data": "biomart: Ensembl\nbiomart_version: '113'\ndisplay_name: Human\ngenebuild: GRCh38.p14\ngprofiler_version: e113_eg59_p19_6be52918\norganism: hsapiens\nsources:\n  CORUM:\n    name: CORUM protein complexes\n    version: 28.11.2022 Corum 4.1\n  GO:BP:\n    name: biological process\n    version: |-\n      annotations: BioMart\n      classes: releases/2025-03-16\n  GO:CC:\n    name: cellular component\n    version: |-\n      annotations: BioMart\n      classes: releases/2025-03-16\n  GO:MF:\n    name: molecular function\n    version: |-\n      annotations: BioMart\n      classes: releases/2025-03-16\n  HP:\n    name: Human Phenotype Ontology\n    version: |-\n      annotations: 05.2025\n      classes: None\n  HPA:\n    name: Human Protein Atlas\n    version: |-\n      annotations: HPA website: 24-10-19\n      classes: script: 25-02-07\n  KEGG:\n    name: Kyoto Encyclopedia of Genes and Genomes\n    version: KEGG FTP Release 2024-01-22\n  MIRNA:\n    name: miRTarBase\n    version: Release 10.0\n  REAC:\n    name: Reactome\n    version: |-\n      annotations: BioMart\n      classes: 2025-5-23\n  TF:\n    name: Transfac\n    version: |-\n      annotations: TRANSFAC Release 2024.2\n      classes: v2\n  WP:\n    name: WikiPathways\n    version: '20250510'\ntaxonomy_id: '9606'\n"
                 },
                 "GRAPHTOOLPARSER": {
                     "python": "3.12.7",
@@ -484,10 +484,10 @@
                 "input_seeds_mqc.tsv:md5,269d96ba266e5481c37a550fe4f13521"
             ]
         ],
+        "timestamp": "2026-02-19T11:14:31.609519756",
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.0"
-        },
-        "timestamp": "2025-11-26T23:11:59.702652515"
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
     }
 }
