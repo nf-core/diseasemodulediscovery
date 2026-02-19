@@ -372,25 +372,20 @@ workflow PIPELINE_COMPLETION {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-prepared_networks_url = "https://zenodo.org/records/15049754/files/"
-network_map = [
-    string_min900: "string.human_links_v12_0_min900",
-    string_min700: "string.human_links_v12_0_min700",
-    string_physical_min900: "string.human_physical_links_v12_0_min900",
-    string_physical_min700: "string.human_physical_links_v12_0_min700",
-    biogrid: "biogrid.4_4_242_homo_sapiens",
-    hippie_high_confidence: "hippie.v2_3_high_confidence",
-    hippie_medium_confidence:"hippie.v2_3_medium_confidence",
-    iid: "iid.human",
-    nedrex: "nedrex.reviewed_proteins_exp",
-    nedrex_high_confidence: "nedrex.reviewed_proteins_exp_high_confidence",
-]
-id_space_map = [
-    entrez: "Entrez",
-    ensembl: "Ensembl",
-    symbol: "Symbol",
-    uniprot: "UniProtKB-AC",
-]
+//
+// Load a YAML file and return its content as a map
+//
+def loadYamlAsMap(path) {
+    def yaml = new  org.yaml.snakeyaml.Yaml()
+    def parsed = yaml.load(file(path, checkIfExists: true).text)
+
+    assert parsed instanceof Map : "YAML root must be a dictionary"
+    return parsed
+}
+
+prepared_networks_url = params.prepared_networks_url
+network_map = loadYamlAsMap("${prepared_networks_url}network_map.yaml")
+id_space_map = loadYamlAsMap("${prepared_networks_url}id_space_map.yaml")
 
 //
 // Check if the network is a prepared network or a file

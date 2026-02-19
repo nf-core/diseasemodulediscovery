@@ -59,6 +59,13 @@
                     "type": "string",
                     "description": "MultiQC report title. Printed as page header, used for filename if not otherwise specified.",
                     "fa_icon": "fas fa-file-signature"
+                },
+                "prepared_networks_url": {
+                    "type": "string",
+                    "default": "https://zenodo.org/records/18702264/files/",
+                    "fa_icon": "fas fa-link",
+                    "hidden": true,
+                    "description": "Set a custom repository link for the prepared networks."
                 }
             }
         },
