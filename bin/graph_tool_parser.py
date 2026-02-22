@@ -5,11 +5,13 @@
 
 import argparse
 import csv
+import json
 import logging
 import sys
 import os
 import graph_tool.all as gt
 from pathlib import Path
+from collections import Counter
 
 logger = logging.getLogger()
 
@@ -36,6 +38,31 @@ def save_multiqc(g, stem):
             duplicate_edges.append(e)  # Mark for removal
         else:
             seen_edges.add(edge_tuple)
+
+    
+    # Calculate degree for each vertex
+    degrees = [v.out_degree() for v in g.vertices()]
+    
+    # Count frequency of each degree
+    degree_counts = Counter(degrees)
+    
+    # Get total number of vertices for normalization
+    total_vertices = len(degrees)
+    
+    # Create absolute counts dictionary: {degree: count}
+    absolute_counts = [[degree, count] for degree, count in sorted(degree_counts.items())]
+    
+    # Create relative frequencies dictionary: {degree: fraction}
+    relative_frequencies = [[degree, count / total_vertices] for degree, count in sorted(degree_counts.items())]
+    
+    # Output format for MultiQC custom content
+    # Since collectFile concatenates, we output each dataset as a separate line
+    # MultiQC will combine them into a single data structure
+    with open(f"node_degree_distribution_absolute.json", "w") as file:
+        # Write each dict on its own line in compact JSON format
+        file.write(json.dumps({stem: absolute_counts}) + '\n')
+    with open(f"node_degree_distribution_relative.json", "w") as file:
+        file.write(json.dumps({f'{stem}_relative': relative_frequencies}) + '\n')
 
     with open("input_network_multiqc.tsv", "w") as file:
         file.write(
@@ -101,6 +128,7 @@ def save_rwr(g, stem):
             )  # raw edge values are hashed vertex names
 
 
+
 def save(g, stem, format):
     """
     Saves a graph_tools Graph object in a specified format
@@ -116,6 +144,8 @@ def save(g, stem, format):
         save_robust(g=g, stem=stem)
     elif format == "rwr":
         save_rwr(g=g, stem=stem)
+    elif format == "node_degree_distribution":
+        save_node_degree_distribution(g=g, stem=stem)
     else:
         logger.critical(f"Unknown output format: {format}")
         sys.exit(1)
@@ -170,7 +200,7 @@ def parse_args(argv=None):
         "-f",
         "--format",
         help="Output format (default gt). If format it gt, a summary file for multiqc will be generated as well.",
-        choices=("gt", "diamond", "domino", "robust", "rwr"),
+        choices=("gt", "diamond", "domino", "robust", "rwr", "node_degree_distribution"),
         default="gt",
     )
     parser.add_argument(

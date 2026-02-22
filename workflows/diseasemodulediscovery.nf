@@ -9,6 +9,7 @@
 //
 include { INPUTCHECK                        } from '../modules/local/inputcheck/main'
 include { GRAPHTOOLPARSER                   } from '../modules/local/graphtoolparser/main'
+include { GRAPHTOOLPARSER as DEGREE_DIST    } from '../modules/local/graphtoolparser/main'
 include { NETWORKANNOTATION                 } from '../modules/local/networkannotation/main'
 include { SAVEMODULES                       } from '../modules/local/savemodules/main'
 include { VISUALIZEMODULES                  } from '../modules/local/visualizemodules/main'
@@ -144,9 +145,24 @@ workflow DISEASEMODULEDISCOVERY {
             name: 'input_network_mqc.tsv',
             keepHeader: true
         )
+    DEGREE_DIST(ch_network, 'gt')
+    ch_multiqc_network_degree_absolute = DEGREE_DIST.out.node_degree_absolute
+        .map{ meta, path -> path }
+    ch_multiqc_network_degree_relative = DEGREE_DIST.out.node_degree_relative
+        .map{ meta, path -> path }
+    
+    ch_multiqc_network_degree = ch_multiqc_network_degree_absolute
+        .mix(ch_multiqc_network_degree_relative)
+        .collectFile(
+            item -> "  " + item.text,
+            cache: false,
+            storeDir: "${params.outdir}/mqc_summaries",
+            name: 'network_node_degree_distribution_mqc.yaml',
+            seed: new File("$projectDir/assets/network_node_degree_distribution_header.yaml").text
+        )
     ch_multiqc_files = ch_multiqc_files.mix(ch_network_multiqc)
+    ch_multiqc_files = ch_multiqc_files.mix(ch_multiqc_network_degree)
     ch_network_gt = GRAPHTOOLPARSER.out.network
-
 
     // Check input
     // channel: [ val(meta[id,seeds_id,network_id]), path(seeds), path(network) ]
