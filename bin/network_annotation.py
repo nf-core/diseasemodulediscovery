@@ -151,7 +151,7 @@ def add_node_degrees(subnetwork, name_to_degree_full, name_to_degree_sub):
     subnetwork.vp["degree_in_full_network"] = subnetwork.new_vertex_property("int")
     # Add degree in the subnetwork
     subnetwork.vp["degree_in_module"] = subnetwork.new_vertex_property("int")
-    
+
     for v in subnetwork.vertices():
         name = subnetwork.vp["name"][v]
         full_degree = name_to_degree_full.get(name, 0)
@@ -160,6 +160,7 @@ def add_node_degrees(subnetwork, name_to_degree_full, name_to_degree_sub):
         subnetwork.vp["degree_in_module"][v] = sub_degree
 
     return subnetwork.vp["degree_in_full_network"], subnetwork.vp["degree_in_module"]
+
 
 if __name__ == "__main__":
     main()

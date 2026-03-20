@@ -2,7 +2,7 @@ process MULTIQCFORMATTER {
     label 'process_single'
     input:
     tuple path(header), path(inputFiles)
-    output: 
+    output:
     path("*mqc*"), emit : multiqc
     path "versions.yml"               , emit: versions
 
@@ -10,7 +10,7 @@ process MULTIQCFORMATTER {
     task.ext.when == null || task.ext.when
     script:
     """
-    multiqc_formatter.py -i $inputFiles -H $header 
+    multiqc_formatter.py -i $inputFiles -H $header
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         python: \$(python --version | sed 's/Python //g')

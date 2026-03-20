@@ -39,30 +39,34 @@ def save_multiqc(g, stem):
         else:
             seen_edges.add(edge_tuple)
 
-    
     # Calculate degree for each vertex
     degrees = [v.out_degree() for v in g.vertices()]
-    
+
     # Count frequency of each degree
     degree_counts = Counter(degrees)
-    
+
     # Get total number of vertices for normalization
     total_vertices = len(degrees)
-    
+
     # Create absolute counts dictionary: {degree: count}
-    absolute_counts = [[degree, count] for degree, count in sorted(degree_counts.items())]
-    
+    absolute_counts = [
+        [degree, count] for degree, count in sorted(degree_counts.items())
+    ]
+
     # Create relative frequencies dictionary: {degree: fraction}
-    relative_frequencies = [[degree, count / total_vertices] for degree, count in sorted(degree_counts.items())]
-    
+    relative_frequencies = [
+        [degree, count / total_vertices]
+        for degree, count in sorted(degree_counts.items())
+    ]
+
     # Output format for MultiQC custom content
     # Since collectFile concatenates, we output each dataset as a separate line
     # MultiQC will combine them into a single data structure
     with open(f"node_degree_distribution_absolute.json", "w") as file:
         # Write each dict on its own line in compact JSON format
-        file.write(json.dumps({stem: absolute_counts}) + '\n')
+        file.write(json.dumps({stem: absolute_counts}) + "\n")
     with open(f"node_degree_distribution_relative.json", "w") as file:
-        file.write(json.dumps({f'{stem}_relative': relative_frequencies}) + '\n')
+        file.write(json.dumps({f"{stem}_relative": relative_frequencies}) + "\n")
 
     with open("input_network_multiqc.tsv", "w") as file:
         file.write(
@@ -126,7 +130,6 @@ def save_rwr(g, stem):
             writer.writerow(
                 [g.vp["name"][e[0]], g.vp["name"][e[1]]]
             )  # raw edge values are hashed vertex names
-
 
 
 def save(g, stem, format):
@@ -200,7 +203,14 @@ def parse_args(argv=None):
         "-f",
         "--format",
         help="Output format (default gt). If format it gt, a summary file for multiqc will be generated as well.",
-        choices=("gt", "diamond", "domino", "robust", "rwr", "node_degree_distribution"),
+        choices=(
+            "gt",
+            "diamond",
+            "domino",
+            "robust",
+            "rwr",
+            "node_degree_distribution",
+        ),
         default="gt",
     )
     parser.add_argument(
