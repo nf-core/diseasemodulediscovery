@@ -9,6 +9,8 @@ process GRAPHTOOLPARSER {
     output:
     tuple val(meta), path("*${format}*")               , emit: network
     tuple val(meta), path("input_network_multiqc.tsv") , emit: multiqc, optional: true
+    tuple val(meta), path("node_degree_distribution_absolute.yaml") , emit: node_degree_absolute, optional: true
+    tuple val(meta), path("node_degree_distribution_relative.yaml") , emit: node_degree_relative, optional: true
     path "versions.yml"                                , emit: versions
 
     when:
