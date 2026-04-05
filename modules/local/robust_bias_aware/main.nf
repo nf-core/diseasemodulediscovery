@@ -1,6 +1,6 @@
 process ROBUSTBIASAWARE {
     tag "$meta.id"
-    label 'process_single'
+    label 'process_low'
     container 'biocontainers/robust-bias-aware:0.0.1--pyh7cba7a3_1'
 
     input:
