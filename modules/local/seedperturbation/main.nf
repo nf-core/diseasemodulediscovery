@@ -14,8 +14,9 @@ process SEEDPERTURBATION {
     task.ext.when == null || task.ext.when
 
     script:
+    def args = task.ext.args ? task.ext.args : ""
     """
-    seed_perturbation.py --seeds ${seeds} --prefix ${meta.seeds_id}
+    seed_perturbation.py ${args} --seeds ${seeds} --prefix ${meta.seeds_id}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

@@ -5,6 +5,7 @@
 import argparse
 import logging
 import sys
+import random
 from pathlib import Path
 
 logger = logging.getLogger()
@@ -36,6 +37,27 @@ def parse_args(argv=None):
         choices=("CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG"),
         default="WARNING",
     )
+    parser.add_argument(
+        "--random_seed",
+        help="The random seed to use for reproducibility (default: 42).",
+        type=int,
+        default=42,
+    )
+    parser.add_argument(
+        "-x",
+        "--num_exclusion",
+        help="number of seeds to exclude for leave-x-out perturbation",
+        type=int,
+        default=3,
+    )
+    parser.add_argument(
+        "-n",
+        "--num_permutations",
+        help="number of leave-x-out perturbations",
+        type=int,
+        default=2,
+    )
+
     return parser.parse_args(argv)
 
 
@@ -64,6 +86,16 @@ def main(argv=None):
             for j, other_seed in enumerate(seeds):
                 if not i == j:
                     file.write(f"{other_seed}\n")
+    # leave x out
+    random.seed(args.random_seed)
+    for i in range(args.num_permutations):
+        excludes_seeds = random.sample(seeds, args.num_exclusion)
+        with open(
+            f"{args.prefix}.perm_{i}_x_{args.num_exclusion}{extension}", "w"
+        ) as file:
+            for seed in seeds:
+                if seed not in excludes_seeds:
+                    file.write(f"{seed}\n")
 
 
 if __name__ == "__main__":
