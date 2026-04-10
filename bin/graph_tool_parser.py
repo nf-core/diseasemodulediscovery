@@ -12,6 +12,7 @@ import os
 import graph_tool.all as gt
 from pathlib import Path
 from collections import Counter
+import yaml
 
 logger = logging.getLogger()
 
@@ -38,36 +39,7 @@ def save_multiqc(g, stem):
             duplicate_edges.append(e)  # Mark for removal
         else:
             seen_edges.add(edge_tuple)
-
-    # Calculate degree for each vertex
-    degrees = [v.out_degree() for v in g.vertices()]
-
-    # Count frequency of each degree
-    degree_counts = Counter(degrees)
-
-    # Get total number of vertices for normalization
-    total_vertices = len(degrees)
-
-    # Create absolute counts dictionary: {degree: count}
-    absolute_counts = [
-        [degree, count] for degree, count in sorted(degree_counts.items())
-    ]
-
-    # Create relative frequencies dictionary: {degree: fraction}
-    relative_frequencies = [
-        [degree, count / total_vertices]
-        for degree, count in sorted(degree_counts.items())
-    ]
-
-    # Output format for MultiQC custom content
-    # Since collectFile concatenates, we output each dataset as a separate line
-    # MultiQC will combine them into a single data structure
-    with open(f"node_degree_distribution_absolute.json", "w") as file:
-        # Write each dict on its own line in compact JSON format
-        file.write(json.dumps({stem: absolute_counts}) + "\n")
-    with open(f"node_degree_distribution_relative.json", "w") as file:
-        file.write(json.dumps({f"{stem}_relative": relative_frequencies}) + "\n")
-
+            
     with open("input_network_multiqc.tsv", "w") as file:
         file.write(
             "Network\t"
@@ -89,6 +61,43 @@ def save_multiqc(g, stem):
             f"{self_loops}\t"
             f"{len(duplicate_edges)}\n"
         )
+
+def save_node_degree_distribution(g, stem):
+    # Calculate degree for each vertex
+    degrees = [v.out_degree() for v in g.vertices()]
+
+    # Count frequency of each degree
+    degree_counts = Counter(degrees)
+
+    # Get total number of vertices for normalization
+    total_vertices = len(degrees)
+
+    # Create absolute counts dictionary: {degree: count}
+    absolute_counts = [
+        [degree, count] for degree, count in sorted(degree_counts.items())
+    ]
+
+    # Create relative frequencies dictionary: {degree: fraction}
+    relative_frequencies = [
+        [degree, count / total_vertices]
+        for degree, count in sorted(degree_counts.items())
+    ]
+    #save node degree distribution as yaml 
+    node_degree_distribution = {
+        "name": stem,
+        "absolute": absolute_counts,
+        "relative": relative_frequencies,
+    }
+    
+    with open(f"{stem}.node_degree_distribution.yaml", "w") as file:
+        yaml.safe_dump(
+            node_degree_distribution,
+            file,
+            sort_keys=False,
+            default_flow_style=None,  # keeps list pairs as [x, y]
+        )
+        
+    
 
 
 def save_diamond(g, stem):
@@ -139,6 +148,7 @@ def save(g, stem, format):
     if format == "gt":
         save_gt(g=g, stem=stem)
         save_multiqc(g=g, stem=stem)
+        save_node_degree_distribution(g=g, stem=stem)
     elif format == "diamond":
         save_diamond(g=g, stem=stem)
     elif format == "domino":
@@ -147,8 +157,6 @@ def save(g, stem, format):
         save_robust(g=g, stem=stem)
     elif format == "rwr":
         save_rwr(g=g, stem=stem)
-    elif format == "node_degree_distribution":
-        save_node_degree_distribution(g=g, stem=stem)
     else:
         logger.critical(f"Unknown output format: {format}")
         sys.exit(1)
@@ -209,7 +217,6 @@ def parse_args(argv=None):
             "domino",
             "robust",
             "rwr",
-            "node_degree_distribution",
         ),
         default="gt",
     )

@@ -147,8 +147,10 @@ workflow DISEASEMODULEDISCOVERY {
         )
     ch_multiqc_files = ch_multiqc_files.mix(ch_network_multiqc)
     ch_network_gt = GRAPHTOOLPARSER.out.network
+    ch_node_degree_distribution = GRAPHTOOLPARSER.out.node_degree
+
     MULTIQCFORMATTER(
-        ch_network_gt.map{_meta, path -> path}.collect().map{networks ->
+        ch_node_degree_distribution.map{_meta, path -> path}.collect().map{networks ->
             def header = new File("$projectDir/assets/network_node_degree_distribution_header.yaml").toPath()
             [header, networks]
         }

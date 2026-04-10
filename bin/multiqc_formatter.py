@@ -1,9 +1,7 @@
 #!/usr/bin/env python
 import argparse
-import graph_tool.all as gt
-from graph_tool_parser import load
 from pathlib import Path
-from collections import Counter
+import yaml
 import sys
 
 
@@ -28,63 +26,32 @@ def parse_input(input_files, header_file):
 
 
 def save_node_degree_distribution(input_files, header_file):
-    with open(header_file, "r") as header:
-        network_degree_header = header.read()
+    with open(header_file, "r", encoding="utf-8") as header:
+        mqc_payload = yaml.safe_load(header) or {}
 
-    network_data = []
+    absolute_data = {}
+    relative_data = {}
+
     for file in input_files:
-        g = load(file_in=file, extension=file.suffix)
-        network_name = file.stem
-        # Calculate degree for each vertex
-        degrees = [v.out_degree() for v in g.vertices()]
-        # Count frequency of each degree
-        degree_counts = Counter(degrees)
+        with open(file, "r", encoding="utf-8") as distribution_file:
+            distribution = yaml.safe_load(distribution_file) or {}
 
-        # Get total number of vertices for normalization
-        total_vertices = len(degrees)
+        network_name = distribution.get("name") or file.stem
+        absolute = distribution.get("absolute")
+        relative = distribution.get("relative")
 
-        # Create absolute counts: [[degree, count], ...]
-        absolute_counts = [
-            [degree, count] for degree, count in sorted(degree_counts.items())
-        ]
+        if absolute is None or relative is None:
+            raise ValueError(
+                f"Invalid distribution YAML in {file}: expected keys 'absolute' and 'relative'"
+            )
 
-        # Create relative frequencies: [[degree, fraction], ...]
-        relative_frequencies = [
-            [degree, count / total_vertices]
-            for degree, count in sorted(degree_counts.items())
-        ]
+        absolute_data[network_name] = absolute
+        relative_data[network_name] = relative
 
-        network_data.append(
-            {
-                "name": network_name,
-                "absolute": absolute_counts,
-                "relative": relative_frequencies,
-            }
-        )
+    mqc_payload["data"] = [absolute_data, relative_data]
 
-    with open("./node_degree_distribution_mqc.yaml", "w") as file:
-        file.write(network_degree_header)
-        file.write("  - ")
-        first = True
-        for network in network_data:
-            if first:
-                file.write(f"{network['name']}:\n")
-                first = False
-            else:
-                file.write(f"    {network['name']}:\n")
-            for degree, count in network["absolute"]:
-                file.write(f"      - [{degree}, {count}]\n")
-        file.write("\n")
-        file.write("  - ")
-        first = True
-        for network in network_data:
-            if first:
-                file.write(f"{network['name']}:\n")
-                first = False
-            else:
-                file.write(f"    {network['name']}:\n")
-            for degree, fraction in network["relative"]:
-                file.write(f"      - [{degree}, {fraction}]\n")
+    with open("./node_degree_distribution_mqc.yaml", "w", encoding="utf-8") as file:
+        yaml.safe_dump(mqc_payload, file, sort_keys=False,  default_flow_style=None)
 
 
 def main():

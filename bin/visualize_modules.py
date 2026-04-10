@@ -104,6 +104,9 @@ def parse_args(argv=None):
 def main(argv=None):
     """Coordinate argument parsing and program execution."""
     args = parse_args(argv)
+    import pyvis 
+    print(f"pyvis version: {pyvis.__version__}")
+
     logging.basicConfig(level=args.log_level, format="[%(levelname)s] %(message)s")
     if not args.module.is_file():
         logger.error(f"The given input file {args.file_in} was not found!")
