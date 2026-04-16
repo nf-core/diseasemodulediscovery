@@ -1,7 +1,7 @@
 
 process DOMINO_SLICER {             // Process name, should be all upper case. Only the part before "_" will be used to define the output folder
     tag "$meta.id"
-    label 'process_low'          // Used to allocate resources, "process_single" uses one thread and 6GB memory, for labels see conf/base.config
+    label 'process_low'          // Used to allocate resources; see conf/base.config for label definitions
     conda "bioconda::domino=1.0.0"  // Define software deployment via conda, "container" is more important right now
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
         'https://depot.galaxyproject.org/singularity/domino:1.0.0--pyhdfd78af_0' :
