@@ -3,7 +3,7 @@
 
 process DIAMOND {                           // Process name, should be all upper case
     tag "$meta.id"                          // Used to display the process in the progress overview
-    label 'process_low'                  // Used to allocate resources, "process_single" uses one thread and 6GB memory, for labels see conf/base.config
+    label 'process_low'                     // Used to allocate resources; see conf/base.config for label-specific settings
     container 'docker.io/djskelton/diamond:2437974'   // The container on docker hub, other repositories are possible, use conda keyword to set a conda environment
 
     input:                                            // Define the input channels
