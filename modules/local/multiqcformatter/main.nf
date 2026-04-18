@@ -1,5 +1,6 @@
 process MULTIQCFORMATTER {
     label 'process_single'
+
     input:
     tuple path(header), path(inputFiles)
     output:
