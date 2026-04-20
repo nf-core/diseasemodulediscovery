@@ -224,6 +224,11 @@
                     "fa_icon": "fas fa-caret-right",
                     "description": "Flag for running the seed perturbation-based evaluation"
                 },
+                "run_leave_x_out_perturbation": {
+                    "type": "boolean",
+                    "description": "Flag for running the leave_x_out seed perturbation evaluation instead of the default leave one out evaluation",
+                    "fa_icon": "fas fa-percent"
+                },
                 "run_network_perturbation": {
                     "type": "boolean",
                     "fa_icon": "fas fa-caret-right",

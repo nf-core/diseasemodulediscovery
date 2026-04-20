@@ -122,21 +122,23 @@ workflow GT_SEEDPERTURBATION {
             sort: true,
             seed: new File("$projectDir/assets/seed_perturbation_jaccard_header.yaml").text
         )
-
+    //is only run with leave_one_out seed perturbation
     // Gene-level visualization
-    ch_visualization_input = SEEDPERTURBATIONEVALUATION.out.detailed
+    if(!params.run_leave_x_out_perturbation){
+        ch_visualization_input = SEEDPERTURBATIONEVALUATION.out.detailed
         .multiMap { meta, path ->
             seeds_id: meta.seeds_id
             network_id: meta.network_id
             amim: meta.amim
             path: path
         }
-    SEEDPERTURBATIONVISUALIZATION(
-        ch_visualization_input.seeds_id.collect(),
-        ch_visualization_input.network_id.collect(),
-        ch_visualization_input.amim.collect(),
-        ch_visualization_input.path.collect()
-    )
+        SEEDPERTURBATIONVISUALIZATION(
+            ch_visualization_input.seeds_id.collect(),
+            ch_visualization_input.network_id.collect(),
+            ch_visualization_input.amim.collect(),
+            ch_visualization_input.path.collect()
+        )
+    }
 
 
 
