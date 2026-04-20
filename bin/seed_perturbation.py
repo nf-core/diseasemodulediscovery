@@ -5,6 +5,7 @@
 import argparse
 import logging
 import sys
+import math
 import random
 from pathlib import Path
 
@@ -44,18 +45,23 @@ def parse_args(argv=None):
         default=42,
     )
     parser.add_argument(
-        "-x",
-        "--num_exclusion",
-        help="number of seeds to exclude for leave-x-out perturbation",
-        type=int,
-        default=3,
+        "--leave_x_out",
+        help="Whether to perform leave-x-out perturbation (default: False).",
+        action="store_true",
+    )
+    parser.add_argument(
+        "-frac",
+        "--fraction_exclusion",
+        help="fraction of seeds to exclude for leave-x-out perturbation",
+        type=float,
+        default=0.1,
     )
     parser.add_argument(
         "-n",
         "--num_permutations",
         help="number of leave-x-out perturbations",
         type=int,
-        default=2,
+        default=100,
     )
 
     return parser.parse_args(argv)
@@ -79,23 +85,26 @@ def main(argv=None):
     # read seed file
     with open(path, "r") as file:
         seeds = [line.strip() for line in file.readlines() if line.strip()]
-
-    # leave one seed out
-    for i, seed in enumerate(seeds):
-        with open(f"{args.prefix}.perm_{i}{extension}", "w") as file:
-            for j, other_seed in enumerate(seeds):
-                if not i == j:
-                    file.write(f"{other_seed}\n")
-    # leave x out
-    random.seed(args.random_seed)
-    for i in range(args.num_permutations):
-        excludes_seeds = random.sample(seeds, args.num_exclusion)
-        with open(
-            f"{args.prefix}.perm_{i}_x_{args.num_exclusion}{extension}", "w"
-        ) as file:
-            for seed in seeds:
-                if seed not in excludes_seeds:
-                    file.write(f"{seed}\n")
+        x = math.ceil(int(args.fraction_exclusion * len(seeds)))
+        print(f"Number of seeds: {len(seeds)}")
+        print(f"Number of seeds to exclude for leave-x-out: {x}")
+        sys.exit(1)
+    if args.leave_x_out:
+        # leave x out
+        random.seed(args.random_seed)
+        for i in range(args.num_permutations):
+            excludes_seeds = random.sample(seeds, x)
+            with open(f"{args.prefix}.perm_{i}_leave_{x}_out{extension}", "w") as file:
+                for seed in seeds:
+                    if seed not in excludes_seeds:
+                        file.write(f"{seed}\n")
+    else:
+        # leave one seed out
+        for i, seed in enumerate(seeds):
+            with open(f"{args.prefix}.perm_{i}_leave_one_out{extension}", "w") as file:
+                for j, other_seed in enumerate(seeds):
+                    if not i == j:
+                        file.write(f"{other_seed}\n")
 
 
 if __name__ == "__main__":
