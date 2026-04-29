@@ -51,7 +51,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 
 ### Prepare network
 
-The [graph-tool](https://graph-tool.skewed.de/) library is used to parse the input network(s) into the [`.gt`](https://graph-tool.skewed.de/static/docs/stable/gt_format.html) format, the internal representation used for networks within the pipeline. Additionally, it is used to generate networks in the specific formats required by the various disease module inference methods. This step also gathers summary statistics for the MultiQC report, including the number of nodes and edges, the network [diameter](https://graph-tool.skewed.de/static/docs/stable/autosummary/graph_tool.topology.pseudo_diameter.html#graph_tool.topology.pseudo_diameter), the number of connected components, the size of the largest connected component, the count of self-loops (nodes with edges to themselves), and the number of duplicate edges (multiple edges connecting the same two nodes).
+The [graph-tool](https://graph-tool.skewed.de/) library is used to parse the input network(s) into the [`.gt`](https://graph-tool.skewed.de/static/docs/stable/gt_format.html) format, the internal representation used for networks within the pipeline. Additionally, it is used to generate networks in the specific formats required by the various disease module inference methods. This step also gathers summary statistics for the MultiQC report, including the number of nodes and edges, the network [diameter](https://graph-tool.skewed.de/static/docs/stable/autosummary/graph_tool.topology.pseudo_diameter.html#graph_tool.topology.pseudo_diameter), the number of connected components, the size of the largest connected component, the distribution of node degrees, the count of self-loops (nodes with edges to themselves), and the number of duplicate edges (multiple edges connecting the same two nodes).
 
 <details markdown="1">
 <summary>Output files</summary>
@@ -63,6 +63,7 @@ The [graph-tool](https://graph-tool.skewed.de/) library is used to parse the inp
   - `<network>.robust.tsv`: Input network in the format required for ROBUST or ROBUST (bias-aware). Only created if the methods are used.
   - `<network>.rwr.csv`: Input network in the format required for RWR. Only created if the method is used.
 - `mqc_summaries/`
+  - ` node_degree_distribution_mqc.yaml`: Network node degree distribution for the MultiQC report.
   - ` input_network_mqc.tsv`: Network summary statistics for the MultiQC report.
 
 </details>
@@ -84,7 +85,7 @@ The format of the input seed file(s) is validated, and any seed nodes not presen
 
 ## Disease module inference
 
-The inferred disease modules are exported in multiple formats, including [`.gt`](https://graph-tool.skewed.de/static/docs/stable/gt_format.html), [`.graphml`](https://de.wikipedia.org/wiki/GraphML), and node and edge lists in `.tsv`. If a method returns only a node list rather than a full network, the connecting edges are extracted from the input network. Module nodes are annotated with their seed status (`is_seed`), their subnetwork participation degree ([`spd`](https://nedrex.net/tutorial/availableFunctions.html)), and a component identifier (`component_id`) to indicate which connected component they belong to. Additionally, tool-specific node properties are added, which are explained in the sections below.
+The inferred disease modules are exported in multiple formats, including [`.gt`](https://graph-tool.skewed.de/static/docs/stable/gt_format.html), [`.graphml`](https://de.wikipedia.org/wiki/GraphML), and node and edge lists in `.tsv`. If a method returns only a node list rather than a full network, the connecting edges are extracted from the input network. Module nodes are annotated with their seed status (`is_seed`), their degree within both the whole network (`degree_in_full_network`) and the disease module(`degree_in_module`), their subnetwork participation degree ([`spd`](https://nedrex.net/tutorial/availableFunctions.html)), and a component identifier (`component_id`) to indicate which connected component they belong to. Additionally, tool-specific node properties are added, which are explained in the sections below.
 
 ### Only seeds
 
