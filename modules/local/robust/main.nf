@@ -1,7 +1,7 @@
 
 process ROBUST {
     tag "$meta.id"
-    label 'process_single'
+    label 'process_low'
     container 'docker.io/djskelton/robust:cc669c6'
 
     input:
