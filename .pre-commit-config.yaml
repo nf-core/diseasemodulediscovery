@@ -31,3 +31,7 @@ repos:
       - id: nextflow-lint
         files: '\.nf$|nextflow\.config$'
         args: ["-output", "json"]
+  - repo: https://github.com/psf/black
+    rev: "24.1.1"
+    hooks:
+      - id: black
