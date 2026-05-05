@@ -65,7 +65,7 @@ workflow GT_NETWORKPERTURBATION {
     // channel: [ val(meta[id,module_id,amim,seeds_id,network_id]), [path(perturbed_modules)] ]
     ch_perturbed_modules = NETWORKEXPANSION.out.modules
         .map{meta, perturbed_module->
-            key = groupKey(meta.subMap("seeds_id", "amim", "network_id"), meta.n_perturbations)
+            def key = groupKey(meta.subMap("seeds_id", "amim", "network_id"), meta.n_perturbations)
             [key, meta, perturbed_module]
         }
         // Group by seeds_id, amim, and network_id

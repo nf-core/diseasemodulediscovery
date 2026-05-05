@@ -55,7 +55,7 @@ workflow GT_SEEDPERTURBATION {
         .combine(ch_perturbed_seeds.map{meta, perturbed_seeds -> [meta.seeds_id, meta.network_id, perturbed_seeds]}, by: [0,1])
         // Add original_seeds_id, amim, and network_id to tuple for grouping
         .map{seeds_id, network_id, meta, perturbed_module, perturbed_seeds ->
-            key = groupKey(meta.subMap("original_seeds_id", "amim", "network_id"), meta.n_perturbations)
+            def key = groupKey(meta.subMap("original_seeds_id", "amim", "network_id"), meta.n_perturbations)
             [key, meta, perturbed_module, perturbed_seeds]
         }
         // Group by original_seeds_id, amim, and network_id
