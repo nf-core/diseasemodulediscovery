@@ -115,13 +115,14 @@ workflow GT_SEEDPERTURBATION {
         SEEDPERTURBATIONEVALUATION.out.multiqc_jaccard
         .map{ meta, path -> path }
         .collectFile(
-            item -> "  " + item.text,
             cache: false,
             storeDir: "${params.outdir}/mqc_summaries",
             name: 'seed_perturbation_jaccard_mqc.yaml',
             sort: true,
             seed: new File("$projectDir/assets/seed_perturbation_jaccard_header.yaml").text
-        )
+        ){
+            item -> "  " + item.text
+        }
 
     // Gene-level visualization
     ch_visualization_input = SEEDPERTURBATIONEVALUATION.out.detailed

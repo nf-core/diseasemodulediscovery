@@ -300,10 +300,6 @@ workflow PIPELINE_INITIALISATION {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-def seeds_empty = [:]
-def module_empty = [:]
-def visualization_skipped = [:]
-def drugstone_skipped = [:]
 workflow PIPELINE_COMPLETION {
 
     take:
@@ -320,6 +316,12 @@ workflow PIPELINE_COMPLETION {
 
 
     main:
+
+    def seeds_empty = [:]
+    def module_empty = [:]
+    def visualization_skipped = [:]
+    def drugstone_skipped = [:]
+
     summary_params = paramsSummaryMap(workflow, parameters_schema: "nextflow_schema.json")
     def multiqc_reports = multiqc_report.toList()
 
@@ -359,7 +361,7 @@ workflow PIPELINE_COMPLETION {
             )
         }
 
-        logWarnings(monochrome_logs=monochrome_logs, seeds_empty=seeds_empty, module_empty=module_empty, visualization_skipped=visualization_skipped, drugstone_skipped=drugstone_skipped)
+        logWarnings(monochrome_logs, seeds_empty, module_empty, visualization_skipped, drugstone_skipped)
         completionSummary(monochrome_logs)
 
     }
@@ -375,30 +377,30 @@ workflow PIPELINE_COMPLETION {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-prepared_networks_url = "https://zenodo.org/records/15049754/files/"
-network_map = [
-    string_min900: "string.human_links_v12_0_min900",
-    string_min700: "string.human_links_v12_0_min700",
-    string_physical_min900: "string.human_physical_links_v12_0_min900",
-    string_physical_min700: "string.human_physical_links_v12_0_min700",
-    biogrid: "biogrid.4_4_242_homo_sapiens",
-    hippie_high_confidence: "hippie.v2_3_high_confidence",
-    hippie_medium_confidence:"hippie.v2_3_medium_confidence",
-    iid: "iid.human",
-    nedrex: "nedrex.reviewed_proteins_exp",
-    nedrex_high_confidence: "nedrex.reviewed_proteins_exp_high_confidence",
-]
-id_space_map = [
-    entrez: "Entrez",
-    ensembl: "Ensembl",
-    symbol: "Symbol",
-    uniprot: "UniProtKB-AC",
-]
-
 //
 // Check if the network is a prepared network or a file
 //
 def mapPreparedNetwork(network, id_space) {
+
+    def prepared_networks_url = "https://zenodo.org/records/15049754/files/"
+    def network_map = [
+        string_min900: "string.human_links_v12_0_min900",
+        string_min700: "string.human_links_v12_0_min700",
+        string_physical_min900: "string.human_physical_links_v12_0_min900",
+        string_physical_min700: "string.human_physical_links_v12_0_min700",
+        biogrid: "biogrid.4_4_242_homo_sapiens",
+        hippie_high_confidence: "hippie.v2_3_high_confidence",
+        hippie_medium_confidence:"hippie.v2_3_medium_confidence",
+        iid: "iid.human",
+        nedrex: "nedrex.reviewed_proteins_exp",
+        nedrex_high_confidence: "nedrex.reviewed_proteins_exp_high_confidence",
+    ]
+    def id_space_map = [
+        entrez: "Entrez",
+        ensembl: "Ensembl",
+        symbol: "Symbol",
+        uniprot: "UniProtKB-AC",
+    ]
     if (network_map.containsKey(network)) {
         return file("${prepared_networks_url}${network_map[network]}.${id_space_map[id_space]}.gt", checkIfExists: true)
     } else {
