@@ -110,7 +110,6 @@ workflow DISEASEMODULEDISCOVERY {
 
 
     take:
-    ch_samplesheet // channel: samplesheet read in from --input
     multiqc_config
     multiqc_logo
     multiqc_methods_description
