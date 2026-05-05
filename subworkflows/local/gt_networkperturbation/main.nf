@@ -2,7 +2,7 @@
 // Runs network perturbation based evaluation of network expansion methods
 //
 
-include { NETWORKEXPANSION             } from '../networkexpansion'
+include { NETWORKEXPANSION              } from '../networkexpansion'
 include { NETWORKPERTURBATION           } from '../../../modules/local/networkperturbation/main'
 include { NETWORKPERTURBATIONEVALUATION } from '../../../modules/local/networkperturbationevaluation/main'
 

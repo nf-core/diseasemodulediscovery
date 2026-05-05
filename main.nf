@@ -56,7 +56,6 @@ workflow NFCORE_DISEASEMODULEDISCOVERY {
     ch_versions = ch_versions.mix(DISEASEMODULEDISCOVERY.out.versions)
 
     emit:
-    multiqc_report                  = DISEASEMODULEDISCOVERY.out.multiqc_report // channel: /path/to/multiqc_report.html
     seeds_empty_status              = DISEASEMODULEDISCOVERY.out.seeds_empty_status             // channel: [id, boolean]
     module_empty_status             = DISEASEMODULEDISCOVERY.out.module_empty_status           // channel: [id, boolean]
     visualization_skipped_status    = DISEASEMODULEDISCOVERY.out.visualization_skipped_status  // channel: [id, boolean]
@@ -83,15 +82,9 @@ workflow {
         params.monochrome_logs,
         args,
         params.outdir,
-        params.input,
         params.help,
         params.help_full,
         params.show_hidden,
-        params.seeds,
-        params.network,
-        params.shortest_paths,
-        params.perturbed_networks,
-        params.id_space
     )
 
     //

@@ -32,15 +32,9 @@ workflow PIPELINE_INITIALISATION {
     monochrome_logs   // boolean: Do not use coloured log outputs
     nextflow_cli_args //   array: List of positional nextflow CLI args
     outdir            //  string: The output directory where the results will be saved
-    input             //  string: Path to input samplesheet
     help              // boolean: Display help message and exit
     help_full         // boolean: Show the full help message
     show_hidden       // boolean: Show hidden parameters in the help message
-    seeds             //  string: Path(s) to seed file(s)
-    network           //  string: Path(s) to network file(s)
-    shortest_paths    //  string: Path to shortest paths file
-    perturbed_networks //  string: Path to folder(s) with perturbed network files
-    id_space          //  string: ID space to use for prepared networks
 
     main:
 
@@ -175,9 +169,9 @@ workflow PIPELINE_INITIALISATION {
 
             ch_seeds = ch_input
                 .map{ it ->
-                    seeds = it[0]
-                    network = it[1]
-                    network_id = mapPreparedNetwork(network, params.id_space).baseName
+                    def seeds = it[0]
+                    def network = it[1]
+                    def network_id = mapPreparedNetwork(network, params.id_space).baseName
                     [ [ id: seeds.baseName + "." + network_id, seeds_id: seeds.baseName, network_id: network_id ] , seeds ]
                 }
 
