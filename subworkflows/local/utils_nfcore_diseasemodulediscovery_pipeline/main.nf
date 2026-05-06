@@ -14,7 +14,6 @@ include { samplesheetToList         } from 'plugin/nf-schema'
 include { paramsHelp                } from 'plugin/nf-schema'
 include { completionEmail           } from '../../nf-core/utils_nfcore_pipeline'
 include { completionSummary         } from '../../nf-core/utils_nfcore_pipeline'
-include { imNotification            } from '../../nf-core/utils_nfcore_pipeline'
 include { UTILS_NFCORE_PIPELINE     } from '../../nf-core/utils_nfcore_pipeline'
 include { UTILS_NEXTFLOW_PIPELINE   } from '../../nf-core/utils_nextflow_pipeline'
 include { logColours                } from '../../nf-core/utils_nfcore_pipeline'
@@ -33,15 +32,9 @@ workflow PIPELINE_INITIALISATION {
     monochrome_logs   // boolean: Do not use coloured log outputs
     nextflow_cli_args //   array: List of positional nextflow CLI args
     outdir            //  string: The output directory where the results will be saved
-    input             //  string: Path to input samplesheet
     help              // boolean: Display help message and exit
     help_full         // boolean: Show the full help message
     show_hidden       // boolean: Show hidden parameters in the help message
-    seeds             //  string: Path(s) to seed file(s)
-    network           //  string: Path(s) to network file(s)
-    shortest_paths    //  string: Path to shortest paths file
-    perturbed_networks //  string: Path to folder(s) with perturbed network files
-    id_space          //  string: ID space to use for prepared networks
 
     main:
 
@@ -60,6 +53,9 @@ workflow PIPELINE_INITIALISATION {
     //
     // Validate parameters and generate parameter summary to stdout
     //
+
+    def before_text = ""
+    def after_text = ""
     before_text = """
 -\033[2m----------------------------------------------------\033[0m-
                                         \033[0;32m,--.\033[0;30m/\033[0;32m,-.\033[0m
@@ -77,6 +73,10 @@ workflow PIPELINE_INITIALISATION {
 * Software dependencies
     https://github.com/nf-core/diseasemodulediscovery/blob/main/CITATIONS.md
 """
+    if (monochrome_logs) {
+        before_text = before_text.replaceAll(/\033\[[0-9;]*m/, '')
+    }
+
     command = "nextflow run ${workflow.manifest.name} -profile <docker/singularity/.../institute> --input samplesheet.csv --outdir <OUTDIR>"
 
     UTILS_NFSCHEMA_PLUGIN (
@@ -169,9 +169,9 @@ workflow PIPELINE_INITIALISATION {
 
             ch_seeds = ch_input
                 .map{ it ->
-                    seeds = it[0]
-                    network = it[1]
-                    network_id = mapPreparedNetwork(network, params.id_space).baseName
+                    def seeds = it[0]
+                    def network = it[1]
+                    def network_id = mapPreparedNetwork(network, params.id_space).baseName
                     [ [ id: seeds.baseName + "." + network_id, seeds_id: seeds.baseName, network_id: network_id ] , seeds ]
                 }
 
@@ -294,10 +294,6 @@ workflow PIPELINE_INITIALISATION {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-def seeds_empty = [:]
-def module_empty = [:]
-def visualization_skipped = [:]
-def drugstone_skipped = [:]
 workflow PIPELINE_COMPLETION {
 
     take:
@@ -306,7 +302,6 @@ workflow PIPELINE_COMPLETION {
     plaintext_email // boolean: Send plain-text email instead of HTML
     outdir          //    path: Path to output directory where results will be published
     monochrome_logs // boolean: Disable ANSI colour codes in log output
-    hook_url        //  string: hook URL for notifications
     multiqc_report  //  string: Path to MultiQC report
     seeds_empty_status           //  map: Empty/not empty status per seed file - network file combination
     module_empty_status          //  map: Empty/not empty status per module
@@ -315,6 +310,12 @@ workflow PIPELINE_COMPLETION {
 
 
     main:
+
+    def seeds_empty = [:]
+    def module_empty = [:]
+    def visualization_skipped = [:]
+    def drugstone_skipped = [:]
+
     summary_params = paramsSummaryMap(workflow, parameters_schema: "nextflow_schema.json")
     def multiqc_reports = multiqc_report.toList()
 
@@ -354,15 +355,13 @@ workflow PIPELINE_COMPLETION {
             )
         }
 
-        logWarnings(monochrome_logs=monochrome_logs, seeds_empty=seeds_empty, module_empty=module_empty, visualization_skipped=visualization_skipped, drugstone_skipped=drugstone_skipped)
+        logWarnings(monochrome_logs, seeds_empty, module_empty, visualization_skipped, drugstone_skipped)
         completionSummary(monochrome_logs)
-        if (hook_url) {
-            imNotification(summary_params, hook_url)
-        }
+
     }
 
     workflow.onError {
-        log.error "Pipeline failed. Please refer to troubleshooting docs: https://nf-co.re/docs/usage/troubleshooting"
+        log.error "Pipeline failed. Please refer to troubleshooting docs for common issues: https://nf-co.re/docs/running/troubleshooting"
     }
 }
 
@@ -372,30 +371,30 @@ workflow PIPELINE_COMPLETION {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-prepared_networks_url = "https://zenodo.org/records/15049754/files/"
-network_map = [
-    string_min900: "string.human_links_v12_0_min900",
-    string_min700: "string.human_links_v12_0_min700",
-    string_physical_min900: "string.human_physical_links_v12_0_min900",
-    string_physical_min700: "string.human_physical_links_v12_0_min700",
-    biogrid: "biogrid.4_4_242_homo_sapiens",
-    hippie_high_confidence: "hippie.v2_3_high_confidence",
-    hippie_medium_confidence:"hippie.v2_3_medium_confidence",
-    iid: "iid.human",
-    nedrex: "nedrex.reviewed_proteins_exp",
-    nedrex_high_confidence: "nedrex.reviewed_proteins_exp_high_confidence",
-]
-id_space_map = [
-    entrez: "Entrez",
-    ensembl: "Ensembl",
-    symbol: "Symbol",
-    uniprot: "UniProtKB-AC",
-]
-
 //
 // Check if the network is a prepared network or a file
 //
 def mapPreparedNetwork(network, id_space) {
+
+    def prepared_networks_url = "https://zenodo.org/records/15049754/files/"
+    def network_map = [
+        string_min900: "string.human_links_v12_0_min900",
+        string_min700: "string.human_links_v12_0_min700",
+        string_physical_min900: "string.human_physical_links_v12_0_min900",
+        string_physical_min700: "string.human_physical_links_v12_0_min700",
+        biogrid: "biogrid.4_4_242_homo_sapiens",
+        hippie_high_confidence: "hippie.v2_3_high_confidence",
+        hippie_medium_confidence:"hippie.v2_3_medium_confidence",
+        iid: "iid.human",
+        nedrex: "nedrex.reviewed_proteins_exp",
+        nedrex_high_confidence: "nedrex.reviewed_proteins_exp_high_confidence",
+    ]
+    def id_space_map = [
+        entrez: "Entrez",
+        ensembl: "Ensembl",
+        symbol: "Symbol",
+        uniprot: "UniProtKB-AC",
+    ]
     if (network_map.containsKey(network)) {
         return file("${prepared_networks_url}${network_map[network]}.${id_space_map[id_space]}.gt", checkIfExists: true)
     } else {

@@ -44,6 +44,10 @@ workflow NFCORE_DISEASEMODULEDISCOVERY {
     //
 
     DISEASEMODULEDISCOVERY (
+        params.multiqc_config,
+        params.multiqc_logo,
+        params.multiqc_methods_description,
+        params.outdir,
         ch_seeds,
         ch_network,
         ch_shortest_paths,
@@ -52,7 +56,6 @@ workflow NFCORE_DISEASEMODULEDISCOVERY {
     ch_versions = ch_versions.mix(DISEASEMODULEDISCOVERY.out.versions)
 
     emit:
-    multiqc_report                  = DISEASEMODULEDISCOVERY.out.multiqc_report // channel: /path/to/multiqc_report.html
     seeds_empty_status              = DISEASEMODULEDISCOVERY.out.seeds_empty_status             // channel: [id, boolean]
     module_empty_status             = DISEASEMODULEDISCOVERY.out.module_empty_status           // channel: [id, boolean]
     visualization_skipped_status    = DISEASEMODULEDISCOVERY.out.visualization_skipped_status  // channel: [id, boolean]
@@ -79,15 +82,9 @@ workflow {
         params.monochrome_logs,
         args,
         params.outdir,
-        params.input,
         params.help,
         params.help_full,
         params.show_hidden,
-        params.seeds,
-        params.network,
-        params.shortest_paths,
-        params.perturbed_networks,
-        params.id_space
     )
 
     //
@@ -104,7 +101,6 @@ workflow {
         params.plaintext_email,
         params.outdir,
         params.monochrome_logs,
-        params.hook_url,
         NFCORE_DISEASEMODULEDISCOVERY.out.multiqc_report,
         NFCORE_DISEASEMODULEDISCOVERY.out.seeds_empty_status,
         NFCORE_DISEASEMODULEDISCOVERY.out.module_empty_status,
