@@ -156,6 +156,18 @@ In addition to the inferred disease modules, the pipeline provides a dummy modul
 
 </details>
 
+### TOPAS
+
+[Topas](https://bitbucket.org/sonnhammergroup/topas/src/master/) connects the maximum number of seed nodes in a top-down manner by selecting connector nodes that ensure the highest Random Walk with Restart flow across the network.
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `modules/{gt,graphml,tsv_nodes,tsv_edges}/`
+  - `<seeds>.<network>.topas.{gt,grahml,nodes.tsv,edges.tsv}`: Topas module in different formats.
+
+</details>
+
 ### 1st Neighbors
 
 1st Neighbors includes all network nodes that are directly connected to at least one seed node.
