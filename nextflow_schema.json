@@ -224,10 +224,22 @@
                     "fa_icon": "fas fa-caret-right",
                     "description": "Flag for running the seed perturbation-based evaluation"
                 },
-                "run_leave_x_out_perturbation": {
+                "leave_frac_out_perturbation": {
                     "type": "boolean",
-                    "description": "Flag for running the leave_x_out seed perturbation evaluation instead of the default leave one out evaluation",
+                    "description": "Flag for running the leave_frac_out seed perturbation evaluation instead of the default leave one out evaluation",
                     "fa_icon": "fas fa-percent"
+                },
+                "fraction": {
+                    "type": "integer",
+                    "fa_icon": "fas fa-percent",
+                    "description": "Fraction of seeds that are leaved out for the leave_frac_out seed perturbation evaluation",
+                    "default": 10
+                },
+                "n_leave_frac_out": {
+                    "type": "number",
+                    "description": "the amount of times leave_frac_out perturbation should be run",
+                    "fa_icon": "fas fa-redo-alt",
+                    "default": 100
                 },
                 "run_network_perturbation": {
                     "type": "boolean",

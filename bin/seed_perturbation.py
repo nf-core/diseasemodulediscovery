@@ -53,8 +53,8 @@ def parse_args(argv=None):
         "-frac",
         "--fraction_exclusion",
         help="fraction of seeds to exclude for leave-x-out perturbation",
-        type=float,
-        default=0.1,
+        type=int,
+        default=10,
     )
     parser.add_argument(
         "-n",
@@ -88,12 +88,10 @@ def main(argv=None):
         if args.leave_x_out:
             # leave x out
             random.seed(args.random_seed)
-            x = math.ceil(args.fraction_exclusion * len(seeds))
+            x = math.ceil(args.fraction_exclusion * len(seeds) / 100)
             for i in range(args.num_permutations):
                 excludes_seeds = random.sample(seeds, x)
-                with open(
-                    f"{args.prefix}.perm_{i}_leave_{x}_out{extension}", "w"
-                ) as file:
+                with open(f"{args.prefix}.perm_{i}{extension}", "w") as file:
                     for seed in seeds:
                         if seed not in excludes_seeds:
                             file.write(f"{seed}\n")
