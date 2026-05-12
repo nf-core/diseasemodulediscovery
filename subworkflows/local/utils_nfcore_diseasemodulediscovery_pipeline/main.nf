@@ -116,7 +116,7 @@ workflow PIPELINE_INITIALISATION {
     }
 
     if(params.input){
-        
+
         // check if seeds or network parameters are set and if so, throw an error since they cannot be used together with the sample sheet
         if (seed_param_set || network_param_set) {
             error("You need to specify either a sample sheet (--input) OR the seeds (--seeds) and network (--network) files")
@@ -152,7 +152,7 @@ workflow PIPELINE_INITIALISATION {
             }
 
         log.info("Creating network and seeds channels based on tuples in the sample sheet")
-        
+
         ch_network = ch_input
             .map{ it -> [it[1], it[2], it[3]]}
             .map{ network, sp, perturbed_networks ->
