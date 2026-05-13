@@ -108,13 +108,6 @@ workflow PIPELINE_INITIALISATION {
     shortest_paths_param_set = (params.shortest_paths != null)
     perturbed_networks_param_set = (params.perturbed_networks != null)
 
-    // prepare network channel, if parameter is set
-    if(network_param_set){
-        ch_network = Channel.fromList(params.network.split(',').flatten())
-            .map{network -> mapPreparedNetwork(network, params.id_space)}
-            .map{ it -> [ [ id: it.baseName, network_id: it.baseName ], it ] }
-    }
-
     if(params.input){
 
         // check if seeds or network parameters are set and if so, throw an error since they cannot be used together with the sample sheet
@@ -176,6 +169,11 @@ workflow PIPELINE_INITIALISATION {
 
         log.info("Creating network and seeds channels based on the combination of all seed and network files provided")
 
+        //create network channel from the provided argument 
+        ch_network = Channel.fromList(params.network.split(',').flatten())
+            .map{network -> mapPreparedNetwork(network, params.id_space)}
+            .map{ it -> [ [ id: it.baseName, network_id: it.baseName ], it ] }
+        //create seeds channel from the provided argument and combine with network channel to create an ID for each seed-network combination
         ch_seeds = Channel
             .fromPath(params.seeds.split(',').flatten(), checkIfExists: true)
             .combine(ch_network.map{meta, network -> meta.network_id})
