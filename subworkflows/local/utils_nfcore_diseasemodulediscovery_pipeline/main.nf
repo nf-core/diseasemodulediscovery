@@ -111,8 +111,8 @@ workflow PIPELINE_INITIALISATION {
     if(params.input){
 
         // check if seeds or network parameters are set and if so, throw an error since they cannot be used together with the sample sheet
-        if (seed_param_set || network_param_set) {
-            error("You need to specify either a sample sheet (--input) OR the seeds (--seeds) and network (--network) files")
+        if (seed_param_set || network_param_set || shortest_paths_param_set || perturbed_networks_param_set){
+            error("You need to specify either a sample sheet (--input) OR the seeds (--seeds) and network (--network) files (including the shortest paths and perturbed networks if the network is set via the sample sheet). You cannot specify both at the same time.")
         }
 
         //
@@ -123,23 +123,14 @@ workflow PIPELINE_INITIALISATION {
         ch_input = Channel
             .fromList(samplesheetToList(params.input, "${projectDir}/assets/schema_input.json"))
             .map{seeds, network, shortest_paths, perturbed_networks ->
-                if((seeds.size()==0) ^ seed_param_set ){
-                    error("Seed genes have to specified through either the sample sheet OR the --seeds parameter")
+                if((seeds.size()==0)){
+                    error("No seeds files specified in the sample sheet")
                 }
-                if((network.size()==0) ^ network_param_set){
-                    error("Networks have to specified through either the sample sheet OR the --network parameter")
+                if((network.size()==0)){
+                    error("No network file specified in the sample sheet")
                 }
-                if(!(shortest_paths.size()==0) && shortest_paths_param_set ){
-                    error("Shortest paths have to specified through either the sample sheet OR the --shortest_path parameter")
-                }
-                if(!(perturbed_networks.size()==0) && perturbed_networks_param_set ){
-                    error("Precomputed network perturbations have to specified through either the sample sheet OR the --perturbed_networks parameter")
-                }
-                if(!(network.size()==0) && (shortest_paths_param_set || perturbed_networks_param_set) ){
-                    error("If the network is set via the sample sheet, shortest_paths or perturbed_networks must also be set via the sample sheet")
-                }
-                if((! shortest_paths.size()==0 || ! perturbed_networks.size()==0) && network_param_set ){
-                    error("If the shortest_paths or perturbed_networks are set via the sample sheet, the network must also be set via the sample sheet")
+                if(seeds.size()!= network.size()){
+                    error("Mismatch between number of seeds and network files specified in the sample sheet. Each row in the sample sheet should correspond to a seed-network combination.")
                 }
                 [seeds, network, shortest_paths, perturbed_networks]
             }
@@ -169,7 +160,7 @@ workflow PIPELINE_INITIALISATION {
 
         log.info("Creating network and seeds channels based on the combination of all seed and network files provided")
 
-        //create network channel from the provided argument 
+        //create network channel from the provided argument
         ch_network = Channel.fromList(params.network.split(',').flatten())
             .map{network -> mapPreparedNetwork(network, params.id_space)}
             .map{ it -> [ [ id: it.baseName, network_id: it.baseName ], it ] }
