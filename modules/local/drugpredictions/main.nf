@@ -21,7 +21,7 @@ process DRUGPREDICTIONS {
     script:
     def drugstone_id_space = "${idspace}" == "ensembl" ? "ensg" : "${idspace}"
     """
-    drug_predictions.py --idspace "${drugstone_id_space}" -p "${meta.id}" -a "${algorithm}" --includeIndirectDrugs ${includeIndirectDrugs} --includeNonApprovedDrugs ${includeNonApprovedDrugs} --result_size "${result_size}" "${module}" -l DEBUG
+    drug_predictions.py --idspace "${drugstone_id_space}" -p "${meta.id}" -a "${algorithm}" --includeIndirectDrugs ${includeIndirectDrugs} --includeNonApprovedDrugs ${includeNonApprovedDrugs} --result_size "${result_size}" "${module}" -l DEBUG ${ params.accept_license ? '--accept_license' : '' }
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

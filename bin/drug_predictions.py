@@ -206,6 +206,12 @@ def parse_args(argv=None):
         type=int,
         default=50,
     )
+    # Agree to License Parameter
+    parser.add_argument(
+        "--accept_license",
+        action="store_true",
+        help="Agree to the license terms.",
+    )
 
     return parser.parse_args(argv)
 
@@ -218,6 +224,10 @@ def main(argv=None):
         logger.error(f"The given input file {args.file_in} was not found!")
         sys.exit(2)
     logger.debug(f"{args=}")
+    
+    if args.accept_license:
+        drugstone.print_license()
+        drugstone.accept_license()
     predictor = DrugPredictions(
         args.file_in,
         args.idspace,

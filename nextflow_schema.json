@@ -292,6 +292,19 @@
                     "description": "Drugst.One parameter for algorithms to be used. Comma separated list. Options: 'trustrank', 'degree' and 'closeness'.",
                     "default": "trustrank",
                     "fa_icon": "fas fa-list-ol"
+                },
+                "true_drugs": {
+                    "type": "string",
+                    "description": "Comma separated list of ground truth known true drug files for the input seeds. Order is matches to order of --seeds inputs. You can provide the files directly, or just the mondo disease ids (with mondo. prefix) to have them automatically queried."
+                },
+                "eval_permutations": {
+                    "type": "integer",
+                    "default": 10000,
+                    "description": "Number of permutations to sample for drug validation evaluation"
+                },
+                "accept_license": {
+                    "type": "boolean",
+                    "description": "Whether to accept the Drugstone NeDRex License agreement https://raw.githubusercontent.com/repotrial/nedrex_platform_licence/main/licence.txt. By setting this parameter to true, you confirm that you have read the license and agree. Required to use licensed sources in the drug prediction and download drug list step."
                 }
             }
         },
