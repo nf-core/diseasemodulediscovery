@@ -129,9 +129,6 @@ workflow PIPELINE_INITIALISATION {
                 if((network.size()==0)){
                     error("No network file specified in the sample sheet")
                 }
-                if(seeds.size()!= network.size()){
-                    error("Mismatch between number of seeds and network files specified in the sample sheet. Each row in the sample sheet should correspond to a seed-network combination.")
-                }
                 [seeds, network, shortest_paths, perturbed_networks]
             }
 
