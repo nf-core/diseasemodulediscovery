@@ -55,7 +55,7 @@ workflow GT_SEEDPERTURBATION {
         .combine(ch_perturbed_seeds.map{meta, perturbed_seeds -> [meta.seeds_id, meta.network_id, perturbed_seeds]}, by: [0,1])
         // Add original_seeds_id, amim, and network_id to tuple for grouping
         .map{seeds_id, network_id, meta, perturbed_module, perturbed_seeds ->
-            key = groupKey(meta.subMap("original_seeds_id", "amim", "network_id"), meta.n_perturbations)
+            def key = groupKey(meta.subMap("original_seeds_id", "amim", "network_id"), meta.n_perturbations)
             [key, meta, perturbed_module, perturbed_seeds]
         }
         // Group by original_seeds_id, amim, and network_id
@@ -115,15 +115,17 @@ workflow GT_SEEDPERTURBATION {
         SEEDPERTURBATIONEVALUATION.out.multiqc_jaccard
         .map{ meta, path -> path }
         .collectFile(
-            item -> "  " + item.text,
             cache: false,
             storeDir: "${params.outdir}/mqc_summaries",
             name: 'seed_perturbation_jaccard_mqc.yaml',
             sort: true,
             seed: new File("$projectDir/assets/seed_perturbation_jaccard_header.yaml").text
-        )
-    //is only run with leave_one_out seed perturbation
+        ){
+            item -> "  " + item.text
+        }
+            
     // Gene-level visualization
+    // only run with leave one out perturbation
     if(!params.leave_frac_out_perturbation){
         ch_visualization_input = SEEDPERTURBATIONEVALUATION.out.detailed
         .multiMap { meta, path ->
