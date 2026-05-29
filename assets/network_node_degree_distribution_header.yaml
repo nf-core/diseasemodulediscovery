@@ -1,3 +1,4 @@
+parent_id: input
 id: network_node_degree_distribution
 parent_name: Input
 section_name: network node degree distribution
