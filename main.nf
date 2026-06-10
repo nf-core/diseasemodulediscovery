@@ -9,6 +9,140 @@
 ----------------------------------------------------------------------------------------
 */
 
+
+params {
+
+    // Path to a CSV sample sheet defining seed file-network combinations
+    input: String?
+
+    // Path(s) to one or multiple file(s) with seed genes
+    seeds: String?
+
+    // Path(s) to one or multiple PPI network(s) in gt, csv, tsv, graphml, xml, dot, or gml format.
+    network: String?
+
+    // Type of gene/protein ids
+    id_space: String = 'entrez'
+
+    // MultiQC report title. Printed as page header, used for filename if not otherwise specified.
+    multiqc_title: String?
+
+    // Flag for skipping first neighbor
+    skip_firstneighbor: Boolean
+
+    // Flag for skipping DOMINO
+    skip_domino: Boolean
+
+    // Flag for skipping Robust
+    skip_robust: Boolean
+
+    // Flag for skipping Robust (bias-aware)
+    skip_robust_bias_aware: Boolean
+
+    // Flag for skipping DIAMOnD
+    skip_diamond: Boolean
+
+    // Desired number of DIAMOnD genes.
+    diamond_n: Integer = 200
+
+    // Weight of the seeds.
+    diamond_alpha: Integer = 1
+
+    // Flag for skipping random walk with restart
+    skip_rwr: Boolean
+
+    // Add a scaling depending on the node's degree.
+    rwr_scaling: Boolean
+
+    // Compute the symmetric instead of column-wise normalized Markov matrix.
+    rwr_symmetrical: Boolean
+
+    // Damping factor/restart probability.
+    rwr_r: Float = 0.8
+
+    // Skip module visualization
+    skip_visualization: Boolean
+
+    // If a module has more nodes it will not be visualized.
+    visualization_max_nodes: Integer = 500
+
+    // Flag for skipping the export to the Drugst.One platform
+    skip_drugstone_export: Boolean
+
+    // If a module has more nodes it will not be exported to the Drugst.One platform. Includes drug prioritization.
+    drugstone_max_nodes: Integer = 500
+
+    // Flag for skipping the annotation part of the process.
+    skip_annotation: Boolean
+
+    // Flag for validating online at baderlab.org.
+    validate_online: Boolean
+
+    // Flag for adding variants to the biopax annotation file.
+    add_variants: Boolean
+
+    // Flag skipping the entire evaluation workflow
+    skip_evaluation: Boolean
+
+    // Flag for skipping g:Profiler
+    skip_gprofiler: Boolean
+
+    // Flag for skipping DIGEST
+    skip_digest: Boolean
+
+    // Flag for skipping only the reference-free mode of DIGEST
+    skip_digest_reference_free: Boolean
+
+    // Flag for skipping only the reference-based mode of DIGEST
+    skip_digest_reference_based: Boolean
+
+    // Flag for running the seed perturbation-based evaluation
+    run_seed_perturbation: Boolean
+
+    // Flag for running the network perturbation-base evaluation
+    run_network_perturbation: Boolean
+
+    // Number of times the network will be perturbed for the network perturbation-based evaluation
+    n_network_perturbations: Integer = 100
+
+    // Path(s) to folder(s) with pre-computed perturbed networks for the network perturbation-based evaluation
+    perturbed_networks: String?
+
+    // Flag for running proximity
+    run_proximity: Boolean
+
+    // Path(s) to the shortest path pickle file(s) used for proximity.
+    shortest_paths: String?
+
+    // Local path to the drug to targets file used for proximity.
+    drug_to_target: String?
+
+    // Flag for skipping drug predictions
+    skip_drug_predictions: Boolean
+
+    // Drugst.One parameter for including indirect drugs.
+    includeIndirectDrugs: Boolean
+
+    // Drugst.One parameter for including non approved drugs.
+    includeNonApprovedDrugs: Boolean
+
+    // Drugst.One parameter for defining  the maximum number of returned drugs.
+    result_size: Integer = 50
+
+    // Drugst.One parameter for algorithms to be used. Comma separated list. Options: 'trustrank', 'degree' and 'closeness'.
+    drugstone_algorithms: String = 'trustrank'
+
+    // Custom config file to supply to MultiQC.
+    multiqc_config: String?
+
+    // Custom logo file to supply to MultiQC. File name must also be set in the MultiQC config file
+    multiqc_logo: String?
+
+    // Custom MultiQC yaml file containing HTML including a methods description.
+    multiqc_methods_description: String?
+
+}
+
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     IMPORT FUNCTIONS / MODULES / SUBWORKFLOWS / WORKFLOWS
