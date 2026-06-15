@@ -118,6 +118,8 @@ workflow DISEASEMODULEDISCOVERY {
     ch_network              // channel: [ val(meta[id,network_id]), path(network) ]
     ch_shortest_paths       // channel: [ val(meta[id,network_id]), path(shortest_paths) ]
     ch_perturbed_networks    // channel: [ val(meta[id,network_id]), [path(perturbed_networks)] ]
+    ch_blacklist                    // channel: [ val(meta[id,seeds_id,network_id]), path(blacklist) ]
+
 
     main:
 
@@ -155,9 +157,15 @@ workflow DISEASEMODULEDISCOVERY {
     // Check input
     // channel: [ val(meta[id,seeds_id,network_id]), path(seeds), path(network) ]
     ch_seeds_network = ch_seeds
-        .map{ meta, seeds -> [meta.network_id, meta, seeds]}
-        .combine(ch_network_gt.map{meta, network -> [meta.network_id, network]}, by: 0)
-        .map{key, meta, seeds, network -> [meta, seeds, network]}
+        .map{meta, seeds -> [meta.seeds_id, meta.network_id, meta, seeds]}
+        .combine(ch_network_gt.map{meta, network -> [meta.network_id, network]}, by: 1)
+        .map{seeds_id, network_id, meta, seeds, network -> [seeds_id, network_id, meta, seeds, network]}
+        // combine with blacklist (if available)
+        .combine(
+            ch_blacklist.map{meta, blacklist -> [meta.seeds_id, meta.network_id, blacklist]},
+            by: [0,1]
+        )
+        .map{seeds_id, network_id, meta, seeds, network, blacklist -> [meta, seeds, network, blacklist]}
 
     INPUTCHECK(ch_seeds_network)
     ch_seeds = INPUTCHECK.out.seeds
@@ -196,7 +204,7 @@ workflow DISEASEMODULEDISCOVERY {
     */
 
     // Network expansion tools
-    NETWORKEXPANSION(ch_seeds, ch_network_gt)
+    NETWORKEXPANSION(ch_seeds, ch_network_gt, ch_blacklist)
     ch_modules = ch_modules.mix(NETWORKEXPANSION.out.modules) // channel: [ val(meta[id,module_id,amim,seeds_id,network_id]), path(module)]
     ch_versions = ch_versions.mix(NETWORKEXPANSION.out.versions)
 

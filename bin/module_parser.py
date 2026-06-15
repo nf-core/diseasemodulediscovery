@@ -136,7 +136,7 @@ def read_seeds(path):
     return set(seeds)
 
 
-def parse_module(file_in, tool, module, seeds_path, output):
+def parse_module(file_in, tool, module, seeds_path, output, blacklist=None):
     stem = Path(file_in).stem
     extension = Path(file_in).suffix
     logger.debug(f"{stem=}")
@@ -150,7 +150,29 @@ def parse_module(file_in, tool, module, seeds_path, output):
 
     g = filter_g(g, tool, module, seeds)
     g = mark_seeds(g, seeds)
+    g = filter_module(g, blacklist)
     g.save(output)
+
+
+def filter_module(g, blacklist):
+    """
+    Filters a graph_tools Graph object based on a blacklist of nodes.
+    """
+    if not blacklist:
+        return g
+    
+    with open(blacklist, "r") as file:
+        blacklist_set = set(line.strip() for line in file)
+
+    vfilt = g.new_vertex_property("bool")
+    for vertex in g.vertices():
+        node_name = g.vp.name[vertex] 
+        vfilt[vertex] = node_name not in blacklist_set
+
+    g.set_vertex_filter(vfilt)
+    g.purge_vertices()
+    return g
+
 
 
 def parse_args(argv=None):
@@ -184,6 +206,12 @@ def parse_args(argv=None):
         type=Path,
     )
     parser.add_argument(
+        "-b",
+        "--blacklist",
+        help="Path to a file containing one node name per line. Nodes in this list will be removed from the module.",
+        type=Path,
+    )
+    parser.add_argument(
         "-o",
         "--output",
         help="Path to the parsed output.",
@@ -207,7 +235,7 @@ def main(argv=None):
         logger.error(f"The given input file {args.file_in} was not found!")
         sys.exit(2)
     logger.debug(f"{args=}")
-    parse_module(args.file_in, args.tool, args.module, args.seeds, args.output)
+    parse_module(args.file_in, args.tool, args.module, args.seeds, args.output, args.blacklist)
 
 
 if __name__ == "__main__":

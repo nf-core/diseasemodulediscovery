@@ -12,8 +12,9 @@ include { MODULEPARSER          } from '../../../modules/local/moduleparser/main
 
 workflow NETWORKEXPANSION {
     take:
-    ch_seeds    // channel: [ val(meta[id,seeds_id,network_id]), path(seeds) ]
-    ch_network  // channel: [ val(meta[id,network_id]), path(network) ]
+    ch_seeds                        // channel: [ val(meta[id,seeds_id,network_id]), path(seeds) ]
+    ch_network                      // channel: [ val(meta[id,network_id]), path(network) ]
+    ch_blacklist                    // channel: [ val(meta[id,seeds_id,network_id]), path(blacklist) ]
 
 
     main:
@@ -81,6 +82,11 @@ workflow NETWORKEXPANSION {
             ch_network.map{ meta, network ->
                 [meta.perturbed_network_id==null ?  meta.network_id: meta.perturbed_network_id, network] // Use perturbed_network_id, if available
             }, by: 0
+        )
+        // combine with blacklist (if available)
+        .combine(
+            ch_blacklist.map{meta, blacklist -> [meta.seeds_id, meta.network_id, blacklist]},
+            by: [0,1]
         )
         // add amim to id and module_id
         .map{network_id, meta, module, seeds, network ->

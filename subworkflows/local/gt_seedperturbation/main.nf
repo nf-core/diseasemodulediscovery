@@ -44,7 +44,7 @@ workflow GT_SEEDPERTURBATION {
 
 
     // Run network expansion tools on perturbed seeds
-    NETWORKEXPANSION(ch_perturbed_seeds, ch_network)
+    NETWORKEXPANSION(ch_perturbed_seeds, ch_network, Channel.empty())
     ch_versions = ch_versions.mix(NETWORKEXPANSION.out.versions)
 
     // Group by original_seeds_id, amim, and network_id to get one element per original module

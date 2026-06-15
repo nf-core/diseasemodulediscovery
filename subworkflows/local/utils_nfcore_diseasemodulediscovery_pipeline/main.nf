@@ -102,11 +102,13 @@ workflow PIPELINE_INITIALISATION {
     ch_network = Channel.empty()        // channel: [ val(meta[id,network_id]), path(network) ]
     ch_shortest_paths = Channel.empty() // channel: [ val(meta[id,network_id]), path(shortest_paths) ]
     ch_perturbed_networks = Channel.empty() // channel: [ val(meta[id,network_id]), [path(perturbed_network)] ]
+    ch_blacklist = Channel.empty()       // channel: [ val(meta[id, seeds_id, network_id]), path(blacklist) ]
 
     seed_param_set = (params.seeds != null)
     network_param_set = (params.network != null)
     shortest_paths_param_set = (params.shortest_paths != null)
     perturbed_networks_param_set = (params.perturbed_networks != null)
+    blacklist_param_set = (params.blacklist != null)
 
     // prepare network channel, if parameter is set
     if(network_param_set){
@@ -124,12 +126,15 @@ workflow PIPELINE_INITIALISATION {
         // channel: [ path(seeds), path(network), path(shortest_paths), path(perturbed_networks) ]
         ch_input = Channel
             .fromList(samplesheetToList(params.input, "${projectDir}/assets/schema_input.json"))
-            .map{seeds, network, shortest_paths, perturbed_networks ->
+            .map{seeds, network, shortest_paths, perturbed_networks, blacklist ->
                 if((seeds.size()==0) ^ seed_param_set ){
                     error("Seed genes have to specified through either the sample sheet OR the --seeds parameter")
                 }
                 if((network.size()==0) ^ network_param_set){
                     error("Networks have to specified through either the sample sheet OR the --network parameter")
+                }
+                if((blacklist.size()==0) ^ blacklist_param_set){
+                    error("Blacklist files have to specified through either the sample sheet OR the --blacklist parameter")
                 }
                 if(!(shortest_paths.size()==0) && shortest_paths_param_set ){
                     error("Shortest paths have to specified through either the sample sheet OR the --shortest_path parameter")
@@ -143,7 +148,7 @@ workflow PIPELINE_INITIALISATION {
                 if((! shortest_paths.size()==0 || ! perturbed_networks.size()==0) && network_param_set ){
                     error("If the shortest_paths or perturbed_networks are set via the sample sheet, the network must also be set via the sample sheet")
                 }
-                [seeds, network, shortest_paths, perturbed_networks]
+                [seeds, network, shortest_paths, perturbed_networks, blacklist]
             }
 
         // prepare network channel, if parameter is not set
@@ -219,6 +224,13 @@ workflow PIPELINE_INITIALISATION {
 
         }
 
+        if(!blacklist_param_set){
+            ch_blacklist = ch_input
+                .map{ it -> [it[0], it[1], it[4]]}
+                .map{ seeds, network, blacklist ->
+                    [ [ id: blacklist.baseName, seeds_id: seeds.baseName, network_id: network.baseName ], blacklist ]
+                }
+        }
 
     } else if (seed_param_set && network_param_set){
 
@@ -230,6 +242,23 @@ workflow PIPELINE_INITIALISATION {
             .map{seeds, network_id ->
                 [ [ id: seeds.baseName + "." + network_id, seeds_id: seeds.baseName, network_id: network_id ] , seeds ]
             }
+
+        if (blacklist_param_set){
+            ch_blacklist = Channel
+                .fromPath(params.blacklist.split(',').flatten(), checkIfExists: true)
+                .map{blacklist -> [blacklist.baseName, blacklist]}
+                .join(
+                    ch_seeds.map{meta, seeds -> [meta.seeds_id, [meta.seeds_id, meta.network_id]]}
+                    .unique()
+                )
+                .map{blacklist_id, blacklist, seeds_id_network ->
+                    def (seeds_id, network_id) = seeds_id_network
+                    [ [ id: blacklist.baseName, seeds_id: seeds_id, network_id: network_id ], blacklist ]
+                }
+        } else {
+            ch_blacklist = ch_seeds
+                .map{ meta, seeds -> [ meta, file("${projectDir}/assets/NO_FILE", checkIfExists: true) ] }
+        }
 
         // Add sp files, if provided (currently does not check if the number of the shortest paths matches the number of the networks and does not work with missing values)
         if(shortest_paths_param_set){
@@ -286,6 +315,7 @@ workflow PIPELINE_INITIALISATION {
     network     = ch_network                    // channel: [ val(meta[id,network_id]), path(network) ]
     shortest_paths = ch_shortest_paths          // channel: [ val(meta[id,network_id]), path(shortest_paths) ]
     perturbed_networks = ch_perturbed_networks    // channel: [ val(meta[id,network_id]), [path(perturbed_network)] ]
+    blacklist = ch_blacklist                    // channel: [ val(meta[id,seeds_id,network_id]), path(blacklist) ]
 }
 
 /*

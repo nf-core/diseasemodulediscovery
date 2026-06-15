@@ -3,7 +3,7 @@ process MODULEPARSER {
     label 'process_single'
 
     input:
-    tuple val(meta), path(module), path(seeds), path(network)
+    tuple val(meta), path(module), path(seeds), path(network), path(blacklist)
 
     output:
     tuple val(meta), path("${meta.id}.gt")  , emit: module
@@ -13,8 +13,9 @@ process MODULEPARSER {
     task.ext.when == null || task.ext.when
 
     script:
+    def blacklist_arg = blacklist.name != 'NO_FILE' ? "-b ${blacklist}" : ""
     """
-    module_parser.py $network -t ${meta.amim} -l DEBUG -m $module -s $seeds -o ${meta.id}.gt
+    module_parser.py $network -t ${meta.amim} -l DEBUG -m $module -s $seeds -o ${meta.id}.gt $blacklist_arg
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

@@ -58,7 +58,7 @@ workflow GT_NETWORKPERTURBATION {
         }
 
     // Run network expansion tools on perturbed networks
-    NETWORKEXPANSION(ch_seeds, ch_perturbed_networks)
+    NETWORKEXPANSION(ch_seeds, ch_perturbed_networks, Channel.empty())
     ch_versions = ch_versions.mix(NETWORKEXPANSION.out.versions)
 
     // Group by seeds_id, amim, and network_id to get one element per original module
