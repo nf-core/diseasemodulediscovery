@@ -60,7 +60,7 @@ workflow NETWORKEXPANSION {
     if(!params.skip_firstneighbor){
         GT_FIRSTNEIGHBOR(ch_seeds, ch_network)
         ch_versions = ch_versions.mix(GT_FIRSTNEIGHBOR.out.versions)
-        ch_modules = ch_modules.mix(GT_FIRSTNEIGHBOR.out.module)
+        ch_raw_modules = ch_raw_modules.mix(GT_FIRSTNEIGHBOR.out.module)
     }
 
     if(!params.skip_rwr){
@@ -93,7 +93,7 @@ workflow NETWORKEXPANSION {
             dup.module_id = dup.id
             [ dup, module, seeds, network, blacklist]
         }
-    
+
     MODULEPARSER(ch_module_parser_input)
     ch_versions = ch_versions.mix(MODULEPARSER.out.versions.first())
     ch_modules = ch_modules.mix(MODULEPARSER.out.module)

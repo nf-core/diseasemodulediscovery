@@ -98,6 +98,9 @@ def filter_g(g, tool, module, seeds):
         g = filter_robust(g, module, filter_column)
     elif tool == "rwr":
         g = filter_rwr(g, module, filter_column)
+    elif tool == "firstneighbor":
+        print("First neighbor module, no filtering needed.")
+        return g
     else:
         logger.critical(f"Unknown tool: {tool}")
         sys.exit(1)
@@ -159,6 +162,7 @@ def filter_module(g, blacklist):
     Filters a graph_tools Graph object based on a blacklist of nodes.
     """
     if not blacklist:
+        print("No blacklist provided, skipping filtering.")
         return g
     
     with open(blacklist, "r") as file:
@@ -191,7 +195,7 @@ def parse_args(argv=None):
         "-t",
         "--tool",
         help="The tool, that generated the module.",
-        choices=("diamond", "domino", "robust", "robust_bias_aware", "rwr"),
+        choices=("diamond", "domino", "robust", "robust_bias_aware", "rwr", "firstneighbor"),
     )
     parser.add_argument(
         "-m",

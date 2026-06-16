@@ -14,6 +14,7 @@ process MODULEPARSER {
 
     script:
     def blacklist_arg = blacklist.name != 'NO_FILE' ? "-b ${blacklist}" : ""
+
     """
     module_parser.py $network -t ${meta.amim} -l DEBUG -m $module -s $seeds -o ${meta.id}.gt $blacklist_arg
 
