@@ -230,6 +230,8 @@ workflow PIPELINE_INITIALISATION {
                 .map{ seeds, network, blacklist ->
                     [ [ id: blacklist.baseName, seeds_id: seeds.baseName, network_id: network.baseName ], blacklist ]
                 }
+        } else {
+            error("You cannot specify blacklist files through the --blacklist parameter if you are using a sample sheet. Please specify the blacklist files in the sample sheet and leave the --blacklist parameter empty.")
         }
 
     } else if (seed_param_set && network_param_set){
@@ -259,6 +261,7 @@ workflow PIPELINE_INITIALISATION {
             ch_blacklist = ch_seeds
                 .map{ meta, seeds -> [ meta, file("${projectDir}/assets/NO_FILE", checkIfExists: true) ] }
         }
+        
 
         // Add sp files, if provided (currently does not check if the number of the shortest paths matches the number of the networks and does not work with missing values)
         if(shortest_paths_param_set){

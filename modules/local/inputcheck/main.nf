@@ -3,7 +3,7 @@ process INPUTCHECK {
     label 'process_single'
 
     input:
-    tuple val(meta ), path (seeds, stageAs: 'check/*'), path(network, stageAs: 'check/*'), path(blacklist)
+    tuple val(meta), path (seeds), path(network), path(blacklist)
 
     output:
     tuple val(meta), path("${meta.id}.tsv")        , emit: seeds, optional: true
@@ -17,6 +17,7 @@ process INPUTCHECK {
 
     script:
     def blacklist_arg = blacklist.name != 'NO_FILE' ? "-b ${blacklist}" : ""
+    println blacklist_arg
     """
     input_check.py -s $seeds -p $meta.id -n $network $blacklist_arg -l DEBUG
 

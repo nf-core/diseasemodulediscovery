@@ -88,7 +88,7 @@ workflow {
         params.help_full,
         params.show_hidden,
     )
-
+    
     //
     // WORKFLOW: Run main workflow
     //

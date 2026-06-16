@@ -69,7 +69,7 @@ workflow NETWORKEXPANSION {
         ch_raw_modules = ch_raw_modules.mix(GT_RWR.out.module)
     }
 
-    // channel: [ val(meta[id,module_id,amim,seeds_id,network_id]), path(module), path(seeds), path(network) ]
+    // channel: [ val(meta[id,module_id,amim,seeds_id,network_id]), path(module), path(seeds), path(network), path(blacklist) ]
     ch_module_parser_input = ch_raw_modules
         .map{meta, module -> [meta.seeds_id, meta.network_id, meta, module]}
         // combine with seeds
@@ -83,17 +83,23 @@ workflow NETWORKEXPANSION {
                 [meta.perturbed_network_id==null ?  meta.network_id: meta.perturbed_network_id, network] // Use perturbed_network_id, if available
             }, by: 0
         )
+        .map { network_id, meta, module, seeds, network ->
+            [meta.seeds_id, meta.network_id, meta, module, seeds, network]
+        }
         // combine with blacklist (if available)
         .combine(
-            ch_blacklist.map{meta, blacklist -> [meta.seeds_id, meta.network_id, blacklist]},
+            ch_blacklist.map { meta, blacklist ->
+                [meta.seeds_id, meta.network_id, blacklist]
+            },
             by: [0,1]
         )
         // add amim to id and module_id
-        .map{network_id, meta, module, seeds, network ->
+        .map { seeds_id, network_id, meta, module, seeds, network, blacklist ->
             def dup = meta.clone()
-            dup.id = meta.id + "." + dup.amim
+            dup.id = "${meta.id}.${dup.amim}"
             dup.module_id = dup.id
-            [ dup, module, seeds, network ]
+
+            [dup, module, seeds, network, blacklist]
         }
 
     MODULEPARSER(ch_module_parser_input)

@@ -153,19 +153,20 @@ workflow DISEASEMODULEDISCOVERY {
     ch_multiqc_files = ch_multiqc_files.mix(ch_network_multiqc)
     ch_network_gt = GRAPHTOOLPARSER.out.network
 
-
     // Check input
     // channel: [ val(meta[id,seeds_id,network_id]), path(seeds), path(network) ]
     ch_seeds_network = ch_seeds
-        .map{meta, seeds -> [meta.seeds_id, meta.network_id, meta, seeds]}
-        .combine(ch_network_gt.map{meta, network -> [meta.network_id, network]}, by: 1)
-        .map{seeds_id, network_id, meta, seeds, network -> [seeds_id, network_id, meta, seeds, network]}
+        .map{meta, seeds -> [meta.network_id, meta.seeds_id, meta, seeds]}
+        .combine(ch_network_gt.map{meta, network -> [meta.network_id, network]}, by: 0)
+        .map{network_id, seeds_id, meta, seeds, network -> [network_id, seeds_id,  meta, seeds, network]}
         // combine with blacklist (if available)
         .combine(
-            ch_blacklist.map{meta, blacklist -> [meta.seeds_id, meta.network_id, blacklist]},
+            ch_blacklist.map{meta, blacklist -> [meta.network_id, meta.seeds_id, blacklist]},
             by: [0,1]
         )
-        .map{seeds_id, network_id, meta, seeds, network, blacklist -> [meta, seeds, network, blacklist]}
+        .map{network_id, seeds_id, meta, seeds, network, blacklist -> [meta, seeds, network, blacklist]}
+
+    
 
     INPUTCHECK(ch_seeds_network)
     ch_seeds = INPUTCHECK.out.seeds
@@ -181,7 +182,7 @@ workflow DISEASEMODULEDISCOVERY {
 
     // Save status for workflow summary
     ch_seeds_empty_status = ch_seeds_network
-        .map{meta, seeds, network -> meta.id}
+        .map{meta, seeds, network, blacklist -> meta.id}
         .join(INPUTCHECK.out.seeds.map{ meta, seeds -> [meta.id, seeds]}, by: 0, remainder: true)
         .map{id, seeds -> [id, seeds == null] }
 
