@@ -166,7 +166,7 @@ workflow DISEASEMODULEDISCOVERY {
         )
         .map{network_id, seeds_id, meta, seeds, network, blacklist -> [meta, seeds, network, blacklist]}
 
-    
+
 
     INPUTCHECK(ch_seeds_network)
     ch_seeds = INPUTCHECK.out.seeds

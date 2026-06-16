@@ -17,7 +17,7 @@ process INPUTCHECK {
 
     script:
     def blacklist_arg = blacklist.name != 'NO_FILE' ? "-b ${blacklist}" : ""
-    println blacklist_arg
+    
     """
     input_check.py -s $seeds -p $meta.id -n $network $blacklist_arg -l DEBUG
 

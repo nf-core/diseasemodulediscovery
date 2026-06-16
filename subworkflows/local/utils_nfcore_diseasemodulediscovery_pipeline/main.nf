@@ -238,24 +238,36 @@ workflow PIPELINE_INITIALISATION {
 
         log.info("Creating network and seeds channels based on the combination of all seed and network files provided")
 
+        // Create indexed seeds list from params directly
+        
         ch_seeds = Channel
             .fromPath(params.seeds.split(',').flatten(), checkIfExists: true)
             .combine(ch_network.map{meta, network -> meta.network_id})
             .map{seeds, network_id ->
                 [ [ id: seeds.baseName + "." + network_id, seeds_id: seeds.baseName, network_id: network_id ] , seeds ]
             }
-
+        
         if (blacklist_param_set){
+            def seeds_list     = params.seeds.split(',').flatten()
+            def blacklist_list = params.blacklist.split(',').flatten()
+
+            def seeds_to_blacklist = [seeds_list, blacklist_list]
+                .transpose()
+                .collectEntries { seed, bl ->
+                    [file(seed).baseName, file(bl).baseName]
+                }
+            
+            ch_seeds_to_blacklist = Channel.from(
+                seeds_to_blacklist.collect { seeds_id, bl_id -> [seeds_id, bl_id] }
+            )
             ch_blacklist = Channel
                 .fromPath(params.blacklist.split(',').flatten(), checkIfExists: true)
                 .map{blacklist -> [blacklist.baseName, blacklist]}
-                .join(
-                    ch_seeds.map{meta, seeds -> [meta.seeds_id, [meta.seeds_id, meta.network_id]]}
-                    .unique()
-                )
-                .map{blacklist_id, blacklist, seeds_id_network ->
-                    def (seeds_id, network_id) = seeds_id_network
-                    [ [ id: blacklist.baseName, seeds_id: seeds_id, network_id: network_id ], blacklist ]
+                .combine(ch_seeds_to_blacklist.map{ seeds_id, bl_id -> [bl_id, seeds_id] }, by: 0)
+                .map{ bl_id, blacklist, seeds_id -> [seeds_id, blacklist, bl_id]}
+                .combine(ch_seeds.map{meta, seeds -> [meta.seeds_id, meta.network_id]}, by: 0)
+                .map{seeds_id, blacklist, bl_id, network_id ->
+                    [ [id: bl_id, seeds_id: seeds_id, network_id: network_id], blacklist ]
                 }
         } else {
             ch_blacklist = ch_seeds
