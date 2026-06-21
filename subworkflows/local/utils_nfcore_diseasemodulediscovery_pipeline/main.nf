@@ -124,8 +124,13 @@ workflow PIPELINE_INITIALISATION {
         //
 
         // channel: [ path(seeds), path(network), path(shortest_paths), path(perturbed_networks) ]
+
+        def rows = samplesheetToList(params.input, "${projectDir}/assets/schema_input.json") 
+        
+        def samplesheet_has_blacklists = rows.any {row -> row[4] && row[4].size() > 0}
+
         ch_input = Channel
-            .fromList(samplesheetToList(params.input, "${projectDir}/assets/schema_input.json"))
+            .fromList(rows)
             .map{seeds, network, shortest_paths, perturbed_networks, blacklist ->
                 if((seeds.size()==0) ^ seed_param_set ){
                     error("Seed genes have to specified through either the sample sheet OR the --seeds parameter")
@@ -133,7 +138,7 @@ workflow PIPELINE_INITIALISATION {
                 if((network.size()==0) ^ network_param_set){
                     error("Networks have to specified through either the sample sheet OR the --network parameter")
                 }
-                if((blacklist.size()==0) ^ blacklist_param_set){
+                if(!(blacklist.size()==0) && blacklist_param_set){
                     error("Blacklist files have to specified through either the sample sheet OR the --blacklist parameter")
                 }
                 if(!(shortest_paths.size()==0) && shortest_paths_param_set ){
@@ -150,6 +155,7 @@ workflow PIPELINE_INITIALISATION {
                 }
                 [seeds, network, shortest_paths, perturbed_networks, blacklist]
             }
+
 
         // prepare network channel, if parameter is not set
         if (!network_param_set){
@@ -179,17 +185,19 @@ workflow PIPELINE_INITIALISATION {
                     def network_id = mapPreparedNetwork(network, params.id_space).baseName
                     [ [ id: seeds.baseName + "." + network_id, seeds_id: seeds.baseName, network_id: network_id ] , seeds ]
                 }
-            if(!blacklist_param_set){
+            if(!blacklist_param_set && samplesheet_has_blacklists){
                 ch_blacklist = ch_input
                     .map{ it -> 
                         def seeds = it[0]
                         def network = it[1]
                         def blacklist = it[4]
                         def network_id = mapPreparedNetwork(network, params.id_space).baseName
-                        [ [ id: blacklist.baseName, seeds_id: seeds.baseName, network_id: network_id ], blacklist ]
+                        [ [id: blacklist ? blacklist.baseName : "NO_FILE", 
+                        seeds_id: seeds.baseName, 
+                        network_id: network_id ], 
+                        blacklist ? blacklist : file("${projectDir}/assets/NO_FILE") ]
                     }
-                ch_blacklist.view()
-            } else {
+            } else if (blacklist_param_set) {
                 error("Blacklist files have to be defined like the seed files.")
             }
 
@@ -226,7 +234,7 @@ workflow PIPELINE_INITIALISATION {
                     .map{seeds_id, blacklist, bl_id, network_id ->
                         [ [id: bl_id, seeds_id: seeds_id, network_id: network_id], blacklist ]
                     }
-            } else {
+            } else if (samplesheet_has_blacklists){
                 error("Blacklist files have to be defined like the seed files.")
             }
 
@@ -261,17 +269,26 @@ workflow PIPELINE_INITIALISATION {
                 ch_network = ch_network.map{meta, network, sp -> [meta, network, sp, []]}
             }
 
-            if(!blacklist_param_set){
+            if(!blacklist_param_set && samplesheet_has_blacklists){
                 ch_blacklist = ch_input
                     .map{it -> 
                         def seeds = it[0].baseName
                         def blacklist = it[4]}
                     .combine(ch_seeds.map{meta, seeds -> [meta.seeds_id, meta.network_id]}, by: 0)
                     .map{ seeds_id, blacklist, network_id ->
-                        [ [ id: blacklist.baseName, seeds_id: seeds_id, network_id: network_id ], blacklist ]
+                        [[id: blacklist ? blacklist.baseName : "NO_FILE", 
+                        seeds_id: seeds_id, 
+                        network_id: network_id ], 
+                        blacklist ? blacklist : file("${projectDir}/assets/NO_FILE") ]
                     }
-            } else {
+            } else if (blacklist_param_set) {
                 error("Blacklist files have to be defined like the seed files.")
+            }
+        }
+
+        if (!blacklist_param_set && !samplesheet_has_blacklists){
+            ch_blacklist = ch_seeds.map { meta, seeds ->
+                [[id: "NO_FILE", seeds_id: meta.seeds_id, network_id: meta.network_id], file("${projectDir}/assets/NO_FILE", checkIfExists:true)]
             }
         }
 
@@ -287,7 +304,7 @@ workflow PIPELINE_INITIALISATION {
             .map{seeds, network_id ->
                 [ [ id: seeds.baseName + "." + network_id, seeds_id: seeds.baseName, network_id: network_id ] , seeds ]
             }
-        
+        // adds blacklist files, by merging accordint to the seeds, but does not work with missing values.
         if (blacklist_param_set){
             def seeds_list     = params.seeds.split(',').flatten()
             def blacklist_list = params.blacklist.split(',').flatten()
@@ -311,8 +328,9 @@ workflow PIPELINE_INITIALISATION {
                     [ [id: bl_id, seeds_id: seeds_id, network_id: network_id], blacklist ]
                 }
         } else {
-            ch_blacklist = ch_seeds
-                .map{ meta, seeds -> [ meta, file("${projectDir}/assets/NO_FILE", checkIfExists: true) ] }
+            ch_blacklist = ch_seeds.map { meta, seeds ->
+                [[id: "NO_FILE", seeds_id: meta.seeds_id, network_id: meta.network_id], file("${projectDir}/assets/NO_FILE", checkIfExists:true)]
+            }
         }
         
 
@@ -364,6 +382,7 @@ workflow PIPELINE_INITIALISATION {
     }
 
     ch_network = ch_network.map{meta, network, sp, perturbed_networks -> [meta, network]}
+
 
     emit:
     versions    = ch_versions
