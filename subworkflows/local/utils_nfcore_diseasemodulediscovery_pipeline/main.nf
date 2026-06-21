@@ -179,6 +179,19 @@ workflow PIPELINE_INITIALISATION {
                     def network_id = mapPreparedNetwork(network, params.id_space).baseName
                     [ [ id: seeds.baseName + "." + network_id, seeds_id: seeds.baseName, network_id: network_id ] , seeds ]
                 }
+            if(!blacklist_param_set){
+                ch_blacklist = ch_input
+                    .map{ it -> 
+                        def seeds = it[0]
+                        def network = it[1]
+                        def blacklist = it[4]
+                        def network_id = mapPreparedNetwork(network, params.id_space).baseName
+                        [ [ id: blacklist.baseName, seeds_id: seeds.baseName, network_id: network_id ], blacklist ]
+                    }
+                ch_blacklist.view()
+            } else {
+                error("Blacklist files have to be defined like the seed files.")
+            }
 
         } else if (seed_param_set && !network_param_set) {
 
@@ -190,6 +203,32 @@ workflow PIPELINE_INITIALISATION {
                 .map{seeds, network_id ->
                     [ [ id: seeds.baseName + "." + network_id, seeds_id: seeds.baseName, network_id: network_id ] , seeds ]
                 }
+            
+            if(blacklist_param_set){
+                def seeds_list     = params.seeds.split(',').flatten()
+                def blacklist_list = params.blacklist.split(',').flatten()
+
+                def seeds_to_blacklist = [seeds_list, blacklist_list]
+                    .transpose()
+                    .collectEntries { seed, bl ->
+                        [file(seed).baseName, file(bl).baseName]
+                    }
+                
+                ch_seeds_to_blacklist = Channel.from(
+                    seeds_to_blacklist.collect { seeds_id, bl_id -> [seeds_id, bl_id] }
+                )
+                ch_blacklist = Channel
+                    .fromPath(params.blacklist.split(',').flatten(), checkIfExists: true)
+                    .map{blacklist -> [blacklist.baseName, blacklist]}
+                    .combine(ch_seeds_to_blacklist.map{ seeds_id, bl_id -> [bl_id, seeds_id] }, by: 0)
+                    .map{ bl_id, blacklist, seeds_id -> [seeds_id, blacklist, bl_id]}
+                    .combine(ch_seeds.map{meta, seeds -> [meta.seeds_id, meta.network_id]}, by: 0)
+                    .map{seeds_id, blacklist, bl_id, network_id ->
+                        [ [id: bl_id, seeds_id: seeds_id, network_id: network_id], blacklist ]
+                    }
+            } else {
+                error("Blacklist files have to be defined like the seed files.")
+            }
 
         } else if (!seed_param_set && network_param_set) {
 
@@ -222,16 +261,18 @@ workflow PIPELINE_INITIALISATION {
                 ch_network = ch_network.map{meta, network, sp -> [meta, network, sp, []]}
             }
 
-        }
-
-        if(!blacklist_param_set){
-            ch_blacklist = ch_input
-                .map{ it -> [it[0], it[1], it[4]]}
-                .map{ seeds, network, blacklist ->
-                    [ [ id: blacklist.baseName, seeds_id: seeds.baseName, network_id: network.baseName ], blacklist ]
-                }
-        } else {
-            error("You cannot specify blacklist files through the --blacklist parameter if you are using a sample sheet. Please specify the blacklist files in the sample sheet and leave the --blacklist parameter empty.")
+            if(!blacklist_param_set){
+                ch_blacklist = ch_input
+                    .map{it -> 
+                        def seeds = it[0].baseName
+                        def blacklist = it[4]}
+                    .combine(ch_seeds.map{meta, seeds -> [meta.seeds_id, meta.network_id]}, by: 0)
+                    .map{ seeds_id, blacklist, network_id ->
+                        [ [ id: blacklist.baseName, seeds_id: seeds_id, network_id: network_id ], blacklist ]
+                    }
+            } else {
+                error("Blacklist files have to be defined like the seed files.")
+            }
         }
 
     } else if (seed_param_set && network_param_set){

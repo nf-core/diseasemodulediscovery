@@ -488,7 +488,8 @@ workflow DISEASEMODULEDISCOVERY {
             GT_SEEDPERTURBATION(
                 ch_modules.filter{ meta, path -> meta.amim != "no_tool" }, // Filter out no_tool modules
                 ch_seed_perturbation_input,
-                ch_network_gt
+                ch_network_gt,
+                ch_blacklist
             )
             ch_versions = ch_versions.mix(GT_SEEDPERTURBATION.out.versions)
             ch_multiqc_files = ch_multiqc_files
@@ -502,7 +503,8 @@ workflow DISEASEMODULEDISCOVERY {
                 ch_modules.filter{ meta, path -> meta.amim != "no_tool" }, // Filter out no_tool modules
                 ch_seeds,
                 ch_network_gt,
-                ch_perturbed_networks
+                ch_perturbed_networks,
+                ch_blacklist
             )
             ch_versions = ch_versions.mix(GT_NETWORKPERTURBATION.out.versions)
             ch_multiqc_files = ch_multiqc_files
