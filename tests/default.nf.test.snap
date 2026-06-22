@@ -3,7 +3,7 @@
         "content": [
             {
                 "BIOPAX_PARSER": {
-                    "python": "3.12.7",
+                    "python": "3.12.13",
                     "graph-tool": "2.77 (commit 4ad25c62, )",
                     "pybiopax": "0.1.4",
                     "nedrex": "0.1.4"
@@ -24,72 +24,76 @@
                     "biodigest": "0.2.16"
                 },
                 "DRUGPREDICTIONS": {
-                    "python": "3.12.7",
+                    "python": "3.12.13",
                     "pandas": "2.2.3",
                     "drugstone": "0.4.5"
                 },
                 "DRUGSTONEEXPORT": {
-                    "python": "3.12.7",
+                    "python": "3.12.13",
                     "graph-tool": "2.77 (commit 4ad25c62, )"
                 },
                 "GPROFILER2_GOST\"": {
                     "r-ggplot2": "3.4.3",
                     "r-gprofiler2": "0.2.2",
-                    "gprofiler-data": "biomart: Ensembl\nbiomart_version: '114'\ndisplay_name: Human\ngenebuild: GRCh38.p14\ngprofiler_version: e114_eg62_p19_fa3a7d2c\norganism: hsapiens\nsources:\n  CORUM:\n    name: CORUM protein complexes\n    version: 28.11.2022 Corum 4.1\n  GO:BP:\n    name: biological process\n    version: |-\n      annotations: BioMart\n      classes: releases/2026-01-23\n  GO:CC:\n    name: cellular component\n    version: |-\n      annotations: BioMart\n      classes: releases/2026-01-23\n  GO:MF:\n    name: molecular function\n    version: |-\n      annotations: BioMart\n      classes: releases/2026-01-23\n  HP:\n    name: Human Phenotype Ontology\n    version: |-\n      annotations: 03.2026\n      classes: None\n  HPA:\n    name: Human Protein Atlas\n    version: |-\n      annotations: HPA website: 25-11-06\n      classes: script: 26-01-20\n  KEGG:\n    name: Kyoto Encyclopedia of Genes and Genomes\n    version: KEGG FTP Release 2026-03-15\n  MIRNA:\n    name: miRTarBase\n    version: Release 10.0\n  REAC:\n    name: Reactome\n    version: |-\n      annotations: BioMart\n      classes: 2026-3-20\n  TF:\n    name: Transfac\n    version: |-\n      annotations: TRANSFAC Release 2025.2\n      classes: v2\n  WP:\n    name: WikiPathways\n    version: '20260310'\ntaxonomy_id: '9606'\n"
+                    "gprofiler-data": "biomart: Ensembl\nbiomart_version: '114'\ndisplay_name: Human\ngenebuild: GRCh38.p14\ngprofiler_version: e114_eg62_p19_27110d83\norganism: hsapiens\nsources:\n  CORUM:\n    name: CORUM protein complexes\n    version: 28.11.2022 Corum 4.1\n  GO:BP:\n    name: biological process\n    version: |-\n      annotations: BioMart\n      classes: releases/2026-01-23\n  GO:CC:\n    name: cellular component\n    version: |-\n      annotations: BioMart\n      classes: releases/2026-01-23\n  GO:MF:\n    name: molecular function\n    version: |-\n      annotations: BioMart\n      classes: releases/2026-01-23\n  HP:\n    name: Human Phenotype Ontology\n    version: |-\n      annotations: 03.2026\n      classes: None\n  HPA:\n    name: Human Protein Atlas\n    version: |-\n      annotations: HPA website: 25-11-06\n      classes: script: 26-01-20\n  KEGG:\n    name: Kyoto Encyclopedia of Genes and Genomes\n    version: KEGG FTP Release 2026-03-15\n  MIRNA:\n    name: miRTarBase\n    version: Release 10.0\n  REAC:\n    name: Reactome\n    version: |-\n      annotations: BioMart\n      classes: 2026-3-20\n  TF:\n    name: Transfac\n    version: |-\n      annotations: TRANSFAC Release 2025.2\n      classes: v2\n  WP:\n    name: WikiPathways\n    version: '20260310'\ntaxonomy_id: '9606'\n"
                 },
                 "GRAPHTOOLPARSER": {
-                    "python": "3.12.7",
+                    "python": "3.12.13",
                     "graph-tool": "2.77 (commit 4ad25c62, )"
                 },
                 "MODULEPARSER": {
-                    "python": "3.12.7",
+                    "python": "3.12.13",
+                    "graph-tool": "2.77 (commit 4ad25c62, )"
+                },
+                "MULTIQCFORMATTER": {
+                    "python": "3.12.13",
                     "graph-tool": "2.77 (commit 4ad25c62, )"
                 },
                 "NETWORKANNOTATION": {
-                    "python": "3.12.7",
+                    "python": "3.12.13",
                     "graph-tool": "2.77 (commit 4ad25c62, )"
                 },
                 "NETWORKPERTURBATION": {
-                    "python": "3.12.7",
+                    "python": "3.12.13",
                     "graph-tool": "2.77 (commit 4ad25c62, )"
                 },
                 "NETWORKPERTURBATIONEVALUATION": {
-                    "python": "3.12.7"
+                    "python": "3.12.13"
                 },
                 "PROXIMITY": {
-                    "python": "3.12.7",
-                    "numpy": "2.1.2",
+                    "python": "3.12.13",
+                    "numpy": "2.1.3",
                     "pandas": "2.2.3",
                     "networkx": 3.3
                 },
                 "SAVEMODULES": {
-                    "python": "3.12.7",
+                    "python": "3.12.13",
                     "graph-tool": "2.77 (commit 4ad25c62, )",
                     "pandas": "2.2.3"
                 },
                 "SEEDPERTURBATION": {
-                    "python": "3.12.7"
+                    "python": "3.12.13"
                 },
                 "SEEDPERTURBATIONEVALUATION": {
-                    "python": "3.12.7"
+                    "python": "3.12.13"
                 },
                 "SHORTEST_PATHS": {
-                    "python": "3.12.7",
+                    "python": "3.12.13",
                     "networkx": 3.3
                 },
                 "TOPOLOGY": {
-                    "python": "3.12.7",
+                    "python": "3.12.13",
                     "graph-tool": "2.77 (commit 4ad25c62, )"
                 },
                 "VISUALIZEMODULES": {
-                    "python": "3.12.7",
+                    "python": "3.12.13",
                     "graph-tool": "2.77 (commit 4ad25c62, )",
                     "networkx": 3.3,
                     "pyintergraph": "1.3.3",
                     "pyvis": "0.3.1"
                 },
                 "VISUALIZEMODULESDRUGS": {
-                    "python": "3.12.7",
+                    "python": "3.12.13",
                     "graph-tool": "2.77 (commit 4ad25c62, )",
                     "networkx": 3.3,
                     "pyintergraph": "1.3.3",
@@ -184,6 +188,7 @@
                 "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond.gprofiler2.gost_results.rds",
                 "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond.gprofiler2.gostplot.html",
                 "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond.gprofiler2.gostplot.png",
+                "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.diamond/gprofiler_full_hsapiens.GO_WP_REAC_KEGG.ENSG_filtered.gmt",
                 "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.no_tool",
                 "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.no_tool/R_sessionInfo.log",
                 "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.no_tool/entrez_seeds_1.entrez_ppi.no_tool.gprofiler2.GO:CC.sub_enriched_pathways.png",
@@ -196,6 +201,7 @@
                 "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.no_tool/entrez_seeds_1.entrez_ppi.no_tool.gprofiler2.gost_results.rds",
                 "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.no_tool/entrez_seeds_1.entrez_ppi.no_tool.gprofiler2.gostplot.html",
                 "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.no_tool/entrez_seeds_1.entrez_ppi.no_tool.gprofiler2.gostplot.png",
+                "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.no_tool/gprofiler_full_hsapiens.GO_WP_REAC_KEGG.ENSG_filtered.gmt",
                 "evaluation/seed_perturbation",
                 "evaluation/seed_perturbation/entrez_seeds_1.entrez_ppi.diamond",
                 "evaluation/seed_perturbation/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond.seed_perturbation_evaluation_detailed.tsv",
@@ -210,6 +216,7 @@
                 "input/networks",
                 "input/networks/entrez_ppi.diamond.csv",
                 "input/networks/entrez_ppi.gt",
+                "input/networks/entrez_ppi.node_degree_distribution.yaml",
                 "input/perturbed_networks",
                 "input/perturbed_networks/entrez_ppi",
                 "input/perturbed_networks/entrez_ppi/entrez_ppi.perm_0.gt",
@@ -254,7 +261,7 @@
                             "main.nf:md5,c63ef7440278f889ab5c6d56bce23e06"
                         ],
                         [
-                            "main.nf:md5,561b4f67517eec047bef02f1df8a755e"
+                            "main.nf:md5,6a4a54a7d15204ecf014a80f0d59ae1f"
                         ],
                         [
                             "main.nf:md5,a936288c36f38445ad191ef3e0b9f4f9"
@@ -267,6 +274,9 @@
                         ],
                         [
                             "main.nf:md5,c22c94f52d7dfae36a4f8470c7818804"
+                        ],
+                        [
+                            "main.nf:md5,8c9da5825a66ed7baca651180d7522cf"
                         ],
                         [
                             "main.nf:md5,7a26946c4861bf5d704172f597d2b0ae"
@@ -403,6 +413,7 @@
                 "mqc_summaries/jaccard_similarity_no_seeds_matrix_mqc.tsv",
                 "mqc_summaries/network_perturbation_jaccard_mqc.yaml",
                 "mqc_summaries/network_perturbation_mqc.tsv",
+                "mqc_summaries/node_degree_distribution_mqc.yaml",
                 "mqc_summaries/seed_perturbation_jaccard_mqc.yaml",
                 "mqc_summaries/seed_perturbation_mqc.tsv",
                 "mqc_summaries/shared_nodes_matrix_mqc.tsv",
@@ -423,6 +434,8 @@
                 "multiqc/multiqc_data/multiqc_input_seeds.txt",
                 "multiqc/multiqc_data/multiqc_jaccard_similarity.txt",
                 "multiqc/multiqc_data/multiqc_jaccard_similarity_no_seeds.txt",
+                "multiqc/multiqc_data/multiqc_network_node_degree_distribution_line_graph.txt",
+                "multiqc/multiqc_data/multiqc_network_node_degree_distribution_line_graph_1.txt",
                 "multiqc/multiqc_data/multiqc_network_perturbation_jaccard_box_plot.txt",
                 "multiqc/multiqc_data/multiqc_seed_perturbation_jaccard_box_plot.txt",
                 "multiqc/multiqc_data/multiqc_shared_nodes.txt",
@@ -439,6 +452,8 @@
                 "multiqc/multiqc_plots/pdf/input_seeds-pct.pdf",
                 "multiqc/multiqc_plots/pdf/jaccard_similarity.pdf",
                 "multiqc/multiqc_plots/pdf/jaccard_similarity_no_seeds.pdf",
+                "multiqc/multiqc_plots/pdf/network_node_degree_distribution_line_graph_Counts.pdf",
+                "multiqc/multiqc_plots/pdf/network_node_degree_distribution_line_graph_Percentages.pdf",
                 "multiqc/multiqc_plots/pdf/network_perturbation_jaccard_box_plot.pdf",
                 "multiqc/multiqc_plots/pdf/seed_perturbation_jaccard_box_plot.pdf",
                 "multiqc/multiqc_plots/pdf/shared_nodes.pdf",
@@ -452,6 +467,8 @@
                 "multiqc/multiqc_plots/png/input_seeds-pct.png",
                 "multiqc/multiqc_plots/png/jaccard_similarity.png",
                 "multiqc/multiqc_plots/png/jaccard_similarity_no_seeds.png",
+                "multiqc/multiqc_plots/png/network_node_degree_distribution_line_graph_Counts.png",
+                "multiqc/multiqc_plots/png/network_node_degree_distribution_line_graph_Percentages.png",
                 "multiqc/multiqc_plots/png/network_perturbation_jaccard_box_plot.png",
                 "multiqc/multiqc_plots/png/seed_perturbation_jaccard_box_plot.png",
                 "multiqc/multiqc_plots/png/shared_nodes.png",
@@ -465,6 +482,8 @@
                 "multiqc/multiqc_plots/svg/input_seeds-pct.svg",
                 "multiqc/multiqc_plots/svg/jaccard_similarity.svg",
                 "multiqc/multiqc_plots/svg/jaccard_similarity_no_seeds.svg",
+                "multiqc/multiqc_plots/svg/network_node_degree_distribution_line_graph_Counts.svg",
+                "multiqc/multiqc_plots/svg/network_node_degree_distribution_line_graph_Percentages.svg",
                 "multiqc/multiqc_plots/svg/network_perturbation_jaccard_box_plot.svg",
                 "multiqc/multiqc_plots/svg/seed_perturbation_jaccard_box_plot.svg",
                 "multiqc/multiqc_plots/svg/shared_nodes.svg",
@@ -478,17 +497,19 @@
             [
                 "entrez_ppi.diamond.csv:md5,59c734eaa00f2265dd1bb896f2aee772",
                 "entrez_ppi.gt:md5,c908f353a8a0e0cb04aa9cb67121521d",
+                "entrez_ppi.node_degree_distribution.yaml:md5,ae828219f3f62319a6bb7ed69ec1780c",
                 "entrez_seeds_1.entrez_ppi.no_tool.gt:md5,e19b2d65dfd9fd20f1a8f843d52c1235",
                 "entrez_seeds_1.entrez_ppi.tsv:md5,1291b36e8add2d6ef0b8b72f7889016b",
-                "entrez_seeds_1.entrez_ppi.no_tool.graphml:md5,bfaed89376015c6ec3724a870fd86031",
-                "entrez_seeds_1.entrez_ppi.no_tool.gt:md5,5939c5390ea37756858e189b2f90462a",
+                "entrez_seeds_1.entrez_ppi.no_tool.graphml:md5,cc3311884751102ec002365dc513bb42",
+                "entrez_seeds_1.entrez_ppi.no_tool.gt:md5,d904aa651ab7267f077e75a6f0dc4f5c",
                 "entrez_seeds_1.entrez_ppi.no_tool.edges.tsv:md5,99cbfff7b59f45c1de3e5e6d36692099",
-                "entrez_seeds_1.entrez_ppi.no_tool.nodes.tsv:md5,e711b826c2117dfde768e65f44cac358",
+                "entrez_seeds_1.entrez_ppi.no_tool.nodes.tsv:md5,6d067dc2849d56e45b7aadf4b5f02fbd",
                 "input_network_mqc.tsv:md5,eedaf7f299c89a43429fa66dffb2bbc3",
-                "input_seeds_mqc.tsv:md5,269d96ba266e5481c37a550fe4f13521"
+                "input_seeds_mqc.tsv:md5,269d96ba266e5481c37a550fe4f13521",
+                "node_degree_distribution_mqc.yaml:md5,cdd5d5cffe8d5b16f17917b3d4ce9a8a"
             ]
         ],
-        "timestamp": "2026-05-05T18:19:28.128987463",
+        "timestamp": "2026-06-22T16:51:19.227310788",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.0"
