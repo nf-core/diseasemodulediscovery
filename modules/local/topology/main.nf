@@ -1,5 +1,6 @@
 process TOPOLOGY {
     tag "$meta.id"
+    label 'process_single'
 
     input:
     tuple val(meta), path(module)

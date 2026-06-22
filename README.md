@@ -10,8 +10,8 @@
 [![GitHub Actions Linting Status](https://github.com/nf-core/diseasemodulediscovery/actions/workflows/linting.yml/badge.svg)](https://github.com/nf-core/diseasemodulediscovery/actions/workflows/linting.yml)[![AWS CI](https://img.shields.io/badge/CI%20tests-full%20size-FF9900?labelColor=000000&logo=Amazon%20AWS)](https://nf-co.re/diseasemodulediscovery/results)[![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.XXXXXXX-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.XXXXXXX)
 [![nf-test](https://img.shields.io/badge/unit_tests-nf--test-337ab7.svg)](https://www.nf-test.com)
 
-[![Nextflow](https://img.shields.io/badge/version-%E2%89%A525.04.0-green?style=flat&logo=nextflow&logoColor=white&color=%230DC09D&link=https%3A%2F%2Fnextflow.io)](https://www.nextflow.io/)
-[![nf-core template version](https://img.shields.io/badge/nf--core_template-3.5.1-green?style=flat&logo=nfcore&logoColor=white&color=%2324B064&link=https%3A%2F%2Fnf-co.re)](https://github.com/nf-core/tools/releases/tag/3.5.1)
+[![Nextflow](https://img.shields.io/badge/version-%E2%89%A525.10.4-green?style=flat&logo=nextflow&logoColor=white&color=%230DC09D&link=https%3A%2F%2Fnextflow.io)](https://www.nextflow.io/)
+[![nf-core template version](https://img.shields.io/badge/nf--core_template-4.0.2-green?style=flat&logo=nfcore&logoColor=white&color=%2324B064&link=https%3A%2F%2Fnf-co.re)](https://github.com/nf-core/tools/releases/tag/4.0.2)
 [![run with conda](http://img.shields.io/badge/run%20with-conda-3EB049?labelColor=000000&logo=anaconda)](https://docs.conda.io/en/latest/)
 [![run with docker](https://img.shields.io/badge/run%20with-docker-0db7ed?labelColor=000000&logo=docker)](https://www.docker.com/)
 [![run with singularity](https://img.shields.io/badge/run%20with-singularity-1d355c.svg?labelColor=000000)](https://sylabs.io/docs/)
@@ -48,7 +48,7 @@
 ## Usage
 
 > [!NOTE]
-> If you are new to Nextflow and nf-core, please refer to [this page](https://nf-co.re/docs/usage/installation) on how to set-up Nextflow. Make sure to [test your setup](https://nf-co.re/docs/usage/introduction#how-to-run-a-pipeline) with `-profile test` before running the workflow on actual data.
+> If you are new to Nextflow and nf-core, please refer to [this page](https://nf-co.re/docs/get_started/environment_setup/overview) on how to set-up Nextflow. Make sure to [test your setup](https://nf-co.re/docs/get_started/run-your-first-pipeline) with `-profile test` before running the workflow on actual data.
 
 > [!WARNING]
 > The pipeline is still under development. In order to run it, please use the option `-r dev`
@@ -78,9 +78,27 @@ nextflow run nf-core/diseasemodulediscovery \
 This will run the pipeline based on the provided `<SEED_FILE>` and `<NETWORK_FILE>`. Results will be saved to the specified `<OUTDIR>`. Use `-profile` to set whether docker or singularity should be used for software deployment.
 
 > [!WARNING]
-> Please provide pipeline parameters via the CLI or Nextflow `-params-file` option. Custom config files including those provided by the `-c` Nextflow option can be used to provide any configuration _**except for parameters**_; see [docs](https://nf-co.re/docs/usage/getting_started/configuration#custom-configuration-files).
+> Please provide pipeline parameters via the CLI or Nextflow `-params-file` option. Custom config files including those provided by the `-c` Nextflow option can be used to provide any configuration _**except for parameters**_; see [docs](https://nf-co.re/docs/running/run-pipelines#using-parameter-files).
 
 For more details and further functionality, please refer to the [usage documentation](https://nf-co.re/diseasemodulediscovery/usage) and the [parameter documentation](https://nf-co.re/diseasemodulediscovery/parameters).
+
+> [!TIP]
+> **OS specifics**
+>
+> The pipeline works best in combination with Linux. Furthermore, some Docker images in the pipeline are natively only available for `amd64` but not the `arm` architecture.
+> Here are some tips to get the pipeline running with a different OS or architecture:
+>
+> **macOS**
+>
+> With macOS and Apple silicon, we had better experiences using the free version of [orbstack](https://orbstack.dev/download) instead of Docker Desktop for deploying the containers.
+>
+> **Windows**
+>
+> The most reliable solution is to work with the [Windows Subsystem for Linux (WSL)](https://documentation.ubuntu.com/wsl/latest/howto/install-ubuntu-wsl2/).
+>
+> **What if it keeps failing?**
+>
+> Most pipeline steps are not essential. If the pipeline keeps failing because of a specific process, you may be able to just [skip](https://nf-co.re/diseasemodulediscovery/dev/docs/usage/#skipping-steps) that one.
 
 ## Pipeline output
 
@@ -102,7 +120,7 @@ We thank the following people for their extensive assistance in the development 
 
 ## Contributions and Support
 
-If you would like to contribute to this pipeline, please see the [contributing guidelines](.github/CONTRIBUTING.md).
+If you would like to contribute to this pipeline, please see the [contributing guidelines](docs/CONTRIBUTING.md).
 
 If you want to include an additional module identification approach, please see [this guide](docs/contributing.md).
 For further information or help, don't hesitate to get in touch on the [Slack `#diseasemodulediscovery` channel](https://nfcore.slack.com/channels/diseasemodulediscovery) (you can join with [this invite](https://nf-co.re/join/slack)).
