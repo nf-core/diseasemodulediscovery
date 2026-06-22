@@ -39,7 +39,7 @@ def save_multiqc(g, stem):
             duplicate_edges.append(e)  # Mark for removal
         else:
             seen_edges.add(edge_tuple)
-            
+
     with open("input_network_multiqc.tsv", "w") as file:
         file.write(
             "Network\t"
@@ -62,6 +62,7 @@ def save_multiqc(g, stem):
             f"{len(duplicate_edges)}\n"
         )
 
+
 def save_node_degree_distribution(g, stem):
     # Calculate degree for each vertex
     degrees = [v.out_degree() for v in g.vertices()]
@@ -82,13 +83,13 @@ def save_node_degree_distribution(g, stem):
         [degree, count / total_vertices]
         for degree, count in sorted(degree_counts.items())
     ]
-    #save node degree distribution as yaml 
+    # save node degree distribution as yaml
     node_degree_distribution = {
         "name": stem,
         "absolute": absolute_counts,
         "relative": relative_frequencies,
     }
-    
+
     with open(f"{stem}.node_degree_distribution.yaml", "w") as file:
         yaml.safe_dump(
             node_degree_distribution,
@@ -96,8 +97,6 @@ def save_node_degree_distribution(g, stem):
             sort_keys=False,
             default_flow_style=None,  # keeps list pairs as [x, y]
         )
-        
-    
 
 
 def save_diamond(g, stem):
