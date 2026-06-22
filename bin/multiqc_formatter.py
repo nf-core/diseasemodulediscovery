@@ -19,7 +19,8 @@ def parse_args(argv=None):
 
 def parse_input(input_files, header_file):
     with open(header_file, "r") as header:
-        header_id = header.readline().split(":", 1)[1].strip()
+        header_data = yaml.safe_load(header)
+        header_id = header_data.get("id", "")
 
     if header_id == "network_node_degree_distribution":
         save_node_degree_distribution(input_files, header_file)
