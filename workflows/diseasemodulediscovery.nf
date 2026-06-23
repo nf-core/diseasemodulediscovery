@@ -9,6 +9,7 @@
 //
 include { INPUTCHECK                        } from '../modules/local/inputcheck/main'
 include { GRAPHTOOLPARSER                   } from '../modules/local/graphtoolparser/main'
+include { MULTIQCFORMATTER                  } from '../modules/local/multiqcformatter/main'
 include { NETWORKANNOTATION                 } from '../modules/local/networkannotation/main'
 include { SAVEMODULES                       } from '../modules/local/savemodules/main'
 include { VISUALIZEMODULES                  } from '../modules/local/visualizemodules/main'
@@ -150,7 +151,6 @@ workflow DISEASEMODULEDISCOVERY {
         )
     ch_multiqc_files = ch_multiqc_files.mix(ch_network_multiqc)
     ch_network_gt = GRAPHTOOLPARSER.out.network
-
 
     // Check input
     // channel: [ val(meta[id,seeds_id,network_id]), path(seeds), path(network) ]
@@ -567,6 +567,16 @@ workflow DISEASEMODULEDISCOVERY {
         ch_versions = ch_versions.mix(GT_PROXIMITY.out.versions)
     }
 
+
+    // Format complex MultiQC input files
+    MULTIQCFORMATTER(
+        GRAPHTOOLPARSER.out.node_degree.map{_meta, path -> path}.collect().map{networks ->
+            def header = new File("$projectDir/assets/network_node_degree_distribution_header.yaml").toPath()
+            [header, networks]
+        }
+    )
+    ch_multiqc_files = ch_multiqc_files.mix(MULTIQCFORMATTER.out.multiqc)
+    ch_versions = ch_versions.mix(MULTIQCFORMATTER.out.versions)
 
     // Collate and save software versions
     //

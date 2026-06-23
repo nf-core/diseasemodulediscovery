@@ -25,6 +25,7 @@ custom_content:
     - input
     - input_seeds
     - input_network
+    - network_node_degree_distribution
     - drugstone_link
     - overlap
     - jaccard_similarity
