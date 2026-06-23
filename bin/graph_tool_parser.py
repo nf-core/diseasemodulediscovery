@@ -78,9 +78,9 @@ def save_node_degree_distribution(g, stem):
         [degree, count] for degree, count in sorted(degree_counts.items())
     ]
 
-    # Create relative frequencies dictionary: {degree: fraction}
+    # Create relative frequencies dictionary: {degree: percentage}
     relative_frequencies = [
-        [degree, count / total_vertices]
+        [degree, count / total_vertices * 100]
         for degree, count in sorted(degree_counts.items())
     ]
     # save node degree distribution as yaml
