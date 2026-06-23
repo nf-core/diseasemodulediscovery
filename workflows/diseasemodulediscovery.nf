@@ -374,9 +374,6 @@ workflow DISEASEMODULEDISCOVERY {
         GT2TSV_Modules(ch_modules_not_empty)
         GT2TSV_Network(ch_network_gt)
 
-        // channel: [ val(meta), path(nodes) ]
-        ch_nodes = GT2TSV_Modules.out
-
         // Module overlap
         ch_overlap_input = ch_nodes_tsv_not_empty
             .multiMap { meta, nodes ->
@@ -392,17 +389,32 @@ workflow DISEASEMODULEDISCOVERY {
         // Overrepresentation analysis
         if(!params.skip_gprofiler){
 
-            ch_gprofiler_input = ch_nodes
-                .map{ meta, path -> [meta.network_id, meta, path]}
-                .combine(GT2TSV_Network.out.map{meta, path -> [meta.id, path]}, by: 0)
+            // Run gprofiler on all module nodes and on added (non-seed) nodes separately;
+            // added_nodes entries carry a .added_nodes id suffix to distinguish their output files
+            ch_gprofiler_input = GT2TSV_Modules.out.all_nodes
+                .map{ meta, path -> [meta.network_id, meta, path] }
+                .mix(
+                    GT2TSV_Modules.out.added_nodes
+                         .filter{ meta, _nodes -> meta.amim != "no_tool" } //filter out no_tool modules
+                        .map{ meta, path ->
+                            def dup = meta.clone()
+                            dup.id = "${meta.id}.added_nodes_only"
+                            [meta.network_id, dup, path]
+                        }
+                )
+                .combine(GT2TSV_Network.out.all_nodes.map{meta, path -> [meta.id, path]}, by: 0)
                 .multiMap{key, meta, nodes, network ->
                     nodes: [meta, nodes]
                     network: [meta, network]
                 }
 
+            ch_gmt_file = params.custom_gmt_file
+                ? channel.value([[], file(params.custom_gmt_file)])
+                : channel.value([[], []])
+
             GPROFILER2_GOST (
                 ch_gprofiler_input.nodes,
-                [[],[]],
+                ch_gmt_file,
                 ch_gprofiler_input.network
             )
             ch_versions = ch_versions.mix(GPROFILER2_GOST.out.versions)

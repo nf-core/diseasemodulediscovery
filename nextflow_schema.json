@@ -204,6 +204,11 @@
                     "description": "Flag for skipping g:Profiler",
                     "fa_icon": "fas fa-forward"
                 },
+                "custom_gmt_file": {
+                    "type": "string",
+                    "description": "Custom gmt file for overrepresentation analysis",
+                    "fa_icon": "fas fa-file-alt"
+                },
                 "skip_digest": {
                     "type": "boolean",
                     "description": "Flag for skipping DIGEST",
