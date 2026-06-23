@@ -46,8 +46,7 @@
                     "graph-tool": "2.77 (commit 4ad25c62, )"
                 },
                 "MULTIQCFORMATTER": {
-                    "python": "3.12.13",
-                    "graph-tool": "2.77 (commit 4ad25c62, )"
+                    "python": "3.12.13"
                 },
                 "NETWORKANNOTATION": {
                     "python": "3.12.13",
@@ -261,7 +260,7 @@
                             "main.nf:md5,c63ef7440278f889ab5c6d56bce23e06"
                         ],
                         [
-                            "main.nf:md5,6a4a54a7d15204ecf014a80f0d59ae1f"
+                            "main.nf:md5,b05cab49c2df502baebbffac0352fafe"
                         ],
                         [
                             "main.nf:md5,a936288c36f38445ad191ef3e0b9f4f9"
@@ -276,7 +275,7 @@
                             "main.nf:md5,c22c94f52d7dfae36a4f8470c7818804"
                         ],
                         [
-                            "main.nf:md5,8c9da5825a66ed7baca651180d7522cf"
+                            "main.nf:md5,5416d5bc6d14178c734672ab0f3a39d5"
                         ],
                         [
                             "main.nf:md5,7a26946c4861bf5d704172f597d2b0ae"
@@ -497,7 +496,7 @@
             [
                 "entrez_ppi.diamond.csv:md5,59c734eaa00f2265dd1bb896f2aee772",
                 "entrez_ppi.gt:md5,c908f353a8a0e0cb04aa9cb67121521d",
-                "entrez_ppi.node_degree_distribution.yaml:md5,ae828219f3f62319a6bb7ed69ec1780c",
+                "entrez_ppi.node_degree_distribution.yaml:md5,24eee40aaebf40772be9fc643e36c6b9",
                 "entrez_seeds_1.entrez_ppi.no_tool.gt:md5,e19b2d65dfd9fd20f1a8f843d52c1235",
                 "entrez_seeds_1.entrez_ppi.tsv:md5,1291b36e8add2d6ef0b8b72f7889016b",
                 "entrez_seeds_1.entrez_ppi.no_tool.graphml:md5,cc3311884751102ec002365dc513bb42",
@@ -506,10 +505,10 @@
                 "entrez_seeds_1.entrez_ppi.no_tool.nodes.tsv:md5,6d067dc2849d56e45b7aadf4b5f02fbd",
                 "input_network_mqc.tsv:md5,eedaf7f299c89a43429fa66dffb2bbc3",
                 "input_seeds_mqc.tsv:md5,269d96ba266e5481c37a550fe4f13521",
-                "node_degree_distribution_mqc.yaml:md5,cdd5d5cffe8d5b16f17917b3d4ce9a8a"
+                "node_degree_distribution_mqc.yaml:md5,b4b1eab1a3622315ecfc98065a2760c6"
             ]
         ],
-        "timestamp": "2026-06-22T16:51:19.227310788",
+        "timestamp": "2026-06-23T15:30:30.075392251",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.0"
