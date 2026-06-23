@@ -207,6 +207,18 @@ seed_file_2.csv,network_2.csv,/path/to/perturbed/networks/network_2
 seed_file_2.csv,network_1.csv,/path/to/perturbed/networks/network_1
 ```
 
+### Overrepresentation analysis
+
+By default, [g:Profiler](https://biit.cs.ut.ee/gprofiler/gost) fetches gene set annotations from its servers at runtime. To use a custom GMT file instead, provide it via `--custom_gmt_file`:
+
+```bash
+nextflow run <PATH_TO_REPO>/modulediscovery/main.nf \
+   -profile <docker/singularity> \
+   --input samplesheet.csv \
+   --outdir <OUTDIR> \
+   --custom_gmt_file ./my_genesets.gmt
+```
+
 ### Updating the pipeline
 
 When you run the above command, Nextflow automatically pulls the pipeline code from GitHub and stores it as a cached version. When running the pipeline after this, it will always use the cached version if available - even if the pipeline has been updated since. To make sure that you're running the latest version of the pipeline, make sure that you regularly update the cached version of the pipeline:
