@@ -21,15 +21,21 @@
         {
             "@id": "./",
             "@type": "Dataset",
-            "creativeWorkStatus": "InProgress",
-            "datePublished": "2026-04-30T13:32:39+00:00",
-            "description": "<h1>\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/images/nf-core-diseasemodulediscovery_logo_dark.png\">\n    <img alt=\"nf-core/diseasemodulediscovery\" src=\"docs/images/nf-core-diseasemodulediscovery_logo_light.png\">\n  </picture>\n</h1>\n\n[![Open in GitHub Codespaces](https://img.shields.io/badge/Open_In_GitHub_Codespaces-black?labelColor=grey&logo=github)](https://github.com/codespaces/new/nf-core/diseasemodulediscovery)\n[![GitHub Actions CI Status](https://github.com/nf-core/diseasemodulediscovery/actions/workflows/nf-test.yml/badge.svg)](https://github.com/nf-core/diseasemodulediscovery/actions/workflows/nf-test.yml)\n[![GitHub Actions Linting Status](https://github.com/nf-core/diseasemodulediscovery/actions/workflows/linting.yml/badge.svg)](https://github.com/nf-core/diseasemodulediscovery/actions/workflows/linting.yml)[![AWS CI](https://img.shields.io/badge/CI%20tests-full%20size-FF9900?labelColor=000000&logo=Amazon%20AWS)](https://nf-co.re/diseasemodulediscovery/results)[![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.XXXXXXX-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.XXXXXXX)\n[![nf-test](https://img.shields.io/badge/unit_tests-nf--test-337ab7.svg)](https://www.nf-test.com)\n\n[![Nextflow](https://img.shields.io/badge/version-%E2%89%A525.10.4-green?style=flat&logo=nextflow&logoColor=white&color=%230DC09D&link=https%3A%2F%2Fnextflow.io)](https://www.nextflow.io/)\n[![nf-core template version](https://img.shields.io/badge/nf--core_template-4.0.2-green?style=flat&logo=nfcore&logoColor=white&color=%2324B064&link=https%3A%2F%2Fnf-co.re)](https://github.com/nf-core/tools/releases/tag/4.0.2)\n[![run with conda](http://img.shields.io/badge/run%20with-conda-3EB049?labelColor=000000&logo=anaconda)](https://docs.conda.io/en/latest/)\n[![run with docker](https://img.shields.io/badge/run%20with-docker-0db7ed?labelColor=000000&logo=docker)](https://www.docker.com/)\n[![run with singularity](https://img.shields.io/badge/run%20with-singularity-1d355c.svg?labelColor=000000)](https://sylabs.io/docs/)\n[![Launch on Seqera Platform](https://img.shields.io/badge/Launch%20%F0%9F%9A%80-Seqera%20Platform-%234256e7)](https://cloud.seqera.io/launch?pipeline=https://github.com/nf-core/diseasemodulediscovery)\n\n[![Get help on Slack](http://img.shields.io/badge/slack-nf--core%20%23diseasemodulediscovery-4A154B?labelColor=000000&logo=slack)](https://nfcore.slack.com/channels/diseasemodulediscovery)[![Follow on Bluesky](https://img.shields.io/badge/bluesky-%40nf__core-1185fe?labelColor=000000&logo=bluesky)](https://bsky.app/profile/nf-co.re)[![Follow on Mastodon](https://img.shields.io/badge/mastodon-nf__core-6364ff?labelColor=FFFFFF&logo=mastodon)](https://mstdn.science/@nf_core)[![Watch on YouTube](http://img.shields.io/badge/youtube-nf--core-FF0000?labelColor=000000&logo=youtube)](https://www.youtube.com/c/nf-core)\n\n## Introduction\n\n**nf-core/diseasemodulediscovery** is a bioinformatics pipeline for network medicine hypothesis generation, designed for identifying active/disease modules. Developed and maintained by the [RePo4EU](https://repo4.eu/) consortium, it aims to characterize the molecular mechanisms of diseases by analyzing the local neighborhood of disease-associated genes or proteins (seeds) within the interactome. This approach can help identify potential drug targets for drug repurposing.\n\n![REPO4EU/modulediscovery metro map](docs/images/nf-core-diseasemodulediscovery_metro_map.png)\n\n- Module inference (all enabled by default):\n  - [`DOMINO`](https://github.com/Shamir-Lab/DOMINO)\n  - [`DIAMOnD`](https://github.com/dinaghiassian/DIAMOnD)\n  - [`ROBUST`](https://github.com/bionetslab/robust)\n  - [`ROBUST (bias-aware)`](https://github.com/bionetslab/robust_bias_aware)\n  - `1st Neighbors`\n  - `random walk with restart (RWR)`\n- Evaluation\n  - Over-representation analysis ([`g:Profiler`](https://cran.r-project.org/web/packages/gprofiler2/index.html))\n  - Functional coherence analysis ([`DIGEST`](https://pypi.org/project/biodigest/))\n  - Network topology analysis ([`graph-tool`](https://graph-tool.skewed.de/))\n  - Overlaps between different disease modules\n  - Seed set perturbation-based evaluation (robustness and seed rediscovery, enabled by `--run_seed_perturbation`)\n  - Network perturbation-based evaluation (robustness, enabled by `--run_network_perturbation`)\n- Export to the network medicine web visualization tool [`Drugst.One`](https://drugst.one/)\n- Drug prioritization using the API of [`Drugst.One`](https://drugst.one/)\n- Visualization of the module networks ([`graph-tool`](https://graph-tool.skewed.de/), [`pyvis`](https://github.com/WestHealth/pyvis))\n- Annotation with biological data (targeting drugs, side effects, associated disorders, cellular localization) queried from [`NeDRexDB`](https://nedrex.net/) and conversion to [`BioPAX`](https://www.biopax.org/) format.\n- Result and evaluation summary ([`MultiQC`](https://seqera.io/multiqc/))\n\n## Usage\n\n> [!NOTE]\n> If you are new to Nextflow and nf-core, please refer to [this page](https://nf-co.re/docs/get_started/environment_setup/overview) on how to set-up Nextflow. Make sure to [test your setup](https://nf-co.re/docs/get_started/run-your-first-pipeline) with `-profile test` before running the workflow on actual data.\n\n> [!WARNING]\n> The pipeline is still under development. In order to run it, please use the option `-r dev`\n\n### Test your setup\n\n```bash\nnextflow run nf-core/diseasemodulediscovery \\\n   -profile <docker/singularity>,test \\\n   --outdir <OUTDIR>\n```\n\nThis will run the pipeline with a small test dataset. Results will be saved to the specified `<OUTDIR>`. Use `-profile` to set whether docker or singularity should be used for software deployment.\n\n### Running the pipeline\n\nNow, you can run the pipeline with your own data using:\n\n```bash\nnextflow run nf-core/diseasemodulediscovery \\\n   -profile <docker/singularity> \\\n   --seeds <SEED_FILE> \\\n   --network <NETWORK_FILE> \\\n   --outdir <OUTDIR>\n```\n\nThis will run the pipeline based on the provided `<SEED_FILE>` and `<NETWORK_FILE>`. Results will be saved to the specified `<OUTDIR>`. Use `-profile` to set whether docker or singularity should be used for software deployment.\n\n> [!WARNING]\n> Please provide pipeline parameters via the CLI or Nextflow `-params-file` option. Custom config files including those provided by the `-c` Nextflow option can be used to provide any configuration _**except for parameters**_; see [docs](https://nf-co.re/docs/running/run-pipelines#using-parameter-files).\n\nFor more details and further functionality, please refer to the [usage documentation](https://nf-co.re/diseasemodulediscovery/usage) and the [parameter documentation](https://nf-co.re/diseasemodulediscovery/parameters).\n\n> [!TIP]\n> **OS specifics**\n>\n> The pipeline works best in combination with Linux. Furthermore, some Docker images in the pipeline are natively only available for `amd64` but not the `arm` architecture.\n> Here are some tips to get the pipeline running with a different OS or architecture:\n>\n> **macOS**\n>\n> With macOS and Apple silicon, we had better experiences using the free version of [orbstack](https://orbstack.dev/download) instead of Docker Desktop for deploying the containers.\n>\n> **Windows**\n>\n> The most reliable solution is to work with the [Windows Subsystem for Linux (WSL)](https://documentation.ubuntu.com/wsl/latest/howto/install-ubuntu-wsl2/).\n>\n> **What if it keeps failing?**\n>\n> Most pipeline steps are not essential. If the pipeline keeps failing because of a specific process, you may be able to just [skip](https://nf-co.re/diseasemodulediscovery/dev/docs/usage/#skipping-steps) that one.\n\n## Pipeline output\n\nTo see the results of an example test run with a full size dataset refer to the [results](https://nf-co.re/diseasemodulediscovery/results) tab on the nf-core website pipeline page.\nFor more details about the output files and reports, please refer to the\n[output documentation](https://nf-co.re/diseasemodulediscovery/output).\n\n## Credits\n\nnf-core/diseasemodulediscovery was originally written by the [RePo4EU](https://repo4.eu/) consortium.\n\nWe thank the following people for their extensive assistance in the development of this pipeline:\n\n- [Johannes Kersting](https://github.com/JohannesKersting) (TUM)\n- [Lisa Spindler](https://github.com/lspindler2509) (TUM)\n- [Quirin Manz](https://github.com/quirinmanz) (TUM)\n- [Quim Aguirre](https://github.com/quimaguirre) (STALICLA)\n- [Chlo\u00e9 Bucheron](https://github.com/ChloeBubu) (University Vienna)\n\n## Contributions and Support\n\nIf you would like to contribute to this pipeline, please see the [contributing guidelines](docs/CONTRIBUTING.md).\n\nIf you want to include an additional module identification approach, please see [this guide](docs/contributing.md).\nFor further information or help, don't hesitate to get in touch on the [Slack `#diseasemodulediscovery` channel](https://nfcore.slack.com/channels/diseasemodulediscovery) (you can join with [this invite](https://nf-co.re/join/slack)).\n\n## Citations\n\nIf you use `nf-core/diseasemodulediscovery` for your analysis, please cite the preprint as follows:\n\n> Johannes Kersting, Chlo\u00e9 Bucheron, Lisa M. Spindler, Joaquim Aguirre-Plans, Quirin Manz, Tanja Pock, Mo Tan, Fernando M. Delgado-Chaves, Cristian Nogales, Harald H. H. W. Schmidt, J\u00f6rg Menche, Andreas Maier, Jan Baumbach, Emre Guney, Markus List **Inferring and Evaluating Network Medicine-Based Disease Modules with Nextflow** _bioRxiv_ , 2025, [doi: 10.1101/2025.11.20.687681](https://doi.org/10.1101/2025.11.20.687681).\n\n<!-- TODO nf-core: Add citation for pipeline after first release. Uncomment lines below and update Zenodo doi and badge at the top of this file. -->\n<!-- If you use nf-core/diseasemodulediscovery for your analysis, please cite it using the following doi: [10.5281/zenodo.XXXXXX](https://doi.org/10.5281/zenodo.XXXXXX) -->\n\nAn extensive list of references for the tools used by the pipeline can be found in the [`CITATIONS.md`](CITATIONS.md) file.\n\nYou can cite the `nf-core` publication as follows:\n\n> **The nf-core framework for community-curated bioinformatics pipelines.**\n>\n> Philip Ewels, Alexander Peltzer, Sven Fillinger, Harshil Patel, Johannes Alneberg, Andreas Wilm, Maxime Ulysse Garcia, Paolo Di Tommaso & Sven Nahnsen.\n>\n> _Nat Biotechnol._ 2020 Feb 13. doi: [10.1038/s41587-020-0439-x](https://dx.doi.org/10.1038/s41587-020-0439-x).\n",
+            "creativeWorkStatus": "Stable",
+            "datePublished": "2026-06-25T13:36:31+00:00",
+            "description": "<h1>\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/images/nf-core-diseasemodulediscovery_logo_dark.png\">\n    <img alt=\"nf-core/diseasemodulediscovery\" src=\"docs/images/nf-core-diseasemodulediscovery_logo_light.png\">\n  </picture>\n</h1>\n\n[![Open in GitHub Codespaces](https://img.shields.io/badge/Open_In_GitHub_Codespaces-black?labelColor=grey&logo=github)](https://github.com/codespaces/new/nf-core/diseasemodulediscovery)\n[![GitHub Actions CI Status](https://github.com/nf-core/diseasemodulediscovery/actions/workflows/nf-test.yml/badge.svg)](https://github.com/nf-core/diseasemodulediscovery/actions/workflows/nf-test.yml)\n[![GitHub Actions Linting Status](https://github.com/nf-core/diseasemodulediscovery/actions/workflows/linting.yml/badge.svg)](https://github.com/nf-core/diseasemodulediscovery/actions/workflows/linting.yml)[![AWS CI](https://img.shields.io/badge/CI%20tests-full%20size-FF9900?labelColor=000000&logo=Amazon%20AWS)](https://nf-co.re/diseasemodulediscovery/results)[![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.XXXXXXX-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.XXXXXXX)\n[![nf-test](https://img.shields.io/badge/unit_tests-nf--test-337ab7.svg)](https://www.nf-test.com)\n\n[![Nextflow](https://img.shields.io/badge/version-%E2%89%A525.10.4-green?style=flat&logo=nextflow&logoColor=white&color=%230DC09D&link=https%3A%2F%2Fnextflow.io)](https://www.nextflow.io/)\n[![nf-core template version](https://img.shields.io/badge/nf--core_template-4.0.2-green?style=flat&logo=nfcore&logoColor=white&color=%2324B064&link=https%3A%2F%2Fnf-co.re)](https://github.com/nf-core/tools/releases/tag/4.0.2)\n[![run with conda](http://img.shields.io/badge/run%20with-conda-3EB049?labelColor=000000&logo=anaconda)](https://docs.conda.io/en/latest/)\n[![run with docker](https://img.shields.io/badge/run%20with-docker-0db7ed?labelColor=000000&logo=docker)](https://www.docker.com/)\n[![run with singularity](https://img.shields.io/badge/run%20with-singularity-1d355c.svg?labelColor=000000)](https://sylabs.io/docs/)\n[![Launch on Seqera Platform](https://img.shields.io/badge/Launch%20%F0%9F%9A%80-Seqera%20Platform-%234256e7)](https://cloud.seqera.io/launch?pipeline=https://github.com/nf-core/diseasemodulediscovery)\n\n[![Get help on Slack](http://img.shields.io/badge/slack-nf--core%20%23diseasemodulediscovery-4A154B?labelColor=000000&logo=slack)](https://nfcore.slack.com/channels/diseasemodulediscovery)[![Follow on Bluesky](https://img.shields.io/badge/bluesky-%40nf__core-1185fe?labelColor=000000&logo=bluesky)](https://bsky.app/profile/nf-co.re)[![Follow on Mastodon](https://img.shields.io/badge/mastodon-nf__core-6364ff?labelColor=FFFFFF&logo=mastodon)](https://mstdn.science/@nf_core)[![Watch on YouTube](http://img.shields.io/badge/youtube-nf--core-FF0000?labelColor=000000&logo=youtube)](https://www.youtube.com/c/nf-core)\n\n## Introduction\n\n**nf-core/diseasemodulediscovery** is a bioinformatics pipeline for network medicine hypothesis generation, designed for identifying active/disease modules. Developed and maintained by the [RePo4EU](https://repo4.eu/) consortium, it aims to characterize the molecular mechanisms of diseases by analyzing the local neighborhood of disease-associated genes or proteins (seeds) within the interactome. This approach can help identify potential drug targets for drug repurposing.\n\n![REPO4EU/modulediscovery metro map](docs/images/nf-core-diseasemodulediscovery_metro_map.png)\n\n- Module inference (all enabled by default):\n  - [`DOMINO`](https://github.com/Shamir-Lab/DOMINO)\n  - [`DIAMOnD`](https://github.com/dinaghiassian/DIAMOnD)\n  - [`ROBUST`](https://github.com/bionetslab/robust)\n  - [`ROBUST (bias-aware)`](https://github.com/bionetslab/robust_bias_aware)\n  - `1st Neighbors`\n  - `random walk with restart (RWR)`\n- Evaluation\n  - Over-representation analysis ([`g:Profiler`](https://cran.r-project.org/web/packages/gprofiler2/index.html))\n  - Functional coherence analysis ([`DIGEST`](https://pypi.org/project/biodigest/))\n  - Network topology analysis ([`graph-tool`](https://graph-tool.skewed.de/))\n  - Overlaps between different disease modules\n  - Seed set perturbation-based evaluation (robustness and seed rediscovery, enabled by `--run_seed_perturbation`)\n  - Network perturbation-based evaluation (robustness, enabled by `--run_network_perturbation`)\n- Export to the network medicine web visualization tool [`Drugst.One`](https://drugst.one/)\n- Drug prioritization using the API of [`Drugst.One`](https://drugst.one/)\n- Visualization of the module networks ([`graph-tool`](https://graph-tool.skewed.de/), [`pyvis`](https://github.com/WestHealth/pyvis))\n- Annotation with biological data (targeting drugs, side effects, associated disorders, cellular localization) queried from [`NeDRexDB`](https://nedrex.net/) and conversion to [`BioPAX`](https://www.biopax.org/) format.\n- Result and evaluation summary ([`MultiQC`](https://seqera.io/multiqc/))\n\n## Usage\n\n> [!NOTE]\n> If you are new to Nextflow and nf-core, please refer to [this page](https://nf-co.re/docs/get_started/environment_setup/overview) on how to set-up Nextflow. Make sure to [test your setup](https://nf-co.re/docs/get_started/run-your-first-pipeline) with `-profile test` before running the workflow on actual data.\n\n### Test your setup\n\n```bash\nnextflow run nf-core/diseasemodulediscovery \\\n   -profile <docker/singularity>,test \\\n   --outdir <OUTDIR>\n```\n\nThis will run the pipeline with a small test dataset. Results will be saved to the specified `<OUTDIR>`. Use `-profile` to set whether docker or singularity should be used for software deployment.\n\n### Running the pipeline\n\nNow, you can run the pipeline with your own data using:\n\n```bash\nnextflow run nf-core/diseasemodulediscovery \\\n   -profile <docker/singularity> \\\n   --seeds <SEED_FILE> \\\n   --network <NETWORK_FILE> \\\n   --outdir <OUTDIR>\n```\n\nThis will run the pipeline based on the provided `<SEED_FILE>` and `<NETWORK_FILE>`. Results will be saved to the specified `<OUTDIR>`. Use `-profile` to set whether docker or singularity should be used for software deployment.\n\n> [!WARNING]\n> Please provide pipeline parameters via the CLI or Nextflow `-params-file` option. Custom config files including those provided by the `-c` Nextflow option can be used to provide any configuration _**except for parameters**_; see [docs](https://nf-co.re/docs/running/run-pipelines#using-parameter-files).\n\nFor more details and further functionality, please refer to the [usage documentation](https://nf-co.re/diseasemodulediscovery/usage) and the [parameter documentation](https://nf-co.re/diseasemodulediscovery/parameters).\n\n> [!TIP]\n> **OS specifics**\n>\n> The pipeline works best in combination with Linux. Furthermore, some Docker images in the pipeline are natively only available for `amd64` but not the `arm` architecture.\n> Here are some tips to get the pipeline running with a different OS or architecture:\n>\n> **macOS**\n>\n> With macOS and Apple silicon, we had better experiences using the free version of [orbstack](https://orbstack.dev/download) instead of Docker Desktop for deploying the containers.\n>\n> **Windows**\n>\n> The most reliable solution is to work with the [Windows Subsystem for Linux (WSL)](https://documentation.ubuntu.com/wsl/latest/howto/install-ubuntu-wsl2/).\n>\n> **What if it keeps failing?**\n>\n> Most pipeline steps are not essential. If the pipeline keeps failing because of a specific process, you may be able to just [skip](https://nf-co.re/diseasemodulediscovery/dev/docs/usage/#skipping-steps) that one.\n\n## Pipeline output\n\nTo see the results of an example test run with a full size dataset refer to the [results](https://nf-co.re/diseasemodulediscovery/results) tab on the nf-core website pipeline page.\nFor more details about the output files and reports, please refer to the\n[output documentation](https://nf-co.re/diseasemodulediscovery/output).\n\n## Credits\n\nnf-core/diseasemodulediscovery was originally written by the [RePo4EU](https://repo4.eu/) consortium.\n\nWe thank the following people for their extensive assistance in the development of this pipeline:\n\n- [Johannes Kersting](https://github.com/JohannesKersting) (TUM)\n- [Lisa Spindler](https://github.com/lspindler2509) (TUM)\n- [Quirin Manz](https://github.com/quirinmanz) (TUM)\n- [Quim Aguirre](https://github.com/quimaguirre) (STALICLA)\n- [Chloé Bucheron](https://github.com/ChloeBubu) (University Vienna)\n\n## Contributions and Support\n\nIf you would like to contribute to this pipeline, please see the [contributing guidelines](docs/CONTRIBUTING.md).\n\nIf you want to include an additional module identification approach, please see [this guide](docs/contributing.md).\nFor further information or help, don't hesitate to get in touch on the [Slack `#diseasemodulediscovery` channel](https://nfcore.slack.com/channels/diseasemodulediscovery) (you can join with [this invite](https://nf-co.re/join/slack)).\n\n## Citations\n\nIf you use `nf-core/diseasemodulediscovery` for your analysis, please cite the preprint as follows:\n\n> Johannes Kersting, Chloé Bucheron, Lisa M. Spindler, Joaquim Aguirre-Plans, Quirin Manz, Tanja Pock, Mo Tan, Fernando M. Delgado-Chaves, Cristian Nogales, Harald H. H. W. Schmidt, Jörg Menche, Andreas Maier, Jan Baumbach, Emre Guney, Markus List **Inferring and Evaluating Network Medicine-Based Disease Modules with Nextflow** _bioRxiv_ , 2025, [doi: 10.1101/2025.11.20.687681](https://doi.org/10.1101/2025.11.20.687681).\n\n<!-- TODO nf-core: Add citation for pipeline after first release. Uncomment lines below and update Zenodo doi and badge at the top of this file. -->\n<!-- If you use nf-core/diseasemodulediscovery for your analysis, please cite it using the following doi: [10.5281/zenodo.XXXXXX](https://doi.org/10.5281/zenodo.XXXXXX) -->\n\nAn extensive list of references for the tools used by the pipeline can be found in the [`CITATIONS.md`](CITATIONS.md) file.\n\nYou can cite the `nf-core` publication as follows:\n\n> **The nf-core framework for community-curated bioinformatics pipelines.**\n>\n> Philip Ewels, Alexander Peltzer, Sven Fillinger, Harshil Patel, Johannes Alneberg, Andreas Wilm, Maxime Ulysse Garcia, Paolo Di Tommaso & Sven Nahnsen.\n>\n> _Nat Biotechnol._ 2020 Feb 13. doi: [10.1038/s41587-020-0439-x](https://dx.doi.org/10.1038/s41587-020-0439-x).\n",
             "hasPart": [
                 {
                     "@id": "main.nf"
                 },
                 {
+                    "@id": "docs/images/nf-core-diseasemodulediscovery_metro_map.png"
+                },
+                {
                     "@id": "assets/"
+                },
+                {
+                    "@id": "bin/"
                 },
                 {
                     "@id": "conf/"
@@ -42,6 +48,9 @@
                 },
                 {
                     "@id": "modules/"
+                },
+                {
+                    "@id": "modules/local/"
                 },
                 {
                     "@id": "modules/nf-core/"
@@ -99,7 +108,7 @@
             },
             "mentions": [
                 {
-                    "@id": "#7d2f8891-3ccf-44fc-8b2d-982bc21816b0"
+                    "@id": "#fe258603-1a22-4ffb-92de-3f13cc16ade2"
                 }
             ],
             "name": "nf-core/diseasemodulediscovery"
@@ -126,14 +135,49 @@
                 "SoftwareSourceCode",
                 "ComputationalWorkflow"
             ],
+            "author": [
+                {
+                    "@id": "https://orcid.org/0000-0002-3882-0093"
+                },
+                {
+                    "@id": "https://orcid.org/0009-0004-0699-6475"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-1971-1350"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-5706-2718"
+                },
+                {
+                    "@id": "https://orcid.org/0009-0001-6706-2789"
+                }
+            ],
             "contributor": [
                 {
-                    "@id": "#08e9336f-12bf-4ef0-8a56-a3243396e7ed"
+                    "@id": "https://orcid.org/0009-0004-0699-6475"
+                },
+                {
+                    "@id": "https://orcid.org/0009-0007-3502-3033"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-1971-1350"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-5706-2718"
+                },
+                {
+                    "@id": "https://orcid.org/0009-0007-4106-4659"
+                },
+                {
+                    "@id": "https://orcid.org/0009-0001-6706-2789"
                 }
             ],
             "dateCreated": "",
-            "dateModified": "2026-04-30T13:32:39Z",
+            "dateModified": "2026-06-25T15:36:31Z",
             "dct:conformsTo": "https://bioschemas.org/profiles/ComputationalWorkflow/1.0-RELEASE/",
+            "image": {
+                "@id": "docs/images/nf-core-diseasemodulediscovery_metro_map.png"
+            },
             "keywords": [
                 "nf-core",
                 "nextflow",
@@ -154,6 +198,11 @@
             "license": [
                 "MIT"
             ],
+            "maintainer": [
+                {
+                    "@id": "https://orcid.org/0000-0002-3882-0093"
+                }
+            ],
             "name": [
                 "nf-core/diseasemodulediscovery"
             ],
@@ -165,10 +214,10 @@
             },
             "url": [
                 "https://github.com/nf-core/diseasemodulediscovery",
-                "https://nf-co.re/diseasemodulediscovery/dev/"
+                "https://nf-co.re/diseasemodulediscovery/1.0.0/"
             ],
             "version": [
-                "1.0dev"
+                "1.0.0"
             ]
         },
         {
@@ -184,11 +233,19 @@
             "version": "!>=25.10.4"
         },
         {
-            "@id": "#7d2f8891-3ccf-44fc-8b2d-982bc21816b0",
+            "@id": "docs/images/nf-core-diseasemodulediscovery_metro_map.png",
+            "@type": [
+                "File",
+                "ImageObject"
+            ],
+            "name": "Workflow diagram"
+        },
+        {
+            "@id": "#fe258603-1a22-4ffb-92de-3f13cc16ade2",
             "@type": "TestSuite",
             "instance": [
                 {
-                    "@id": "#418e4b18-e335-434e-bd37-e55498e6f5c6"
+                    "@id": "#8721c2b3-7527-43ed-99ed-5d2b5a4f94f5"
                 }
             ],
             "mainEntity": {
@@ -197,7 +254,7 @@
             "name": "Test suite for nf-core/diseasemodulediscovery"
         },
         {
-            "@id": "#418e4b18-e335-434e-bd37-e55498e6f5c6",
+            "@id": "#8721c2b3-7527-43ed-99ed-5d2b5a4f94f5",
             "@type": "TestInstance",
             "name": "GitHub Actions workflow for testing nf-core/diseasemodulediscovery",
             "resource": "repos/nf-core/diseasemodulediscovery/actions/workflows/nf-test.yml",
@@ -220,6 +277,11 @@
             "description": "Additional files"
         },
         {
+            "@id": "bin/",
+            "@type": "Dataset",
+            "description": "Scripts that must be callable from a pipeline process"
+        },
+        {
             "@id": "conf/",
             "@type": "Dataset",
             "description": "Configuration files"
@@ -238,6 +300,11 @@
             "@id": "modules/",
             "@type": "Dataset",
             "description": "Modules used by the pipeline"
+        },
+        {
+            "@id": "modules/local/",
+            "@type": "Dataset",
+            "description": "Pipeline-specific modules"
         },
         {
             "@id": "modules/nf-core/",
@@ -326,9 +393,60 @@
             "url": "https://nf-co.re/"
         },
         {
-            "@id": "#08e9336f-12bf-4ef0-8a56-a3243396e7ed",
+            "@id": "https://orcid.org/0000-0002-3882-0093",
             "@type": "Person",
-            "name": "REPO4EU"
+            "affiliation": "Data Science in Systems Biology, TUM School of Life Sciences, Technical University of Munich, Germany.",
+            "email": "johannes.kersting@tum.de",
+            "name": "Johannes Kersting",
+            "url": "https://github.com/JohannesKersting"
+        },
+        {
+            "@id": "https://orcid.org/0009-0004-0699-6475",
+            "@type": "Person",
+            "affiliation": "Max Perutz Labs, Department of Structural and Computational Biology, University of Vienna, Vienna, Austria.",
+            "email": "chloe.bucheron@univie.ac.at",
+            "name": "Chloé Bucheron",
+            "url": "https://github.com/ChloeBubu"
+        },
+        {
+            "@id": "https://orcid.org/0009-0007-3502-3033",
+            "@type": "Person",
+            "affiliation": "Data Science in Systems Biology, TUM School of Life Sciences, Technical University of Munich, Germany.",
+            "email": "lisa.spindler@tum.de",
+            "name": "Lisa M. Spindler",
+            "url": "https://github.com/lspindler2509"
+        },
+        {
+            "@id": "https://orcid.org/0000-0002-1971-1350",
+            "@type": "Person",
+            "affiliation": "Discovery and Data Science (DDS) Unit, STALICLA SL, Barcelona, Spain.",
+            "email": "joaquim.aguirre@stalicla.com",
+            "name": "Joaquim Aguirre-Plans",
+            "url": "https://github.com/quimaguirre"
+        },
+        {
+            "@id": "https://orcid.org/0000-0002-5706-2718",
+            "@type": "Person",
+            "affiliation": "Data Science in Systems Biology, TUM School of Life Sciences, Technical University of Munich, Germany.",
+            "email": "quirin.manz@tum.de",
+            "name": "Quirin Manz",
+            "url": "https://github.com/quirinmanz"
+        },
+        {
+            "@id": "https://orcid.org/0009-0007-4106-4659",
+            "@type": "Person",
+            "affiliation": "Data Science in Systems Biology, TUM School of Life Sciences, Technical University of Munich, Germany.",
+            "email": "e28saf@mytum.de",
+            "name": "Tanja Pock",
+            "url": "https://github.com/tanjapock"
+        },
+        {
+            "@id": "https://orcid.org/0009-0001-6706-2789",
+            "@type": "Person",
+            "affiliation": "Data Science in Systems Biology, TUM School of Life Sciences, Technical University of Munich, Germany.",
+            "email": "mo.tan@tum.de",
+            "name": "Mo Tan",
+            "url": "https://github.com/Schansiate"
         }
     ]
 }

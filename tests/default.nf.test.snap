@@ -89,7 +89,7 @@
                     "pyvis": "0.3.1"
                 },
                 "Workflow": {
-                    "nf-core/diseasemodulediscovery": "v1.0dev"
+                    "nf-core/diseasemodulediscovery": "v1.0.0"
                 }
             },
             [
@@ -492,7 +492,7 @@
                 "node_degree_distribution_mqc.yaml:md5,b4b1eab1a3622315ecfc98065a2760c6"
             ]
         ],
-        "timestamp": "2026-06-25T14:19:27.908284051",
+        "timestamp": "2026-06-25T15:40:42.607012971",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.0"
