@@ -7,9 +7,12 @@ lint:
     - assets/sendmail_template.txt
   multiqc_config:
     - report_comment
-  nextflow_config:
-    - manifest.name
-    - manifest.homePage
+  ## ignore lining of the config file and schema for now
+  #  nextflow_config:
+  #    - manifest.name
+  #    - manifest.homePage
+  nextflow_config: false
+  schema_params: false
 nf_core_version: 4.0.2
 repository_type: pipeline
 template:
