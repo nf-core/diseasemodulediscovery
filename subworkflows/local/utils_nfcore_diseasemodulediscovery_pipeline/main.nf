@@ -98,6 +98,10 @@ workflow PIPELINE_INITIALISATION {
         nextflow_cli_args
     )
 
+    def prepared_networks_url = params.prepared_networks_url
+    def network_map = loadYamlAsMap("${prepared_networks_url}network_map.yaml")
+    def id_space_map = loadYamlAsMap("${prepared_networks_url}id_space_map.yaml")
+
     ch_seeds = Channel.empty()          // channel: [ val(meta[id,seeds_id,network_id]), path(seeds) ]
     ch_network = Channel.empty()        // channel: [ val(meta[id,network_id]), path(network) ]
     ch_shortest_paths = Channel.empty() // channel: [ val(meta[id,network_id]), path(shortest_paths) ]
@@ -111,7 +115,7 @@ workflow PIPELINE_INITIALISATION {
     // prepare network channel, if parameter is set
     if(network_param_set){
         ch_network = Channel.fromList(params.network.split(',').flatten())
-            .map{network -> mapPreparedNetwork(network, params.id_space)}
+            .map{network -> mapPreparedNetwork(network_map, id_space_map, prepared_networks_url, network, params.id_space)}
             .map{ it -> [ [ id: it.baseName, network_id: it.baseName ], it ] }
     }
 
@@ -151,7 +155,7 @@ workflow PIPELINE_INITIALISATION {
             ch_network = ch_input
                 .map{ it -> [it[1], it[2], it[3]]}
                 .map{ network, sp, perturbed_networks ->
-                    [ mapPreparedNetwork(network, params.id_space), sp, perturbed_networks ]
+                    [ mapPreparedNetwork(network_map, id_space_map, prepared_networks_url, network, params.id_space), sp, perturbed_networks ]
                 }
                 .map{ network, sp, perturbed_networks ->
                     [ [ id: network.baseName, network_id: network.baseName ], network, sp, perturbed_networks ]
@@ -171,7 +175,7 @@ workflow PIPELINE_INITIALISATION {
                 .map{ it ->
                     def seeds = it[0]
                     def network = it[1]
-                    def network_id = mapPreparedNetwork(network, params.id_space).baseName
+                    def network_id = mapPreparedNetwork(network_map, id_space_map, prepared_networks_url, network, params.id_space).baseName
                     [ [ id: seeds.baseName + "." + network_id, seeds_id: seeds.baseName, network_id: network_id ] , seeds ]
                 }
 
@@ -372,36 +376,26 @@ workflow PIPELINE_COMPLETION {
 */
 
 //
+// Load a YAML file and return its content as a map
+//
+def loadYamlAsMap(path) {
+    def yaml = new  org.yaml.snakeyaml.Yaml()
+    def parsed = yaml.load(file(path, checkIfExists: true).text)
+
+    assert parsed instanceof Map : "YAML root must be a dictionary"
+    return parsed
+}
+
+//
 // Check if the network is a prepared network or a file
 //
-def mapPreparedNetwork(network, id_space) {
-
-    def prepared_networks_url = "https://zenodo.org/records/15049754/files/"
-    def network_map = [
-        string_min900: "string.human_links_v12_0_min900",
-        string_min700: "string.human_links_v12_0_min700",
-        string_physical_min900: "string.human_physical_links_v12_0_min900",
-        string_physical_min700: "string.human_physical_links_v12_0_min700",
-        biogrid: "biogrid.4_4_242_homo_sapiens",
-        hippie_high_confidence: "hippie.v2_3_high_confidence",
-        hippie_medium_confidence:"hippie.v2_3_medium_confidence",
-        iid: "iid.human",
-        nedrex: "nedrex.reviewed_proteins_exp",
-        nedrex_high_confidence: "nedrex.reviewed_proteins_exp_high_confidence",
-    ]
-    def id_space_map = [
-        entrez: "Entrez",
-        ensembl: "Ensembl",
-        symbol: "Symbol",
-        uniprot: "UniProtKB-AC",
-    ]
+def mapPreparedNetwork(network_map, id_space_map, prepared_networks_url, network, id_space) {
     if (network_map.containsKey(network)) {
         return file("${prepared_networks_url}${network_map[network]}.${id_space_map[id_space]}.gt", checkIfExists: true)
     } else {
         return file(network, checkIfExists: true)
     }
 }
-
 //
 // Read a tsv file and return its content as a list of groovy maps
 //

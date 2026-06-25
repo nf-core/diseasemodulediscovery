@@ -59,12 +59,6 @@
                 "NETWORKPERTURBATIONEVALUATION": {
                     "python": "3.12.13"
                 },
-                "PROXIMITY": {
-                    "python": "3.12.13",
-                    "numpy": "2.1.3",
-                    "pandas": "2.2.3",
-                    "networkx": 3.3
-                },
                 "SAVEMODULES": {
                     "python": "3.12.13",
                     "graph-tool": "2.77 (commit 4ad25c62, )",
@@ -75,10 +69,6 @@
                 },
                 "SEEDPERTURBATIONEVALUATION": {
                     "python": "3.12.13"
-                },
-                "SHORTEST_PATHS": {
-                    "python": "3.12.13",
-                    "networkx": 3.3
                 },
                 "TOPOLOGY": {
                     "python": "3.12.13",
@@ -99,7 +89,7 @@
                     "pyvis": "0.3.1"
                 },
                 "Workflow": {
-                    "nf-core/diseasemodulediscovery": "v1.0dev"
+                    "nf-core/diseasemodulediscovery": "v1.0.0"
                 }
             },
             [
@@ -109,9 +99,6 @@
                 "drug_prioritization/drugstone/entrez_seeds_1.entrez_ppi.diamond.trustrank.drug_predictions.tsv",
                 "drug_prioritization/drugstone/entrez_seeds_1.entrez_ppi.no_tool.trustrank.csv",
                 "drug_prioritization/drugstone/entrez_seeds_1.entrez_ppi.no_tool.trustrank.drug_predictions.tsv",
-                "drug_prioritization/proximity",
-                "drug_prioritization/proximity/entrez_seeds_1.entrez_ppi.diamond.proximity.tsv",
-                "drug_prioritization/proximity/entrez_seeds_1.entrez_ppi.no_tool.proximity.tsv",
                 "evaluation",
                 "evaluation/digest",
                 "evaluation/digest/reference-based",
@@ -187,7 +174,6 @@
                 "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond.gprofiler2.gost_results.rds",
                 "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond.gprofiler2.gostplot.html",
                 "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond.gprofiler2.gostplot.png",
-                "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.diamond/gprofiler_full_hsapiens.GO_WP_REAC_KEGG.ENSG_filtered.gmt",
                 "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.no_tool",
                 "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.no_tool/R_sessionInfo.log",
                 "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.no_tool/entrez_seeds_1.entrez_ppi.no_tool.gprofiler2.GO:CC.sub_enriched_pathways.png",
@@ -200,7 +186,7 @@
                 "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.no_tool/entrez_seeds_1.entrez_ppi.no_tool.gprofiler2.gost_results.rds",
                 "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.no_tool/entrez_seeds_1.entrez_ppi.no_tool.gprofiler2.gostplot.html",
                 "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.no_tool/entrez_seeds_1.entrez_ppi.no_tool.gprofiler2.gostplot.png",
-                "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.no_tool/gprofiler_full_hsapiens.GO_WP_REAC_KEGG.ENSG_filtered.gmt",
+                "evaluation/gprofiler/gprofiler_full_hsapiens.GO_WP_REAC_KEGG.ENSG_filtered.gmt",
                 "evaluation/seed_perturbation",
                 "evaluation/seed_perturbation/entrez_seeds_1.entrez_ppi.diamond",
                 "evaluation/seed_perturbation/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond.seed_perturbation_evaluation_detailed.tsv",
@@ -224,8 +210,6 @@
                 "input/seeds",
                 "input/seeds/entrez_seeds_1.entrez_ppi.no_tool.gt",
                 "input/seeds/entrez_seeds_1.entrez_ppi.tsv",
-                "input/shortest_paths",
-                "input/shortest_paths/entrez_ppi.shortest_paths.pkl",
                 [
                     [
                         [
@@ -508,7 +492,7 @@
                 "node_degree_distribution_mqc.yaml:md5,b4b1eab1a3622315ecfc98065a2760c6"
             ]
         ],
-        "timestamp": "2026-06-23T15:30:30.075392251",
+        "timestamp": "2026-06-25T15:40:42.607012971",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.0"

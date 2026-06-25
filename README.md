@@ -50,9 +50,6 @@
 > [!NOTE]
 > If you are new to Nextflow and nf-core, please refer to [this page](https://nf-co.re/docs/get_started/environment_setup/overview) on how to set-up Nextflow. Make sure to [test your setup](https://nf-co.re/docs/get_started/run-your-first-pipeline) with `-profile test` before running the workflow on actual data.
 
-> [!WARNING]
-> The pipeline is still under development. In order to run it, please use the option `-r dev`
-
 ### Test your setup
 
 ```bash

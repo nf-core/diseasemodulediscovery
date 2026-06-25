@@ -84,6 +84,9 @@ params {
     // Path(s) to one or multiple PPI network(s) in gt, csv, tsv, graphml, xml, dot, or gml format.
     network: String?
 
+    // Set a custom repository link for the prepared networks.
+    prepared_networks_url: String = 'https://zenodo.org/records/18702264/files/'
+
     //
     // Network expansion
     //
