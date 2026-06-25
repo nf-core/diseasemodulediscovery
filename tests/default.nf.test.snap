@@ -186,7 +186,7 @@
                 "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.no_tool/entrez_seeds_1.entrez_ppi.no_tool.gprofiler2.gost_results.rds",
                 "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.no_tool/entrez_seeds_1.entrez_ppi.no_tool.gprofiler2.gostplot.html",
                 "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.no_tool/entrez_seeds_1.entrez_ppi.no_tool.gprofiler2.gostplot.png",
-                "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.no_tool/gprofiler_full_hsapiens.GO_WP_REAC_KEGG.ENSG_filtered.gmt",
+                "evaluation/gprofiler/gprofiler_full_hsapiens.GO_WP_REAC_KEGG.ENSG_filtered.gmt",
                 "evaluation/seed_perturbation",
                 "evaluation/seed_perturbation/entrez_seeds_1.entrez_ppi.diamond",
                 "evaluation/seed_perturbation/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond.seed_perturbation_evaluation_detailed.tsv",
@@ -492,7 +492,7 @@
                 "node_degree_distribution_mqc.yaml:md5,b4b1eab1a3622315ecfc98065a2760c6"
             ]
         ],
-        "timestamp": "2026-06-23T15:30:30.075392251",
+        "timestamp": "2026-06-25T14:19:27.908284051",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.0"

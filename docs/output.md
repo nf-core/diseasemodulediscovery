@@ -33,7 +33,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 - [Disease module evaluation](#disease-module-evaluation)
   - [g:Profiler](#gprofiler)
   - [DIGEST](#digest)
-  - [Network topology](#topology)
+  - [Network topology](#network-topology)
   - [Overlap](#overlap)
   - [Seed perturbation](#seed-perturbation)
   - [Network perturbation](#network-perturbation)
@@ -187,8 +187,9 @@ Output file documentation is based on the nf-core module [gprofiler2_gost](https
   - `<seeds>.<network>.<amim>.gprofiler2.gost_results.rds`: R object containing the results of the gost query.
   - `<seeds>.<network>.<amim>.gprofiler2.<source>.sub_enriched_pathways.tsv`: Table listing enriched pathways that were found from one particular source.
   - `<seeds>.<network>.<amim>.gprofiler2.<source>.sub_enriched_pathways.png`: Bar plot showing the fraction of genes that were found enriched in each pathway.
-  - `*ENSG_filtered.gmt`: GMT file that was provided as input or that was downloaded from g:profiler if no input GMT file was given; filtered for the selected datasources.
   - `R_sessionInfo.log`: Log file containing information about the R session that was run for this module.
+- `evaluation/gprofiler/`
+  - `*ENSG_filtered.gmt`: GMT file that was provided as input or that was downloaded from g:profiler if no input GMT file was given; filtered for the selected datasources.
 
 </details>
 
