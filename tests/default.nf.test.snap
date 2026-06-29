@@ -4,13 +4,13 @@
             {
                 "BIOPAX_PARSER": {
                     "python": "3.12.13",
-                    "graph-tool": "2.77 (commit 4ad25c62, )",
+                    "graph-tool": 2.77,
                     "pybiopax": "0.1.4",
                     "nedrex": "0.1.4"
                 },
                 "BIOPAX_VALIDATOR": {
-                    "java": "openjdk version \"20.0.2.1\" 2023-08-22",
-                    "biopax-validator": "/biopax-validator/lib/biopax-validator-6.0.0-SNAPSHOT.jar"
+                    "openjdk": "20.0.2.1",
+                    "biopax-validator": "6.0.0"
                 },
                 "DIAMOND": {
                     "python": "3.8.5"
@@ -30,7 +30,7 @@
                 },
                 "DRUGSTONEEXPORT": {
                     "python": "3.12.13",
-                    "graph-tool": "2.77 (commit 4ad25c62, )"
+                    "graph-tool": 2.77
                 },
                 "GPROFILER2_GOST\"": {
                     "r-ggplot2": "3.4.3",
@@ -39,29 +39,29 @@
                 },
                 "GRAPHTOOLPARSER": {
                     "python": "3.12.13",
-                    "graph-tool": "2.77 (commit 4ad25c62, )"
+                    "graph-tool": 2.77
                 },
                 "MODULEPARSER": {
                     "python": "3.12.13",
-                    "graph-tool": "2.77 (commit 4ad25c62, )"
+                    "graph-tool": 2.77
                 },
                 "MULTIQCFORMATTER": {
                     "python": "3.12.13"
                 },
                 "NETWORKANNOTATION": {
                     "python": "3.12.13",
-                    "graph-tool": "2.77 (commit 4ad25c62, )"
+                    "graph-tool": 2.77
                 },
                 "NETWORKPERTURBATION": {
                     "python": "3.12.13",
-                    "graph-tool": "2.77 (commit 4ad25c62, )"
+                    "graph-tool": 2.77
                 },
                 "NETWORKPERTURBATIONEVALUATION": {
                     "python": "3.12.13"
                 },
                 "SAVEMODULES": {
                     "python": "3.12.13",
-                    "graph-tool": "2.77 (commit 4ad25c62, )",
+                    "graph-tool": 2.77,
                     "pandas": "2.2.3"
                 },
                 "SEEDPERTURBATION": {
@@ -72,18 +72,18 @@
                 },
                 "TOPOLOGY": {
                     "python": "3.12.13",
-                    "graph-tool": "2.77 (commit 4ad25c62, )"
+                    "graph-tool": 2.77
                 },
                 "VISUALIZEMODULES": {
                     "python": "3.12.13",
-                    "graph-tool": "2.77 (commit 4ad25c62, )",
+                    "graph-tool": 2.77,
                     "networkx": 3.3,
                     "pyintergraph": "1.3.3",
                     "pyvis": "0.3.1"
                 },
                 "VISUALIZEMODULESDRUGS": {
                     "python": "3.12.13",
-                    "graph-tool": "2.77 (commit 4ad25c62, )",
+                    "graph-tool": 2.77,
                     "networkx": 3.3,
                     "pyintergraph": "1.3.3",
                     "pyvis": "0.3.1"
@@ -93,6 +93,22 @@
                 }
             },
             [
+                "disease_modules",
+                "disease_modules/biopax",
+                "disease_modules/biopax/entrez_seeds_1.entrez_ppi.diamond.owl",
+                "disease_modules/biopax/entrez_seeds_1.entrez_ppi.no_tool.owl",
+                "disease_modules/graphml",
+                "disease_modules/graphml/entrez_seeds_1.entrez_ppi.diamond.graphml",
+                "disease_modules/graphml/entrez_seeds_1.entrez_ppi.no_tool.graphml",
+                "disease_modules/gt",
+                "disease_modules/gt/entrez_seeds_1.entrez_ppi.diamond.gt",
+                "disease_modules/gt/entrez_seeds_1.entrez_ppi.no_tool.gt",
+                "disease_modules/tsv_edges",
+                "disease_modules/tsv_edges/entrez_seeds_1.entrez_ppi.diamond.edges.tsv",
+                "disease_modules/tsv_edges/entrez_seeds_1.entrez_ppi.no_tool.edges.tsv",
+                "disease_modules/tsv_nodes",
+                "disease_modules/tsv_nodes/entrez_seeds_1.entrez_ppi.diamond.nodes.tsv",
+                "disease_modules/tsv_nodes/entrez_seeds_1.entrez_ppi.no_tool.nodes.tsv",
                 "drug_prioritization",
                 "drug_prioritization/drugstone",
                 "drug_prioritization/drugstone/entrez_seeds_1.entrez_ppi.diamond.trustrank.csv",
@@ -210,156 +226,6 @@
                 "input/seeds",
                 "input/seeds/entrez_seeds_1.entrez_ppi.no_tool.gt",
                 "input/seeds/entrez_seeds_1.entrez_ppi.tsv",
-                [
-                    [
-                        [
-                            [
-                                "main.nf:md5,edc7751f3b79557e4ba8e11b6416fbb1"
-                            ],
-                            [
-                                "main.nf:md5,d9fb50d9c46e26f8b16a460f3673ecba"
-                            ]
-                        ],
-                        [
-                            "main.nf:md5,fe3c9fd70754703dc3fb36661a83d957"
-                        ],
-                        [
-                            "main.nf:md5,6b53235bb83350a7c7868dfd15f0fe0b"
-                        ],
-                        [
-                            [
-                                "main.nf:md5,87b351780c8cc372176da1d617da7e57"
-                            ],
-                            [
-                                "main.nf:md5,e318cedfe863b47ff3da3f9429a7f2b5"
-                            ]
-                        ],
-                        [
-                            "main.nf:md5,b8d27b931cf227907842f1b8eaff092c"
-                        ],
-                        [
-                            "main.nf:md5,e634b8b1a784d23d3aa4a622acbb8319"
-                        ],
-                        [
-                            "main.nf:md5,c63ef7440278f889ab5c6d56bce23e06"
-                        ],
-                        [
-                            "main.nf:md5,b05cab49c2df502baebbffac0352fafe"
-                        ],
-                        [
-                            "main.nf:md5,a936288c36f38445ad191ef3e0b9f4f9"
-                        ],
-                        [
-                            "main.nf:md5,d489dd80fea3144905442057f395ae60"
-                        ],
-                        [
-                            "main.nf:md5,ef97ebabc1f88357db0d0140a59c4fd9"
-                        ],
-                        [
-                            "main.nf:md5,c22c94f52d7dfae36a4f8470c7818804"
-                        ],
-                        [
-                            "main.nf:md5,5416d5bc6d14178c734672ab0f3a39d5"
-                        ],
-                        [
-                            "main.nf:md5,7a26946c4861bf5d704172f597d2b0ae"
-                        ],
-                        [
-                            "main.nf:md5,4af9f9cde7900373d4d2e7ce84db93c1"
-                        ],
-                        [
-                            "main.nf:md5,e12fcfd6a006b823e637a1d09eea906d"
-                        ],
-                        [
-                            "main.nf:md5,e40e8af8083cda018aedcc5f18041017"
-                        ],
-                        [
-                            "main.nf:md5,a91047b99bc5341b26d18964a45b1ced"
-                        ],
-                        [
-                            "main.nf:md5,970dcb2f1330a7cfff6e59bb42d351a4"
-                        ],
-                        [
-                            "main.nf:md5,971ec83fa330293e1efa6d372e8e1dba"
-                        ],
-                        [
-                            "main.nf:md5,2307cef212413dccf6af50743cc3a2e8"
-                        ],
-                        [
-                            "main.nf:md5,1d19c2cf277a772abe2a9c9d76533425"
-                        ],
-                        [
-                            "main.nf:md5,2c00b3cace082eafaa48838c18d91307"
-                        ],
-                        [
-                            "main.nf:md5,f23409e823cb306717d0af4fe82a460e"
-                        ],
-                        [
-                            "main.nf:md5,31f5e51f1312a0c70c0b18ae90b38f9c"
-                        ],
-                        [
-                            "main.nf:md5,1abc41275c99a05b0acbc268bf466e1c"
-                        ],
-                        [
-                            "main.nf:md5,8e3455c64b9f1eb8c4a4d69b762b5eab"
-                        ],
-                        [
-                            "main.nf:md5,26e2a055dd8e000d9b2a56ca5191e99f"
-                        ],
-                        [
-                            "main.nf:md5,385dcf180a788ce1499624d86a363a90"
-                        ]
-                    ],
-                    [
-                        [
-                            [
-                                "environment.yml:md5,d56be896e649694d01ff46e4779bcd2a",
-                                "main.nf:md5,b94a0f3db2722d765875cd0fda702b77",
-                                "meta.yml:md5,d4894f41ff2aaf5922b6846862ca1d3f",
-                                [
-                                    "gprofiler2_gost.R:md5,9a5cfe533e0e867cf4440a72de14e8b0"
-                                ],
-                                [
-                                    "main.nf.test:md5,21b1e65a5fd8d2f85190074c1ef2c962",
-                                    "main.nf.test.snap:md5,7dbbb9b0a17e04c0c58ca21261d28e9c",
-                                    "nextflow.config:md5,684f141dc7436b53314bc3c5212c2f60"
-                                ]
-                            ]
-                        ],
-                        [
-                            [
-                                "linux_amd64-bd-c1f4a7982b743963_1.txt:md5,ed9df67422d6e79d1318ca1bf0b585c5",
-                                "linux_amd64-bd-db7c73dae76bc9e6_1.txt:md5,a8c87b62cb6eb424feb7a18ddecf4e17",
-                                "linux_arm64-bd-40bf3b435e89dc22_1.txt:md5,49f40ef62d259f661d6395769ca4f8d2",
-                                "linux_arm64-bd-d167b8012595a136_1.txt:md5,c3906e92419e29575a4ad63b57c21f62"
-                            ],
-                            "environment.yml:md5,ab8cbdd8fc2159a9eb619e5886e130ec",
-                            "main.nf:md5,6b4391220918a1e6fb9b38b8e36076f2",
-                            "meta.yml:md5,1876e5690081654235d10c9c9083461e",
-                            [
-                                "custom_prefix.config:md5,8eb88d777062553b31b4871450d03bec",
-                                "main.nf.test:md5,b9accaf8c6e87f56338a8bf3602d7ef2",
-                                "main.nf.test.snap:md5,c973e27753bff7906f76c4fdfcf24f6e",
-                                "nextflow.config:md5,f74dece0ba6ff1899a740950d213acac"
-                            ]
-                        ]
-                    ]
-                ],
-                "modules/biopax",
-                "modules/biopax/entrez_seeds_1.entrez_ppi.diamond.owl",
-                "modules/biopax/entrez_seeds_1.entrez_ppi.no_tool.owl",
-                "modules/graphml",
-                "modules/graphml/entrez_seeds_1.entrez_ppi.diamond.graphml",
-                "modules/graphml/entrez_seeds_1.entrez_ppi.no_tool.graphml",
-                "modules/gt",
-                "modules/gt/entrez_seeds_1.entrez_ppi.diamond.gt",
-                "modules/gt/entrez_seeds_1.entrez_ppi.no_tool.gt",
-                "modules/tsv_edges",
-                "modules/tsv_edges/entrez_seeds_1.entrez_ppi.diamond.edges.tsv",
-                "modules/tsv_edges/entrez_seeds_1.entrez_ppi.no_tool.edges.tsv",
-                "modules/tsv_nodes",
-                "modules/tsv_nodes/entrez_seeds_1.entrez_ppi.diamond.nodes.tsv",
-                "modules/tsv_nodes/entrez_seeds_1.entrez_ppi.no_tool.nodes.tsv",
                 "modules_visualized",
                 "modules_visualized/html",
                 "modules_visualized/html/entrez_seeds_1.entrez_ppi.diamond.html",
@@ -478,21 +344,21 @@
                 "reports/biopax-validator-report.html"
             ],
             [
+                "entrez_seeds_1.entrez_ppi.no_tool.graphml:md5,cc3311884751102ec002365dc513bb42",
+                "entrez_seeds_1.entrez_ppi.no_tool.gt:md5,d904aa651ab7267f077e75a6f0dc4f5c",
+                "entrez_seeds_1.entrez_ppi.no_tool.edges.tsv:md5,99cbfff7b59f45c1de3e5e6d36692099",
+                "entrez_seeds_1.entrez_ppi.no_tool.nodes.tsv:md5,6d067dc2849d56e45b7aadf4b5f02fbd",
                 "entrez_ppi.diamond.csv:md5,59c734eaa00f2265dd1bb896f2aee772",
                 "entrez_ppi.gt:md5,c908f353a8a0e0cb04aa9cb67121521d",
                 "entrez_ppi.node_degree_distribution.yaml:md5,24eee40aaebf40772be9fc643e36c6b9",
                 "entrez_seeds_1.entrez_ppi.no_tool.gt:md5,e19b2d65dfd9fd20f1a8f843d52c1235",
                 "entrez_seeds_1.entrez_ppi.tsv:md5,1291b36e8add2d6ef0b8b72f7889016b",
-                "entrez_seeds_1.entrez_ppi.no_tool.graphml:md5,cc3311884751102ec002365dc513bb42",
-                "entrez_seeds_1.entrez_ppi.no_tool.gt:md5,d904aa651ab7267f077e75a6f0dc4f5c",
-                "entrez_seeds_1.entrez_ppi.no_tool.edges.tsv:md5,99cbfff7b59f45c1de3e5e6d36692099",
-                "entrez_seeds_1.entrez_ppi.no_tool.nodes.tsv:md5,6d067dc2849d56e45b7aadf4b5f02fbd",
                 "input_network_mqc.tsv:md5,eedaf7f299c89a43429fa66dffb2bbc3",
                 "input_seeds_mqc.tsv:md5,269d96ba266e5481c37a550fe4f13521",
                 "node_degree_distribution_mqc.yaml:md5,b4b1eab1a3622315ecfc98065a2760c6"
             ]
         ],
-        "timestamp": "2026-06-25T15:40:42.607012971",
+        "timestamp": "2026-06-29T17:24:04.383090522",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.0"

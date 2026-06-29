@@ -10,12 +10,13 @@ multiqc/multiqc_report.html
 pipeline_info/*.{html,json,txt,yml}
 input/perturbed_networks/**
 input/shortest_paths/**
-modules/biopax/**
-modules/{graphml,gt,tsv_edges,tsv_nodes}/*{diamond}*.{gt,graphml,tsv}
+disease_modules/biopax/**
+disease_modules/{graphml,gt,tsv_edges,tsv_nodes}/*{diamond}*.{gt,graphml,tsv}
 reports/biopax-validator-report.html
 modules_visualized/**
 modules_visualized_with_drugs/**
-evaluation/**
+evaluation/{digest,gprofiler}/**
+evaluation/seed_perturbation/*{diamond}*/**
 drug_prioritization/**
 multiqc/**
 mqc_summaries/drugstone_link_mqc.tsv

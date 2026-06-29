@@ -94,7 +94,7 @@ In addition to the inferred disease modules, the pipeline provides a dummy modul
 <details markdown="1">
 <summary>Output files</summary>
 
-- `modules/{gt,graphml,tsv_nodes,tsv_edges}/`
+- `disease_modules/{gt,graphml,tsv_nodes,tsv_edges}/`
   - `<seeds>.<network>.no_tool.{gt,grahml,nodes.tsv,edges.tsv}`: Module containing only the seed nodes in different formats.
 
 </details>
@@ -106,7 +106,7 @@ In addition to the inferred disease modules, the pipeline provides a dummy modul
 <details markdown="1">
 <summary>Output files</summary>
 
-- `modules/{gt,graphml,tsv_nodes,tsv_edges}/`
+- `disease_modules/{gt,graphml,tsv_nodes,tsv_edges}/`
   - `<seeds>.<network>.domino.{gt,grahml,nodes.tsv,edges.tsv}`: DOMINO module in different formats.
 
 </details>
@@ -118,7 +118,7 @@ In addition to the inferred disease modules, the pipeline provides a dummy modul
 <details markdown="1">
 <summary>Output files</summary>
 
-- `modules/{gt,graphml,tsv_nodes,tsv_edges}/`
+- `disease_modules/{gt,graphml,tsv_nodes,tsv_edges}/`
   - `<seeds>.<network>.diamond.{gt,grahml,nodes.tsv,edges.tsv}`: DIAMOnD module in different formats.
 
 </details>
@@ -130,7 +130,7 @@ In addition to the inferred disease modules, the pipeline provides a dummy modul
 <details markdown="1">
 <summary>Output files</summary>
 
-- `modules/{gt,graphml,tsv_nodes,tsv_edges}/`
+- `disease_modules/{gt,graphml,tsv_nodes,tsv_edges}/`
   - `<seeds>.<network>.robust.{gt,grahml,nodes.tsv,edges.tsv}`: ROBUST module in different formats.
 
 </details>
@@ -142,7 +142,7 @@ In addition to the inferred disease modules, the pipeline provides a dummy modul
 <details markdown="1">
 <summary>Output files</summary>
 
-- `modules/{gt,graphml,tsv_nodes,tsv_edges}/`
+- `disease_modules/{gt,graphml,tsv_nodes,tsv_edges}/`
   - `<seeds>.<network>.robust_bias_aware.{gt,grahml,nodes.tsv,edges.tsv}`: ROBUST (bias-aware) module in different formats.
 
 </details>
@@ -152,7 +152,7 @@ In addition to the inferred disease modules, the pipeline provides a dummy modul
 <details markdown="1">
 <summary>Output files</summary>
 
-- `modules/{gt,graphml,tsv_nodes,tsv_edges}/`
+- `disease_modules/{gt,graphml,tsv_nodes,tsv_edges}/`
   - `<seeds>.<network>.rwr.{gt,grahml,nodes.tsv,edges.tsv}`: RWR module in different formats.
 
 </details>
@@ -164,7 +164,7 @@ In addition to the inferred disease modules, the pipeline provides a dummy modul
 <details markdown="1">
 <summary>Output files</summary>
 
-- `modules/{gt,graphml,tsv_nodes,tsv_edges}/`
+- `disease_modules/{gt,graphml,tsv_nodes,tsv_edges}/`
   - `<seeds>.<network>.firstneighbor.{gt,grahml,nodes.tsv,edges.tsv}`: 1st Neighbors module in different formats.
 
 </details>
@@ -388,7 +388,7 @@ The resulting files have the following structure:
 <details markdown="1">
 <summary>Output files</summary>
 
-- `modules/biopax/`
+- `disease_modules/biopax/`
   - `<seeds>.<network>.<amim>.owl`: BioPax-files for each module in BioPax-format.
 
 - `reports/`
