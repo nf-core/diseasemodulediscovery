@@ -94,10 +94,13 @@ workflow NETWORKEXPANSION {
             [ dup, module, seeds, network, blacklist]
         }
 
+    //ch_module_parser_input.view()
+
     MODULEPARSER(ch_module_parser_input)
     ch_versions = ch_versions.mix(MODULEPARSER.out.versions.first())
     ch_modules = ch_modules.mix(MODULEPARSER.out.module)
 
+    ch_modules.view()
 
     emit:
     modules  = ch_modules               // channel: [ val(meta[id,module_id,amim,seeds_id,network_id]), path(module) ]
