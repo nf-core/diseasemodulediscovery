@@ -52,7 +52,7 @@ def save_node_degree_distribution(input_files, header_file):
     mqc_payload["data"] = [absolute_data, relative_data]
 
     with open("./node_degree_distribution_mqc.yaml", "w", encoding="utf-8") as file:
-        yaml.safe_dump(mqc_payload, file, sort_keys=False, default_flow_style=None)
+        yaml.safe_dump(mqc_payload, file, default_flow_style=None)
 
 
 def main():

@@ -217,7 +217,6 @@
                 "input/networks",
                 "input/networks/entrez_ppi.diamond.csv",
                 "input/networks/entrez_ppi.gt",
-                "input/networks/entrez_ppi.node_degree_distribution.yaml",
                 "input/perturbed_networks",
                 "input/perturbed_networks/entrez_ppi",
                 "input/perturbed_networks/entrez_ppi/entrez_ppi.perm_0.gt",
@@ -350,15 +349,14 @@
                 "entrez_seeds_1.entrez_ppi.no_tool.nodes.tsv:md5,6d067dc2849d56e45b7aadf4b5f02fbd",
                 "entrez_ppi.diamond.csv:md5,59c734eaa00f2265dd1bb896f2aee772",
                 "entrez_ppi.gt:md5,c908f353a8a0e0cb04aa9cb67121521d",
-                "entrez_ppi.node_degree_distribution.yaml:md5,24eee40aaebf40772be9fc643e36c6b9",
                 "entrez_seeds_1.entrez_ppi.no_tool.gt:md5,e19b2d65dfd9fd20f1a8f843d52c1235",
                 "entrez_seeds_1.entrez_ppi.tsv:md5,1291b36e8add2d6ef0b8b72f7889016b",
                 "input_network_mqc.tsv:md5,eedaf7f299c89a43429fa66dffb2bbc3",
                 "input_seeds_mqc.tsv:md5,269d96ba266e5481c37a550fe4f13521",
-                "node_degree_distribution_mqc.yaml:md5,b4b1eab1a3622315ecfc98065a2760c6"
+                "node_degree_distribution_mqc.yaml:md5,d6a05ace0a3f6dc518c1106334462049"
             ]
         ],
-        "timestamp": "2026-06-30T08:45:59.208066053",
+        "timestamp": "2026-06-30T19:11:41.967837911",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.0"

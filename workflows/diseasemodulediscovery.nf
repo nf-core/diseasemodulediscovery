@@ -147,7 +147,8 @@ workflow DISEASEMODULEDISCOVERY {
             cache: false,
             storeDir: "${params.outdir}/mqc_summaries",
             name: 'input_network_mqc.tsv',
-            keepHeader: true
+            keepHeader: true,
+            sort: { file -> file.text }
         )
     ch_multiqc_files = ch_multiqc_files.mix(ch_network_multiqc)
     ch_network_gt = GRAPHTOOLPARSER.out.network
@@ -167,7 +168,8 @@ workflow DISEASEMODULEDISCOVERY {
             cache: false,
             storeDir: "${params.outdir}/mqc_summaries",
             name: 'input_seeds_mqc.tsv',
-            keepHeader: true
+            keepHeader: true,
+            sort: { file -> file.text }
         )
     ch_multiqc_files = ch_multiqc_files.mix(ch_seeds_multiqc)
 
