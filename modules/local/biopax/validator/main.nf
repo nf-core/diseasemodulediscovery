@@ -31,8 +31,8 @@ process BIOPAX_VALIDATOR {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        java: \$(java -version 2>&1 | head -n 1)
-        biopax-validator: \$(ls /biopax-validator/lib/biopax-validator*.jar)
+        openjdk: \$(java -version 2>&1 | head -n1 | cut -d'"' -f2)
+        biopax-validator: \$(ls /biopax-validator/lib/biopax-validator*.jar | grep -oE '[0-9]+[.][0-9]+[.][0-9]+')
     END_VERSIONS
     """
 }

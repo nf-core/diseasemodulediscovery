@@ -1,34 +1,29 @@
 lint:
   files_exist:
-    - CODE_OF_CONDUCT.md
-    - assets/nf-core-modulediscovery_logo_light.png
-    - docs/images/nf-core-modulediscovery_logo_light.png
-    - docs/images/nf-core-modulediscovery_logo_dark.png
-    - .github/ISSUE_TEMPLATE/config.yml
-    - .github/workflows/awstest.yml
-    - .github/workflows/awsfulltest.yml
     - conf/igenomes.config
+    - conf/igenomes_ignored.config
   files_unchanged:
-    - CODE_OF_CONDUCT.md
-    - assets/nf-core-modulediscovery_logo_light.png
-    - docs/images/nf-core-modulediscovery_logo_light.png
-    - docs/images/nf-core-modulediscovery_logo_dark.png
-    - .github/ISSUE_TEMPLATE/bug_report.yml
+    - .github/CONTRIBUTING.md
+    - assets/sendmail_template.txt
   multiqc_config:
     - report_comment
-  nextflow_config:
-    - manifest.name
-    - manifest.homePage
-nf_core_version: 3.2.0
+  ## ignore lining of the config file and schema for now
+  #  nextflow_config:
+  #    - manifest.name
+  #    - manifest.homePage
+  nextflow_config: false
+  schema_params: false
+nf_core_version: 4.0.2
 repository_type: pipeline
 template:
   author: REPO4EU
   description: A pipeline for network-based disease module identification
   force: false
-  is_nfcore: false
-  name: modulediscovery
-  org: REPO4EU
+  is_nfcore: true
+  name: diseasemodulediscovery
+  org: nf-core
   outdir: .
   skip_features:
     - igenomes
-  version: 1.0dev
+    - fastqc
+  version: 1.0.0

@@ -1,0 +1,51 @@
+nextflow_pipeline {
+
+    name "Test prepared networks"
+    script "../main.nf"
+    tag "pipeline"
+
+
+    test("Test prepared networks") {
+
+        when {
+            params {
+                outdir = "$outputDir"
+
+                // Input data
+                seeds                   = "https://raw.githubusercontent.com/nf-core/test-datasets/diseasemodulediscovery/small/entrez_seeds_1.csv"
+                network                 = "string_min900,string_min700,string_physical_min900,string_physical_min700,biogrid,hippie_high_confidence,hippie_medium_confidence,iid,nedrex,nedrex_high_confidence"
+
+                // Skip all steps that are not needed for testing the prepared networks
+                skip_diamond            = true
+                skip_domino             = true
+                skip_rwr                = true
+                skip_robust             = true
+                skip_robust_bias_aware  = true
+                skip_firstneighbor      = true
+                skip_visualization      = true
+                skip_drugstone_export   = true
+                skip_evaluation         = true
+                skip_annotation         = true
+                skip_drug_predictions   = true
+            }
+        }
+
+        then {
+            // stable_path: All files + folders in ${params.outdir}/ with a stable path (including file name)
+            def stable_path = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
+            // stable_content: All files in ${params.outdir}/ with stable content
+            def stable_content = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            assert workflow.success
+            assertAll(
+                { assert snapshot(
+                    // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
+                    removeNextflowVersion("$outputDir/pipeline_info/nf_core_diseasemodulediscovery_software_mqc_versions.yml"),
+                    // All stable path name, with a relative path
+                    stable_path,
+                    // All files with stable contents
+                    stable_content
+                ).match() }
+            )
+        }
+    }
+}

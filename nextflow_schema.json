@@ -1,7 +1,7 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://raw.githubusercontent.com/REPO4EU/modulediscovery/main/nextflow_schema.json",
-    "title": "REPO4EU/modulediscovery pipeline parameters",
+    "$id": "https://raw.githubusercontent.com/nf-core/diseasemodulediscovery/main/nextflow_schema.json",
+    "title": "nf-core/diseasemodulediscovery pipeline parameters",
     "description": "A pipeline for network-based disease module identification",
     "type": "object",
     "$defs": {
@@ -30,7 +30,7 @@
                 },
                 "network": {
                     "type": "string",
-                    "description": "Path(s) to one or multiple PPI network(s) in gt, csv, graphml, xml, dot, or gml format.",
+                    "description": "Path(s) to one or multiple PPI network(s) in gt, csv, tsv, graphml, xml, dot, or gml format.",
                     "format": "file-path",
                     "fa_icon": "fas fa-file-csv",
                     "help_text": "Multiple files have to be \",\" separated."
@@ -59,6 +59,13 @@
                     "type": "string",
                     "description": "MultiQC report title. Printed as page header, used for filename if not otherwise specified.",
                     "fa_icon": "fas fa-file-signature"
+                },
+                "prepared_networks_url": {
+                    "type": "string",
+                    "default": "https://zenodo.org/records/18702264/files/",
+                    "fa_icon": "fas fa-link",
+                    "hidden": true,
+                    "description": "Set a custom repository link for the prepared networks."
                 }
             }
         },
@@ -86,7 +93,7 @@
                 },
                 "skip_robust_bias_aware": {
                     "type": "boolean",
-                    "description": "Flag for skipping Robust-bias-aware",
+                    "description": "Flag for skipping Robust (bias-aware)",
                     "fa_icon": "fas fa-forward"
                 },
                 "skip_diamond": {
@@ -153,6 +160,12 @@
                     "type": "boolean",
                     "fa_icon": "fas fa-forward",
                     "description": "Flag for skipping the export to the Drugst.One platform"
+                },
+                "drugstone_max_nodes": {
+                    "type": "integer",
+                    "default": 500,
+                    "fa_icon": "fas fa-project-diagram",
+                    "description": "If a module has more nodes it will not be exported to the Drugst.One platform. Includes drug prioritization."
                 }
             }
         },
@@ -203,26 +216,36 @@
                     "description": "Flag for skipping DIGEST",
                     "fa_icon": "fas fa-forward"
                 },
-                "run_seed_permutation": {
+                "skip_digest_reference_free": {
+                    "type": "boolean",
+                    "fa_icon": "fas fa-forward",
+                    "description": "Flag for skipping only the reference-free mode of DIGEST"
+                },
+                "skip_digest_reference_based": {
+                    "type": "boolean",
+                    "fa_icon": "fas fa-forward",
+                    "description": "Flag for skipping only the reference-based mode of DIGEST"
+                },
+                "run_seed_perturbation": {
                     "type": "boolean",
                     "fa_icon": "fas fa-caret-right",
-                    "description": "Flag for running the seed permutation-based evaluation"
+                    "description": "Flag for running the seed perturbation-based evaluation"
                 },
-                "run_network_permutation": {
+                "run_network_perturbation": {
                     "type": "boolean",
                     "fa_icon": "fas fa-caret-right",
-                    "description": "Flag for running the network permutation-base evaluation"
+                    "description": "Flag for running the network perturbation-base evaluation"
                 },
-                "n_network_permutations": {
+                "n_network_perturbations": {
                     "type": "integer",
-                    "default": 1000,
+                    "default": 100,
                     "fa_icon": "fas fa-cogs",
-                    "description": "Number of times the network will be permuted for the network permutation-based evaluation"
+                    "description": "Number of times the network will be perturbed for the network perturbation-based evaluation"
                 },
-                "permuted_networks": {
+                "perturbed_networks": {
                     "type": "string",
                     "fa_icon": "fas fa-folder-open",
-                    "description": "Path(s) to folder(s) with pre-computed permuted networks for the network permutation-based evaluation"
+                    "description": "Path(s) to folder(s) with pre-computed perturbed networks for the network perturbation-based evaluation"
                 }
             }
         },
@@ -377,13 +400,6 @@
                     "fa_icon": "fas fa-palette",
                     "hidden": true
                 },
-                "hook_url": {
-                    "type": "string",
-                    "description": "Incoming hook URL for messaging service",
-                    "fa_icon": "fas fa-people-group",
-                    "help_text": "Incoming hook URL for messaging service. Currently, MS Teams and Slack are supported.",
-                    "hidden": true
-                },
                 "multiqc_config": {
                     "type": "string",
                     "format": "file-path",
@@ -421,6 +437,18 @@
                     "fa_icon": "far calendar",
                     "description": "Suffix to add to the trace report filename. Default is the date and time in the format yyyy-MM-dd_HH-mm-ss.",
                     "hidden": true
+                },
+                "help": {
+                    "type": ["boolean", "string"],
+                    "description": "Display the help message."
+                },
+                "help_full": {
+                    "type": "boolean",
+                    "description": "Display the full detailed help message."
+                },
+                "show_hidden": {
+                    "type": "boolean",
+                    "description": "Display hidden parameters in the help message (only works when --help or --help_full are provided)."
                 }
             }
         }

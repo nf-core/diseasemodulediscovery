@@ -1,17 +1,19 @@
-# REPO4EU/modulediscovery: Usage
+# nf-core/diseasemodulediscovery: Usage
+
+## :warning: Please read this documentation on the nf-core website: [https://nf-co.re/diseasemodulediscovery/usage](https://nf-co.re/diseasemodulediscovery/usage)
 
 > _Documentation of pipeline parameters is generated automatically from the pipeline schema and can no longer be found in markdown files._
 
 ## Introduction
 
-**REPO4EU/modulediscovery** is a bioinformatics pipeline for network medicine hypothesis generation, designed for identifying active/disease modules. Developed and maintained by the [RePo4EU](https://repo4.eu/) consortium, it aims to characterize the molecular mechanisms of diseases by analyzing the local neighborhood of disease-associated genes or proteins (seeds) within the interactome. This approach can help identify potential drug targets for drug repurposing.
+**nf-core/diseasemodulediscovery** is a bioinformatics pipeline for network medicine hypothesis generation, designed for identifying active/disease modules. Developed and maintained by the [RePo4EU](https://repo4.eu/) consortium, it aims to characterize the molecular mechanisms of diseases by analyzing the local neighborhood of disease-associated genes or proteins (seeds) within the interactome. This approach can help identify potential drug targets for drug repurposing.
 
 ## Running the pipeline
 
 The typical command for running the pipeline is as follows:
 
 ```bash
-nextflow run <PATH_TO_REPO>/modulediscovery/main.nf \
+nextflow run nf-core/diseasemodulediscovery \
    -profile docker \
    --seeds ./seeds.txt \
    --network ./ppi.csv \
@@ -21,9 +23,32 @@ nextflow run <PATH_TO_REPO>/modulediscovery/main.nf \
 
 This will launch the pipeline with the `docker` configuration profile. See below for more information about profiles.
 
-`--seeds` has to point to a text file with seed genes or proteins, without a header and one line per entry.
+`--seeds` has to point to a text file with seed genes or proteins, without a header and one line per entry. Format example:
 
-`--network` has to point to file containing a background network. This can be a CSV edge list (without header), or a .gt, .graphml, or .dot file. Alternatively, you can choose one of the available background networks (see below).
+```csv title="seeds.txt"
+2717
+175
+4669
+4125
+348
+4126
+411
+```
+
+`--network` has to point to file containing a background network. This can be a CSV edge list (without header), or a .gt, .graphml, or .dot file. Alternatively, you can choose one of the available background networks ([see below](#available-networks)). Format example:
+
+```csv title="ppi.csv"
+3920,5476
+113457,4214
+113457,7132
+113457,1326
+113457,1147
+113457,3551
+113457,29110
+113457,8717
+113457,9641
+113457,9020
+```
 
 `--id_space` has to indicate the ID space your genes or proteins are using. For genes Entrez IDs, Ensembl IDs, and HGNC Symbols are supported. For proteins UniProt-AC IDs are supported.
 
@@ -41,12 +66,12 @@ If you wish to repeatedly use the same parameters for multiple runs, rather than
 Pipeline settings can be provided in a `yaml` or `json` file via `-params-file <file>`.
 
 > [!WARNING]
-> Do not use `-c <file>` to specify parameters as this will result in errors. Custom config files specified with `-c` must only be used for [tuning process resource specifications](https://nf-co.re/docs/usage/configuration#tuning-workflow-resources), other infrastructural tweaks (such as output directories), or module arguments (args).
+> Do not use `-c <file>` to specify parameters as this will result in errors. Custom config files specified with `-c` must only be used for [tuning process resource specifications](https://nf-co.re/docs/running/run-pipelines#configuring-pipelines), other infrastructural tweaks (such as output directories), or module arguments (args).
 
 The above pipeline run specified with a params file in yaml format:
 
 ```bash
-nextflow run REPO4EU/modulediscovery -profile docker -params-file params.yaml
+nextflow run nf-core/diseasemodulediscovery -profile docker -params-file params.yaml
 ```
 
 with:
@@ -111,9 +136,7 @@ If multiple files are provided for both options, the pipeline will run for every
 
 In case you are only interested in specific combinations, seeds-network pairs can be specified via a CSV samplesheet:
 
-`samplesheet.csv`:
-
-```csv
+```csv, title="samplesheet.csv"
 seeds,network
 seed_file_1.csv,network_1.csv
 seed_file_2.csv,network_2.csv
@@ -154,10 +177,34 @@ nextflow run <PATH_TO_REPO>/modulediscovery/main.nf \
    -resume
 ```
 
-To see the full list of skipping options, please run:
+To see the full list of skipping options, please refer to the [parameter documentation](https://nf-co.re/diseasemodulediscovery/parameters).
+
+### Perturbation-based analyses
+
+Since the input perturbation-based analyses workflows can be computationally expensive, the pipeline does not run them by default.
+
+Use `--run_seed_perturbation` to perform a leave-one-out analysis. This option sequentially removes each seed gene or protein from the seed file input. The module identification methods are then rerun on these perturbed datasets to evaluate their robustness to small input changes and their ability to reintegrate the omitted seeds.
+
+Use `--run_network_perturbation` to repeatedly rewire the edges of the input network while preserving the degree of each node. The pipeline then reruns the module identification methods on these rewired networks. If rewiring has little effect, it suggests that the modules are driven mainly by node degree rather than by specific edge connections.
+
+The pipeline saves the rewired networks (please refer to the [output documentation](https://nf-co.re/diseasemodulediscovery/output)), which can be reused in future analyses with the same original input network. To do so, provide the path to the folder containing the rewired networks via the `--perturbed_networks` parameter. If multiple networks are used, the folders specified in `--perturbed_networks` must be given in the same order as the corresponding input networks.
 
 ```bash
-nextflow run <PATH_TO_REPO>/modulediscovery/main.nf --help
+nextflow run <PATH_TO_REPO>/modulediscovery/main.nf \
+   -profile <docker/singularity> \
+   --seeds <SEED_FILE_> \
+   --network <NETWORK_FILE_1,NETWORK_FILE_2,...> \
+   --perturbed_networks <PATH_TO_PERTURBED_NETWORK_FOLDER_1,PATH_TO_PERTURBED_NETWORK_FOLDER_1,...> \
+   --outdir <OUTDIR>
+```
+
+Alternatively, they can be specified using the samplesheet:
+
+```csv, title="samplesheet.csv"
+seeds,network,perturbed_networks
+seed_file_1.csv,network_1.csv,/path/to/perturbed/networks/network_1
+seed_file_2.csv,network_2.csv,/path/to/perturbed/networks/network_2
+seed_file_2.csv,network_1.csv,/path/to/perturbed/networks/network_1
 ```
 
 ### Updating the pipeline
@@ -165,14 +212,14 @@ nextflow run <PATH_TO_REPO>/modulediscovery/main.nf --help
 When you run the above command, Nextflow automatically pulls the pipeline code from GitHub and stores it as a cached version. When running the pipeline after this, it will always use the cached version if available - even if the pipeline has been updated since. To make sure that you're running the latest version of the pipeline, make sure that you regularly update the cached version of the pipeline:
 
 ```bash
-nextflow pull REPO4EU/modulediscovery
+nextflow pull nf-core/diseasemodulediscovery
 ```
 
 ### Reproducibility
 
 It is a good idea to specify the pipeline version when running the pipeline on your data. This ensures that a specific version of the pipeline code and software are used when you run your pipeline. If you keep using the same tag, you'll be running the same version of the pipeline, even if there have been changes to the code since.
 
-First, go to the [REPO4EU/modulediscovery releases page](https://github.com/REPO4EU/modulediscovery/releases) and find the latest pipeline version - numeric only (eg. `1.3.1`). Then specify this when running the pipeline with `-r` (one hyphen) - eg. `-r 1.3.1`. Of course, you can switch to another version by changing the number after the `-r` flag.
+First, go to the [nf-core/diseasemodulediscovery releases page](https://github.com/nf-core/diseasemodulediscovery/releases) and find the latest pipeline version - numeric only (eg. `1.3.1`). Then specify this when running the pipeline with `-r` (one hyphen) - eg. `-r 1.3.1`. Of course, you can switch to another version by changing the number after the `-r` flag.
 
 This version number will be logged in reports when you run the pipeline, so that you'll know what you used when you look back in the future. For example, at the bottom of the MultiQC reports.
 
@@ -214,7 +261,7 @@ If `-profile` is not specified, the pipeline will run locally and expect all sof
 - `shifter`
   - A generic configuration profile to be used with [Shifter](https://nersc.gitlab.io/development/shifter/how-to-use/)
 - `charliecloud`
-  - A generic configuration profile to be used with [Charliecloud](https://hpc.github.io/charliecloud/)
+  - A generic configuration profile to be used with [Charliecloud](https://charliecloud.io/)
 - `apptainer`
   - A generic configuration profile to be used with [Apptainer](https://apptainer.org/)
 - `wave`
@@ -238,19 +285,19 @@ Specify the path to a specific config file (this is a core Nextflow command). Se
 
 Whilst the default requirements set within the pipeline will hopefully work for most people and with most input data, you may find that you want to customise the compute resources that the pipeline requests. Each step in the pipeline has a default set of requirements for number of CPUs, memory and time. For most of the pipeline steps, if the job exits with any of the error codes specified [here](https://github.com/nf-core/rnaseq/blob/4c27ef5610c87db00c3c5a3eed10b1d161abf575/conf/base.config#L18) it will automatically be resubmitted with higher resources request (2 x original, then 3 x original). If it still fails after the third attempt then the pipeline execution is stopped.
 
-To change the resource requests, please see the [max resources](https://nf-co.re/docs/usage/configuration#max-resources) and [tuning workflow resources](https://nf-co.re/docs/usage/configuration#tuning-workflow-resources) section of the nf-core website.
+To change the resource requests, please see the [max resources](https://nf-co.re/docs/running/configuration/nextflow-for-your-system#set-max-resources) and [customise process resources](https://nf-co.re/docs/running/configuration/nextflow-for-your-system#customize-process-resources) section of the nf-core website.
 
 ### Custom Containers
 
 In some cases, you may wish to change the container or conda environment used by a pipeline steps for a particular tool. By default, nf-core pipelines use containers and software from the [biocontainers](https://biocontainers.pro/) or [bioconda](https://bioconda.github.io/) projects. However, in some cases the pipeline specified version maybe out of date.
 
-To use a different container from the default container or conda environment specified in a pipeline, please see the [updating tool versions](https://nf-co.re/docs/usage/configuration#updating-tool-versions) section of the nf-core website.
+To use a different container from the default container or conda environment specified in a pipeline, please see the [updating tool versions](https://nf-co.re/docs/running/configuration/nextflow-for-your-system#update-tool-versions) section of the nf-core website.
 
 ### Custom Tool Arguments
 
 A pipeline might not always support every possible argument or option of a particular tool used in pipeline. Fortunately, nf-core pipelines provide some freedom to users to insert additional parameters that the pipeline does not include by default.
 
-To learn how to provide additional arguments to a particular tool of the pipeline, please see the [customising tool arguments](https://nf-co.re/docs/usage/configuration#customising-tool-arguments) section of the nf-core website.
+To learn how to provide additional arguments to a particular tool of the pipeline, please see the [customising tool arguments](https://nf-co.re/docs/running/configuration/nextflow-for-your-system#modifying-tool-arguments) section of the nf-core website.
 
 ### nf-core/configs
 

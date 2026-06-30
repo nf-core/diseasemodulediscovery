@@ -1,6 +1,6 @@
 process DIGEST {
     tag "$meta.id"
-    label 'process_single'
+    label 'process_medium'
     container 'biocontainers/biodigest:0.2.16--pyhdfd78af_2'
 
     input:
@@ -8,15 +8,16 @@ process DIGEST {
     val target_type
     path network
     val network_type
+    val mode
 
     output:
     tuple val(meta), path("${meta.id}")            , emit: outdir
-    tuple val(meta), path("${meta.id}.multiqc.tsv"), emit: multiqc
+    tuple val(meta), path("${meta.id}.multiqc.tsv"), emit: multiqc, optional: true
     path "versions.yml"                            , emit: versions
 
     script:
     """
-    digest.py --target_file $target_file  --target_type $target_type   --network $network  --network_type $network_type --outdir ${meta.id}
+    digest.py --target_file $target_file  --target_type $target_type   --network $network  --network_type $network_type --mode $mode --outdir ${meta.id}
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         python: \$(python --version | sed 's/Python //g')

@@ -1,7 +1,7 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://raw.githubusercontent.com/REPO4EU/modulediscovery/main/assets/schema_input.json",
-    "title": "REPO4EU/modulediscovery pipeline - params.input schema",
+    "$id": "https://raw.githubusercontent.com/nf-core/diseasemodulediscovery/main/assets/schema_input.json",
+    "title": "nf-core/diseasemodulediscovery pipeline - params.input schema",
     "description": "Schema for the file provided with params.input",
     "type": "array",
     "items": {
@@ -24,11 +24,11 @@
                 "pattern": "^\\S+\\.(pickle|pkl|pck|pcl)$",
                 "errorMessage": "The shortest_paths file cannot contain spaces and must end with .(pickle|pkl|pck|pcl)"
             },
-            "permuted_networks": {
+            "perturbed_networks": {
                 "type": "string",
                 "format": "directory-path",
                 "exists": true,
-                "errorMessage": "The permuted_networks path must point to an existing directory and cannot contain spaces."
+                "errorMessage": "The perturbed_networks path must point to an existing directory and cannot contain spaces."
             }
         }
     }
