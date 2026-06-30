@@ -11,13 +11,13 @@ pipeline_info/*.{html,json,txt,yml}
 input/perturbed_networks/**
 input/shortest_paths/**
 disease_modules/biopax/**
-disease_modules/{graphml,gt,tsv_edges,tsv_nodes}/*{diamond}*.{gt,graphml,tsv}
+disease_modules/{graphml,gt,tsv_edges,tsv_nodes}/*{diamond,robust,rwr,domino}*.{gt,graphml,tsv}
 reports/biopax-validator-report.html
 modules_visualized/**
 modules_visualized_with_drugs/**
 evaluation/{digest,gprofiler}/**
 evaluation/seed_perturbation/*
-evaluation/seed_perturbation/*{diamond}*/**
+evaluation/seed_perturbation/*{diamond,robust,rwr,domino}*/**
 drug_prioritization/**
 multiqc/**
 mqc_summaries/drugstone_link_mqc.tsv
