@@ -16,6 +16,7 @@ reports/biopax-validator-report.html
 modules_visualized/**
 modules_visualized_with_drugs/**
 evaluation/{digest,gprofiler}/**
+evaluation/seed_perturbation/*
 evaluation/seed_perturbation/*{diamond}*/**
 drug_prioritization/**
 multiqc/**
