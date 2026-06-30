@@ -484,6 +484,7 @@ workflow DISEASEMODULEDISCOVERY {
                     fail: nodes < 2
                     pass: true
                 }
+
             ch_seed_perturbation_input  = ch_filtered_seeds.pass.map{_seeds_id, _network_id, _nodes, meta, seeds -> [meta, seeds]}
             GT_SEEDPERTURBATION(
                 ch_modules.filter{ meta, path -> meta.amim != "no_tool" }, // Filter out no_tool modules

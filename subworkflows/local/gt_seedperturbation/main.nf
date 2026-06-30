@@ -43,10 +43,21 @@ workflow GT_SEEDPERTURBATION {
             [ dup, perturbed_seeds]
         }
 
+    ch_perturbed_blacklist = ch_perturbed_seeds
+        .map{meta, perturbed_seeds -> [meta.original_seeds_id, meta.network_id, meta.seeds_id]}
+        .combine(
+            ch_blacklist.map{meta, blacklist -> [meta.seeds_id, meta.network_id, blacklist]},
+            by: [0,1]
+        )
+        .map{original_seeds_id, network_id, perturbed_seeds_id, blacklist ->
+        [ [id: perturbed_seeds_id + "." + network_id, seeds_id: perturbed_seeds_id, network_id: network_id], blacklist]
+    }
+
 
     // Run network expansion tools on perturbed seeds
-    NETWORKEXPANSION(ch_perturbed_seeds, ch_network, ch_blacklist)
+    NETWORKEXPANSION(ch_perturbed_seeds, ch_network, ch_perturbed_blacklist)
     ch_versions = ch_versions.mix(NETWORKEXPANSION.out.versions)
+
 
     // Group by original_seeds_id, amim, and network_id to get one element per original module
     // channel: [ val(meta[id,module_id,amim,seeds_id,network_id]), [path(perturbed_modules)], [path(perturbed_seeds)] ]
