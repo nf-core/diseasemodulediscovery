@@ -18,6 +18,7 @@ modules_visualized_with_drugs/**
 evaluation/{digest,gprofiler}/**
 evaluation/seed_perturbation/*
 evaluation/seed_perturbation/*{diamond,robust,rwr,domino}*/**
+evaluation/seed_perturbation/*/*detailed.tsv
 drug_prioritization/**
 multiqc/**
 mqc_summaries/drugstone_link_mqc.tsv
