@@ -195,7 +195,7 @@ workflow PIPELINE_INITIALISATION {
                         def seeds = it[0]
                         def network = it[1]
                         def blacklist = it[4]
-                        def network_id = mapPreparedNetwork(network, params.id_space).baseName
+                        def network_id = mapPreparedNetwork(network_map, id_space_map, prepared_networks_url, network, params.id_space).baseName
                         [ [id: blacklist ? blacklist.baseName : "NO_FILE", 
                         seeds_id: seeds.baseName, 
                         network_id: network_id ], 
