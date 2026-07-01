@@ -1,0 +1,48 @@
+nextflow_pipeline {
+
+    name "Test all included module discovery methods"
+    script "../main.nf"
+    tag "pipeline"
+
+    test("Test all included module discovery methods") {
+
+        when {
+            params {
+                outdir = "$outputDir"
+
+                // Run all module discovery methods
+                skip_diamond            = false
+                skip_domino             = false
+                skip_rwr                = false
+                skip_robust             = false
+                skip_robust_bias_aware  = false
+                skip_firstneighbor      = false
+
+                // Skip all steps that are not needed for testing the module discovery methods
+                skip_visualization      = true
+                skip_drugstone_export   = true
+                skip_evaluation         = true
+                skip_annotation         = true
+                skip_drug_predictions   = true
+            }
+        }
+
+        then {
+            // stable_path: All files + folders in ${params.outdir}/ with a stable path (including file name)
+            def stable_path = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
+            // stable_content: All files in ${params.outdir}/ with stable content
+            def stable_content = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            assert workflow.success
+            assertAll(
+                { assert snapshot(
+                    // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
+                    removeNextflowVersion("$outputDir/pipeline_info/nf_core_diseasemodulediscovery_software_mqc_versions.yml"),
+                    // All stable path name, with a relative path
+                    stable_path,
+                    // All files with stable contents
+                    stable_content
+                ).match() }
+            )
+        }
+    }
+}
