@@ -86,6 +86,9 @@ params {
     // Path(s) to one or multiple PPI network(s) in gt, csv, tsv, graphml, xml, dot, or gml format.
     network: String?
 
+    // Path(s) to one or multiple file(s) with genes to be blacklisted. One gene/protein per line.
+    blacklist: String?
+
     // Set a custom repository link for the prepared networks.
     prepared_networks_url: String = 'https://zenodo.org/records/18702264/files/'
 
