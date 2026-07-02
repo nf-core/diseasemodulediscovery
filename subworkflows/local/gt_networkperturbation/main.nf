@@ -58,10 +58,18 @@ workflow GT_NETWORKPERTURBATION {
             [ dup, perturbed_network]
         }
     
-
+    ch_perturbed_blacklist = ch_perturbed_networks
+        .map{meta, perturbed_network -> [meta.network_id, meta.perturbed_network_id]}
+        .combine(
+            ch_blacklist.map{meta, blacklist -> [meta.network_id, meta.seeds_id, blacklist]},
+            by: 0
+        )
+        .map{network_id, perturbed_network_id, seeds_id, blacklist ->
+            [ [id: seeds_id + "." + perturbed_network_id, seeds_id: seeds_id, network_id: perturbed_network_id], blacklist]
+        }
 
     // Run network expansion tools on perturbed networks
-    NETWORKEXPANSION(ch_seeds, ch_perturbed_networks, ch_blacklist)
+    NETWORKEXPANSION(ch_seeds, ch_perturbed_networks, ch_perturbed_blacklist)
     ch_versions = ch_versions.mix(NETWORKEXPANSION.out.versions)
 
     // Group by seeds_id, amim, and network_id to get one element per original module
