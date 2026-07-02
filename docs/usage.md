@@ -207,6 +207,28 @@ seed_file_2.csv,network_2.csv,/path/to/perturbed/networks/network_2
 seed_file_2.csv,network_1.csv,/path/to/perturbed/networks/network_1
 ```
 
+### Blacklisting genes
+
+Some genes or proteins may be uninformative or undesirable for downstream interpretation. Use `--blacklist` to exclude such genes from the network and from the identified disease modules after the module identification methods have been run. The pipeline removes any blacklisted genes/proteins from the resulting modules.
+
+```
+nextflow run <PATH_TO_REPO>/modulediscovery/main.nf \
+   -profile <docker/singularity> \
+   --seeds <SEED_FILE_> \
+   --network <NETWORK_FILE_1,NETWORK_FILE_2,...> \
+   --blacklist <BLACKLIST_FILE_1,BLACKLIST_FILE_2,...> \
+   --outdir <OUTDIR>
+```
+
+Alternatively, they can be specified using the samplesheet:
+
+```
+seeds,network,blacklist
+seed_file_1.csv,network_1.csv,blacklist_file_1.csv
+seed_file_2.csv,network_2.csv,blacklist_file_2.csv
+seed_file_2.csv,network_1.csv,blacklist_file_1.csv
+```
+
 ### Updating the pipeline
 
 When you run the above command, Nextflow automatically pulls the pipeline code from GitHub and stores it as a cached version. When running the pipeline after this, it will always use the cached version if available - even if the pipeline has been updated since. To make sure that you're running the latest version of the pipeline, make sure that you regularly update the cached version of the pipeline:
