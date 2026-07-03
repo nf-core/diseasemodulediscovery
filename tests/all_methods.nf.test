@@ -10,6 +10,11 @@ nextflow_pipeline {
             params {
                 outdir = "$outputDir"
 
+                // Input data
+                input                   = "${projectDir}/tests/test_samplesheet.csv"
+                seeds                   = null
+                network                 = null
+
                 // Run all module discovery methods
                 skip_diamond            = false
                 skip_domino             = false
