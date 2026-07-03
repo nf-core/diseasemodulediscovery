@@ -4,7 +4,7 @@ nextflow_pipeline {
     script "../main.nf"
     tag "pipeline"
 
-    test("Test pipeline with a sample sheet") {
+    test("Test pipeline structure with a sample sheet") {
 
         when {
             params {
