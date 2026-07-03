@@ -1,0 +1,45 @@
+nextflow_workflow {
+
+    name "Test pipeline initialisation"
+    script "../subworkflows/local/utils_nfcore_diseasemodulediscovery_pipeline/main.nf"
+    workflow "PIPELINE_INITIALISATION"
+    tag "workflow"
+
+    test("Test input channel creation for multiple seeds and networks") {
+
+        when {
+            workflow {
+                """
+                input[0] = false                    // boolean: Display version and exit
+                input[1] = false                    // boolean: Boolean whether to validate parameters against the schema at runtime
+                input[2] = false                    // boolean: Do not use coloured log outputs
+                input[3] = []                       //   array: List of positional nextflow CLI args
+                input[4] = 'results'                //  string: The output directory where the results will be saved
+                input[5] = false                    // boolean: Display help message and exit
+                input[6] = false                    // boolean: Show the full help message
+                input[7] = false                    // boolean: Show hidden parameters in the help message
+                input[8] = null                     //  string: Path to input samplesheet
+
+                // string: Path(s) to seeds file(s)
+                input[9] = 'https://raw.githubusercontent.com/nf-core/test-datasets/diseasemodulediscovery/small/entrez_seeds_1.csv,https://raw.githubusercontent.com/nf-core/test-datasets/diseasemodulediscovery/small/entrez_seeds_2.csv'
+
+                //  string: Path(s) to network file(s)
+                input[10] = 'https://raw.githubusercontent.com/nf-core/test-datasets/diseasemodulediscovery/small/entrez_ppi.csv,string_physical_min900'
+
+                input[11] = null                                            //  string: Path(s) to shortest paths files
+                input[12] = null                                            //  string: Path(s) to perturbed networks file
+                input[13] = 'https://zenodo.org/records/18702264/files/'    //  string: URL to prepared networks
+                input[14] = 'entrez'                                        //  string: ID space to use for prepared networks
+                """
+            }
+        }
+
+        then {
+
+            assert workflow.success
+            assert snapshot(workflow.out.seeds, workflow.out.network, workflow.out.shortest_paths, workflow.out.perturbed_networks).match()
+
+        }
+
+    }
+}
