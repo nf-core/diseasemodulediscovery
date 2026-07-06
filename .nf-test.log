@@ -1,0 +1,16 @@
+Jul-06 15:26:19.928 [main] INFO  com.askimed.nf.test.App - nf-test 0.9.5
+Jul-06 15:26:19.943 [main] INFO  com.askimed.nf.test.App - Arguments: [test, tests/blacklist.nf.test, --profile, +docker, --verbose]
+Jul-06 15:26:20.643 [main] INFO  com.askimed.nf.test.App - Nextflow Version: 26.04.0
+Jul-06 15:26:20.645 [main] INFO  com.askimed.nf.test.commands.RunTestsCommand - Load config from file /home/mojito/Desktop/BA/diseasemodulediscovery/nf-test.config...
+Jul-06 15:26:22.766 [main] INFO  com.askimed.nf.test.lang.dependencies.DependencyResolver - Loaded 64 files from directory /home/mojito/Desktop/BA/diseasemodulediscovery in 0.48 sec
+Jul-06 15:26:22.767 [main] INFO  com.askimed.nf.test.lang.dependencies.DependencyResolver - Found 1 files containing tests.
+Jul-06 15:26:22.767 [main] DEBUG com.askimed.nf.test.lang.dependencies.DependencyResolver - Found files: [/home/mojito/Desktop/BA/diseasemodulediscovery/tests/blacklist.nf.test]
+Jul-06 15:26:22.976 [main] INFO  com.askimed.nf.test.commands.RunTestsCommand - Found 1 tests to execute.
+Jul-06 15:26:22.977 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Started test plan
+Jul-06 15:26:22.977 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Running testsuite 'Test blacklist flag' from file '/home/mojito/Desktop/BA/diseasemodulediscovery/tests/blacklist.nf.test'.
+Jul-06 15:26:22.977 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Run test 'e7cf7b90: Test pipeline with blacklist flag'. type: com.askimed.nf.test.lang.pipeline.PipelineTest
+Jul-06 15:27:17.062 [main] DEBUG com.askimed.nf.test.lang.extensions.SnapshotFile - Load snapshots from file '/home/mojito/Desktop/BA/diseasemodulediscovery/tests/blacklist.nf.test.snap'
+Jul-06 15:27:17.104 [main] DEBUG com.askimed.nf.test.lang.extensions.Snapshot - Snapshots 'Test pipeline with blacklist flag' match.
+Jul-06 15:27:17.105 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Test 'e7cf7b90: Test pipeline with blacklist flag' finished. status: PASSED
+Jul-06 15:27:17.106 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Testsuite 'Test blacklist flag' finished. snapshot file: true, skipped tests: false, failed tests: false
+Jul-06 15:27:17.106 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Executed 1 tests. 0 tests failed. Done!

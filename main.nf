@@ -279,6 +279,14 @@ workflow {
         params.help,
         params.help_full,
         params.show_hidden,
+        params.input,
+        params.seeds,
+        params.network,
+        params.shortest_paths,
+        params.perturbed_networks,
+        params.prepared_networks_url,
+        params.id_space,
+        params.blacklist
     )
     
     //

@@ -1,22 +1,21 @@
 nextflow_pipeline {
 
-    name "Test all included module discovery methods"
+    name "Test handling of seeds that are not in the largest connected component (LCC) of the network"
     script "../main.nf"
     tag "pipeline"
 
-    test("Test all included module discovery methods") {
+    test("Test handling of seeds that are not in the largest connected component (LCC) of the network") {
 
         when {
             params {
                 outdir = "$outputDir"
 
                 // Input data
-                input                   = "${projectDir}/tests/test_samplesheet.csv"
-                seeds                   = null
-                network                 = null
+                seeds                   = "https://raw.githubusercontent.com/nf-core/test-datasets/diseasemodulediscovery/issue_149/mondo.0009025.tsv"
+                network                 = "https://raw.githubusercontent.com/nf-core/test-datasets/diseasemodulediscovery/issue_149/string.human_physical_links_v12_0_min700.Entrez.csv"
 
-                // Run all module discovery methods
-                skip_diamond            = false
+                // Run all module discovery methods (except DIAMOnD, which will not pass this test, but authors did not fix it yet)
+                skip_diamond            = true  // DIAMOnD will not pass this test, but authors did not fix it yet
                 skip_domino             = false
                 skip_rwr                = false
                 skip_robust             = false

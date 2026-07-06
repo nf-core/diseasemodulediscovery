@@ -35,6 +35,14 @@ workflow PIPELINE_INITIALISATION {
     help              // boolean: Display help message and exit
     help_full         // boolean: Show the full help message
     show_hidden       // boolean: Show hidden parameters in the help message
+    param_input             //  string: Path to input samplesheet
+    param_seeds             //  string: Path(s) to seed genes file(s)
+    param_network           //  string: Path(s) to network file(s)
+    param_shortest_paths    //  string: Path(s) to shortest paths files
+    param_perturbed_networks //  string: Path(s) to perturbed networks file
+    param_prepared_networks_url //  string: URL to prepared networks
+    param_id_space          //  string: ID space to use for prepared networks
+    param_blacklist         //  string: Path(s) to blacklist file(s)
 
     main:
 
@@ -98,8 +106,8 @@ workflow PIPELINE_INITIALISATION {
         nextflow_cli_args
     )
 
-    def prepared_networks_url = params.prepared_networks_url
-    def network_map = loadYamlAsMap("${prepared_networks_url}network_map.yaml")
+    def prepared_networks_url = param_prepared_networks_url
+    def network_map = loadYamlAsMap("${param_prepared_networks_url}network_map.yaml")
     def id_space_map = loadYamlAsMap("${prepared_networks_url}id_space_map.yaml")
 
     ch_seeds = Channel.empty()          // channel: [ val(meta[id,seeds_id,network_id]), path(seeds) ]
@@ -108,20 +116,20 @@ workflow PIPELINE_INITIALISATION {
     ch_perturbed_networks = Channel.empty() // channel: [ val(meta[id,network_id]), [path(perturbed_network)] ]
     ch_blacklist = Channel.empty()       // channel: [ val(meta[id, seeds_id, network_id]), path(blacklist) ]
 
-    seed_param_set = (params.seeds != null)
-    network_param_set = (params.network != null)
-    shortest_paths_param_set = (params.shortest_paths != null)
-    perturbed_networks_param_set = (params.perturbed_networks != null)
-    blacklist_param_set = (params.blacklist != null)
+    seed_param_set = (param_seeds != null)
+    network_param_set = (param_network != null)
+    shortest_paths_param_set = (param_shortest_paths != null)
+    perturbed_networks_param_set = (param_perturbed_networks != null)
+    blacklist_param_set = (param_blacklist != null)
 
     // prepare network channel, if parameter is set
     if(network_param_set){
-        ch_network = Channel.fromList(params.network.split(',').flatten())
-            .map{network -> mapPreparedNetwork(network_map, id_space_map, prepared_networks_url, network, params.id_space)}
+        ch_network = Channel.fromList(param_network.split(',').flatten())
+            .map{network -> mapPreparedNetwork(network_map, id_space_map, prepared_networks_url, network, param_id_space)}
             .map{ it -> [ [ id: it.baseName, network_id: it.baseName ], it ] }
     }
 
-    if(params.input){
+    if(param_input){
 
         //
         // Create channel from input file provided through params.input
@@ -129,7 +137,7 @@ workflow PIPELINE_INITIALISATION {
 
         // channel: [ path(seeds), path(network), path(shortest_paths), path(perturbed_networks) ]
 
-        def rows = samplesheetToList(params.input, "${projectDir}/assets/schema_input.json") 
+        def rows = samplesheetToList(param_input, "${projectDir}/assets/schema_input.json") 
         
         def samplesheet_has_blacklists = rows.any {row -> row[4] && row[4].size() > 0}
 
@@ -166,7 +174,7 @@ workflow PIPELINE_INITIALISATION {
             ch_network = ch_input
                 .map{ it -> [it[1], it[2], it[3]]}
                 .map{ network, sp, perturbed_networks ->
-                    [ mapPreparedNetwork(network_map, id_space_map, prepared_networks_url, network, params.id_space), sp, perturbed_networks ]
+                    [ mapPreparedNetwork(network_map, id_space_map, prepared_networks_url, network, param_id_space), sp, perturbed_networks ]
                 }
                 .map{ network, sp, perturbed_networks ->
                     [ [ id: network.baseName, network_id: network.baseName ], network, sp, perturbed_networks ]
@@ -186,7 +194,7 @@ workflow PIPELINE_INITIALISATION {
                 .map{ it ->
                     def seeds = it[0]
                     def network = it[1]
-                    def network_id = mapPreparedNetwork(network_map, id_space_map, prepared_networks_url, network, params.id_space).baseName
+                    def network_id = mapPreparedNetwork(network_map, id_space_map, prepared_networks_url, network, param_id_space).baseName
                     [ [ id: seeds.baseName + "." + network_id, seeds_id: seeds.baseName, network_id: network_id ] , seeds ]
                 }
             if(!blacklist_param_set && samplesheet_has_blacklists){
@@ -210,7 +218,7 @@ workflow PIPELINE_INITIALISATION {
             log.info("Creating network channel based on the sample sheet and seeds channel based on the seeds parameter")
 
             ch_seeds = Channel
-                .fromPath(params.seeds.split(',').flatten(), checkIfExists: true)
+                .fromPath(param_seeds.split(',').flatten(), checkIfExists: true)
                 .combine(ch_network.map{meta, network, sp, perturbed_networks -> meta.network_id})
                 .map{seeds, network_id ->
                     [ [ id: seeds.baseName + "." + network_id, seeds_id: seeds.baseName, network_id: network_id ] , seeds ]
@@ -218,7 +226,7 @@ workflow PIPELINE_INITIALISATION {
             
             if(blacklist_param_set){
                 def seeds_list     = params.seeds.split(',').flatten()
-                def blacklist_list = params.blacklist.split(',').flatten()
+                def blacklist_list = param_blacklist.split(',').flatten()
 
                 def seeds_to_blacklist = [seeds_list, blacklist_list]
                     .transpose()
@@ -230,7 +238,7 @@ workflow PIPELINE_INITIALISATION {
                     seeds_to_blacklist.collect { seeds_id, bl_id -> [seeds_id, bl_id] }
                 )
                 ch_blacklist = Channel
-                    .fromPath(params.blacklist.split(',').flatten(), checkIfExists: true)
+                    .fromPath(param_blacklist.split(',').flatten(), checkIfExists: true)
                     .map{blacklist -> [blacklist.baseName, blacklist]}
                     .combine(ch_seeds_to_blacklist.map{ seeds_id, bl_id -> [bl_id, seeds_id] }, by: 0)
                     .map{ bl_id, blacklist, seeds_id -> [seeds_id, blacklist, bl_id]}
@@ -257,7 +265,7 @@ workflow PIPELINE_INITIALISATION {
             if(shortest_paths_param_set){
                 ch_network = ch_network.merge(
                     Channel
-                    .fromPath(params.shortest_paths.split(',').flatten())
+                    .fromPath(param_shortest_paths.split(',').flatten())
                 )
             } else{
                 ch_network = ch_network.map{meta, network -> [meta, network, file("${projectDir}/assets/NO_FILE", checkIfExists: true)]}
@@ -267,7 +275,7 @@ workflow PIPELINE_INITIALISATION {
             if(perturbed_networks_param_set){
                 ch_network = ch_network.merge(
                     Channel
-                    .fromPath(params.perturbed_networks.split(',').flatten())
+                    .fromPath(param_perturbed_networks.split(',').flatten())
                 )
             } else{
                 ch_network = ch_network.map{meta, network, sp -> [meta, network, sp, []]}
@@ -303,7 +311,7 @@ workflow PIPELINE_INITIALISATION {
         // Create indexed seeds list from params directly
         
         ch_seeds = Channel
-            .fromPath(params.seeds.split(',').flatten(), checkIfExists: true)
+            .fromPath(param_seeds.split(',').flatten(), checkIfExists: true)
             .combine(ch_network.map{meta, network -> meta.network_id})
             .map{seeds, network_id ->
                 [ [ id: seeds.baseName + "." + network_id, seeds_id: seeds.baseName, network_id: network_id ] , seeds ]
@@ -311,7 +319,7 @@ workflow PIPELINE_INITIALISATION {
         // adds blacklist files, by merging accordint to the seeds, but does not work with missing values.
         if (blacklist_param_set){
             def seeds_list     = params.seeds.split(',').flatten()
-            def blacklist_list = params.blacklist.split(',').flatten()
+            def blacklist_list = param_blacklist.split(',').flatten()
 
             def seeds_to_blacklist = [seeds_list, blacklist_list]
                 .transpose()
@@ -323,7 +331,7 @@ workflow PIPELINE_INITIALISATION {
                 seeds_to_blacklist.collect { seeds_id, bl_id -> [seeds_id, bl_id] }
             )
             ch_blacklist = Channel
-                .fromPath(params.blacklist.split(',').flatten(), checkIfExists: true)
+                .fromPath(param_blacklist.split(',').flatten(), checkIfExists: true)
                 .map{blacklist -> [blacklist.baseName, blacklist]}
                 .combine(ch_seeds_to_blacklist.map{ seeds_id, bl_id -> [bl_id, seeds_id] }, by: 0)
                 .map{ bl_id, blacklist, seeds_id -> [seeds_id, blacklist, bl_id]}
@@ -342,7 +350,7 @@ workflow PIPELINE_INITIALISATION {
         if(shortest_paths_param_set){
             ch_network = ch_network.merge(
                 Channel
-                .fromPath(params.shortest_paths.split(',').flatten())
+                .fromPath(param_shortest_paths.split(',').flatten())
             )
         } else{
             ch_network = ch_network.map{meta, network -> [meta, network, file("${projectDir}/assets/NO_FILE", checkIfExists: true)]}
@@ -352,7 +360,7 @@ workflow PIPELINE_INITIALISATION {
         if(perturbed_networks_param_set){
             ch_network = ch_network.merge(
                 Channel
-                .fromPath(params.perturbed_networks.split(',').flatten())
+                .fromPath(param_perturbed_networks.split(',').flatten())
             )
         } else{
             ch_network = ch_network.map{meta, network, sp -> [meta, network, sp, []]}
