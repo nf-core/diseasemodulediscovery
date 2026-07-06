@@ -29,6 +29,13 @@
                 "format": "directory-path",
                 "exists": true,
                 "errorMessage": "The perturbed_networks path must point to an existing directory and cannot contain spaces."
+            },
+            "blacklist": {
+                "type": "string",
+                "format": "file-path",
+                "exists": true,
+                "pattern": "^\\S+$",
+                "errorMessage": "Blacklist file path cannot contain spaces"
             }
         }
     }

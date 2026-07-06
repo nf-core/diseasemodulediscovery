@@ -98,6 +98,9 @@ def filter_g(g, tool, module, seeds):
         g = filter_robust(g, module, filter_column)
     elif tool == "rwr":
         g = filter_rwr(g, module, filter_column)
+    elif tool == "firstneighbor":
+        print("First neighbor module, no filtering needed.")
+        return g
     else:
         logger.critical(f"Unknown tool: {tool}")
         sys.exit(1)
@@ -136,7 +139,7 @@ def read_seeds(path):
     return set(seeds)
 
 
-def parse_module(file_in, tool, module, seeds_path, output):
+def parse_module(file_in, tool, module, seeds_path, output, blacklist=None):
     stem = Path(file_in).stem
     extension = Path(file_in).suffix
     logger.debug(f"{stem=}")
@@ -150,7 +153,30 @@ def parse_module(file_in, tool, module, seeds_path, output):
 
     g = filter_g(g, tool, module, seeds)
     g = mark_seeds(g, seeds)
+    g = filter_module(g, blacklist)
     g.save(output)
+
+
+def filter_module(g, blacklist):
+    """
+    Filters a graph_tools Graph object based on a blacklist of nodes.
+    """
+    if not blacklist:
+        print("No blacklist provided, skipping filtering.")
+        return g
+    
+    with open(blacklist, "r") as file:
+        blacklist_set = set(line.strip() for line in file)
+
+    vfilt = g.new_vertex_property("bool")
+    for vertex in g.vertices():
+        node_name = g.vp.name[vertex] 
+        vfilt[vertex] = node_name not in blacklist_set
+
+    g.set_vertex_filter(vfilt)
+    g.purge_vertices()
+    return g
+
 
 
 def parse_args(argv=None):
@@ -169,7 +195,7 @@ def parse_args(argv=None):
         "-t",
         "--tool",
         help="The tool, that generated the module.",
-        choices=("diamond", "domino", "robust", "robust_bias_aware", "rwr"),
+        choices=("diamond", "domino", "robust", "robust_bias_aware", "rwr", "firstneighbor"),
     )
     parser.add_argument(
         "-m",
@@ -181,6 +207,12 @@ def parse_args(argv=None):
         "-s",
         "--seeds",
         help="Path to the seeds file used for module generation.",
+        type=Path,
+    )
+    parser.add_argument(
+        "-b",
+        "--blacklist",
+        help="Path to a file containing one node name per line. Nodes in this list will be removed from the module.",
         type=Path,
     )
     parser.add_argument(
@@ -207,7 +239,7 @@ def main(argv=None):
         logger.error(f"The given input file {args.file_in} was not found!")
         sys.exit(2)
     logger.debug(f"{args=}")
-    parse_module(args.file_in, args.tool, args.module, args.seeds, args.output)
+    parse_module(args.file_in, args.tool, args.module, args.seeds, args.output, args.blacklist)
 
 
 if __name__ == "__main__":

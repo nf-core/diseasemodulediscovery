@@ -66,6 +66,14 @@
                     "fa_icon": "fas fa-link",
                     "hidden": true,
                     "description": "Set a custom repository link for the prepared networks."
+                },
+                "blacklist": {
+                    "type": "string",
+                    "format": "file-path",
+                    "fa_icon": "fas fa-file-csv",
+                    "errorMessage": "Blacklist file path cannot contain spaces",
+                    "default": "",
+                    "description": "Path to a file with blacklisted genes/proteins. One gene/protein per line."
                 }
             }
         },
