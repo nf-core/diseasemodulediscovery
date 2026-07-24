@@ -1,0 +1,155 @@
+{
+    "Test the pipeline with mouse input data": {
+        "content": [
+            {
+                "DIAMOND": {
+                    "python": "3.8.5"
+                },
+                "GPROFILER2_GOST\"": {
+                    "r-ggplot2": "3.4.3",
+                    "r-gprofiler2": "0.2.2",
+                    "gprofiler-data": "biomart: Ensembl\nbiomart_version: '114'\ndisplay_name: Mouse\ngenebuild: GRCm39\ngprofiler_version: e114_eg62_p19_27110d83\norganism: mmusculus\nsources:\n  CORUM:\n    name: CORUM protein complexes\n    version: 28.11.2022 Corum 4.1\n  GO:BP:\n    name: biological process\n    version: |-\n      annotations: BioMart\n      classes: releases/2026-01-23\n  GO:CC:\n    name: cellular component\n    version: |-\n      annotations: BioMart\n      classes: releases/2026-01-23\n  GO:MF:\n    name: molecular function\n    version: |-\n      annotations: BioMart\n      classes: releases/2026-01-23\n  HP:\n    name: Human Phenotype Ontology\n    version: |-\n      annotations: 03.2026\n      classes: None\n  KEGG:\n    name: Kyoto Encyclopedia of Genes and Genomes\n    version: KEGG FTP Release 2026-03-15\n  REAC:\n    name: Reactome\n    version: |-\n      annotations: BioMart\n      classes: 2026-3-20\n  TF:\n    name: Transfac\n    version: |-\n      annotations: TRANSFAC Release 2025.2\n      classes: v2\n  WP:\n    name: WikiPathways\n    version: '20260310'\ntaxonomy_id: '10090'\n"
+                },
+                "GRAPHTOOLPARSER": {
+                    "python": "3.12.13",
+                    "graph-tool": 2.77
+                },
+                "MODULEPARSER": {
+                    "python": "3.12.13",
+                    "graph-tool": 2.77
+                },
+                "MULTIQCFORMATTER": {
+                    "python": "3.12.13"
+                },
+                "NETWORKANNOTATION": {
+                    "python": "3.12.13",
+                    "graph-tool": 2.77
+                },
+                "SAVEMODULES": {
+                    "python": "3.12.13",
+                    "graph-tool": 2.77,
+                    "pandas": "2.2.3"
+                },
+                "TOPOLOGY": {
+                    "python": "3.12.13",
+                    "graph-tool": 2.77
+                },
+                "Workflow": {
+                    "nf-core/diseasemodulediscovery": "v1.0.0"
+                }
+            },
+            [
+                "disease_modules",
+                "disease_modules/graphml",
+                "disease_modules/graphml/ENSMUSG_seeds.ENSMUSG_network.diamond.graphml",
+                "disease_modules/graphml/ENSMUSG_seeds.ENSMUSG_network.no_tool.graphml",
+                "disease_modules/gt",
+                "disease_modules/gt/ENSMUSG_seeds.ENSMUSG_network.diamond.gt",
+                "disease_modules/gt/ENSMUSG_seeds.ENSMUSG_network.no_tool.gt",
+                "disease_modules/tsv_edges",
+                "disease_modules/tsv_edges/ENSMUSG_seeds.ENSMUSG_network.diamond.edges.tsv",
+                "disease_modules/tsv_edges/ENSMUSG_seeds.ENSMUSG_network.no_tool.edges.tsv",
+                "disease_modules/tsv_nodes",
+                "disease_modules/tsv_nodes/ENSMUSG_seeds.ENSMUSG_network.diamond.nodes.tsv",
+                "disease_modules/tsv_nodes/ENSMUSG_seeds.ENSMUSG_network.no_tool.nodes.tsv",
+                "evaluation",
+                "evaluation/gprofiler",
+                "evaluation/gprofiler/ENSMUSG_seeds.ENSMUSG_network.diamond",
+                "evaluation/gprofiler/ENSMUSG_seeds.ENSMUSG_network.diamond/ENSMUSG_seeds.ENSMUSG_network.diamond.gprofiler2.all_enriched_pathways.tsv",
+                "evaluation/gprofiler/ENSMUSG_seeds.ENSMUSG_network.diamond/R_sessionInfo.log",
+                "evaluation/gprofiler/ENSMUSG_seeds.ENSMUSG_network.no_tool",
+                "evaluation/gprofiler/ENSMUSG_seeds.ENSMUSG_network.no_tool/ENSMUSG_seeds.ENSMUSG_network.no_tool.gprofiler2.all_enriched_pathways.tsv",
+                "evaluation/gprofiler/ENSMUSG_seeds.ENSMUSG_network.no_tool/R_sessionInfo.log",
+                "evaluation/gprofiler/gprofiler_full_mmusculus.GO_WP_REAC_KEGG.ENSG_filtered.gmt",
+                "input",
+                "input/networks",
+                "input/networks/ENSMUSG_network.diamond.csv",
+                "input/networks/ENSMUSG_network.gt",
+                "input/seeds",
+                "input/seeds/ENSMUSG_seeds.ENSMUSG_network.no_tool.gt",
+                "input/seeds/ENSMUSG_seeds.ENSMUSG_network.removed.tsv",
+                "input/seeds/ENSMUSG_seeds.ENSMUSG_network.tsv",
+                "mqc_summaries",
+                "mqc_summaries/input_network_mqc.tsv",
+                "mqc_summaries/input_seeds_mqc.tsv",
+                "mqc_summaries/jaccard_similarity_matrix_mqc.tsv",
+                "mqc_summaries/jaccard_similarity_no_seeds_matrix_mqc.tsv",
+                "mqc_summaries/node_degree_distribution_mqc.yaml",
+                "mqc_summaries/shared_nodes_matrix_mqc.tsv",
+                "mqc_summaries/shared_nodes_no_seeds_matrix_mqc.tsv",
+                "mqc_summaries/topology_mqc.tsv",
+                "multiqc",
+                "multiqc/multiqc_data",
+                "multiqc/multiqc_data/llms-full.txt",
+                "multiqc/multiqc_data/multiqc.log",
+                "multiqc/multiqc_data/multiqc.parquet",
+                "multiqc/multiqc_data/multiqc_citations.txt",
+                "multiqc/multiqc_data/multiqc_data.json",
+                "multiqc/multiqc_data/multiqc_general_stats.txt",
+                "multiqc/multiqc_data/multiqc_input_network.txt",
+                "multiqc/multiqc_data/multiqc_input_seeds.txt",
+                "multiqc/multiqc_data/multiqc_jaccard_similarity.txt",
+                "multiqc/multiqc_data/multiqc_jaccard_similarity_no_seeds.txt",
+                "multiqc/multiqc_data/multiqc_network_node_degree_distribution_line_graph.txt",
+                "multiqc/multiqc_data/multiqc_network_node_degree_distribution_line_graph_1.txt",
+                "multiqc/multiqc_data/multiqc_shared_nodes.txt",
+                "multiqc/multiqc_data/multiqc_shared_nodes_no_seeds.txt",
+                "multiqc/multiqc_data/multiqc_software_versions.txt",
+                "multiqc/multiqc_data/multiqc_sources.txt",
+                "multiqc/multiqc_plots",
+                "multiqc/multiqc_plots/pdf",
+                "multiqc/multiqc_plots/pdf/input_network.pdf",
+                "multiqc/multiqc_plots/pdf/input_seeds-cnt.pdf",
+                "multiqc/multiqc_plots/pdf/input_seeds-pct.pdf",
+                "multiqc/multiqc_plots/pdf/jaccard_similarity.pdf",
+                "multiqc/multiqc_plots/pdf/jaccard_similarity_no_seeds.pdf",
+                "multiqc/multiqc_plots/pdf/network_node_degree_distribution_line_graph_Counts.pdf",
+                "multiqc/multiqc_plots/pdf/network_node_degree_distribution_line_graph_Percentages.pdf",
+                "multiqc/multiqc_plots/pdf/shared_nodes.pdf",
+                "multiqc/multiqc_plots/pdf/shared_nodes_no_seeds.pdf",
+                "multiqc/multiqc_plots/png",
+                "multiqc/multiqc_plots/png/input_network.png",
+                "multiqc/multiqc_plots/png/input_seeds-cnt.png",
+                "multiqc/multiqc_plots/png/input_seeds-pct.png",
+                "multiqc/multiqc_plots/png/jaccard_similarity.png",
+                "multiqc/multiqc_plots/png/jaccard_similarity_no_seeds.png",
+                "multiqc/multiqc_plots/png/network_node_degree_distribution_line_graph_Counts.png",
+                "multiqc/multiqc_plots/png/network_node_degree_distribution_line_graph_Percentages.png",
+                "multiqc/multiqc_plots/png/shared_nodes.png",
+                "multiqc/multiqc_plots/png/shared_nodes_no_seeds.png",
+                "multiqc/multiqc_plots/svg",
+                "multiqc/multiqc_plots/svg/input_network.svg",
+                "multiqc/multiqc_plots/svg/input_seeds-cnt.svg",
+                "multiqc/multiqc_plots/svg/input_seeds-pct.svg",
+                "multiqc/multiqc_plots/svg/jaccard_similarity.svg",
+                "multiqc/multiqc_plots/svg/jaccard_similarity_no_seeds.svg",
+                "multiqc/multiqc_plots/svg/network_node_degree_distribution_line_graph_Counts.svg",
+                "multiqc/multiqc_plots/svg/network_node_degree_distribution_line_graph_Percentages.svg",
+                "multiqc/multiqc_plots/svg/shared_nodes.svg",
+                "multiqc/multiqc_plots/svg/shared_nodes_no_seeds.svg",
+                "multiqc/multiqc_report.html",
+                "pipeline_info",
+                "pipeline_info/nf_core_diseasemodulediscovery_software_mqc_versions.yml"
+            ],
+            [
+                "ENSMUSG_seeds.ENSMUSG_network.no_tool.graphml:md5,74a2da157e727101286ff17cc97e70bc",
+                "ENSMUSG_seeds.ENSMUSG_network.no_tool.gt:md5,0a5ea3493bf214c4355432b45f109547",
+                "ENSMUSG_seeds.ENSMUSG_network.no_tool.edges.tsv:md5,db6e1f89d246a21d21f6a99be1d51254",
+                "ENSMUSG_seeds.ENSMUSG_network.no_tool.nodes.tsv:md5,0a11a06c481061ac621f39702f694a05",
+                "ENSMUSG_network.diamond.csv:md5,9ef65db34f43fac9e6d0828209f324c5",
+                "ENSMUSG_network.gt:md5,9f522f95efd2678168f2040bbe011a03",
+                "ENSMUSG_seeds.ENSMUSG_network.no_tool.gt:md5,d50de19ef096e9891a61055baad53b37",
+                "ENSMUSG_seeds.ENSMUSG_network.removed.tsv:md5,69472c9cf280966b4e1dca5227c33533",
+                "ENSMUSG_seeds.ENSMUSG_network.tsv:md5,d2de22d9af6bd4b188d03746f69a2f1a",
+                "input_network_mqc.tsv:md5,f4dc75bd4fe02b7180e0e4d7567da2df",
+                "input_seeds_mqc.tsv:md5,df9fb677f7eb30f5065315a63a952587",
+                "node_degree_distribution_mqc.yaml:md5,2ddf480cd88385fb69af47d0750b6a70"
+            ]
+        ],
+        "timestamp": "2026-07-24T13:14:04.229539286",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.0"
+        }
+    }
+}

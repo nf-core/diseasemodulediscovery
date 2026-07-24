@@ -1,0 +1,13 @@
+channels:
+  - conda-forge
+  - bioconda
+  - nodefaults
+
+dependencies:
+  - nextflow>=26.04.0
+  - prettier==3.1.0
+  - black>=23.11
+  - singularity>=3.8
+  - pip
+  - pip:
+      - nf-core==4.0.3
