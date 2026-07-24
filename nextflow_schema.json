@@ -25,15 +25,17 @@
                 "seeds": {
                     "type": "string",
                     "fa_icon": "fas fa-file-csv",
-                    "description": "Path(s) to one or multiple file(s) with seed genes",
-                    "help_text": "Multiple files have to be \",\" separated. Each file must have one line per seed gene. This parameter cannot be set, if there is a \"seeds\" column, in the sample sheet provided via --input."
+                    "description": "Path(s) to one or multiple file(s) with seed genes, in txt, csv, or tsv format.",
+                    "help_text": "Multiple files have to be \",\" separated. Each file must have one line per seed gene. This parameter cannot be set, if there is a \"seeds\" column, in the sample sheet provided via --input.",
+                    "pattern": "^[^,\\s]+\\.(txt|csv|tsv)(,[^,\\s]+\\.(txt|csv|tsv))*$"
                 },
                 "network": {
                     "type": "string",
-                    "description": "Path(s) to one or multiple PPI network(s) in gt, csv, tsv, graphml, xml, dot, or gml format.",
+                    "description": "Path(s) to one or multiple PPI network(s) as file(s) in gt, csv, tsv, graphml, xml, dot, or gml format, or keyword(s) referring to inbuilt networks.",
                     "format": "file-path",
                     "fa_icon": "fas fa-file-csv",
-                    "help_text": "Multiple files have to be \",\" separated."
+                    "help_text": "Multiple files have to be \",\" separated.",
+                    "pattern": "^([^,\\s]+\\.(gt|csv|tsv|graphml|xml|dot|gml)|[^,\\s.]+)(,([^,\\s]+\\.(gt|csv|tsv|graphml|xml|dot|gml)|[^,\\s.]+))*$"
                 },
                 "id_space": {
                     "type": "string",
