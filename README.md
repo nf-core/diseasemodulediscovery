@@ -126,9 +126,9 @@ For further information or help, don't hesitate to get in touch on the [Slack `#
 
 ## Citations
 
-If you use `nf-core/diseasemodulediscovery` for your analysis, please cite the preprint as follows:
+If you use `nf-core/diseasemodulediscovery` for your analysis, please cite the corresponding publication:
 
-> Johannes Kersting, Chloé Bucheron, Lisa M. Spindler, Joaquim Aguirre-Plans, Quirin Manz, Tanja Pock, Mo Tan, Fernando M. Delgado-Chaves, Cristian Nogales, Harald H. H. W. Schmidt, Jörg Menche, Andreas Maier, Jan Baumbach, Emre Guney, Markus List **Inferring and Evaluating Network Medicine-Based Disease Modules with Nextflow** _bioRxiv_ , 2025, [doi: 10.1101/2025.11.20.687681](https://doi.org/10.1101/2025.11.20.687681).
+> Johannes Kersting, Chloé Bucheron, Lisa M Spindler, Joaquim Aguirre-Plans, Quirin Manz, Tanja Pock, Mo Tan, Fernando M Delgado-Chaves, Cristian Nogales, Harald H H W Schmidt, Jörg Menche, Andreas Maier, Jan Baumbach, Emre Guney, Markus List, **Inferring and evaluating network medicine-based disease modules with nextflow**, _Bioinformatics_, Volume 42, Issue Supplement_1, July 2026, btag223, [doi: 10.1093/bioinformatics/btag223](https://doi.org/10.1093/bioinformatics/btag223)
 
 <!-- TODO nf-core: Add citation for pipeline after first release. Uncomment lines below and update Zenodo doi and badge at the top of this file. -->
 <!-- If you use nf-core/diseasemodulediscovery for your analysis, please cite it using the following doi: [10.5281/zenodo.XXXXXX](https://doi.org/10.5281/zenodo.XXXXXX) -->
