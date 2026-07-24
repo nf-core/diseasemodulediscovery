@@ -1,7 +1,7 @@
 nextflow_workflow {
 
     name "Test pipeline initialisation"
-    script "../subworkflows/local/utils_nfcore_diseasemodulediscovery_pipeline/main.nf"
+    script "../main.nf"
     workflow "PIPELINE_INITIALISATION"
     tag "workflow"
 
@@ -37,7 +37,7 @@ nextflow_workflow {
         then {
 
             assert workflow.success
-            assert snapshot(workflow.out.seeds, workflow.out.network, workflow.out.shortest_paths, workflow.out.perturbed_networks).match()
+            assert snapshot(workflow.out).match()
 
         }
 
