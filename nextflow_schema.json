@@ -213,6 +213,13 @@
                     "description": "Flag for skipping g:Profiler",
                     "fa_icon": "fas fa-forward"
                 },
+                "gprofiler_organism": {
+                    "type": "string",
+                    "default": "hsapiens",
+                    "description": "Organism for g:Profiler",
+                    "help_text": "See https://biit.cs.ut.ee/gprofiler/page/organism-list for a list of supported organisms.",
+                    "fa_icon": "fas fa-dna"
+                },
                 "skip_digest": {
                     "type": "boolean",
                     "description": "Flag for skipping DIGEST",
