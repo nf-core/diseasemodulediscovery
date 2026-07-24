@@ -14,8 +14,8 @@ include { NETWORKANNOTATION                 } from '../modules/local/networkanno
 include { SAVEMODULES                       } from '../modules/local/savemodules/main'
 include { VISUALIZEMODULES                  } from '../modules/local/visualizemodules/main'
 include { VISUALIZEMODULESDRUGS             } from '../modules/local/visualizemodulesdrugs/main'
-include { GT2TSV as GT2TSV_Modules          } from '../modules/local/gt2tsv/main'
-include { GT2TSV as GT2TSV_Network          } from '../modules/local/gt2tsv/main'
+include { GT2TSV as GT2TSV_MODULES          } from '../modules/local/gt2tsv/main'
+include { GT2TSV as GT2TSV_NETWORK          } from '../modules/local/gt2tsv/main'
 include { DIGEST as DIGEST_REFERENCEFREE    } from '../modules/local/digest/main'
 include { DIGEST as DIGEST_REFERENCEBASED   } from '../modules/local/digest/main'
 include { MODULEOVERLAP                     } from '../modules/local/moduleoverlap/main'
@@ -373,11 +373,11 @@ workflow DISEASEMODULEDISCOVERY {
 
     if(!params.skip_evaluation){
 
-        GT2TSV_Modules(ch_modules_not_empty)
-        GT2TSV_Network(ch_network_gt)
+        GT2TSV_MODULES(ch_modules_not_empty)
+        GT2TSV_NETWORK(ch_network_gt)
 
         // channel: [ val(meta), path(nodes) ]
-        ch_nodes = GT2TSV_Modules.out
+        ch_nodes = GT2TSV_MODULES.out
 
         // Module overlap
         ch_overlap_input = ch_nodes_tsv_not_empty
@@ -396,7 +396,7 @@ workflow DISEASEMODULEDISCOVERY {
 
             ch_gprofiler_input = ch_nodes
                 .map{ meta, path -> [meta.network_id, meta, path]}
-                .combine(GT2TSV_Network.out.map{meta, path -> [meta.id, path]}, by: 0)
+                .combine(GT2TSV_NETWORK.out.map{meta, path -> [meta.id, path]}, by: 0)
                 .multiMap{key, meta, nodes, network ->
                     nodes: [meta, nodes]
                     network: [meta, network]
