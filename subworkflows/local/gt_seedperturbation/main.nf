@@ -2,7 +2,7 @@
 // Runs seed perturbation based evaluation of network expansion methods
 //
 
-include { NETWORKEXPANSION              } from '../networkexpansion'
+include { NETWORKEXPANSION               } from '../networkexpansion'
 include { SEEDPERTURBATION               } from '../../../modules/local/seedperturbation/main'
 include { SEEDPERTURBATIONEVALUATION     } from '../../../modules/local/seedperturbationevaluation/main'
 include { SEEDPERTURBATIONVISUALIZATION  } from '../../../modules/local/seedperturbationvisualization/main'

@@ -21,10 +21,10 @@ nextflow_workflow {
                 input[8] = null                     //  string: Path to input samplesheet
 
                 // string: Path(s) to seeds file(s)
-                input[9] = 'https://raw.githubusercontent.com/nf-core/test-datasets/diseasemodulediscovery/small/entrez_seeds_1.csv,https://raw.githubusercontent.com/nf-core/test-datasets/diseasemodulediscovery/small/entrez_seeds_2.csv'
+                input[9] = params.pipelines_testdata_base_path + "small/entrez_seeds_1.csv," + params.pipelines_testdata_base_path + "small/entrez_seeds_2.csv"
 
                 //  string: Path(s) to network file(s)
-                input[10] = 'https://raw.githubusercontent.com/nf-core/test-datasets/diseasemodulediscovery/small/entrez_ppi.csv,string_physical_min900'
+                input[10] = params.pipelines_testdata_base_path + "small/entrez_ppi.csv,string_physical_min900"
 
                 input[11] = null                                            //  string: Path(s) to shortest paths files
                 input[12] = null                                            //  string: Path(s) to perturbed networks file
