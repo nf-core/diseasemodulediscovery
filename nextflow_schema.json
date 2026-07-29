@@ -15,7 +15,7 @@
                 "input": {
                     "type": "string",
                     "description": "Path to a CSV sample sheet defining seed file-network combinations",
-                    "help_text": "The file must have a header and can have two columns: \"seeds\" and \"network\". If either \"seeds\" or \"network\" are missing, the --seeds and --network parameters are expected as replacement. ",
+                    "help_text": "The file must have a header and can have up to four columns: \"seeds\", \"network\", \"shortest_paths\", and \"perturbed_networks\". If you want to provide shortest_paths or perturbed_networks, all values (including seeds and network) have to come from the sample sheet.",
                     "fa_icon": "fas fa-file-csv",
                     "pattern": "^\\S+\\.csv$",
                     "format": "file-path",
@@ -26,7 +26,7 @@
                     "type": "string",
                     "fa_icon": "fas fa-file-csv",
                     "description": "Path(s) to one or multiple file(s) with seed genes, in txt, csv, or tsv format.",
-                    "help_text": "Multiple files have to be \",\" separated. Each file must have one line per seed gene. This parameter cannot be set, if there is a \"seeds\" column, in the sample sheet provided via --input.",
+                    "help_text": "Multiple files have to be \",\" separated. Each file must have one line per seed gene. This parameter cannot be used together with --input.",
                     "pattern": "^[^,\\s]+\\.(txt|csv|tsv)(,[^,\\s]+\\.(txt|csv|tsv))*$"
                 },
                 "network": {
@@ -34,7 +34,7 @@
                     "description": "Path(s) to one or multiple PPI network(s) as file(s) in gt, csv, tsv, graphml, xml, dot, or gml format, or keyword(s) referring to inbuilt networks.",
                     "format": "file-path",
                     "fa_icon": "fas fa-file-csv",
-                    "help_text": "Multiple files have to be \",\" separated.",
+                    "help_text": "Multiple files have to be \",\" separated. This parameter cannot be used together with --input.",
                     "pattern": "^([^,\\s]+\\.(gt|csv|tsv|graphml|xml|dot|gml)|[^,\\s.]+)(,([^,\\s]+\\.(gt|csv|tsv|graphml|xml|dot|gml)|[^,\\s.]+))*$"
                 },
                 "id_space": {
