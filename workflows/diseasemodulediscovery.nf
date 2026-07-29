@@ -9,12 +9,13 @@
 //
 include { INPUTCHECK                        } from '../modules/local/inputcheck/main'
 include { GRAPHTOOLPARSER                   } from '../modules/local/graphtoolparser/main'
+include { MULTIQCFORMATTER                  } from '../modules/local/multiqcformatter/main'
 include { NETWORKANNOTATION                 } from '../modules/local/networkannotation/main'
 include { SAVEMODULES                       } from '../modules/local/savemodules/main'
 include { VISUALIZEMODULES                  } from '../modules/local/visualizemodules/main'
 include { VISUALIZEMODULESDRUGS             } from '../modules/local/visualizemodulesdrugs/main'
-include { GT2TSV as GT2TSV_Modules          } from '../modules/local/gt2tsv/main'
-include { GT2TSV as GT2TSV_Network          } from '../modules/local/gt2tsv/main'
+include { GT2TSV as GT2TSV_MODULES          } from '../modules/local/gt2tsv/main'
+include { GT2TSV as GT2TSV_NETWORK          } from '../modules/local/gt2tsv/main'
 include { DIGEST as DIGEST_REFERENCEFREE    } from '../modules/local/digest/main'
 include { DIGEST as DIGEST_REFERENCEBASED   } from '../modules/local/digest/main'
 include { MODULEOVERLAP                     } from '../modules/local/moduleoverlap/main'
@@ -146,11 +147,11 @@ workflow DISEASEMODULEDISCOVERY {
             cache: false,
             storeDir: "${params.outdir}/mqc_summaries",
             name: 'input_network_mqc.tsv',
-            keepHeader: true
+            keepHeader: true,
+            sort: { file -> file.text }
         )
     ch_multiqc_files = ch_multiqc_files.mix(ch_network_multiqc)
     ch_network_gt = GRAPHTOOLPARSER.out.network
-
 
     // Check input
     // channel: [ val(meta[id,seeds_id,network_id]), path(seeds), path(network) ]
@@ -167,7 +168,8 @@ workflow DISEASEMODULEDISCOVERY {
             cache: false,
             storeDir: "${params.outdir}/mqc_summaries",
             name: 'input_seeds_mqc.tsv',
-            keepHeader: true
+            keepHeader: true,
+            sort: { file -> file.text }
         )
     ch_multiqc_files = ch_multiqc_files.mix(ch_seeds_multiqc)
 
@@ -371,11 +373,11 @@ workflow DISEASEMODULEDISCOVERY {
 
     if(!params.skip_evaluation){
 
-        GT2TSV_Modules(ch_modules_not_empty)
-        GT2TSV_Network(ch_network_gt)
+        GT2TSV_MODULES(ch_modules_not_empty)
+        GT2TSV_NETWORK(ch_network_gt)
 
         // channel: [ val(meta), path(nodes) ]
-        ch_nodes = GT2TSV_Modules.out
+        ch_nodes = GT2TSV_MODULES.out
 
         // Module overlap
         ch_overlap_input = ch_nodes_tsv_not_empty
@@ -394,7 +396,7 @@ workflow DISEASEMODULEDISCOVERY {
 
             ch_gprofiler_input = ch_nodes
                 .map{ meta, path -> [meta.network_id, meta, path]}
-                .combine(GT2TSV_Network.out.map{meta, path -> [meta.id, path]}, by: 0)
+                .combine(GT2TSV_NETWORK.out.map{meta, path -> [meta.id, path]}, by: 0)
                 .multiMap{key, meta, nodes, network ->
                     nodes: [meta, nodes]
                     network: [meta, network]
@@ -567,6 +569,16 @@ workflow DISEASEMODULEDISCOVERY {
         ch_versions = ch_versions.mix(GT_PROXIMITY.out.versions)
     }
 
+
+    // Format complex MultiQC input files
+    MULTIQCFORMATTER(
+        GRAPHTOOLPARSER.out.node_degree.map{_meta, path -> path}.collect().map{networks ->
+            def header = new File("$projectDir/assets/network_node_degree_distribution_header.yaml").toPath()
+            [header, networks]
+        }
+    )
+    ch_multiqc_files = ch_multiqc_files.mix(MULTIQCFORMATTER.out.multiqc)
+    ch_versions = ch_versions.mix(MULTIQCFORMATTER.out.versions)
 
     // Collate and save software versions
     //

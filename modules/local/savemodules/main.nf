@@ -21,7 +21,7 @@ process SAVEMODULES {
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         python: \$(python --version | sed 's/Python //g')
-        graph-tool: \$(python -c "import graph_tool; print(graph_tool.__version__)")
+        graph-tool: \$(python -c "import graph_tool; print(graph_tool.__version__)" | cut -d' ' -f1)
         pandas: \$(python -c "import pandas; print(pandas.__version__)")
     END_VERSIONS
     """
