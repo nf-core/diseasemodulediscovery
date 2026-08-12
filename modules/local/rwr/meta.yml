@@ -1,0 +1,48 @@
+name: rwr
+description: TODO
+keywords:
+  - TODO
+tools:
+  - rwr:
+      description: TODO
+      homepage: TODO
+      documentation: TODO
+      licence:
+        - TODO
+input:
+  - - meta:
+        type: map
+        description: Groovy Map containing sample information
+    - seeds:
+        type: file
+        description: TODO
+    - network:
+        type: file
+        description: TODO
+  - - scaling:
+        type: string
+        description: TODO
+  - - symmetrical:
+        type: string
+        description: TODO
+  - - r:
+        type: string
+        description: TODO
+output:
+  module:
+    - meta:
+        type: map
+        description: Groovy Map containing sample information
+    - "*.txt":
+        type: file
+        description: TODO
+        pattern: "*.txt"
+  versions:
+    - versions.yml:
+        type: file
+        description: TODO
+        pattern: versions.yml
+authors:
+  - "@TODO"
+maintainers:
+  - "@TODO"

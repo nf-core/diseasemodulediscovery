@@ -1,0 +1,33 @@
+name: networkannotation
+description: TODO
+keywords:
+  - TODO
+tools:
+  - networkannotation:
+      description: TODO
+      homepage: TODO
+      documentation: TODO
+      licence:
+        - TODO
+input:
+  - - meta:
+        type: map
+        description: Groovy Map containing sample information
+output:
+  module:
+    - meta:
+        type: map
+        description: Groovy Map containing sample information
+    - ${meta.id}.gt:
+        type: file
+        description: TODO
+        pattern: ${meta.id}.gt
+  versions:
+    - versions.yml:
+        type: file
+        description: TODO
+        pattern: versions.yml
+authors:
+  - "@TODO"
+maintainers:
+  - "@TODO"

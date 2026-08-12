@@ -1,0 +1,33 @@
+name: multiqcformatter
+description: TODO
+keywords:
+  - TODO
+tools:
+  - multiqcformatter:
+      description: TODO
+      homepage: TODO
+      documentation: TODO
+      licence:
+        - TODO
+input:
+  - - header:
+        type: file
+        description: TODO
+    - inputFiles:
+        type: file
+        description: TODO
+output:
+  multiqc:
+    - "*mqc*":
+        type: file
+        description: TODO
+        pattern: "*mqc*"
+  versions:
+    - versions.yml:
+        type: file
+        description: TODO
+        pattern: versions.yml
+authors:
+  - "@TODO"
+maintainers:
+  - "@TODO"

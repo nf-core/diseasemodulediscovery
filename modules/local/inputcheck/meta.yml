@@ -1,0 +1,57 @@
+name: inputcheck
+description: TODO
+keywords:
+  - TODO
+tools:
+  - inputcheck:
+      description: TODO
+      homepage: TODO
+      documentation: TODO
+      licence:
+        - TODO
+input:
+  - - meta:
+        type: map
+        description: Groovy Map containing sample information
+output:
+  seeds:
+    - meta:
+        type: map
+        description: Groovy Map containing sample information
+    - ${meta.id}.tsv:
+        type: file
+        description: TODO
+        pattern: ${meta.id}.tsv
+  seeds_module:
+    - meta:
+        type: map
+        description: Groovy Map containing sample information
+    - ${meta.id}.no_tool.gt:
+        type: file
+        description: TODO
+        pattern: ${meta.id}.no_tool.gt
+  removed_seeds:
+    - meta:
+        type: map
+        description: Groovy Map containing sample information
+    - ${meta.id}.removed.tsv:
+        type: file
+        description: TODO
+        pattern: ${meta.id}.removed.tsv
+  multiqc:
+    - meta:
+        type: map
+        description: Groovy Map containing sample information
+    - ${meta.id}.multiqc.tsv:
+        type: file
+        description: TODO
+        pattern: ${meta.id}.multiqc.tsv
+  versions:
+    - versions.yml:
+        type: file
+        description: TODO
+        pattern: versions.yml
+authors:
+  - "@TODO"
+maintainers:
+  - "@TODO"

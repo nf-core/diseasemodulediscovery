@@ -1,0 +1,56 @@
+name: digest
+description: TODO
+keywords:
+  - TODO
+tools:
+  - digest:
+      description: TODO
+      homepage: TODO
+      documentation: TODO
+      licence:
+        - TODO
+input:
+  - - meta:
+        type: map
+        description: Groovy Map containing sample information
+    - target_file:
+        type: file
+        description: TODO
+  - - target_type:
+        type: string
+        description: TODO
+  - - network:
+        type: file
+        description: TODO
+  - - network_type:
+        type: string
+        description: TODO
+  - - mode:
+        type: string
+        description: TODO
+output:
+  outdir:
+    - meta:
+        type: map
+        description: Groovy Map containing sample information
+    - ${meta.id}:
+        type: file
+        description: TODO
+        pattern: ${meta.id}
+  multiqc:
+    - meta:
+        type: map
+        description: Groovy Map containing sample information
+    - ${meta.id}.multiqc.tsv:
+        type: file
+        description: TODO
+        pattern: ${meta.id}.multiqc.tsv
+  versions:
+    - versions.yml:
+        type: file
+        description: TODO
+        pattern: versions.yml
+authors:
+  - "@TODO"
+maintainers:
+  - "@TODO"

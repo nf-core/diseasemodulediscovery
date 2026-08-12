@@ -1,0 +1,36 @@
+name: topology
+description: TODO
+keywords:
+  - TODO
+tools:
+  - topology:
+      description: TODO
+      homepage: TODO
+      documentation: TODO
+      licence:
+        - TODO
+input:
+  - - meta:
+        type: map
+        description: Groovy Map containing sample information
+    - module:
+        type: file
+        description: TODO
+output:
+  topology:
+    - meta:
+        type: map
+        description: Groovy Map containing sample information
+    - ${meta.id}.topology.tsv:
+        type: file
+        description: TODO
+        pattern: ${meta.id}.topology.tsv
+  versions:
+    - versions.yml:
+        type: file
+        description: TODO
+        pattern: versions.yml
+authors:
+  - "@TODO"
+maintainers:
+  - "@TODO"

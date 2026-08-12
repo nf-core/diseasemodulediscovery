@@ -1,0 +1,26 @@
+name: domino_slicer
+description: TODO
+keywords:
+  - TODO
+tools:
+  - domino_slicer:
+      description: TODO
+      homepage: TODO
+      documentation: TODO
+      licence:
+        - TODO
+input:
+  - - meta:
+        type: map
+        description: Groovy Map containing sample information
+    - network:
+        type: file
+        description: TODO
+  - - meta:
+        type: map
+        description: Groovy Map containing sample information
+output: {}
+authors:
+  - "@TODO"
+maintainers:
+  - "@TODO"

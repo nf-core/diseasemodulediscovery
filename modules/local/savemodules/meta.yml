@@ -1,0 +1,52 @@
+name: savemodules
+description: TODO
+keywords:
+  - TODO
+tools:
+  - savemodules:
+      description: TODO
+      homepage: TODO
+      documentation: TODO
+      licence:
+        - TODO
+input:
+  - - meta:
+        type: map
+        description: Groovy Map containing sample information
+    - module:
+        type: file
+        description: TODO
+output:
+  graphml:
+    - meta:
+        type: map
+        description: Groovy Map containing sample information
+    - ${meta.id}.graphml:
+        type: file
+        description: TODO
+        pattern: ${meta.id}.graphml
+  nodes_tsv:
+    - meta:
+        type: map
+        description: Groovy Map containing sample information
+    - ${meta.id}.nodes.tsv:
+        type: file
+        description: TODO
+        pattern: ${meta.id}.nodes.tsv
+  edges_tsv:
+    - meta:
+        type: map
+        description: Groovy Map containing sample information
+    - ${meta.id}.edges.tsv:
+        type: file
+        description: TODO
+        pattern: ${meta.id}.edges.tsv
+  versions:
+    - versions.yml:
+        type: file
+        description: TODO
+        pattern: versions.yml
+authors:
+  - "@TODO"
+maintainers:
+  - "@TODO"

@@ -1,0 +1,26 @@
+name: prefixlines
+description: TODO
+keywords:
+  - TODO
+tools:
+  - prefixlines:
+      description: TODO
+      homepage: TODO
+      documentation: TODO
+      licence:
+        - TODO
+input:
+  - - meta:
+        type: map
+        description: Groovy Map containing sample information
+    - file:
+        type: file
+        description: TODO
+  - - prefix:
+        type: string
+        description: TODO
+output: {}
+authors:
+  - "@TODO"
+maintainers:
+  - "@TODO"

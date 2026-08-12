@@ -1,0 +1,32 @@
+name: domino_domino
+description: TODO
+keywords:
+  - TODO
+tools:
+  - domino_domino:
+      description: TODO
+      homepage: TODO
+      documentation: TODO
+      licence:
+        - TODO
+input:
+  - - meta:
+        type: map
+        description: Groovy Map containing sample information
+    - seeds:
+        type: file
+        description: TODO
+    - network:
+        type: file
+        description: TODO
+    - slices:
+        type: file
+        description: TODO
+  - - meta:
+        type: map
+        description: Groovy Map containing sample information
+output: {}
+authors:
+  - "@TODO"
+maintainers:
+  - "@TODO"

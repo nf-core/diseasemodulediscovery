@@ -1,0 +1,39 @@
+name: biopax_parser
+description: TODO
+keywords:
+  - TODO
+tools:
+  - biopax_parser:
+      description: TODO
+      homepage: TODO
+      documentation: TODO
+      licence:
+        - TODO
+input:
+  - - meta:
+        type: map
+        description: Groovy Map containing sample information
+    - network:
+        type: file
+        description: TODO
+  - - idspace:
+        type: string
+        description: TODO
+  - - add_variants:
+        type: string
+        description: TODO
+output:
+  biopax:
+    - "*.owl":
+        type: file
+        description: TODO
+        pattern: "*.owl"
+  versions:
+    - versions.yml:
+        type: file
+        description: TODO
+        pattern: versions.yml
+authors:
+  - "@TODO"
+maintainers:
+  - "@TODO"

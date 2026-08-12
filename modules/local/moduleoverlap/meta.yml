@@ -1,0 +1,43 @@
+name: moduleoverlap
+description: TODO
+keywords:
+  - TODO
+tools:
+  - moduleoverlap:
+      description: TODO
+      homepage: TODO
+      documentation: TODO
+      licence:
+        - TODO
+input:
+  - - ids:
+        type: string
+        description: TODO
+  - - inputs:
+        type: file
+        description: TODO
+output:
+  jaccard_multiqc:
+    - "*.jaccard_multiqc":
+        type: file
+        description: TODO
+        pattern: "*.jaccard_multiqc"
+  shared_multiqc:
+    - "*.shared_multiqc":
+        type: file
+        description: TODO
+        pattern: "*.shared_multiqc"
+  jaccard_no_seeds_multiqc:
+    - "*.jaccard_no_seeds_multiqc":
+        type: file
+        description: TODO
+        pattern: "*.jaccard_no_seeds_multiqc"
+  shared_no_seeds_multiqc:
+    - "*.shared_no_seeds_multiqc":
+        type: file
+        description: TODO
+        pattern: "*.shared_no_seeds_multiqc"
+authors:
+  - "@TODO"
+maintainers:
+  - "@TODO"

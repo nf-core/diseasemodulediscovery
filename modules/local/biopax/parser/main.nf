@@ -2,6 +2,11 @@ process BIOPAX_PARSER {
     tag "$meta.id"
     label 'process_single'
 
+    container "${ workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
+?         'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/2d/2dc099c6561d0c857b4673ac4077adee0de873e76300cbdc51e28856179f4eae/data'
+:         'community.wave.seqera.io/library/modulediscovery_python_dependencies:894e0b47d51d9d4b' }"
+
+
     input:
     tuple val(meta), path(network)
     val idspace

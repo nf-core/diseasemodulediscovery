@@ -1,0 +1,63 @@
+name: visualizemodulesdrugs
+description: TODO
+keywords:
+  - TODO
+tools:
+  - visualizemodulesdrugs:
+      description: TODO
+      homepage: TODO
+      documentation: TODO
+      licence:
+        - TODO
+input:
+  - - meta:
+        type: map
+        description: Groovy Map containing sample information
+    - module:
+        type: file
+        description: TODO
+    - drug_predictions:
+        type: file
+        description: TODO
+output:
+  pdf:
+    - meta:
+        type: map
+        description: Groovy Map containing sample information
+    - ${meta.id}.pdf:
+        type: file
+        description: TODO
+        pattern: ${meta.id}.pdf
+  png:
+    - meta:
+        type: map
+        description: Groovy Map containing sample information
+    - ${meta.id}.png:
+        type: file
+        description: TODO
+        pattern: ${meta.id}.png
+  svg:
+    - meta:
+        type: map
+        description: Groovy Map containing sample information
+    - ${meta.id}.svg:
+        type: file
+        description: TODO
+        pattern: ${meta.id}.svg
+  html:
+    - meta:
+        type: map
+        description: Groovy Map containing sample information
+    - ${meta.id}.html:
+        type: file
+        description: TODO
+        pattern: ${meta.id}.html
+  versions:
+    - versions.yml:
+        type: file
+        description: TODO
+        pattern: versions.yml
+authors:
+  - "@TODO"
+maintainers:
+  - "@TODO"

@@ -1,0 +1,47 @@
+name: networkperturbationevaluation
+description: TODO
+keywords:
+  - TODO
+tools:
+  - networkperturbationevaluation:
+      description: TODO
+      homepage: TODO
+      documentation: TODO
+      licence:
+        - TODO
+input:
+  - - meta:
+        type: map
+        description: Groovy Map containing sample information
+    - module:
+        type: file
+        description: TODO
+  - - perturbed_modules:
+        type: file
+        description: TODO
+output:
+  multiqc_summary:
+    - meta:
+        type: map
+        description: Groovy Map containing sample information
+    - ${meta.id}.network_perturbation_multiqc_summary.tsv:
+        type: file
+        description: TODO
+        pattern: ${meta.id}.network_perturbation_multiqc_summary.tsv
+  multiqc_jaccard:
+    - meta:
+        type: map
+        description: Groovy Map containing sample information
+    - ${meta.id}.network_perturbation_multiqc_jaccard.txt:
+        type: file
+        description: TODO
+        pattern: ${meta.id}.network_perturbation_multiqc_jaccard.txt
+  versions:
+    - versions.yml:
+        type: file
+        description: TODO
+        pattern: versions.yml
+authors:
+  - "@TODO"
+maintainers:
+  - "@TODO"

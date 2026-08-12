@@ -1,0 +1,63 @@
+name: drugstoneexport
+description: TODO
+keywords:
+  - TODO
+tools:
+  - drugstoneexport:
+      description: TODO
+      homepage: TODO
+      documentation: TODO
+      licence:
+        - TODO
+input:
+  - - meta:
+        type: map
+        description: Groovy Map containing sample information
+    - module:
+        type: file
+        description: TODO
+  - - id_space:
+        type: string
+        description: TODO
+output:
+  link:
+    - meta:
+        type: map
+        description: Groovy Map containing sample information
+    - ${meta.id}.drugstonelink.tsv:
+        type: file
+        description: TODO
+        pattern: ${meta.id}.drugstonelink.tsv
+  versions:
+    - versions.yml:
+        type: file
+        description: TODO
+        pattern: versions.yml
+authors:
+  - "@TODO"
+maintainers:
+  - "@TODO"
+containers:
+  docker:
+    linux/arm64:
+      name: community.wave.seqera.io/library/modulediscovery_python_dependencies:ccf583cf8b2348fc
+      build_id: bd-ccf583cf8b2348fc_1
+      scan_id: sc-d85e8d44c4f55246_1
+    linux/amd64:
+      name: community.wave.seqera.io/library/modulediscovery_python_dependencies:894e0b47d51d9d4b
+      build_id: bd-894e0b47d51d9d4b_1
+      scan_id: sc-fd3fae576b238898_1
+  singularity:
+    linux/arm64:
+      name: oras://community.wave.seqera.io/library/modulediscovery_python_dependencies:52ad421a66696f4b
+      build_id: bd-52ad421a66696f4b_1
+      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/21/21de64b1037cf398eef3f2ff58c45914a2be46ec51b588cd9188e7e0e3d1142d/data
+    linux/amd64:
+      name: oras://community.wave.seqera.io/library/modulediscovery_python_dependencies:de2f590cc18e3bd8
+      build_id: bd-de2f590cc18e3bd8_1
+      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/2d/2dc099c6561d0c857b4673ac4077adee0de873e76300cbdc51e28856179f4eae/data
+  conda:
+    linux/amd64:
+      lock_file: modules/local/drugstoneexport/.conda-lock/linux_amd64-bd-894e0b47d51d9d4b_1.txt
+    linux/arm64:
+      lock_file: modules/local/drugstoneexport/.conda-lock/linux_arm64-bd-ccf583cf8b2348fc_1.txt

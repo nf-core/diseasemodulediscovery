@@ -1,6 +1,9 @@
 process SEEDPERTURBATIONVISUALIZATION {
     label 'process_single'
 
+    conda "${moduleDir}/environment.yml"
+    container "modulediscovery_python_dependencies:894e0b47d51d9d4b" // automatically generated
+
     input:
     val  (seed_ids)
     val  (network_ids)

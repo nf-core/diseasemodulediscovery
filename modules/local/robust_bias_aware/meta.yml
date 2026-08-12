@@ -1,0 +1,42 @@
+name: robustbiasaware
+description: TODO
+keywords:
+  - TODO
+tools:
+  - robustbiasaware:
+      description: TODO
+      homepage: TODO
+      documentation: TODO
+      licence:
+        - TODO
+input:
+  - - meta:
+        type: map
+        description: Groovy Map containing sample information
+    - seeds:
+        type: file
+        description: TODO
+    - network:
+        type: file
+        description: TODO
+  - - idspace:
+        type: string
+        description: TODO
+output:
+  module:
+    - meta:
+        type: map
+        description: Groovy Map containing sample information
+    - ${meta.id}.graphml:
+        type: file
+        description: TODO
+        pattern: ${meta.id}.graphml
+  versions:
+    - versions.yml:
+        type: file
+        description: TODO
+        pattern: versions.yml
+authors:
+  - "@TODO"
+maintainers:
+  - "@TODO"

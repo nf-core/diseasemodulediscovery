@@ -1,0 +1,39 @@
+name: networkperturbation
+description: TODO
+keywords:
+  - TODO
+tools:
+  - networkperturbation:
+      description: TODO
+      homepage: TODO
+      documentation: TODO
+      licence:
+        - TODO
+input:
+  - - meta:
+        type: map
+        description: Groovy Map containing sample information
+    - network:
+        type: file
+        description: TODO
+    - output_name:
+        type: string
+        description: TODO
+output:
+  perturbed_network:
+    - meta:
+        type: map
+        description: Groovy Map containing sample information
+    - ${output_name}:
+        type: file
+        description: TODO
+        pattern: ${output_name}
+  versions:
+    - versions.yml:
+        type: file
+        description: TODO
+        pattern: versions.yml
+authors:
+  - "@TODO"
+maintainers:
+  - "@TODO"

@@ -1,0 +1,33 @@
+name: biopax_validator
+description: TODO
+keywords:
+  - TODO
+tools:
+  - biopax_validator:
+      description: TODO
+      homepage: TODO
+      documentation: TODO
+      licence:
+        - TODO
+input:
+  - - biopax_files:
+        type: file
+        description: TODO
+  - - validate_online:
+        type: string
+        description: TODO
+output:
+  validation:
+    - biopax-validator-report.html:
+        type: file
+        description: TODO
+        pattern: biopax-validator-report.html
+  versions:
+    - versions.yml:
+        type: file
+        description: TODO
+        pattern: versions.yml
+authors:
+  - "@TODO"
+maintainers:
+  - "@TODO"

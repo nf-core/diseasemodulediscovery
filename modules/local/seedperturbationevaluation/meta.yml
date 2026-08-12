@@ -1,0 +1,72 @@
+name: seedperturbationevaluation
+description: TODO
+keywords:
+  - TODO
+tools:
+  - seedperturbationevaluation:
+      description: TODO
+      homepage: TODO
+      documentation: TODO
+      licence:
+        - TODO
+input:
+  - - meta:
+        type: map
+        description: Groovy Map containing sample information
+    - module:
+        type: file
+        description: TODO
+  - - seeds:
+        type: file
+        description: TODO
+  - - perturbed_modules:
+        type: file
+        description: TODO
+  - - perturbed_seeds:
+        type: file
+        description: TODO
+  - - network:
+        type: file
+        description: TODO
+output:
+  summary:
+    - meta:
+        type: map
+        description: Groovy Map containing sample information
+    - ${meta.id}.seed_perturbation_evaluation_summary.tsv:
+        type: file
+        description: TODO
+        pattern: ${meta.id}.seed_perturbation_evaluation_summary.tsv
+  detailed:
+    - meta:
+        type: map
+        description: Groovy Map containing sample information
+    - ${meta.id}.seed_perturbation_evaluation_detailed.tsv:
+        type: file
+        description: TODO
+        pattern: ${meta.id}.seed_perturbation_evaluation_detailed.tsv
+  multiqc_summary:
+    - meta:
+        type: map
+        description: Groovy Map containing sample information
+    - ${meta.id}.seed_perturbation_multiqc_summary.tsv:
+        type: file
+        description: TODO
+        pattern: ${meta.id}.seed_perturbation_multiqc_summary.tsv
+  multiqc_jaccard:
+    - meta:
+        type: map
+        description: Groovy Map containing sample information
+    - ${meta.id}.seed_perturbation_multiqc_jaccard.txt:
+        type: file
+        description: TODO
+        pattern: ${meta.id}.seed_perturbation_multiqc_jaccard.txt
+  versions:
+    - versions.yml:
+        type: file
+        description: TODO
+        pattern: versions.yml
+authors:
+  - "@TODO"
+maintainers:
+  - "@TODO"

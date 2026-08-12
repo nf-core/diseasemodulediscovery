@@ -1,0 +1,29 @@
+name: seedperturbationvisualization
+description: TODO
+keywords:
+  - TODO
+tools:
+  - seedperturbationvisualization:
+      description: TODO
+      homepage: TODO
+      documentation: TODO
+      licence:
+        - TODO
+input:
+  - - seed_ids:
+        type: string
+        description: TODO
+  - - network_ids:
+        type: string
+        description: TODO
+  - - amim_ids:
+        type: string
+        description: TODO
+  - - inputs:
+        type: file
+        description: TODO
+output: {}
+authors:
+  - "@TODO"
+maintainers:
+  - "@TODO"

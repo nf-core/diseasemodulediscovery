@@ -1,0 +1,17 @@
+name: diamond
+description: TODO
+keywords:
+  - TODO
+tools:
+  - diamond:
+      description: TODO
+      homepage: TODO
+      documentation: TODO
+      licence:
+        - TODO
+input: []
+output: {}
+authors:
+  - "@TODO"
+maintainers:
+  - "@TODO"

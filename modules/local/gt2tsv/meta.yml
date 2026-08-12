@@ -1,0 +1,23 @@
+name: gt2tsv
+description: TODO
+keywords:
+  - TODO
+tools:
+  - gt2tsv:
+      description: TODO
+      homepage: TODO
+      documentation: TODO
+      licence:
+        - TODO
+input:
+  - - meta:
+        type: map
+        description: Groovy Map containing sample information
+    - gt_file:
+        type: file
+        description: TODO
+output: {}
+authors:
+  - "@TODO"
+maintainers:
+  - "@TODO"
