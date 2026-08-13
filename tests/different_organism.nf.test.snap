@@ -6,33 +6,34 @@
                     "python": "3.8.5"
                 },
                 "GPROFILER2_GOST\"": {
+                    "r-base": "4.3.3",
                     "r-ggplot2": "3.4.3",
                     "r-gprofiler2": "0.2.2",
-                    "gprofiler-data": "biomart: Ensembl\nbiomart_version: '114'\ndisplay_name: Mouse\ngenebuild: GRCm39\ngprofiler_version: e114_eg62_p19_27110d83\norganism: mmusculus\nsources:\n  CORUM:\n    name: CORUM protein complexes\n    version: 28.11.2022 Corum 4.1\n  GO:BP:\n    name: biological process\n    version: |-\n      annotations: BioMart\n      classes: releases/2026-01-23\n  GO:CC:\n    name: cellular component\n    version: |-\n      annotations: BioMart\n      classes: releases/2026-01-23\n  GO:MF:\n    name: molecular function\n    version: |-\n      annotations: BioMart\n      classes: releases/2026-01-23\n  HP:\n    name: Human Phenotype Ontology\n    version: |-\n      annotations: 03.2026\n      classes: None\n  KEGG:\n    name: Kyoto Encyclopedia of Genes and Genomes\n    version: KEGG FTP Release 2026-03-15\n  REAC:\n    name: Reactome\n    version: |-\n      annotations: BioMart\n      classes: 2026-3-20\n  TF:\n    name: Transfac\n    version: |-\n      annotations: TRANSFAC Release 2025.2\n      classes: v2\n  WP:\n    name: WikiPathways\n    version: '20260310'\ntaxonomy_id: '10090'\n"
+                    "gprofiler-data": "e114_eg62_p19_27110d83"
                 },
                 "GRAPHTOOLPARSER": {
                     "python": "3.12.13",
-                    "graph-tool": 2.77
+                    "graph-tool": "2.77"
                 },
                 "MODULEPARSER": {
                     "python": "3.12.13",
-                    "graph-tool": 2.77
+                    "graph-tool": "2.77"
                 },
                 "MULTIQCFORMATTER": {
                     "python": "3.12.13"
                 },
                 "NETWORKANNOTATION": {
                     "python": "3.12.13",
-                    "graph-tool": 2.77
+                    "graph-tool": "2.77"
                 },
                 "SAVEMODULES": {
                     "python": "3.12.13",
-                    "graph-tool": 2.77,
+                    "graph-tool": "2.77",
                     "pandas": "2.2.3"
                 },
                 "TOPOLOGY": {
                     "python": "3.12.13",
-                    "graph-tool": 2.77
+                    "graph-tool": "2.77"
                 },
                 "Workflow": {
                     "nf-core/diseasemodulediscovery": "v1.0.0"
@@ -146,10 +147,10 @@
                 "node_degree_distribution_mqc.yaml:md5,2ddf480cd88385fb69af47d0750b6a70"
             ]
         ],
-        "timestamp": "2026-07-24T13:14:04.229539286",
+        "timestamp": "2026-08-13T16:29:31.115506049",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.0"
+            "nf-test": "0.9.4",
+            "nextflow": "26.04.6"
         }
     }
 }

@@ -26,10 +26,9 @@ nextflow_workflow {
                 //  string: Path(s) to network file(s)
                 input[10] = params.pipelines_testdata_base_path + "small/entrez_ppi.csv,string_physical_min900"
 
-                input[11] = null                                            //  string: Path(s) to shortest paths files
-                input[12] = null                                            //  string: Path(s) to perturbed networks file
-                input[13] = 'https://zenodo.org/records/18702264/files/'    //  string: URL to prepared networks
-                input[14] = 'entrez'                                        //  string: ID space to use for prepared networks
+                input[11] = null                                            //  string: Path(s) to perturbed networks file
+                input[12] = 'https://zenodo.org/records/18702264/files/'    //  string: URL to prepared networks
+                input[13] = 'entrez'                                        //  string: ID space to use for prepared networks
                 """
             }
         }

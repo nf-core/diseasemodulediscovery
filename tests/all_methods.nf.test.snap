@@ -13,22 +13,22 @@
                 },
                 "FIRSTNEIGHBOR": {
                     "python": "3.12.13",
-                    "graph-tool": 2.77
+                    "graph-tool": "2.77"
                 },
                 "GRAPHTOOLPARSER": {
                     "python": "3.12.13",
-                    "graph-tool": 2.77
+                    "graph-tool": "2.77"
                 },
                 "MODULEPARSER": {
                     "python": "3.12.13",
-                    "graph-tool": 2.77
+                    "graph-tool": "2.77"
                 },
                 "MULTIQCFORMATTER": {
                     "python": "3.12.13"
                 },
                 "NETWORKANNOTATION": {
                     "python": "3.12.13",
-                    "graph-tool": 2.77
+                    "graph-tool": "2.77"
                 },
                 "ROBUST": {
                     "python": "3.10.4"
@@ -42,12 +42,12 @@
                 },
                 "SAVEMODULES": {
                     "python": "3.12.13",
-                    "graph-tool": 2.77,
+                    "graph-tool": "2.77",
                     "pandas": "2.2.3"
                 },
                 "TOPOLOGY": {
                     "python": "3.12.13",
-                    "graph-tool": 2.77
+                    "graph-tool": "2.77"
                 },
                 "Workflow": {
                     "nf-core/diseasemodulediscovery": "v1.0.0"

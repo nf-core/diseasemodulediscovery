@@ -30,7 +30,6 @@ include { GT_BIOPAX             } from '../subworkflows/local/gt_biopax/main'
 include { NETWORKEXPANSION      } from '../subworkflows/local/networkexpansion/main'
 include { GT_SEEDPERTURBATION    } from '../subworkflows/local/gt_seedperturbation/main'
 include { GT_NETWORKPERTURBATION } from '../subworkflows/local/gt_networkperturbation/main'
-include { GT_PROXIMITY          } from '../subworkflows/local/gt_proximity/main'
 
 include { readTsvAsListOfMaps   } from '../subworkflows/local/utils_nfcore_diseasemodulediscovery_pipeline/main'
 
@@ -117,7 +116,6 @@ workflow DISEASEMODULEDISCOVERY {
     outdir
     ch_seeds                // channel: [ val(meta[id,seeds_id,network_id]), path(seeds) ]
     ch_network              // channel: [ val(meta[id,network_id]), path(network) ]
-    ch_shortest_paths       // channel: [ val(meta[id,network_id]), path(shortest_paths) ]
     ch_perturbed_networks    // channel: [ val(meta[id,network_id]), [path(perturbed_networks)] ]
 
     main:
@@ -126,9 +124,7 @@ workflow DISEASEMODULEDISCOVERY {
     id_space = Channel.value(params.id_space)
     validate_online = Channel.value(params.validate_online)
 
-    if(params.run_proximity){
-        proximity_dt = file(params.drug_to_target, checkIfExists:true)
-    }
+
 
     // Channels
     ch_versions = Channel.empty()
@@ -558,17 +554,6 @@ workflow DISEASEMODULEDISCOVERY {
             ch_versions = ch_versions.mix(VISUALIZEMODULESDRUGS.out.versions)
         }
     }
-
-    // Drug prioritization - Proximity
-    if(params.run_proximity){
-        GT_PROXIMITY(
-            ch_network_gt,
-            ch_nodes_tsv_not_empty,
-            ch_shortest_paths,
-            proximity_dt)
-        ch_versions = ch_versions.mix(GT_PROXIMITY.out.versions)
-    }
-
 
     // Format complex MultiQC input files
     MULTIQCFORMATTER(

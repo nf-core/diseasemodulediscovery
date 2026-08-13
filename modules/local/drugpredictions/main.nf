@@ -28,9 +28,9 @@ process DRUGPREDICTIONS {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        python: \$(python --version | sed 's/Python //g')
-        pandas: \$(python -c "import pandas; print(pandas.__version__)")
-        drugstone: \$(pip show drugstone | grep Version | awk '{print \$2}')
+        python: "\$(python --version | sed 's/Python //g')"
+        pandas: "\$(python -c "import pandas; print(pandas.__version__)")"
+        drugstone: "\$(pip show drugstone | grep Version | awk '{print \$2}')"
     END_VERSIONS
     """
 }

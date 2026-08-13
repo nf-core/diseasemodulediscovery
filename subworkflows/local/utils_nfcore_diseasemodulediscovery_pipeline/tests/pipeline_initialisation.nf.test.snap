@@ -61,22 +61,6 @@
                             "id": "entrez_ppi",
                             "network_id": "entrez_ppi"
                         },
-                        "NO_FILE:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ],
-                    [
-                        {
-                            "id": "string.human_physical_links_v12_0_min900.Entrez",
-                            "network_id": "string.human_physical_links_v12_0_min900.Entrez"
-                        },
-                        "NO_FILE:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
-                ],
-                "4": [
-                    [
-                        {
-                            "id": "entrez_ppi",
-                            "network_id": "entrez_ppi"
-                        },
                         [
                             
                         ]
@@ -161,31 +145,15 @@
                         "/nf-core/test-datasets/diseasemodulediscovery/small/entrez_seeds_2.csv"
                     ]
                 ],
-                "shortest_paths": [
-                    [
-                        {
-                            "id": "entrez_ppi",
-                            "network_id": "entrez_ppi"
-                        },
-                        "NO_FILE:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ],
-                    [
-                        {
-                            "id": "string.human_physical_links_v12_0_min900.Entrez",
-                            "network_id": "string.human_physical_links_v12_0_min900.Entrez"
-                        },
-                        "NO_FILE:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
-                ],
                 "versions": [
                     
                 ]
             }
         ],
-        "timestamp": "2026-07-24T09:15:45.628419128",
+        "timestamp": "2026-08-13T15:49:30.201582825",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.0"
+            "nf-test": "0.9.4",
+            "nextflow": "26.04.6"
         }
     }
 }

@@ -21,8 +21,8 @@ process DRUGSTONEEXPORT{
     drugstone_export.py -m $module -i $id_space -p "${meta.id}"
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        python: \$(python --version | sed 's/Python //g')
-        graph-tool: \$(python -c "import graph_tool; print(graph_tool.__version__)" | cut -d' ' -f1)
+        python: "\$(python --version | sed 's/Python //g')"
+        graph-tool: "\$(python -c "import graph_tool; print(graph_tool.__version__)" | cut -d' ' -f1)"
     END_VERSIONS
     """
 }
