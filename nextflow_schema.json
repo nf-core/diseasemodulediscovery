@@ -15,7 +15,7 @@
                 "input": {
                     "type": "string",
                     "description": "Path to a CSV sample sheet defining seed file-network combinations",
-                    "help_text": "The file must have a header and can have up to four columns: \"seeds\", \"network\", \"shortest_paths\", and \"perturbed_networks\". If you want to provide shortest_paths or perturbed_networks, all values (including seeds and network) have to come from the sample sheet.",
+                    "help_text": "The file must have a header and must include columns: \"seeds\" and \"network\". Optional columns: \"shortest_paths\" and \"perturbed_networks\". When using --input, do not also set --seeds/--network/--shortest_paths/--perturbed_networks.",
                     "pattern": "^\\S+\\.csv$",
                     "format": "file-path",
                     "mimetype": "text/csv",
