@@ -14,7 +14,7 @@ process MULTIQCFORMATTER {
     multiqc_formatter.py -i $inputFiles -H $header
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        python: \$(python --version | sed 's/Python //g')
+        python: "\$(python --version | sed 's/Python //g')"
     END_VERSIONS
     """
 

@@ -15,8 +15,8 @@ process SHORTEST_PATHS {
 
     cat <<-END_VERSIONS > versions.yml
         "${task.process}":
-            python: \$(python --version | sed 's/Python //g')
-            networkx: \$(python -c "import networkx; print(networkx.__version__)")
+            python: "\$(python --version | sed 's/Python //g')"
+            networkx: "\$(python -c "import networkx; print(networkx.__version__)")"
     END_VERSIONS
     """
 }

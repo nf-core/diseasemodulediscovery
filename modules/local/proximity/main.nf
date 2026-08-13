@@ -35,10 +35,10 @@ process PROXIMITY {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        python: \$(python --version | sed 's/Python //g')
-        numpy: \$(python -c "import numpy; print(numpy.__version__)")
-        pandas: \$(python -c "import pandas; print(pandas.__version__)")
-        networkx: \$(python -c "import networkx; print(networkx.__version__)")
+        python: "\$(python --version | sed 's/Python //g')"
+        numpy: "\$(python -c "import numpy; print(numpy.__version__)")"
+        pandas: "\$(python -c "import pandas; print(pandas.__version__)")"
+        networkx: "\$(python -c "import networkx; print(networkx.__version__)")"
     END_VERSIONS
     """
 }
