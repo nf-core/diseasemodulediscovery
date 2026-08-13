@@ -119,14 +119,12 @@ workflow PIPELINE_INITIALISATION {
     shortest_paths_param_set = (param_shortest_paths != null)
     perturbed_networks_param_set = (param_perturbed_networks != null)
 
-    // prepare network channel, if parameter is set
-    if(network_param_set){
-        ch_network = Channel.fromList(param_network.split(',').flatten())
-            .map{network -> mapPreparedNetwork(network_map, id_space_map, prepared_networks_url, network, param_id_space)}
-            .map{ it -> [ [ id: it.baseName, network_id: it.baseName ], it ] }
-    }
-
     if(param_input){
+
+        // check if seeds, network, shortest_paths or perturbed_networks parameters are set and if so, throw an error since they cannot be used together with the sample sheet
+        if (seed_param_set || network_param_set || shortest_paths_param_set || perturbed_networks_param_set){
+            error("You need to specify either a sample sheet (--input) OR the seeds (--seeds) and network (--network) files (including the shortest paths and perturbed networks). You cannot specify both at the same time.")
+        }
 
         //
         // Create channel from input file provided through params.input
@@ -136,108 +134,46 @@ workflow PIPELINE_INITIALISATION {
         ch_input = Channel
             .fromList(samplesheetToList(param_input, "${projectDir}/assets/schema_input.json"))
             .map{seeds, network, shortest_paths, perturbed_networks ->
-                if((seeds.size()==0) ^ seed_param_set ){
-                    error("Seed genes have to specified through either the sample sheet OR the --seeds parameter")
+                if(seeds.size()==0){
+                    error("No seeds files specified in the sample sheet")
                 }
-                if((network.size()==0) ^ network_param_set){
-                    error("Networks have to specified through either the sample sheet OR the --network parameter")
-                }
-                if(!(shortest_paths.size()==0) && shortest_paths_param_set ){
-                    error("Shortest paths have to specified through either the sample sheet OR the --shortest_path parameter")
-                }
-                if(!(perturbed_networks.size()==0) && perturbed_networks_param_set ){
-                    error("Precomputed network perturbations have to specified through either the sample sheet OR the --perturbed_networks parameter")
-                }
-                if(!(network.size()==0) && (shortest_paths_param_set || perturbed_networks_param_set) ){
-                    error("If the network is set via the sample sheet, shortest_paths or perturbed_networks must also be set via the sample sheet")
-                }
-                if((! shortest_paths.size()==0 || ! perturbed_networks.size()==0) && network_param_set ){
-                    error("If the shortest_paths or perturbed_networks are set via the sample sheet, the network must also be set via the sample sheet")
+                if(network.size()==0){
+                    error("No network file specified in the sample sheet")
                 }
                 [seeds, network, shortest_paths, perturbed_networks]
             }
 
-        // prepare network channel, if parameter is not set
-        if (!network_param_set){
-            ch_network = ch_input
-                .map{ it -> [it[1], it[2], it[3]]}
-                .map{ network, sp, perturbed_networks ->
-                    [ mapPreparedNetwork(network_map, id_space_map, prepared_networks_url, network, param_id_space), sp, perturbed_networks ]
-                }
-                .map{ network, sp, perturbed_networks ->
-                    [ [ id: network.baseName, network_id: network.baseName ], network, sp, perturbed_networks ]
-                }
-                .unique()
-        }
+        log.info("Creating network and seeds channels based on tuples in the sample sheet")
 
-        if (seed_param_set && network_param_set) {
-
-            error("You need to specify either a sample sheet (--input) OR the seeds (--seeds) and network (--network) files")
-
-        } else if (!seed_param_set && !network_param_set) {
-
-            log.info("Creating network and seeds channels based on tuples in the sample sheet")
-
-            ch_seeds = ch_input
-                .map{ it ->
-                    def seeds = it[0]
-                    def network = it[1]
-                    def network_id = mapPreparedNetwork(network_map, id_space_map, prepared_networks_url, network, param_id_space).baseName
-                    [ [ id: seeds.baseName + "." + network_id, seeds_id: seeds.baseName, network_id: network_id ] , seeds ]
-                }
-
-        } else if (seed_param_set && !network_param_set) {
-
-            log.info("Creating network channel based on the sample sheet and seeds channel based on the seeds parameter")
-
-            ch_seeds = Channel
-                .fromPath(param_seeds.split(',').flatten(), checkIfExists: true)
-                .combine(ch_network.map{meta, network, sp, perturbed_networks -> meta.network_id})
-                .map{seeds, network_id ->
-                    [ [ id: seeds.baseName + "." + network_id, seeds_id: seeds.baseName, network_id: network_id ] , seeds ]
-                }
-
-        } else if (!seed_param_set && network_param_set) {
-
-            log.info("Creating network channel based on the network parameter and seeds channel based on the sample sheet")
-
-            ch_seeds = ch_input
-                .map{ it -> it[0]}
-                .combine(ch_network.map{meta, network -> meta.network_id})
-                .map{seeds, network_id ->
-                    [ [ id: seeds.baseName + "." + network_id, seeds_id: seeds.baseName, network_id: network_id ] , seeds ]
-                }
-
-            // Add sp files, if provided (currently does not check if the number of the shortest paths matches the number of the networks and does not work with missing values)
-            if(shortest_paths_param_set){
-                ch_network = ch_network.merge(
-                    Channel
-                    .fromPath(param_shortest_paths.split(',').flatten())
-                )
-            } else{
-                ch_network = ch_network.map{meta, network -> [meta, network, file("${projectDir}/assets/NO_FILE", checkIfExists: true)]}
+        ch_network = ch_input
+            .map{ it -> [it[1], it[2], it[3]]}
+            .map{ network, sp, perturbed_networks ->
+                [ mapPreparedNetwork(network_map, id_space_map, prepared_networks_url, network, param_id_space), sp, perturbed_networks ]
             }
-
-            // Add perturbed network folders, if provided (currently does not check if the number of the shortest paths matches the number of the networks and does not work with missing values)
-            if(perturbed_networks_param_set){
-                ch_network = ch_network.merge(
-                    Channel
-                    .fromPath(param_perturbed_networks.split(',').flatten())
-                )
-            } else{
-                ch_network = ch_network.map{meta, network, sp -> [meta, network, sp, []]}
+            .map{ network, sp, perturbed_networks ->
+                [ [ id: network.baseName, network_id: network.baseName ], network, sp, perturbed_networks ]
             }
+            .unique()
 
-        }
-
+        ch_seeds = ch_input
+            .map{ it ->
+                def seeds = it[0]
+                def network = it[1]
+                def network_id = mapPreparedNetwork(network_map, id_space_map, prepared_networks_url, network, param_id_space).baseName
+                [ [ id: seeds.baseName + "." + network_id, seeds_id: seeds.baseName, network_id: network_id ] , seeds ]
+            }
 
     } else if (seed_param_set && network_param_set){
 
         log.info("Creating network and seeds channels based on the combination of all seed and network files provided")
 
+        ch_network = Channel.fromList(param_network.split(',').flatten())
+            .map{network -> mapPreparedNetwork(network_map, id_space_map, prepared_networks_url, network, param_id_space)}
+            .map{ it -> [ [ id: it.baseName, network_id: it.baseName ], it ] }
+
         ch_seeds = Channel
             .fromPath(param_seeds.split(',').flatten(), checkIfExists: true)
-            .combine(ch_network.map{meta, network -> meta.network_id})
+            .combine(ch_network.map{meta, _network -> meta.network_id})
             .map{seeds, network_id ->
                 [ [ id: seeds.baseName + "." + network_id, seeds_id: seeds.baseName, network_id: network_id ] , seeds ]
             }
@@ -252,7 +188,7 @@ workflow PIPELINE_INITIALISATION {
             ch_network = ch_network.map{meta, network -> [meta, network, file("${projectDir}/assets/NO_FILE", checkIfExists: true)]}
         }
 
-        // Add perturbed network folders, if provided (currently does not check if the number of the shortest paths matches the number of the networks and does not work with missing values)
+        // Add perturbed network folders, if provided (currently does not check if the number of the perturbed networks matches the number of the networks and does not work with missing values)
         if(perturbed_networks_param_set){
             ch_network = ch_network.merge(
                 Channel
@@ -267,7 +203,7 @@ workflow PIPELINE_INITIALISATION {
     }
 
     // check if IDs are unique
-    ch_network.map{ meta, network, sp, perturbed_networks -> [meta.id] }
+    ch_network.map{ meta, _network, _sp, _perturbed_networks -> [meta.id] }
         .collect()
         .subscribe { list ->
             def unique = list.size() == list.toSet().size()
@@ -281,15 +217,15 @@ workflow PIPELINE_INITIALISATION {
         }
 
     // separate network channel into network, shoretes_paths, and perturbed_networks
-    ch_shortest_paths = ch_network.map{meta, network, sp, perturbed_networks ->
+    ch_shortest_paths = ch_network.map{meta, _network, sp, _perturbed_networks ->
         [meta, sp.size() > 0 ? sp : file("${projectDir}/assets/NO_FILE", checkIfExists: true)]
     }
 
-    ch_perturbed_networks = ch_network.map{meta, network, sp, perturbed_networks ->
+    ch_perturbed_networks = ch_network.map{meta, _network, _sp, perturbed_networks ->
         [meta, perturbed_networks.size() > 0 ? file(perturbed_networks+"/*.gt") : []]
     }
 
-    ch_network = ch_network.map{meta, network, sp, perturbed_networks -> [meta, network]}
+    ch_network = ch_network.map{meta, _network, _sp, _perturbed_networks -> [meta, _network]}
 
     emit:
     versions    = ch_versions
