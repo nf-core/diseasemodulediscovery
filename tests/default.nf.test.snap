@@ -33,9 +33,10 @@
                     "graph-tool": "2.77"
                 },
                 "GPROFILER2_GOST\"": {
+                    "r-base": "4.3.3",
                     "r-ggplot2": "3.4.3",
                     "r-gprofiler2": "0.2.2",
-                    "gprofiler-data": "biomart: Ensembl\nbiomart_version: '114'\ndisplay_name: Human\ngenebuild: GRCh38.p14\ngprofiler_version: e114_eg62_p19_27110d83\norganism: hsapiens\nsources:\n  CORUM:\n    name: CORUM protein complexes\n    version: 28.11.2022 Corum 4.1\n  GO:BP:\n    name: biological process\n    version: |-\n      annotations: BioMart\n      classes: releases/2026-01-23\n  GO:CC:\n    name: cellular component\n    version: |-\n      annotations: BioMart\n      classes: releases/2026-01-23\n  GO:MF:\n    name: molecular function\n    version: |-\n      annotations: BioMart\n      classes: releases/2026-01-23\n  HP:\n    name: Human Phenotype Ontology\n    version: |-\n      annotations: 03.2026\n      classes: None\n  HPA:\n    name: Human Protein Atlas\n    version: |-\n      annotations: HPA website: 25-11-06\n      classes: script: 26-01-20\n  KEGG:\n    name: Kyoto Encyclopedia of Genes and Genomes\n    version: KEGG FTP Release 2026-03-15\n  MIRNA:\n    name: miRTarBase\n    version: Release 10.0\n  REAC:\n    name: Reactome\n    version: |-\n      annotations: BioMart\n      classes: 2026-3-20\n  TF:\n    name: Transfac\n    version: |-\n      annotations: TRANSFAC Release 2025.2\n      classes: v2\n  WP:\n    name: WikiPathways\n    version: '20260310'\ntaxonomy_id: '9606'\n"
+                    "gprofiler-data": "e114_eg62_p19_27110d83"
                 },
                 "GRAPHTOOLPARSER": {
                     "python": "3.12.13",
@@ -356,10 +357,10 @@
                 "node_degree_distribution_mqc.yaml:md5,d6a05ace0a3f6dc518c1106334462049"
             ]
         ],
-        "timestamp": "2026-06-30T19:11:41.967837911",
+        "timestamp": "2026-08-13T16:28:02.021877556",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.0"
+            "nf-test": "0.9.4",
+            "nextflow": "26.04.6"
         }
     }
 }
