@@ -15,7 +15,7 @@
                 "input": {
                     "type": "string",
                     "description": "Path to a CSV sample sheet defining seed file-network combinations",
-                    "help_text": "The file must have a header and must include columns: \"seeds\" and \"network\". Optional columns: \"shortest_paths\" and \"perturbed_networks\". When using --input, do not also set --seeds/--network/--shortest_paths/--perturbed_networks.",
+                    "help_text": "The file must have a header and must include columns: \"seeds\" and \"network\". Optional columns: \"perturbed_networks\". When using --input, do not also set --seeds/--network/--perturbed_networks.",
                     "pattern": "^\\S+\\.csv$",
                     "format": "file-path",
                     "mimetype": "text/csv",
@@ -264,23 +264,6 @@
             "default": "",
             "fa_icon": "fas fa-capsules",
             "properties": {
-                "run_proximity": {
-                    "type": "boolean",
-                    "fa_icon": "fas fa-caret-right",
-                    "description": "Flag for running proximity"
-                },
-                "shortest_paths": {
-                    "type": "string",
-                    "fa_icon": "fas fa-project-diagram",
-                    "description": "Path(s) to the shortest path pickle file(s) used for proximity.",
-                    "hidden": true
-                },
-                "drug_to_target": {
-                    "type": "string",
-                    "fa_icon": "fas fa-file-csv",
-                    "description": "Local path to the drug to targets file used for proximity.",
-                    "hidden": true
-                },
                 "skip_drug_predictions": {
                     "type": "boolean",
                     "description": "Flag for skipping drug predictions",

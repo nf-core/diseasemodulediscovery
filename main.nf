@@ -32,7 +32,6 @@ workflow NFCORE_DISEASEMODULEDISCOVERY {
     take:
     ch_seeds                // channel: [ val(meta[id,seeds_id,network_id]), path(seeds) ]
     ch_network              // channel: [ val(meta[id,network_id]), path(network) ]
-    ch_shortest_paths       // channel: [ val(meta[id,network_id]), path(shortest_paths) ]
     ch_perturbed_networks    // channel: [ val(meta[id,network_id]), [path(perturbed_networks)] ]
 
     main:
@@ -50,7 +49,6 @@ workflow NFCORE_DISEASEMODULEDISCOVERY {
         params.outdir,
         ch_seeds,
         ch_network,
-        ch_shortest_paths,
         ch_perturbed_networks
     )
     ch_versions = ch_versions.mix(DISEASEMODULEDISCOVERY.out.versions)
@@ -189,14 +187,6 @@ params {
     //
     // Drug prioritization
     //
-    // Flag for running proximity
-    run_proximity: Boolean
-
-    // Path(s) to the shortest path pickle file(s) used for proximity.
-    shortest_paths: String?
-
-    // Local path to the drug to targets file used for proximity.
-    drug_to_target: String?
 
     // Flag for skipping drug predictions
     skip_drug_predictions: Boolean
@@ -280,7 +270,6 @@ workflow {
         params.input,
         params.seeds,
         params.network,
-        params.shortest_paths,
         params.perturbed_networks,
         params.prepared_networks_url,
         params.id_space
@@ -289,7 +278,7 @@ workflow {
     //
     // WORKFLOW: Run main workflow
     //
-    NFCORE_DISEASEMODULEDISCOVERY (PIPELINE_INITIALISATION.out.seeds, PIPELINE_INITIALISATION.out.network, PIPELINE_INITIALISATION.out.shortest_paths, PIPELINE_INITIALISATION.out.perturbed_networks)
+    NFCORE_DISEASEMODULEDISCOVERY (PIPELINE_INITIALISATION.out.seeds, PIPELINE_INITIALISATION.out.network, PIPELINE_INITIALISATION.out.perturbed_networks)
 
     //
     // SUBWORKFLOW: Run completion tasks
