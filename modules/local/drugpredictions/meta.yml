@@ -1,62 +1,91 @@
 name: drugpredictions
-description: TODO
+description: Prioritizes drug candidates targeting the nodes of a disease module via
+  the Drugst.One platform
 keywords:
-  - TODO
+  - drugstone
+  - drug prioritization
+  - drug repurposing
+  - disease module
+  - trustrank
 tools:
-  - drugpredictions:
-      description: TODO
-      homepage: TODO
-      documentation: TODO
+  - drugstone:
+      description: Python package for the Drugst.One platform. It submits a set of
+        nodes to the platform and returns the drugs targeting them, ranked by the selected
+        prioritization algorithm - TrustRank (network propagation), degree centrality
+        (number of module nodes a compound targets) or harmonic centrality (average
+        shortest path from a compound to the module nodes).
+      homepage: https://drugst.one/
+      documentation: https://github.com/drugst-one/python-package
       licence:
-        - TODO
+        - MIT
 input:
   - - meta:
         type: map
-        description: Groovy Map containing sample information
+        description: Groovy Map containing sample information, must contain an `id`
+          field
     - module:
         type: file
-        description: TODO
+        description: Tab-separated table of the disease module nodes, with a `name`
+          column holding the node identifiers
   - - idspace:
         type: string
-        description: TODO
+        description: ID space of the node identifiers in the module. `ensembl` is translated
+          to Drugst.One's `ensg`, all other values are passed through unchanged.
   - - algorithm:
         type: string
-        description: TODO
+        description: Drug prioritization algorithm, one of `trustrank`, `degree` or
+          `closeness`
   - - includeIndirectDrugs:
-        type: string
-        description: TODO
+        type: integer
+        description: Set to 1 to also return drugs that do not target a module node
+          directly, 0 to restrict the results to direct targets
   - - includeNonApprovedDrugs:
-        type: string
-        description: TODO
+        type: integer
+        description: Set to 1 to also return compounds that are not approved drugs,
+          0 to restrict the results to approved drugs
   - - result_size:
-        type: string
-        description: TODO
+        type: integer
+        description: Maximum number of drugs returned by Drugst.One
 output:
   drug_predictions:
-    - meta:
-        type: map
-        description: Groovy Map containing sample information
-    - ${meta.id}.drug_predictions.tsv:
-        type: file
-        description: TODO
-        pattern: ${meta.id}.drug_predictions.tsv
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information, must contain an `id`
+            field
+      - algorithm:
+          type: string
+          description: Drug prioritization algorithm the results were produced with
+      - ${meta.id}.drug_predictions.tsv:
+          type: file
+          description: Tab-separated table of the module node annotations merged with
+            the prioritization results. Each node is repeated once per targeting compound,
+            with the DrugBank identifier (`drug_id`), the prioritization `score`, the
+            compound name (`drug_name`) and its `status` added. Nodes without a predicted
+            compound are kept as a single row, and the rows of a node are sorted by
+            descending score.
+          pattern: ${meta.id}.drug_predictions.tsv
   drugstone_download:
-    - meta:
-        type: map
-        description: Groovy Map containing sample information
-    - ${meta.id}.csv:
-        type: file
-        description: TODO
-        pattern: ${meta.id}.csv
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information, must contain an `id`
+            field
+      - algorithm:
+          type: string
+          description: Drug prioritization algorithm the results were produced with
+      - ${meta.id}.csv:
+          type: file
+          description: Raw drug table as returned by Drugst.One, downloaded unmodified
+          pattern: ${meta.id}.csv
   versions:
     - versions.yml:
         type: file
-        description: TODO
+        description: File containing software versions
         pattern: versions.yml
 authors:
-  - "@TODO"
+  - "@lspindler2509"
+  - "@JohannesKersting"
 maintainers:
-  - "@TODO"
+  - "@JohannesKersting"
 containers:
   docker:
     linux/arm64:

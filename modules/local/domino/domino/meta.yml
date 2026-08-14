@@ -1,32 +1,58 @@
 name: domino_domino
-description: TODO
+description: Identifies disease modules around a set of seed nodes with DOMINO
 keywords:
-  - TODO
+  - domino
+  - disease module
+  - module identification
+  - active module
+  - seed genes
 tools:
   - domino_domino:
-      description: TODO
-      homepage: TODO
-      documentation: TODO
+      description: DOMINO keeps the network slices that are enriched for seed nodes
+        according to a hypergeometric test, refines them by solving the Prize Collecting
+        Steiner Tree problem and subdivides them into putative modules of at most 10
+        nodes, each of which is tested for seed enrichment again. Several non-overlapping
+        modules can be reported for a single seed set.
+      homepage: https://github.com/Shamir-Lab/DOMINO
+      documentation: https://github.com/Shamir-Lab/DOMINO
       licence:
-        - TODO
+        - MIT
 input:
   - - meta:
         type: map
-        description: Groovy Map containing sample information
+        description: Groovy Map containing sample information, must contain an `id`
+          field
     - seeds:
         type: file
-        description: TODO
+        description: Seed nodes to grow the modules around, one node identifier per
+          line. The identifiers must not be purely numeric, since DOMINO would interpret
+          them as integers.
     - network:
         type: file
-        description: TODO
+        description: Interaction network as a tab-separated SIF file with the header
+          columns `node_1`, `type` and `node_2`
     - slices:
         type: file
-        description: TODO
-  - - meta:
-        type: map
-        description: Groovy Map containing sample information
-output: {}
+        description: Precomputed disjoint slices of the network, each given as a bracketed,
+          comma-separated list of its node identifiers
+output:
+  modules:
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information, must contain an `id`
+            field
+      - ${seeds.baseName}/modules.out:
+          type: file
+          description: One module per line, given as a bracketed, comma-separated list
+            of node identifiers. Empty if no module passed the seed enrichment test.
+            DOMINO writes the file into a directory named after the seed file.
+          pattern: ${seeds.baseName}/modules.out
+  versions:
+    - versions.yml:
+        type: file
+        description: File containing software versions
+        pattern: versions.yml
 authors:
-  - "@TODO"
+  - "@JohannesKersting"
 maintainers:
-  - "@TODO"
+  - "@JohannesKersting"

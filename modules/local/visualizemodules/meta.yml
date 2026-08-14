@@ -1,60 +1,110 @@
 name: visualizemodules
-description: TODO
+description: Draws a disease module network as static images and as an interactive HTML
+  page
 keywords:
-  - TODO
+  - visualization
+  - network
+  - disease module
+  - layout
+  - interactive
 tools:
   - visualizemodules:
-      description: TODO
-      homepage: TODO
-      documentation: TODO
+      description: In-house Python script (visualize_modules.py) that lays out a module
+        network, colors its seed nodes differently from the added ones and renders it
+        both as static images and as an interactive page in which every node exposes
+        its properties.
+      homepage: https://github.com/nf-core/diseasemodulediscovery
+      documentation: https://nf-co.re/diseasemodulediscovery/output
       licence:
-        - TODO
+        - MIT
+  - graph-tool:
+      description: Efficient Python module for the manipulation and statistical analysis
+        of graphs, implemented in C++ on top of the Boost Graph Library. Used to compute
+        the SFDP layout and to render the static images.
+      homepage: https://graph-tool.skewed.de/
+      documentation: https://graph-tool.skewed.de/static/doc/index.html
+      licence:
+        - LGPL-3.0-or-later
+  - networkx:
+      description: Python package for the creation, manipulation and study of the structure
+        and dynamics of complex networks. Used as the intermediate representation for
+        the interactive output.
+      homepage: https://networkx.org/
+      documentation: https://networkx.org/documentation/stable/
+      licence:
+        - BSD-3-Clause
+  - pyintergraph:
+      description: Converts graph objects between networkx, python-igraph and graph-tool.
+        Used to turn the module into a networkx graph.
+      homepage: https://github.com/luerhard/pyintergraph
+      documentation: https://github.com/luerhard/pyintergraph
+      licence:
+        - MIT
+  - pyvis:
+      description: Python library for interactive network visualizations in the browser.
+        Used to write the interactive HTML page.
+      homepage: https://github.com/WestHealth/pyvis
+      documentation: https://pyvis.readthedocs.io/en/latest/
+      licence:
+        - BSD-3-Clause
 input:
   - - meta:
         type: map
-        description: Groovy Map containing sample information
+        description: Groovy Map containing sample information, must contain an `id`
+          field
     - module:
         type: file
-        description: TODO
+        description: Disease module network in graph-tool binary format. Its nodes need
+          a `name`, an `is_seed` and a `component_id` property, the first two to label
+          and color them and the last one to order the property tables shown in the interactive
+          output.
 output:
   pdf:
-    - meta:
-        type: map
-        description: Groovy Map containing sample information
-    - ${meta.id}.pdf:
-        type: file
-        description: TODO
-        pattern: ${meta.id}.pdf
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information, must contain an `id`
+            field
+      - ${meta.id}.pdf:
+          type: file
+          description: The laid out module network as PDF, with the seed nodes colored
+            differently from the added ones and every node labelled with its identifier
+          pattern: ${meta.id}.pdf
   png:
-    - meta:
-        type: map
-        description: Groovy Map containing sample information
-    - ${meta.id}.png:
-        type: file
-        description: TODO
-        pattern: ${meta.id}.png
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information, must contain an `id`
+            field
+      - ${meta.id}.png:
+          type: file
+          description: The same drawing as PNG, rendered at a larger output size
+          pattern: ${meta.id}.png
   svg:
-    - meta:
-        type: map
-        description: Groovy Map containing sample information
-    - ${meta.id}.svg:
-        type: file
-        description: TODO
-        pattern: ${meta.id}.svg
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information, must contain an `id`
+            field
+      - ${meta.id}.svg:
+          type: file
+          description: The same drawing as SVG
+          pattern: ${meta.id}.svg
   html:
-    - meta:
-        type: map
-        description: Groovy Map containing sample information
-    - ${meta.id}.html:
-        type: file
-        description: TODO
-        pattern: ${meta.id}.html
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information, must contain an `id`
+            field
+      - ${meta.id}.html:
+          type: file
+          description: Interactive rendering of the module network, using the same layout
+            as the static images. Hovering a node shows all of its properties, and the
+            physics, interaction and manipulation settings can be changed in the page.
+          pattern: ${meta.id}.html
   versions:
     - versions.yml:
         type: file
-        description: TODO
+        description: File containing software versions
         pattern: versions.yml
 authors:
-  - "@TODO"
+  - "@JohannesKersting"
+  - "@lspindler2509"
 maintainers:
-  - "@TODO"
+  - "@JohannesKersting"

@@ -1,72 +1,98 @@
 name: seedperturbationevaluation
-description: TODO
+description: Evaluates how robust a disease module is against leaving out single seeds
+  and how often the omitted seeds are rediscovered
 keywords:
-  - TODO
+  - perturbation
+  - leave-one-out
+  - robustness
+  - rediscovery
+  - jaccard
 tools:
   - seedperturbationevaluation:
-      description: TODO
-      homepage: TODO
-      documentation: TODO
+      description: In-house Python script (seed_perturbation_evaluation.py) that compares
+        a reference module against the modules obtained from leave-one-out seed sets,
+        reporting how often an omitted seed is recovered, the Jaccard index between the
+        node sets and four topological measures of the modules.
+      homepage: https://github.com/nf-core/diseasemodulediscovery
+      documentation: https://nf-co.re/diseasemodulediscovery/output
       licence:
-        - TODO
+        - MIT
 input:
   - - meta:
         type: map
-        description: Groovy Map containing sample information
+        description: Groovy Map containing sample information, must contain an `id`
+          field
     - module:
         type: file
-        description: TODO
+        description: Reference module network in graph-tool binary format, with the
+          node identifiers in the `name` vertex property
   - - seeds:
         type: file
-        description: TODO
+        description: Seed nodes the reference module was built from, one node identifier
+          per line. Lines starting with `#` are skipped and only the first tab-separated
+          column is read.
   - - perturbed_modules:
         type: file
-        description: TODO
+        description: Module networks inferred from the perturbed seed sets, in graph-tool
+          binary format and with the node identifiers in the `name` vertex property
   - - perturbed_seeds:
         type: file
-        description: TODO
+        description: The perturbed seed sets, in the same order as the perturbed modules,
+          one node identifier per line
   - - network:
         type: file
-        description: TODO
+        description: Full interaction network in graph-tool binary format, with the node
+          identifiers in the `name` vertex property
 output:
   summary:
-    - meta:
-        type: map
-        description: Groovy Map containing sample information
-    - ${meta.id}.seed_perturbation_evaluation_summary.tsv:
-        type: file
-        description: TODO
-        pattern: ${meta.id}.seed_perturbation_evaluation_summary.tsv
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information, must contain an `id`
+            field
+      - ${meta.id}.seed_perturbation_evaluation_summary.tsv:
+          type: file
+          description: Tab-separated table aggregating the results over all perturbations,
+            with one row per measure and the average, the standard deviation and, where
+            applicable, the z-score as columns
+          pattern: ${meta.id}.seed_perturbation_evaluation_summary.tsv
   detailed:
-    - meta:
-        type: map
-        description: Groovy Map containing sample information
-    - ${meta.id}.seed_perturbation_evaluation_detailed.tsv:
-        type: file
-        description: TODO
-        pattern: ${meta.id}.seed_perturbation_evaluation_detailed.tsv
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information, must contain an `id`
+            field
+      - ${meta.id}.seed_perturbation_evaluation_detailed.tsv:
+          type: file
+          description: Tab-separated table with one row per perturbation, listing the
+            omitted seeds, the retrieval frequency and its module size normalized variant,
+            the Jaccard index and the topological measures of the perturbed module
+          pattern: ${meta.id}.seed_perturbation_evaluation_detailed.tsv
   multiqc_summary:
-    - meta:
-        type: map
-        description: Groovy Map containing sample information
-    - ${meta.id}.seed_perturbation_multiqc_summary.tsv:
-        type: file
-        description: TODO
-        pattern: ${meta.id}.seed_perturbation_multiqc_summary.tsv
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information, must contain an `id`
+            field
+      - ${meta.id}.seed_perturbation_multiqc_summary.tsv:
+          type: file
+          description: Single-row tab-separated file with the columns `id`, `avg_jaccard_index`,
+            `rediscovery_rate` and `normalized_rediscovery_rate`
+          pattern: ${meta.id}.seed_perturbation_multiqc_summary.tsv
   multiqc_jaccard:
-    - meta:
-        type: map
-        description: Groovy Map containing sample information
-    - ${meta.id}.seed_perturbation_multiqc_jaccard.txt:
-        type: file
-        description: TODO
-        pattern: ${meta.id}.seed_perturbation_multiqc_jaccard.txt
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information, must contain an `id`
+            field
+      - ${meta.id}.seed_perturbation_multiqc_jaccard.txt:
+          type: file
+          description: "Single YAML mapping entry of the form `<id>: [<jaccard indices>]`,
+            listing the Jaccard index of every perturbed module"
+          pattern: ${meta.id}.seed_perturbation_multiqc_jaccard.txt
   versions:
     - versions.yml:
         type: file
-        description: TODO
+        description: File containing software versions
         pattern: versions.yml
 authors:
-  - "@TODO"
+  - "@ChloeBubu"
+  - "@JohannesKersting"
 maintainers:
-  - "@TODO"
+  - "@JohannesKersting"

@@ -1,33 +1,61 @@
 name: networkannotation
-description: TODO
+description: Annotates the nodes of a disease module with network topology properties
 keywords:
-  - TODO
+  - annotation
+  - network
+  - disease module
+  - node degree
+  - connected components
 tools:
   - networkannotation:
-      description: TODO
-      homepage: TODO
-      documentation: TODO
+      description: In-house Python script (network_annotation.py) that adds the node
+        degree within the module and within the full network, the resulting subnetwork
+        participation degree and a connected component identifier to the nodes of a
+        module.
+      homepage: https://github.com/nf-core/diseasemodulediscovery
+      documentation: https://nf-co.re/diseasemodulediscovery/output
       licence:
-        - TODO
+        - MIT
+  - graph-tool:
+      description: Efficient Python module for the manipulation and statistical analysis
+        of graphs, implemented in C++ on top of the Boost Graph Library. It also defines
+        the binary `.gt` network format.
+      homepage: https://graph-tool.skewed.de/
+      documentation: https://graph-tool.skewed.de/static/doc/index.html
+      licence:
+        - LGPL-3.0-or-later
 input:
   - - meta:
         type: map
-        description: Groovy Map containing sample information
+        description: Groovy Map containing sample information, must contain an `id`
+          field
+    - subnetwork:
+        type: file
+        description: Disease module network in graph-tool binary format, with the node
+          identifiers in the `name` vertex property
+    - network:
+        type: file
+        description: Full interaction network in graph-tool binary format, with the node
+          identifiers in the `name` vertex property
 output:
   module:
-    - meta:
-        type: map
-        description: Groovy Map containing sample information
-    - ${meta.id}.gt:
-        type: file
-        description: TODO
-        pattern: ${meta.id}.gt
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information, must contain an `id`
+            field
+      - ${meta.id}.gt:
+          type: file
+          description: The module network in graph-tool binary format, keeping its existing
+            node properties and adding `degree_in_module`, `degree_in_full_network`,
+            `spd` (the ratio of the two) and `component_id`.
+          pattern: ${meta.id}.gt
   versions:
     - versions.yml:
         type: file
-        description: TODO
+        description: File containing software versions
         pattern: versions.yml
 authors:
-  - "@TODO"
+  - "@JohannesKersting"
+  - "@quimaguirre"
 maintainers:
-  - "@TODO"
+  - "@JohannesKersting"

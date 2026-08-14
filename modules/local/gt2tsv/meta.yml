@@ -1,23 +1,42 @@
 name: gt2tsv
-description: TODO
+description: Extracts the node identifiers of a network into a single-column table
 keywords:
-  - TODO
+  - network
+  - format conversion
+  - node list
+  - tsv
 tools:
-  - gt2tsv:
-      description: TODO
-      homepage: TODO
-      documentation: TODO
+  - graph-tool:
+      description: Efficient Python module for the manipulation and statistical analysis
+        of graphs, implemented in C++ on top of the Boost Graph Library. It also defines
+        the binary `.gt` network format.
+      homepage: https://graph-tool.skewed.de/
+      documentation: https://graph-tool.skewed.de/static/doc/index.html
       licence:
-        - TODO
+        - LGPL-3.0-or-later
 input:
   - - meta:
         type: map
-        description: Groovy Map containing sample information
+        description: Groovy Map containing sample information, must contain an `id`
+          field
     - gt_file:
         type: file
-        description: TODO
-output: {}
+        description: Network in graph-tool binary format, with the node identifiers
+          in the `name` vertex property
+output:
+  nodes:
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information, must contain an `id`
+            field
+      - ${meta.id}.nodes.tsv:
+          type: file
+          description: Single-column table with the header `gene_id`, holding one node
+            identifier of the network per line
+          pattern: ${meta.id}.nodes.tsv
 authors:
-  - "@TODO"
+  - "@tanjapock"
+  - "@JohannesKersting"
+  - "@Schansiate"
 maintainers:
-  - "@TODO"
+  - "@JohannesKersting"

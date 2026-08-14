@@ -1,26 +1,42 @@
 name: prefixlines
-description: TODO
+description: Prepends a fixed prefix to every line of a text file
 keywords:
-  - TODO
+  - prefix
+  - text
+  - identifier
+  - sed
 tools:
-  - prefixlines:
-      description: TODO
-      homepage: TODO
-      documentation: TODO
+  - sed:
+      description: GNU stream editor for filtering and transforming text. A substitution
+        on the start of each line is used to prepend the prefix.
+      homepage: https://www.gnu.org/software/sed/
+      documentation: https://www.gnu.org/software/sed/manual/sed.html
       licence:
-        - TODO
+        - GPL-3.0-or-later
 input:
   - - meta:
         type: map
-        description: Groovy Map containing sample information
+        description: Groovy Map containing sample information, must contain an `id`
+          field
     - file:
         type: file
-        description: TODO
+        description: Text file whose lines are to be prefixed
   - - prefix:
         type: string
-        description: TODO
-output: {}
+        description: String to prepend to every line. It is used inside a `sed` substitution,
+          so it must not contain characters that are special there, such as `/` or `&`.
+output:
+  prefixed:
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information, must contain an `id`
+            field
+      - ${file.baseName}.prefixed.${file.extension}:
+          type: file
+          description: Copy of the input file with the prefix prepended to every line,
+            named after the input file with `.prefixed` inserted before its extension
+          pattern: ${file.baseName}.prefixed.${file.extension}
 authors:
-  - "@TODO"
+  - "@JohannesKersting"
 maintainers:
-  - "@TODO"
+  - "@JohannesKersting"

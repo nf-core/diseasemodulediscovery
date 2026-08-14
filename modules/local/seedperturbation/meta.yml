@@ -1,36 +1,47 @@
 name: seedperturbation
-description: TODO
+description: Creates leave-one-out variants of a seed set, each missing exactly one
+  of the seeds
 keywords:
-  - TODO
+  - perturbation
+  - leave-one-out
+  - seed genes
+  - robustness
 tools:
   - seedperturbation:
-      description: TODO
-      homepage: TODO
-      documentation: TODO
+      description: In-house Python script (seed_perturbation.py) that writes one copy
+        of the given seed set per seed, each of them holding all seeds except that one.
+      homepage: https://github.com/nf-core/diseasemodulediscovery
+      documentation: https://nf-co.re/diseasemodulediscovery/output
       licence:
-        - TODO
+        - MIT
 input:
   - - meta:
         type: map
-        description: Groovy Map containing sample information
+        description: Groovy Map containing sample information, must contain an `id`
+          field and a `seeds_id` field used to name the output files
     - seeds:
         type: file
-        description: TODO
+        description: Seed nodes to perturb, one node identifier per line. Empty lines
+          are ignored.
 output:
   perturbed_seeds:
-    - meta:
-        type: map
-        description: Groovy Map containing sample information
-    - ${meta.seeds_id}.*.${seeds.extension}:
-        type: file
-        description: TODO
-        pattern: ${meta.seeds_id}.*.${seeds.extension}
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information, must contain an `id`
+            field
+      - ${meta.seeds_id}.*.${seeds.extension}:
+          type: file
+          description: One perturbed seed set per seed of the input, each listing all
+            seeds but the omitted one, one identifier per line. The files are numbered
+            by the position of the omitted seed in the input and keep the extension of
+            the input file.
+          pattern: ${meta.seeds_id}.*.${seeds.extension}
   versions:
     - versions.yml:
         type: file
-        description: TODO
+        description: File containing software versions
         pattern: versions.yml
 authors:
-  - "@TODO"
+  - "@JohannesKersting"
 maintainers:
-  - "@TODO"
+  - "@JohannesKersting"

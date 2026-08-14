@@ -1,29 +1,77 @@
 name: seedperturbationvisualization
-description: TODO
+description: Visualizes the seed rediscovery and the robustness of several module inference
+  methods as heatmaps
 keywords:
-  - TODO
+  - visualization
+  - heatmap
+  - perturbation
+  - robustness
+  - rediscovery
 tools:
   - seedperturbationvisualization:
-      description: TODO
-      homepage: TODO
-      documentation: TODO
+      description: In-house Python script (seed_perturbation_visualization.py) that
+        collects the leave-one-out evaluations of several module inference methods and
+        draws, per seed set and network, one heatmap of the seed rediscovery and one
+        of the robustness, with the omitted seeds as rows and the methods as columns.
+      homepage: https://github.com/nf-core/diseasemodulediscovery
+      documentation: https://nf-co.re/diseasemodulediscovery/output
       licence:
-        - TODO
+        - MIT
 input:
   - - seed_ids:
         type: string
-        description: TODO
+        description: List of identifiers of the seed sets, one per input file and in
+          the same order
   - - network_ids:
         type: string
-        description: TODO
+        description: List of identifiers of the networks, one per input file and in the
+          same order
   - - amim_ids:
         type: string
-        description: TODO
+        description: List of identifiers of the module inference methods, one per input
+          file and in the same order
   - - inputs:
         type: file
-        description: TODO
-output: {}
+        description: List of tab-separated leave-one-out evaluation tables, each with
+          at least the columns `Removed seeds`, `Retrieval frequency`, `Normalized retrieval
+          frequency` and `Jaccard index`
+output:
+  seed_rediscovery_png:
+    - "*.seed_rediscovery.png":
+        type: file
+        description: Heatmap of the retrieval frequency of every omitted seed per method,
+          as PNG. Rows and columns are sorted by their sum in descending order.
+        pattern: "*.seed_rediscovery.png"
+  seed_rediscovery_pdf:
+    - "*.seed_rediscovery.pdf":
+        type: file
+        description: The seed rediscovery heatmap as PDF
+        pattern: "*.seed_rediscovery.pdf"
+  seed_rediscovery_tsv:
+    - "*.seed_rediscovery.tsv":
+        type: file
+        description: Tab-separated table underlying the seed rediscovery heatmap, with
+          the omitted seeds as rows and the module inference methods as columns
+        pattern: "*.seed_rediscovery.tsv"
+  robustness_png:
+    - "*.robustness.png":
+        type: file
+        description: Heatmap of the Jaccard index between the reference and the perturbed
+          module for every omitted seed per method, as PNG. Rows and columns are sorted
+          by their sum in descending order.
+        pattern: "*.robustness.png"
+  robustness_pdf:
+    - "*.robustness.pdf":
+        type: file
+        description: The robustness heatmap as PDF
+        pattern: "*.robustness.pdf"
+  robustness_tsv:
+    - "*.robustness.tsv":
+        type: file
+        description: Tab-separated table underlying the robustness heatmap, with the
+          omitted seeds as rows and the module inference methods as columns
+        pattern: "*.robustness.tsv"
 authors:
-  - "@TODO"
+  - "@JohannesKersting"
 maintainers:
-  - "@TODO"
+  - "@JohannesKersting"

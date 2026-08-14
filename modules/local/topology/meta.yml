@@ -1,36 +1,58 @@
 name: topology
-description: TODO
+description: Computes summary statistics describing the topology of a disease module
 keywords:
-  - TODO
+  - topology
+  - network statistics
+  - disease module
+  - connected components
+  - diameter
 tools:
   - topology:
-      description: TODO
-      homepage: TODO
-      documentation: TODO
+      description: In-house Python script (topology.py) that collects the size, the
+        diameter, the connected components, the number of isolated nodes and the seed
+        related measures of a module into a single summary row.
+      homepage: https://github.com/nf-core/diseasemodulediscovery
+      documentation: https://nf-co.re/diseasemodulediscovery/output
       licence:
-        - TODO
+        - MIT
+  - graph-tool:
+      description: Efficient Python module for the manipulation and statistical analysis
+        of graphs, implemented in C++ on top of the Boost Graph Library. It also defines
+        the binary `.gt` network format.
+      homepage: https://graph-tool.skewed.de/
+      documentation: https://graph-tool.skewed.de/static/doc/index.html
+      licence:
+        - LGPL-3.0-or-later
 input:
   - - meta:
         type: map
-        description: Groovy Map containing sample information
+        description: Groovy Map containing sample information, must contain an `id`
+          field
     - module:
         type: file
-        description: TODO
+        description: Disease module network in graph-tool binary format. If its nodes
+          carry an `is_seed` property, the seed related measures are computed as well.
 output:
   topology:
-    - meta:
-        type: map
-        description: Groovy Map containing sample information
-    - ${meta.id}.topology.tsv:
-        type: file
-        description: TODO
-        pattern: ${meta.id}.topology.tsv
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information, must contain an `id`
+            field
+      - ${meta.id}.topology.tsv:
+          type: file
+          description: Single-row tab-separated summary of the module with the columns
+            `sample`, `nodes`, `edges`, `seeds`, `max_dist_to_seed` (the largest distance
+            from an added node to its closest seed), `diameter` (the pseudo-diameter),
+            `components`, `largest_component` and `isolated_nodes`. The two seed related
+            columns stay empty if the module has no `is_seed` property.
+          pattern: ${meta.id}.topology.tsv
   versions:
     - versions.yml:
         type: file
-        description: TODO
+        description: File containing software versions
         pattern: versions.yml
 authors:
-  - "@TODO"
+  - "@JohannesKersting"
+  - "@Schansiate"
 maintainers:
-  - "@TODO"
+  - "@JohannesKersting"

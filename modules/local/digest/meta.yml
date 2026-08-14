@@ -1,56 +1,79 @@
 name: digest
-description: TODO
+description: Evaluates the functional coherence of a disease module with DIGEST and
+  tests it for significance against randomly drawn modules
 keywords:
-  - TODO
+  - digest
+  - functional coherence
+  - disease module
+  - evaluation
+  - gene ontology
+  - kegg
 tools:
   - digest:
-      description: TODO
-      homepage: TODO
-      documentation: TODO
+      description: DIGEST (in silico validation of disease and gene sets, clusterings
+        or subnetworks) scores how functionally coherent a set of nodes is, based on
+        Gene Ontology (GO.BP, GO.CC, GO.MF) and KEGG pathway annotations. Functional
+        overlap is measured with the Jaccard index and empirical p-values are derived
+        from 1000 random modules drawn from the given network.
+      homepage: https://digest-validation.net/
+      documentation: https://github.com/bionetslab/digest
       licence:
-        - TODO
+        - GPL-3.0-or-later
 input:
   - - meta:
         type: map
-        description: Groovy Map containing sample information
+        description: Groovy Map containing sample information, must contain an `id`
+          field
     - target_file:
         type: file
-        description: TODO
+        description: Tab-separated file with a header and a `name` column holding the
+          node identifiers of the module to evaluate. In `subnetwork-set` mode an additional
+          `is_seed` column with values 0 and 1 is required.
   - - target_type:
         type: string
-        description: TODO
+        description: ID space of the node identifiers in the target file
   - - network:
         type: file
-        description: TODO
+        description: Background network in graph-tool binary format, from which the
+          random modules are drawn
   - - network_type:
         type: string
-        description: TODO
+        description: ID space of the node identifiers in the network
   - - mode:
         type: string
-        description: TODO
+        description: Analysis mode. `subnetwork` evaluates the functional coherence
+          among all nodes of the module (reference-free), `subnetwork-set` compares the
+          added nodes against the seed nodes (reference-based).
 output:
   outdir:
-    - meta:
-        type: map
-        description: Groovy Map containing sample information
-    - ${meta.id}:
-        type: file
-        description: TODO
-        pattern: ${meta.id}
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information, must contain an `id`
+            field
+      - ${meta.id}:
+          type: directory
+          description: Directory holding the DIGEST results, i.e. the empirical p-values
+            and the functional coherence scores as CSV, the full results as JSON, and
+            the result plots as PNG
+          pattern: ${meta.id}
   multiqc:
-    - meta:
-        type: map
-        description: Groovy Map containing sample information
-    - ${meta.id}.multiqc.tsv:
-        type: file
-        description: TODO
-        pattern: ${meta.id}.multiqc.tsv
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information, must contain an `id`
+            field
+      - ${meta.id}.multiqc.tsv:
+          type: file
+          description: Tab-separated summary of the empirical functional coherence p-values
+            as -log10 values, with one column per gene set/pathway source. Not written
+            if the target or the reference set is empty.
+          pattern: ${meta.id}.multiqc.tsv
   versions:
     - versions.yml:
         type: file
-        description: TODO
+        description: File containing software versions
         pattern: versions.yml
 authors:
-  - "@TODO"
+  - "@tanjapock"
+  - "@JohannesKersting"
 maintainers:
-  - "@TODO"
+  - "@JohannesKersting"

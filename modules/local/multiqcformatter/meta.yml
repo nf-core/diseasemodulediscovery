@@ -1,33 +1,44 @@
 name: multiqcformatter
-description: TODO
+description: Merges several result files into a single MultiQC custom content file
 keywords:
-  - TODO
+  - multiqc
+  - custom content
+  - reporting
+  - node degree
 tools:
   - multiqcformatter:
-      description: TODO
-      homepage: TODO
-      documentation: TODO
+      description: In-house Python script (multiqc_formatter.py) that fills the `data`
+        field of a MultiQC custom content section with the merged contents of the given
+        files. The `id` of the section header selects how the files are merged.
+      homepage: https://github.com/nf-core/diseasemodulediscovery
+      documentation: https://nf-co.re/diseasemodulediscovery/output
       licence:
-        - TODO
+        - MIT
 input:
   - - header:
         type: file
-        description: TODO
+        description: MultiQC custom content section header in YAML format. Its `id`
+          decides how the input files are merged, currently only `network_node_degree_distribution`
+          is supported.
     - inputFiles:
         type: file
-        description: TODO
+        description: One or more YAML files to merge, each providing a `name` alongside
+          an `absolute` and a `relative` list of `[degree, value]` pairs
 output:
   multiqc:
     - "*mqc*":
         type: file
-        description: TODO
+        description: The section header extended by a `data` field that holds the absolute
+          counts and the relative percentages of all input files, each as a mapping from
+          network name to the respective list of pairs
         pattern: "*mqc*"
   versions:
     - versions.yml:
         type: file
-        description: TODO
+        description: File containing software versions
         pattern: versions.yml
 authors:
-  - "@TODO"
+  - "@Schansiate"
 maintainers:
-  - "@TODO"
+  - "@JohannesKersting"
+  - "@Schansiate"

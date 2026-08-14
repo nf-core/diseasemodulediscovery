@@ -1,55 +1,93 @@
 name: graphtoolparser
-description: TODO
+description: Converts an interaction network into the internal graph-tool format or
+  into the input format required by one of the module inference methods
 keywords:
-  - TODO
+  - network
+  - format conversion
+  - parser
+  - network statistics
+  - edge list
 tools:
   - graphtoolparser:
-      description: TODO
-      homepage: TODO
-      documentation: TODO
+      description: In-house Python script (graph_tool_parser.py) that reads a network
+        in any of the formats understood by graph-tool and rewrites it either as a binary
+        `.gt` file, in which case it also collects network summary statistics and the
+        node degree distribution, or as the edge list format expected by a specific
+        module inference method.
+      homepage: https://github.com/nf-core/diseasemodulediscovery
+      documentation: https://nf-co.re/diseasemodulediscovery/output
       licence:
-        - TODO
+        - MIT
+  - graph-tool:
+      description: Efficient Python module for the manipulation and statistical analysis
+        of graphs, implemented in C++ on top of the Boost Graph Library. It also defines
+        the binary `.gt` network format.
+      homepage: https://graph-tool.skewed.de/
+      documentation: https://graph-tool.skewed.de/static/doc/index.html
+      licence:
+        - LGPL-3.0-or-later
 input:
   - - meta:
         type: map
-        description: Groovy Map containing sample information
+        description: Groovy Map containing sample information, must contain an `id`
+          field
+    - network:
+        type: file
+        description: Interaction network, either in one of the graph formats readable
+          by graph-tool (`.gt`, `.graphml`, `.xml`, `.dot`, `.gml`) or as an edge list
+          in `.csv` or `.tsv`. The network must contain at least one node and one edge.
   - - format:
         type: string
-        description: TODO
+        description: Output format, one of `gt`, `diamond`, `domino`, `robust` or `rwr`
 output:
   network:
-    - meta:
-        type: map
-        description: Groovy Map containing sample information
-    - "*${format}*":
-        type: file
-        description: TODO
-        pattern: "*${format}*"
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information, must contain an `id`
+            field
+      - "*${format}*":
+          type: file
+          description: The converted network, named after the input file and the requested
+            format. `gt` gives the network in graph-tool's binary format, `diamond` and
+            `rwr` a headerless two-column CSV edge list, `robust` the same as a TSV,
+            and `domino` a tab-separated SIF file with the header columns `node_1`, `type`
+            and `node_2` in which the node identifiers are prefixed with `entrez.`.
+          pattern: "*${format}*"
   multiqc:
-    - meta:
-        type: map
-        description: Groovy Map containing sample information
-    - input_network_multiqc.tsv:
-        type: file
-        description: TODO
-        pattern: input_network_multiqc.tsv
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information, must contain an `id`
+            field
+      - input_network_multiqc.tsv:
+          type: file
+          description: Single-row tab-separated summary of the network with the columns
+            `Network`, `nodes`, `edges`, `components`, `largest_component`, `diameter`
+            (the pseudo-diameter), `self_loops` and `duplicate_edges`. Only written when
+            the requested format is `gt`.
+          pattern: input_network_multiqc.tsv
   node_degree:
-    - meta:
-        type: map
-        description: Groovy Map containing sample information
-    - "*node_degree_distribution.yaml":
-        type: file
-        description: TODO
-        pattern: "*node_degree_distribution.yaml"
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information, must contain an `id`
+            field
+      - "*node_degree_distribution.yaml":
+          type: file
+          description: Node degree distribution of the network, holding the network name
+            plus the `absolute` node counts and `relative` percentages per degree as
+            lists of `[degree, value]` pairs. Only written when the requested format is
+            `gt`.
+          pattern: "*node_degree_distribution.yaml"
   versions:
     - versions.yml:
         type: file
-        description: TODO
+        description: File containing software versions
         pattern: versions.yml
 authors:
-  - "@TODO"
+  - "@JohannesKersting"
+  - "@quirinmanz"
+  - "@Schansiate"
 maintainers:
-  - "@TODO"
+  - "@JohannesKersting"
 containers:
   docker:
     linux/amd64:

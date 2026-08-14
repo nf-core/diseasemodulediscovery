@@ -1,39 +1,61 @@
 name: firstneighbor
-description: TODO
+description: Extracts the subnetwork induced by the seed nodes and all of their direct
+  neighbors
 keywords:
-  - TODO
+  - first neighbor
+  - disease module
+  - module identification
+  - network expansion
+  - seed genes
 tools:
   - firstneighbor:
-      description: TODO
-      homepage: TODO
-      documentation: TODO
+      description: In-house Python script (firstneighbor_tool.py) that collects the
+        seed nodes together with every node directly connected to at least one seed,
+        and extracts the subnetwork induced by that node set.
+      homepage: https://github.com/nf-core/diseasemodulediscovery
+      documentation: https://nf-co.re/diseasemodulediscovery/output
       licence:
-        - TODO
+        - MIT
+  - graph-tool:
+      description: Efficient Python module for the manipulation and statistical analysis
+        of graphs, implemented in C++ on top of the Boost Graph Library. It also defines
+        the binary `.gt` network format.
+      homepage: https://graph-tool.skewed.de/
+      documentation: https://graph-tool.skewed.de/static/doc/index.html
+      licence:
+        - LGPL-3.0-or-later
 input:
   - - meta:
         type: map
-        description: Groovy Map containing sample information
+        description: Groovy Map containing sample information, must contain an `id`
+          field
     - seeds:
         type: file
-        description: TODO
+        description: Seed nodes to grow the module around, one node identifier per line.
+          Seeds that are not present in the network are ignored.
     - network:
         type: file
-        description: TODO
+        description: Interaction network in graph-tool binary format, with the node
+          identifiers in the `name` vertex property
 output:
   module:
-    - meta:
-        type: map
-        description: Groovy Map containing sample information
-    - ${meta.id}.firstneighbor.gt:
-        type: file
-        description: TODO
-        pattern: ${meta.id}.firstneighbor.gt
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information, must contain an `id`
+            field
+      - ${meta.id}.firstneighbor.gt:
+          type: file
+          description: Subnetwork induced by the seed nodes and their direct neighbors,
+            in graph-tool binary format. The added `is_seed` vertex property marks which
+            of its nodes were seeds.
+          pattern: ${meta.id}.firstneighbor.gt
   versions:
     - versions.yml:
         type: file
-        description: TODO
+        description: File containing software versions
         pattern: versions.yml
 authors:
-  - "@TODO"
+  - "@JohannesKersting"
+  - "@quimaguirre"
 maintainers:
-  - "@TODO"
+  - "@JohannesKersting"

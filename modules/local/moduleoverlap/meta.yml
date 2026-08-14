@@ -1,43 +1,63 @@
 name: moduleoverlap
-description: TODO
+description: Computes pairwise overlaps between the node sets of several disease modules
 keywords:
-  - TODO
+  - overlap
+  - jaccard
+  - similarity
+  - disease module
+  - comparison
 tools:
   - moduleoverlap:
-      description: TODO
-      homepage: TODO
-      documentation: TODO
+      description: In-house Python script (module_overlap.py) that computes the pairwise
+        Jaccard similarity and the pairwise number of shared nodes between the node
+        sets of the given modules, once over all module nodes and once over the added
+        nodes only, i.e. after removing the seed nodes.
+      homepage: https://github.com/nf-core/diseasemodulediscovery
+      documentation: https://nf-co.re/diseasemodulediscovery/output
       licence:
-        - TODO
+        - MIT
 input:
   - - ids:
         type: string
-        description: TODO
+        description: List of identifiers naming the rows and columns of the output matrices,
+          one per input file and in the same order
   - - inputs:
         type: file
-        description: TODO
+        description: List of tab-separated module node lists, each with at least a `name`
+          column holding the node identifiers and an `is_seed` column with values 0
+          and 1
 output:
   jaccard_multiqc:
-    - "*.jaccard_multiqc":
+    - jaccard_similarity_matrix_mqc.tsv:
         type: file
-        description: TODO
-        pattern: "*.jaccard_multiqc"
+        description: Symmetric matrix of the pairwise Jaccard similarities between the
+          full node sets of the modules, tab-separated and indexed by the `ID` column.
+          Rows and columns are sorted by identifier.
+        pattern: jaccard_similarity_matrix_mqc.tsv
   shared_multiqc:
-    - "*.shared_multiqc":
+    - shared_nodes_matrix_mqc.tsv:
         type: file
-        description: TODO
-        pattern: "*.shared_multiqc"
+        description: Symmetric matrix of the pairwise numbers of shared nodes between
+          the full node sets of the modules, tab-separated and indexed by the `ID` column.
+          Rows and columns are sorted by identifier.
+        pattern: shared_nodes_matrix_mqc.tsv
   jaccard_no_seeds_multiqc:
-    - "*.jaccard_no_seeds_multiqc":
+    - jaccard_similarity_no_seeds_matrix_mqc.tsv:
         type: file
-        description: TODO
-        pattern: "*.jaccard_no_seeds_multiqc"
+        description: Same as the Jaccard similarity matrix, but restricted to the nodes
+          with `is_seed` equal to 0. Modules that are left without any node after removing
+          the seeds are dropped, and the file is not written if that applies to all of
+          them.
+        pattern: jaccard_similarity_no_seeds_matrix_mqc.tsv
   shared_no_seeds_multiqc:
-    - "*.shared_no_seeds_multiqc":
+    - shared_nodes_no_seeds_matrix_mqc.tsv:
         type: file
-        description: TODO
-        pattern: "*.shared_no_seeds_multiqc"
+        description: Same as the shared nodes matrix, but restricted to the nodes with
+          `is_seed` equal to 0. Modules that are left without any node after removing
+          the seeds are dropped, and the file is not written if that applies to all of
+          them.
+        pattern: shared_nodes_no_seeds_matrix_mqc.tsv
 authors:
-  - "@TODO"
+  - "@JohannesKersting"
 maintainers:
-  - "@TODO"
+  - "@JohannesKersting"

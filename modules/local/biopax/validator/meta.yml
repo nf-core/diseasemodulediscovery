@@ -1,33 +1,45 @@
 name: biopax_validator
-description: TODO
+description: Checks BioPAX OWL files for syntactic errors and violations of BioPAX
+  best practices and writes a single HTML validation report
 keywords:
-  - TODO
+  - biopax
+  - validation
+  - owl
+  - quality control
 tools:
   - biopax_validator:
-      description: TODO
-      homepage: TODO
-      documentation: TODO
+      description: Java tool that validates BioPAX Level 3 data against the BioPAX
+        specification and a set of best-practice rules. Run either against the remote
+        validator service or fully offline, in which case the required OBO ontologies
+        are loaded locally.
+      homepage: https://biopax.github.io/validator/
+      documentation: https://github.com/BioPAX/validator/wiki
       licence:
-        - TODO
+        - MIT
 input:
   - - biopax_files:
         type: file
-        description: TODO
+        description: One or more BioPAX OWL files to validate, staged into the working
+          directory
   - - validate_online:
-        type: string
-        description: TODO
+        type: boolean
+        description: If true, validation is delegated to the remote validator service
+          via the validator client. If false, validation runs offline and the OBO files
+          are loaded locally, which is slower but recommended for large inputs.
 output:
   validation:
     - biopax-validator-report.html:
         type: file
-        description: TODO
+        description: HTML validation report covering all input files, using the `notstrict`
+          validation profile
         pattern: biopax-validator-report.html
   versions:
     - versions.yml:
         type: file
-        description: TODO
+        description: File containing software versions
         pattern: versions.yml
 authors:
-  - "@TODO"
+  - "@quirinmanz"
 maintainers:
-  - "@TODO"
+  - "@quirinmanz"
+  - "@JohannesKersting"

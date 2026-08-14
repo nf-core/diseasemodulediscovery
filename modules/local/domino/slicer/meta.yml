@@ -1,26 +1,48 @@
 name: domino_slicer
-description: TODO
+description: Partitions a network into disjoint slices via modularity optimization,
+  the preprocessing step of DOMINO
 keywords:
-  - TODO
+  - domino
+  - slicer
+  - network partitioning
+  - louvain
+  - preprocessing
 tools:
   - domino_slicer:
-      description: TODO
-      homepage: TODO
-      documentation: TODO
+      description: Preprocessing step shipped with DOMINO that partitions a network
+        into disjoint slices using Louvain modularity optimization. The resulting slices
+        depend only on the network and can be reused for any seed set.
+      homepage: https://github.com/Shamir-Lab/DOMINO
+      documentation: https://github.com/Shamir-Lab/DOMINO
       licence:
-        - TODO
+        - MIT
 input:
   - - meta:
         type: map
-        description: Groovy Map containing sample information
+        description: Groovy Map containing sample information, must contain an `id`
+          field
     - network:
         type: file
-        description: TODO
-  - - meta:
-        type: map
-        description: Groovy Map containing sample information
-output: {}
+        description: Interaction network as a tab-separated SIF file with the header
+          columns `node_1`, `type` and `node_2`
+output:
+  slices:
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information, must contain an `id`
+            field
+      - ${meta.id}.slices.txt:
+          type: file
+          description: "Text file listing the network slices. The first line reports
+            the total number of slices, and every slice is given as a `cc #<i>: n=<size>`
+            line followed by a bracketed, comma-separated list of its node identifiers."
+          pattern: ${meta.id}.slices.txt
+  versions:
+    - versions.yml:
+        type: file
+        description: File containing software versions
+        pattern: versions.yml
 authors:
-  - "@TODO"
+  - "@JohannesKersting"
 maintainers:
-  - "@TODO"
+  - "@JohannesKersting"

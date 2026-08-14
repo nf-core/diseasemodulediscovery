@@ -19,7 +19,7 @@ process DOMINO_SLICER {             // Process name, should be all upper case. O
     task.ext.when == null || task.ext.when
 
 
-    // The script for executint slicer
+    // The script for executing slicer
     // Access inputs, parameters, etc. with the "$" operator
     // The part starting with "cat <<-END_VERSIONS > versions.yml" only collects software versions for the versions.yml file, not essential
     script:
