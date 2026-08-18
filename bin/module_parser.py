@@ -100,7 +100,7 @@ def filter_g(g, tool, module, seeds):
         g = filter_rwr(g, module, filter_column)
     elif tool == "firstneighbor":
         print("First neighbor module, no filtering needed.")
-        return g
+        return gt.load_graph(str(module))
     else:
         logger.critical(f"Unknown tool: {tool}")
         sys.exit(1)
