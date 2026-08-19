@@ -59,3 +59,17 @@ authors:
   - "@lspindler2509"
 maintainers:
   - "@JohannesKersting"
+containers:
+  docker:
+    linux/amd64:
+      name: community.wave.seqera.io/library/robust_bias_aware:e9adb1fd9f1376ff
+      build_id: bd-e9adb1fd9f1376ff_1
+      scan_id: sc-08e81749b05b6e16_1
+  singularity:
+    linux/amd64:
+      name: oras://community.wave.seqera.io/library/robust_bias_aware:7bff1638c5fbd5ce
+      build_id: bd-7bff1638c5fbd5ce_1
+      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/a9/a99e4719bc4bf4c1cb5af87ec9dc3d87069d49c4ae3b3ade730b14e231966c7e/data
+  conda:
+    linux/amd64:
+      lock_file: modules/local/robust_bias_aware/.conda-lock/linux_amd64-bd-e9adb1fd9f1376ff_1.txt

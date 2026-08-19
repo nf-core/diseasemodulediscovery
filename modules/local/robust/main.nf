@@ -2,7 +2,7 @@
 process ROBUST {
     tag "$meta.id"
     label 'process_low'
-    container 'robust:local'
+    container 'docker.io/djskelton/robust:cc669c6'
 
     input:
     tuple val(meta), path(seeds), path (network)

@@ -3,8 +3,8 @@ process BIOPAX_PARSER {
     label 'process_single'
 
     container "${ workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
-?         'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/2d/2dc099c6561d0c857b4673ac4077adee0de873e76300cbdc51e28856179f4eae/data'
-:         'community.wave.seqera.io/library/modulediscovery_python_dependencies:894e0b47d51d9d4b' }"
+?         'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/01/01231a4ef4a2196d65fda042c44442d7b41c3d0859e6766fdfd846f72acfdb23/data'
+:         'community.wave.seqera.io/library/modulediscovery_python_dependencies:37beeaac11625203' }"
 
 
     input:

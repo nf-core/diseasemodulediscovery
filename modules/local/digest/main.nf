@@ -1,7 +1,7 @@
 process DIGEST {
     tag "$meta.id"
     label 'process_medium'
-    container 'biocontainers/biodigest:0.2.16--pyhdfd78af_2'
+    container 'quay.io/biocontainers/biodigest:0.2.16--pyhdfd78af_2'
 
     input:
     tuple val(meta), path(target_file)

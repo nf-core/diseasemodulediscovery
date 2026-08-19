@@ -1,0 +1,7 @@
+name: robust_bias_aware
+channels:
+  - conda-forge
+  - bioconda
+  - nodefaults
+dependencies:
+  - bioconda::robust-bias-aware=0.0.1

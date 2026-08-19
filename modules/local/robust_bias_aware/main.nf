@@ -1,7 +1,10 @@
 process ROBUSTBIASAWARE {
     tag "$meta.id"
     label 'process_low'
-    container 'biocontainers/robust-bias-aware:0.0.1--pyh7cba7a3_1'
+    conda "${moduleDir}/environment.yml"
+    container "${ workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
+?         'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/a9/a99e4719bc4bf4c1cb5af87ec9dc3d87069d49c4ae3b3ade730b14e231966c7e/data'
+:         'community.wave.seqera.io/library/robust_bias_aware:e9adb1fd9f1376ff' }" // automatically generated
 
     input:
     tuple val(meta), path(seeds), path (network)
