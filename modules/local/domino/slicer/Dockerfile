@@ -1,4 +1,4 @@
-from python:3.9-slim
+from python:3.9.25-slim
 
 run apt-get update && \
   # apt-get installs and clean-up
@@ -19,4 +19,4 @@ run apt-get update && \
     statsmodels==0.13.0 \
     python-louvain==0.14 && \
   # install DOMINO from PyPI, skipping its own dependency resolution
-  pip install --no-cache-dir --no-deps domino-python
+  pip install --no-cache-dir --no-deps domino-python==0.1.1
