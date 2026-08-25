@@ -17,6 +17,13 @@ tools:
       documentation: https://github.com/dinaghiassian/DIAMOnD
       licence:
         - MIT
+  - networkx:
+      description: Python package for the creation, manipulation and study of the structure
+        and dynamics of complex networks.
+      homepage: https://networkx.org/
+      documentation: https://networkx.org/documentation/stable/
+      licence:
+        - BSD-3-Clause
 input:
   - - meta:
         type: map

@@ -33,6 +33,12 @@ process DOMINO_DOMINO {     // Process name, should be all upper case. Only the 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         python: "\$(python --version | sed 's/Python //g')"
+        domino-python: "\$(pip show domino-python | grep Version | awk '{print \$2}')"
+        pcst-fast: "\$(pip show pcst-fast | grep Version | awk '{print \$2}')"
+        statsmodels: "\$(pip show statsmodels | grep Version | awk '{print \$2}')"
+        networkx: "\$(pip show networkx | grep Version | awk '{print \$2}')"
+        scipy: "\$(pip show scipy | grep Version | awk '{print \$2}')"
+        numpy: "\$(pip show numpy | grep Version | awk '{print \$2}')"
     END_VERSIONS
     """
 }

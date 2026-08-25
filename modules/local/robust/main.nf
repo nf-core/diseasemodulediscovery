@@ -27,6 +27,9 @@ process ROBUST {
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         python: "\$(python3 --version | sed 's/Python //g')"
+        pcst-fast: "\$(python3 -c "from importlib.metadata import version; print(version('pcst_fast'))")"
+        networkx: "\$(python3 -c "import networkx; print(networkx.__version__)")"
+        numpy: "\$(python3 -c "import numpy; print(numpy.__version__)")"
     END_VERSIONS
     """
 }

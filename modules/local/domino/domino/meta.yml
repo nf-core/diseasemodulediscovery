@@ -17,6 +17,27 @@ tools:
       documentation: https://github.com/Shamir-Lab/DOMINO
       licence:
         - MIT
+  - pcst-fast:
+      description: Fast C++ implementation of the Goemans-Williamson scheme for the
+        prize-collecting Steiner tree problem, exposed to Python.
+      homepage: https://github.com/fraenkel-lab/pcst_fast
+      documentation: https://github.com/fraenkel-lab/pcst_fast
+      licence:
+        - MIT
+  - statsmodels:
+      description: Python package for statistical models and tests, used here for the
+        multiple testing correction of the enrichment p-values.
+      homepage: https://www.statsmodels.org/
+      documentation: https://www.statsmodels.org/stable/index.html
+      licence:
+        - BSD-3-Clause
+  - networkx:
+      description: Python package for the creation, manipulation and study of the structure
+        and dynamics of complex networks.
+      homepage: https://networkx.org/
+      documentation: https://networkx.org/documentation/stable/
+      licence:
+        - BSD-3-Clause
 input:
   - - meta:
         type: map

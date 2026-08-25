@@ -3,7 +3,10 @@
         "content": [
             {
                 "DIAMOND": {
-                    "python": "3.8.5"
+                    "python": "3.8.5",
+                    "networkx": "2.5",
+                    "scipy": "1.5.2",
+                    "numpy": "1.19.2"
                 },
                 "GPROFILER2_GOST\"": {
                     "r-base": "4.3.3",
@@ -147,7 +150,7 @@
                 "node_degree_distribution_mqc.yaml:md5,2ddf480cd88385fb69af47d0750b6a70"
             ]
         ],
-        "timestamp": "2026-08-13T16:29:31.115506049",
+        "timestamp": "2026-08-25T11:12:18.333930139",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "26.04.6"

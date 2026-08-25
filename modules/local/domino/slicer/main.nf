@@ -29,6 +29,10 @@ process DOMINO_SLICER {             // Process name, should be all upper case. O
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         python: "\$(python --version | sed 's/Python //g')"
+        domino-python: "\$(pip show domino-python | grep Version | awk '{print \$2}')"
+        python-louvain: "\$(pip show python-louvain | grep Version | awk '{print \$2}')"
+        networkx: "\$(pip show networkx | grep Version | awk '{print \$2}')"
+        numpy: "\$(pip show numpy | grep Version | awk '{print \$2}')"
     END_VERSIONS
     """
 }

@@ -19,6 +19,20 @@ tools:
       documentation: https://github.com/bionetslab/robust
       licence:
         - GPL-3.0
+  - pcst-fast:
+      description: Fast C++ implementation of the Goemans-Williamson scheme for the
+        prize-collecting Steiner tree problem, exposed to Python.
+      homepage: https://github.com/fraenkel-lab/pcst_fast
+      documentation: https://github.com/fraenkel-lab/pcst_fast
+      licence:
+        - MIT
+  - networkx:
+      description: Python package for the creation, manipulation and study of the structure
+        and dynamics of complex networks.
+      homepage: https://networkx.org/
+      documentation: https://networkx.org/documentation/stable/
+      licence:
+        - BSD-3-Clause
 input:
   - - meta:
         type: map
