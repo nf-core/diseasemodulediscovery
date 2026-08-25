@@ -31,7 +31,7 @@
                     "python": "3.10.4"
                 },
                 "ROBUSTBIASAWARE": {
-                    "python": "3.10.14",
+                    "python": "3.12.14",
                     "robust-bias-aware": "0.0.1"
                 },
                 "RWR": {
