@@ -20,8 +20,8 @@ process DIGEST {
     digest.py --target_file $target_file  --target_type $target_type   --network $network  --network_type $network_type --mode $mode --outdir ${meta.id}
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        python: \$(python --version | sed 's/Python //g')
-        biodigest: \$(pip show biodigest | grep Version | awk '{print \$2}')
+        python: "\$(python --version | sed 's/Python //g')"
+        biodigest: "\$(pip show biodigest | grep Version | awk '{print \$2}')"
     END_VERSIONS
 
     """

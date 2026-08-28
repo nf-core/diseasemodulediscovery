@@ -18,8 +18,8 @@ process NETWORKANNOTATION {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        python: \$(python --version | sed 's/Python //g')
-        graph-tool: \$(python -c "import graph_tool; print(graph_tool.__version__)")
+        python: "\$(python --version | sed 's/Python //g')"
+        graph-tool: "\$(python -c "import graph_tool; print(graph_tool.__version__)" | cut -d' ' -f1)"
     END_VERSIONS
     """
 }

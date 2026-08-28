@@ -4,8 +4,11 @@ channels:
   - nodefaults
 
 dependencies:
-  - nf-core==4.0.2
-  - nextflow>=24.10.5
+  - nextflow>=26.04.0
+  - openjdk==21
   - prettier==3.1.0
   - black>=23.11
   - singularity>=3.8
+  - pip
+  - pip:
+      - nf-core==4.0.3

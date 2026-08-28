@@ -9,12 +9,13 @@
 //
 include { INPUTCHECK                        } from '../modules/local/inputcheck/main'
 include { GRAPHTOOLPARSER                   } from '../modules/local/graphtoolparser/main'
+include { MULTIQCFORMATTER                  } from '../modules/local/multiqcformatter/main'
 include { NETWORKANNOTATION                 } from '../modules/local/networkannotation/main'
 include { SAVEMODULES                       } from '../modules/local/savemodules/main'
 include { VISUALIZEMODULES                  } from '../modules/local/visualizemodules/main'
 include { VISUALIZEMODULESDRUGS             } from '../modules/local/visualizemodulesdrugs/main'
-include { GT2TSV as GT2TSV_Modules          } from '../modules/local/gt2tsv/main'
-include { GT2TSV as GT2TSV_Network          } from '../modules/local/gt2tsv/main'
+include { GT2TSV as GT2TSV_MODULES          } from '../modules/local/gt2tsv/main'
+include { GT2TSV as GT2TSV_NETWORK          } from '../modules/local/gt2tsv/main'
 include { DIGEST as DIGEST_REFERENCEFREE    } from '../modules/local/digest/main'
 include { DIGEST as DIGEST_REFERENCEBASED   } from '../modules/local/digest/main'
 include { MODULEOVERLAP                     } from '../modules/local/moduleoverlap/main'
@@ -29,7 +30,6 @@ include { GT_BIOPAX             } from '../subworkflows/local/gt_biopax/main'
 include { NETWORKEXPANSION      } from '../subworkflows/local/networkexpansion/main'
 include { GT_SEEDPERTURBATION    } from '../subworkflows/local/gt_seedperturbation/main'
 include { GT_NETWORKPERTURBATION } from '../subworkflows/local/gt_networkperturbation/main'
-include { GT_PROXIMITY          } from '../subworkflows/local/gt_proximity/main'
 
 include { readTsvAsListOfMaps   } from '../subworkflows/local/utils_nfcore_diseasemodulediscovery_pipeline/main'
 
@@ -116,7 +116,6 @@ workflow DISEASEMODULEDISCOVERY {
     outdir
     ch_seeds                // channel: [ val(meta[id,seeds_id,network_id]), path(seeds) ]
     ch_network              // channel: [ val(meta[id,network_id]), path(network) ]
-    ch_shortest_paths       // channel: [ val(meta[id,network_id]), path(shortest_paths) ]
     ch_perturbed_networks    // channel: [ val(meta[id,network_id]), [path(perturbed_networks)] ]
 
     main:
@@ -125,9 +124,7 @@ workflow DISEASEMODULEDISCOVERY {
     id_space = Channel.value(params.id_space)
     validate_online = Channel.value(params.validate_online)
 
-    if(params.run_proximity){
-        proximity_dt = file(params.drug_to_target, checkIfExists:true)
-    }
+
 
     // Channels
     ch_versions = Channel.empty()
@@ -146,11 +143,11 @@ workflow DISEASEMODULEDISCOVERY {
             cache: false,
             storeDir: "${params.outdir}/mqc_summaries",
             name: 'input_network_mqc.tsv',
-            keepHeader: true
+            keepHeader: true,
+            sort: { file -> file.text }
         )
     ch_multiqc_files = ch_multiqc_files.mix(ch_network_multiqc)
     ch_network_gt = GRAPHTOOLPARSER.out.network
-
 
     // Check input
     // channel: [ val(meta[id,seeds_id,network_id]), path(seeds), path(network) ]
@@ -167,7 +164,8 @@ workflow DISEASEMODULEDISCOVERY {
             cache: false,
             storeDir: "${params.outdir}/mqc_summaries",
             name: 'input_seeds_mqc.tsv',
-            keepHeader: true
+            keepHeader: true,
+            sort: { file -> file.text }
         )
     ch_multiqc_files = ch_multiqc_files.mix(ch_seeds_multiqc)
 
@@ -371,8 +369,8 @@ workflow DISEASEMODULEDISCOVERY {
 
     if(!params.skip_evaluation){
 
-        GT2TSV_Modules(ch_modules_not_empty)
-        GT2TSV_Network(ch_network_gt)
+        GT2TSV_MODULES(ch_modules_not_empty)
+        GT2TSV_NETWORK(ch_network_gt)
 
         // Module overlap
         ch_overlap_input = ch_nodes_tsv_not_empty
@@ -391,10 +389,10 @@ workflow DISEASEMODULEDISCOVERY {
 
             // Run gprofiler on all module nodes and on added (non-seed) nodes separately;
             // added_nodes entries carry a .added_nodes id suffix to distinguish their output files
-            ch_gprofiler_input = GT2TSV_Modules.out.all_nodes
+            ch_gprofiler_input = GT2TSV_MODULES.out.all_nodes
                 .map{ meta, path -> [meta.network_id, meta, path] }
                 .mix(
-                    GT2TSV_Modules.out.added_nodes
+                    GT2TSV_MODULES.out.added_nodes
                          .filter{ meta, _nodes -> meta.amim != "no_tool" } //filter out no_tool modules
                         .map{ meta, path ->
                             def dup = meta.clone()
@@ -402,7 +400,7 @@ workflow DISEASEMODULEDISCOVERY {
                             [meta.network_id, dup, path]
                         }
                 )
-                .combine(GT2TSV_Network.out.all_nodes.map{meta, path -> [meta.id, path]}, by: 0)
+                .combine(GT2TSV_NETWORK.out.all_nodes.map{meta, path -> [meta.id, path]}, by: 0)
                 .multiMap{key, meta, nodes, network ->
                     nodes: [meta, nodes]
                     network: [meta, network]
@@ -569,16 +567,15 @@ workflow DISEASEMODULEDISCOVERY {
         }
     }
 
-    // Drug prioritization - Proximity
-    if(params.run_proximity){
-        GT_PROXIMITY(
-            ch_network_gt,
-            ch_nodes_tsv_not_empty,
-            ch_shortest_paths,
-            proximity_dt)
-        ch_versions = ch_versions.mix(GT_PROXIMITY.out.versions)
-    }
-
+    // Format complex MultiQC input files
+    MULTIQCFORMATTER(
+        GRAPHTOOLPARSER.out.node_degree.map{_meta, path -> path}.collect().map{networks ->
+            def header = new File("$projectDir/assets/network_node_degree_distribution_header.yaml").toPath()
+            [header, networks]
+        }
+    )
+    ch_multiqc_files = ch_multiqc_files.mix(MULTIQCFORMATTER.out.multiqc)
+    ch_versions = ch_versions.mix(MULTIQCFORMATTER.out.versions)
 
     // Collate and save software versions
     //

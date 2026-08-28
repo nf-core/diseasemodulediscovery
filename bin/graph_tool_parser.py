@@ -5,11 +5,14 @@
 
 import argparse
 import csv
+import json
 import logging
 import sys
 import os
 import graph_tool.all as gt
 from pathlib import Path
+from collections import Counter
+import yaml
 
 logger = logging.getLogger()
 
@@ -57,6 +60,42 @@ def save_multiqc(g, stem):
             f"{pseudo_diameter}\t"
             f"{self_loops}\t"
             f"{len(duplicate_edges)}\n"
+        )
+
+
+def save_node_degree_distribution(g, stem):
+    # Calculate degree for each vertex
+    degrees = [v.out_degree() for v in g.vertices()]
+
+    # Count frequency of each degree
+    degree_counts = Counter(degrees)
+
+    # Get total number of vertices for normalization
+    total_vertices = len(degrees)
+
+    # Create absolute counts dictionary: {degree: count}
+    absolute_counts = [
+        [degree, count] for degree, count in sorted(degree_counts.items())
+    ]
+
+    # Create relative frequencies dictionary: {degree: percentage}
+    relative_frequencies = [
+        [degree, count / total_vertices * 100]
+        for degree, count in sorted(degree_counts.items())
+    ]
+    # save node degree distribution as yaml
+    node_degree_distribution = {
+        "name": stem,
+        "absolute": absolute_counts,
+        "relative": relative_frequencies,
+    }
+
+    with open(f"{stem}.node_degree_distribution.yaml", "w") as file:
+        yaml.safe_dump(
+            node_degree_distribution,
+            file,
+            sort_keys=False,
+            default_flow_style=None,  # keeps list pairs as [x, y]
         )
 
 
@@ -108,6 +147,7 @@ def save(g, stem, format):
     if format == "gt":
         save_gt(g=g, stem=stem)
         save_multiqc(g=g, stem=stem)
+        save_node_degree_distribution(g=g, stem=stem)
     elif format == "diamond":
         save_diamond(g=g, stem=stem)
     elif format == "domino":
@@ -170,7 +210,13 @@ def parse_args(argv=None):
         "-f",
         "--format",
         help="Output format (default gt). If format it gt, a summary file for multiqc will be generated as well.",
-        choices=("gt", "diamond", "domino", "robust", "rwr"),
+        choices=(
+            "gt",
+            "diamond",
+            "domino",
+            "robust",
+            "rwr",
+        ),
         default="gt",
     )
     parser.add_argument(
