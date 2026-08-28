@@ -125,7 +125,8 @@ workflow GT_SEEDPERTURBATION {
         }
 
     // Gene-level visualization
-    if(!params.run_leave_x_out_perturbation){
+    // only run with leave one out perturbation
+    if(!params.leave_frac_out_perturbation){
         ch_visualization_input = SEEDPERTURBATIONEVALUATION.out.detailed
         .multiMap { meta, path ->
             seeds_id: meta.seeds_id
