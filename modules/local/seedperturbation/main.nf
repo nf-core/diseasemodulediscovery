@@ -21,7 +21,7 @@ process SEEDPERTURBATION {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        python: \$(python3 --version | sed 's/Python //g')
+        python: "\$(python3 --version | sed 's/Python //g')"
     END_VERSIONS
     """
 }

@@ -1,6 +1,6 @@
 process DIGEST {
     tag "$meta.id"
-    label 'process_single'
+    label 'process_medium'
     container 'biocontainers/biodigest:0.2.16--pyhdfd78af_2'
 
     input:
@@ -20,8 +20,8 @@ process DIGEST {
     digest.py --target_file $target_file  --target_type $target_type   --network $network  --network_type $network_type --mode $mode --outdir ${meta.id}
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        python: \$(python --version | sed 's/Python //g')
-        biodigest: \$(pip show biodigest | grep Version | awk '{print \$2}')
+        python: "\$(python --version | sed 's/Python //g')"
+        biodigest: "\$(pip show biodigest | grep Version | awk '{print \$2}')"
     END_VERSIONS
 
     """

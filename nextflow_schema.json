@@ -15,8 +15,7 @@
                 "input": {
                     "type": "string",
                     "description": "Path to a CSV sample sheet defining seed file-network combinations",
-                    "help_text": "The file must have a header and can have two columns: \"seeds\" and \"network\". If either \"seeds\" or \"network\" are missing, the --seeds and --network parameters are expected as replacement. ",
-                    "fa_icon": "fas fa-file-csv",
+                    "help_text": "The file must have a header and must include columns: \"seeds\" and \"network\". Optional columns: \"perturbed_networks\". When using --input, do not also set --seeds/--network/--perturbed_networks.",
                     "pattern": "^\\S+\\.csv$",
                     "format": "file-path",
                     "mimetype": "text/csv",
@@ -25,15 +24,17 @@
                 "seeds": {
                     "type": "string",
                     "fa_icon": "fas fa-file-csv",
-                    "description": "Path(s) to one or multiple file(s) with seed genes",
-                    "help_text": "Multiple files have to be \",\" separated. Each file must have one line per seed gene. This parameter cannot be set, if there is a \"seeds\" column, in the sample sheet provided via --input."
+                    "description": "Path(s) to one or multiple file(s) with seed genes, in txt, csv, or tsv format. ",
+                    "help_text": "Multiple files have to be \",\" separated. Each file must have one line per seed gene. This parameter cannot be set, if there is a \"seeds\" column, in the sample sheet provided via --input.  NOT compatible with the sample sheet input.",
+                    "pattern": "^[^,\\s]+\\.(txt|csv|tsv)(,[^,\\s]+\\.(txt|csv|tsv))*$"
                 },
                 "network": {
                     "type": "string",
-                    "description": "Path(s) to one or multiple PPI network(s) in gt, csv, tsv, graphml, xml, dot, or gml format.",
+                    "description": "Path(s) to one or multiple PPI network(s) as file(s) in gt, csv, tsv, graphml, xml, dot, or gml format, or keyword(s) referring to inbuilt networks.",
                     "format": "file-path",
                     "fa_icon": "fas fa-file-csv",
-                    "help_text": "Multiple files have to be \",\" separated."
+                    "help_text": "Multiple files have to be \",\" separated. NOT compatible with the sample sheet input",
+                    "pattern": "^([^,\\s]+\\.(gt|csv|tsv|graphml|xml|dot|gml)|[^,\\s.]+)(,([^,\\s]+\\.(gt|csv|tsv|graphml|xml|dot|gml)|[^,\\s.]+))*$"
                 },
                 "id_space": {
                     "type": "string",
@@ -59,6 +60,13 @@
                     "type": "string",
                     "description": "MultiQC report title. Printed as page header, used for filename if not otherwise specified.",
                     "fa_icon": "fas fa-file-signature"
+                },
+                "prepared_networks_url": {
+                    "type": "string",
+                    "default": "https://zenodo.org/records/18702264/files/",
+                    "fa_icon": "fas fa-link",
+                    "hidden": true,
+                    "description": "Set a custom repository link for the prepared networks."
                 }
             }
         },
@@ -204,6 +212,13 @@
                     "description": "Flag for skipping g:Profiler",
                     "fa_icon": "fas fa-forward"
                 },
+                "gprofiler_organism": {
+                    "type": "string",
+                    "default": "hsapiens",
+                    "description": "Organism for g:Profiler",
+                    "help_text": "See https://biit.cs.ut.ee/gprofiler/page/organism-list for a list of supported organisms.",
+                    "fa_icon": "fas fa-dna"
+                },
                 "skip_digest": {
                     "type": "boolean",
                     "description": "Flag for skipping DIGEST",
@@ -254,23 +269,6 @@
             "default": "",
             "fa_icon": "fas fa-capsules",
             "properties": {
-                "run_proximity": {
-                    "type": "boolean",
-                    "fa_icon": "fas fa-caret-right",
-                    "description": "Flag for running proximity"
-                },
-                "shortest_paths": {
-                    "type": "string",
-                    "fa_icon": "fas fa-project-diagram",
-                    "description": "Path(s) to the shortest path pickle file(s) used for proximity.",
-                    "hidden": true
-                },
-                "drug_to_target": {
-                    "type": "string",
-                    "fa_icon": "fas fa-file-csv",
-                    "description": "Local path to the drug to targets file used for proximity.",
-                    "hidden": true
-                },
                 "skip_drug_predictions": {
                     "type": "boolean",
                     "description": "Flag for skipping drug predictions",
@@ -396,13 +394,6 @@
                     "type": "boolean",
                     "description": "Do not use coloured log outputs.",
                     "fa_icon": "fas fa-palette",
-                    "hidden": true
-                },
-                "hook_url": {
-                    "type": "string",
-                    "description": "Incoming hook URL for messaging service",
-                    "fa_icon": "fas fa-people-group",
-                    "help_text": "Incoming hook URL for messaging service. Currently, MS Teams and Slack are supported.",
                     "hidden": true
                 },
                 "multiqc_config": {

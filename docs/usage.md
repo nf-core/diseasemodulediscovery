@@ -6,7 +6,7 @@
 
 ## Introduction
 
-**nf-core/diseasemodulediscovery** is a bioinformatics pipeline for network medicine hypothesis generation, designed for identifying active/disease modules. Developed and maintained by the [RePo4EU](https://repo4.eu/) consortium, it aims to characterize the molecular mechanisms of diseases by analyzing the local neighborhood of disease-associated genes or proteins (seeds) within the interactome. This approach can help identify potential drug targets for drug repurposing.
+**nf-core/diseasemodulediscovery** is a bioinformatics pipeline for network medicine hypothesis generation, designed for identifying active/disease modules. Developed and maintained by the [RePo4EU](https://repo4.eu/) consortium, it aims to characterize the molecular mechanisms of diseases by analyzing the local neighborhood of disease-associated genes or proteins (seeds) within a molecular interaction network. The pipeline includes multiple disease module detection algorithms and an evaluation framework to compare the results returned by different methods.
 
 ## Running the pipeline
 
@@ -66,7 +66,7 @@ If you wish to repeatedly use the same parameters for multiple runs, rather than
 Pipeline settings can be provided in a `yaml` or `json` file via `-params-file <file>`.
 
 > [!WARNING]
-> Do not use `-c <file>` to specify parameters as this will result in errors. Custom config files specified with `-c` must only be used for [tuning process resource specifications](https://nf-co.re/docs/usage/configuration#tuning-workflow-resources), other infrastructural tweaks (such as output directories), or module arguments (args).
+> Do not use `-c <file>` to specify parameters as this will result in errors. Custom config files specified with `-c` must only be used for [tuning process resource specifications](https://nf-co.re/docs/running/run-pipelines#configuring-pipelines), other infrastructural tweaks (such as output directories), or module arguments (args).
 
 The above pipeline run specified with a params file in yaml format:
 
@@ -106,7 +106,7 @@ Instead of providing your own network file, you can choose from a variety of alr
 Usage example:
 
 ```bash
-nextflow run <PATH_TO_REPO>/modulediscovery/main.nf \
+nextflow run nf-core/diseasemodulediscovery \
    -profile docker \
    --seeds ./seeds.txt \
    --network string_min900 \
@@ -125,7 +125,7 @@ For details on the network preparation procedure (including ID mapping, links to
 You can also use the `--seeds` and `--network` parameters to define multiple files as comma-separated lists:
 
 ```bash
-nextflow run <PATH_TO_REPO>/modulediscovery/main.nf \
+nextflow run nf-core/diseasemodulediscovery \
    -profile <docker/singularity> \
    --seeds <SEED_FILE_1,SEED_FILE_2,...> \
    --network <NETWORK_FILE_1,NETWORK_FILE_2,...> \
@@ -148,7 +148,7 @@ Each row defines a seeds-network pair.
 You can run the pipeline with a samplesheet using the `--input` parameter instead of `--seeds` and `--network`:
 
 ```bash
-nextflow run <PATH_TO_REPO>/modulediscovery/main.nf \
+nextflow run nf-core/diseasemodulediscovery \
    -profile <docker/singularity> \
    --input samplesheet.csv \
    --outdir <OUTDIR>
@@ -159,7 +159,7 @@ nextflow run <PATH_TO_REPO>/modulediscovery/main.nf \
 Most pipeline steps can be skipped using `--skip_<PIPELINE_STEP>`. E.g., if you are only interested in module discovery, you can skip the annotation and evaluation steps using:
 
 ```bash
-nextflow run <PATH_TO_REPO>/modulediscovery/main.nf \
+nextflow run nf-core/diseasemodulediscovery \
    -profile <docker/singularity> \
    --input samplesheet.csv \
    --outdir <OUTDIR> \
@@ -170,7 +170,7 @@ nextflow run <PATH_TO_REPO>/modulediscovery/main.nf \
 You can then later continue the pipeline (including evaluation and annotation) using the `-resume` option:
 
 ```bash
-nextflow run <PATH_TO_REPO>/modulediscovery/main.nf \
+nextflow run nf-core/diseasemodulediscovery \
    -profile <docker/singularity> \
    --input samplesheet.csv \
    --outdir <OUTDIR> \
@@ -190,9 +190,9 @@ Use `--run_network_perturbation` to repeatedly rewire the edges of the input net
 The pipeline saves the rewired networks (please refer to the [output documentation](https://nf-co.re/diseasemodulediscovery/output)), which can be reused in future analyses with the same original input network. To do so, provide the path to the folder containing the rewired networks via the `--perturbed_networks` parameter. If multiple networks are used, the folders specified in `--perturbed_networks` must be given in the same order as the corresponding input networks.
 
 ```bash
-nextflow run <PATH_TO_REPO>/modulediscovery/main.nf \
+nextflow run nf-core/diseasemodulediscovery \
    -profile <docker/singularity> \
-   --seeds <SEED_FILE_> \
+   --seeds <SEED_FILE> \
    --network <NETWORK_FILE_1,NETWORK_FILE_2,...> \
    --perturbed_networks <PATH_TO_PERTURBED_NETWORK_FOLDER_1,PATH_TO_PERTURBED_NETWORK_FOLDER_1,...> \
    --outdir <OUTDIR>
@@ -206,6 +206,32 @@ seed_file_1.csv,network_1.csv,/path/to/perturbed/networks/network_1
 seed_file_2.csv,network_2.csv,/path/to/perturbed/networks/network_2
 seed_file_2.csv,network_1.csv,/path/to/perturbed/networks/network_1
 ```
+
+### Using the pipeline with a different organism or custom ID space
+
+The pipeline is currently designed for human data, and all [inbuilt networks](#available-networks) are available for humans only. However, most steps are agnostic of the organism and the ID space of the network nodes and seeds. By providing your own [seed and network files](#running-the-pipeline) and [skipping the steps](#skipping-steps) that rely on matching node IDs to external, human-specific resources, you can run the pipeline with completely custom node IDs. The steps that need to be skipped are:
+
+- **ROBUST (bias-aware)** (`--skip_robust_bias_aware`) – maps node IDs to a human study-bias dataset
+- **g:Profiler** (`--skip_gprofiler`) and **DIGEST** (`--skip_digest`) – functional evaluation against external annotations. If your IDs are valid genes/proteins of a [supported organism](https://biit.cs.ut.ee/gprofiler/page/organism-list), you can keep g:Profiler by setting `--gprofiler_organism <organism>` instead of skipping it.
+- **Module annotation** (`--skip_annotation`) – biological data from NeDRex
+- **Drugst.One export** (`--skip_drugstone_export`) and **drug prioritization** (`--skip_drug_predictions`) – rely on Drugst.One
+
+```bash
+nextflow run nf-core/diseasemodulediscovery \
+   -profile <docker/singularity> \
+   --seeds <CUSTOM_ID_SPACE_SEED_FILE> \
+   --network <CUSTOM_ID_SPACE_NETWORK_FILE> \
+   --skip_robust_bias_aware \
+   --skip_annotation \
+   --skip_gprofiler \
+   --skip_digest \
+   --skip_drugstone_export \
+   --skip_drug_predictions \
+   --outdir <OUTDIR>
+```
+
+> [!NOTE]
+> The node IDs in your seed and network files must use the same ID space. Since all steps that depend on `--id_space` are skipped here, the parameter can be left at its default value.
 
 ### Updating the pipeline
 
@@ -285,19 +311,19 @@ Specify the path to a specific config file (this is a core Nextflow command). Se
 
 Whilst the default requirements set within the pipeline will hopefully work for most people and with most input data, you may find that you want to customise the compute resources that the pipeline requests. Each step in the pipeline has a default set of requirements for number of CPUs, memory and time. For most of the pipeline steps, if the job exits with any of the error codes specified [here](https://github.com/nf-core/rnaseq/blob/4c27ef5610c87db00c3c5a3eed10b1d161abf575/conf/base.config#L18) it will automatically be resubmitted with higher resources request (2 x original, then 3 x original). If it still fails after the third attempt then the pipeline execution is stopped.
 
-To change the resource requests, please see the [max resources](https://nf-co.re/docs/usage/configuration#max-resources) and [tuning workflow resources](https://nf-co.re/docs/usage/configuration#tuning-workflow-resources) section of the nf-core website.
+To change the resource requests, please see the [max resources](https://nf-co.re/docs/running/configuration/nextflow-for-your-system#set-max-resources) and [customise process resources](https://nf-co.re/docs/running/configuration/nextflow-for-your-system#customize-process-resources) section of the nf-core website.
 
 ### Custom Containers
 
 In some cases, you may wish to change the container or conda environment used by a pipeline steps for a particular tool. By default, nf-core pipelines use containers and software from the [biocontainers](https://biocontainers.pro/) or [bioconda](https://bioconda.github.io/) projects. However, in some cases the pipeline specified version maybe out of date.
 
-To use a different container from the default container or conda environment specified in a pipeline, please see the [updating tool versions](https://nf-co.re/docs/usage/configuration#updating-tool-versions) section of the nf-core website.
+To use a different container from the default container or conda environment specified in a pipeline, please see the [updating tool versions](https://nf-co.re/docs/running/configuration/nextflow-for-your-system#update-tool-versions) section of the nf-core website.
 
 ### Custom Tool Arguments
 
 A pipeline might not always support every possible argument or option of a particular tool used in pipeline. Fortunately, nf-core pipelines provide some freedom to users to insert additional parameters that the pipeline does not include by default.
 
-To learn how to provide additional arguments to a particular tool of the pipeline, please see the [customising tool arguments](https://nf-co.re/docs/usage/configuration#customising-tool-arguments) section of the nf-core website.
+To learn how to provide additional arguments to a particular tool of the pipeline, please see the [customising tool arguments](https://nf-co.re/docs/running/configuration/nextflow-for-your-system#modifying-tool-arguments) section of the nf-core website.
 
 ### nf-core/configs
 

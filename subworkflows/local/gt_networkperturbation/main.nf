@@ -2,7 +2,7 @@
 // Runs network perturbation based evaluation of network expansion methods
 //
 
-include { NETWORKEXPANSION             } from '../networkexpansion'
+include { NETWORKEXPANSION              } from '../networkexpansion'
 include { NETWORKPERTURBATION           } from '../../../modules/local/networkperturbation/main'
 include { NETWORKPERTURBATIONEVALUATION } from '../../../modules/local/networkperturbationevaluation/main'
 
@@ -65,7 +65,7 @@ workflow GT_NETWORKPERTURBATION {
     // channel: [ val(meta[id,module_id,amim,seeds_id,network_id]), [path(perturbed_modules)] ]
     ch_perturbed_modules = NETWORKEXPANSION.out.modules
         .map{meta, perturbed_module->
-            key = groupKey(meta.subMap("seeds_id", "amim", "network_id"), meta.n_perturbations)
+            def key = groupKey(meta.subMap("seeds_id", "amim", "network_id"), meta.n_perturbations)
             [key, meta, perturbed_module]
         }
         // Group by seeds_id, amim, and network_id
@@ -105,13 +105,15 @@ workflow GT_NETWORKPERTURBATION {
         NETWORKPERTURBATIONEVALUATION.out.multiqc_jaccard
         .map{ meta, path -> path }
         .collectFile(
-            item -> "  " + item.text,
             cache: false,
             storeDir: "${params.outdir}/mqc_summaries",
             name: 'network_perturbation_jaccard_mqc.yaml',
             sort: true,
             seed: new File("$projectDir/assets/network_perturbation_jaccard_header.yaml").text
-        )
+        ){
+            item -> "  " + item.text
+        }
+
 
 
 
