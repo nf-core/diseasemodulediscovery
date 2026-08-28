@@ -5,6 +5,8 @@
 import argparse
 import logging
 import sys
+import math
+import random
 from pathlib import Path
 
 logger = logging.getLogger()
@@ -36,6 +38,32 @@ def parse_args(argv=None):
         choices=("CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG"),
         default="WARNING",
     )
+    parser.add_argument(
+        "--random_seed",
+        help="The random seed to use for reproducibility (default: 42).",
+        type=int,
+        default=42,
+    )
+    parser.add_argument(
+        "--leave_x_out",
+        help="Whether to perform leave-x-out perturbation (default: False).",
+        action="store_true",
+    )
+    parser.add_argument(
+        "-frac",
+        "--fraction_exclusion",
+        help="fraction of seeds to exclude for leave-x-out perturbation",
+        type=int,
+        default=10,
+    )
+    parser.add_argument(
+        "-n",
+        "--num_permutations",
+        help="number of leave-x-out perturbations",
+        type=int,
+        default=10,
+    )
+
     return parser.parse_args(argv)
 
 
@@ -57,13 +85,23 @@ def main(argv=None):
     # read seed file
     with open(path, "r") as file:
         seeds = [line.strip() for line in file.readlines() if line.strip()]
-
-    # leave one seed out
-    for i, seed in enumerate(seeds):
-        with open(f"{args.prefix}.perm_{i}{extension}", "w") as file:
-            for j, other_seed in enumerate(seeds):
-                if not i == j:
-                    file.write(f"{other_seed}\n")
+        if args.leave_x_out:
+            # leave x out
+            random.seed(args.random_seed)
+            x = math.ceil(args.fraction_exclusion * len(seeds) / 100)
+            for i in range(args.num_permutations):
+                excludes_seeds = random.sample(seeds, x)
+                with open(f"{args.prefix}.perm_{i}{extension}", "w") as file:
+                    for seed in seeds:
+                        if seed not in excludes_seeds:
+                            file.write(f"{seed}\n")
+        else:
+            # leave one seed out
+            for i, seed in enumerate(seeds):
+                with open(f"{args.prefix}.perm_{i}{extension}", "w") as file:
+                    for j, other_seed in enumerate(seeds):
+                        if not i == j:
+                            file.write(f"{other_seed}\n")
 
 
 if __name__ == "__main__":
