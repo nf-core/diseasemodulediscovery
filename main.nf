@@ -163,6 +163,9 @@ params {
     // Parameter for setting the organism for g:Profiler. See https://biit.cs.ut.ee/gprofiler/page/organism-list for a list of supported organisms.
     gprofiler_organism: String = 'hsapiens'
 
+    // Path to custom gmt file for gprofiler
+    custom_gmt_file: String?
+
     // Flag for skipping DIGEST
     skip_digest: Boolean
 
