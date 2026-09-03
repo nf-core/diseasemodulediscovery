@@ -9,20 +9,20 @@
                     "numpy": "1.19.2"
                 },
                 "DOMINO_DOMINO": {
-                    "python": "3.6.15",
-                    "domino-python": "0.1.1",
+                    "python": "3.9.23",
+                    "domino": "1.0.0",
                     "pcst-fast": "1.0.7",
-                    "statsmodels": "0.11.0",
+                    "statsmodels": "0.13.0",
                     "networkx": "2.4",
-                    "scipy": "1.4.1",
-                    "numpy": "1.18.1"
+                    "scipy": "1.9.3",
+                    "numpy": "1.22.0"
                 },
                 "DOMINO_SLICER": {
-                    "python": "3.6.15",
-                    "domino-python": "0.1.1",
+                    "python": "3.9.23",
+                    "domino": "1.0.0",
                     "python-louvain": "0.14",
                     "networkx": "2.4",
-                    "numpy": "1.18.1"
+                    "numpy": "1.22.0"
                 },
                 "FIRSTNEIGHBOR": {
                     "python": "3.12.13",
@@ -319,7 +319,7 @@
                 "warn_empty_modules_mqc.tsv:md5,29e74711f7ca35f312d791a64cb94515"
             ]
         ],
-        "timestamp": "2026-08-25T11:10:01.437715541",
+        "timestamp": "2026-09-03T13:05:06.514269948",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "26.04.6"

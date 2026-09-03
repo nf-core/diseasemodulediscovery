@@ -29,8 +29,8 @@ process VISUALIZEMODULESDRUGS {
         python: "\$(python --version | sed 's/Python //g')"
         graph-tool: "\$(python -c "import graph_tool; print(graph_tool.__version__)" | cut -d' ' -f1)"
         networkx: "\$(python -c "import networkx; print(networkx.__version__)")"
-        pyintergraph: "\$(pip show pyintergraph | grep Version | awk '{print \$2}')"
-        pyvis: "\$(pip show pyvis | grep Version | awk '{print \$2}')"
+        pyintergraph: "\$(pip show pyintergraph | grep '^Version:' | awk '{print \$2}')"
+        pyvis: "\$(pip show pyvis | grep '^Version:' | awk '{print \$2}')"
     END_VERSIONS
     """
 }
