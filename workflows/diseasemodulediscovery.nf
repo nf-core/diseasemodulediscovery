@@ -19,6 +19,7 @@ include { GT2TSV as GT2TSV_NETWORK          } from '../modules/local/gt2tsv/main
 include { DIGEST as DIGEST_REFERENCEFREE    } from '../modules/local/digest/main'
 include { DIGEST as DIGEST_REFERENCEBASED   } from '../modules/local/digest/main'
 include { MODULEOVERLAP                     } from '../modules/local/moduleoverlap/main'
+include { PATHWAYFREQUENCY                  } from '../modules/local/pathwayfrequency/main'
 include { DRUGPREDICTIONS                   } from '../modules/local/drugpredictions/main'
 include { TOPOLOGY                          } from '../modules/local/topology/main'
 include { DRUGSTONEEXPORT                   } from '../modules/local/drugstoneexport/main'
@@ -404,6 +405,14 @@ workflow DISEASEMODULEDISCOVERY {
                 ch_gprofiler_input.network
             )
             ch_versions = ch_versions.mix(GPROFILER2_GOST.out.versions)
+
+            // Pathway frequency analysis
+            ch_pathwayfrequency_input = GPROFILER2_GOST.out.all_enrich
+                .multiMap { meta, path ->
+                    ids: meta.id
+                    list_enriched_pathways: path
+                }
+            // ...
         }
 
         // Digest
