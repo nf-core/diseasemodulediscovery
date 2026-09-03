@@ -3,7 +3,7 @@
         "content": [
             {
                 "DIAMOND": {
-                    "python": "3.8.5",
+                    "python": "3.8.20",
                     "networkx": "2.5",
                     "scipy": "1.5.2",
                     "numpy": "1.19.2"
@@ -44,7 +44,7 @@
                     "graph-tool": "2.77"
                 },
                 "ROBUST": {
-                    "python": "3.10.4",
+                    "python": "3.10.21",
                     "pcst-fast": "1.0.7",
                     "networkx": "2.8.3",
                     "numpy": "1.22.4"
@@ -319,7 +319,7 @@
                 "warn_empty_modules_mqc.tsv:md5,29e74711f7ca35f312d791a64cb94515"
             ]
         ],
-        "timestamp": "2026-09-03T13:05:06.514269948",
+        "timestamp": "2026-09-03T13:38:15.297361989",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "26.04.6"

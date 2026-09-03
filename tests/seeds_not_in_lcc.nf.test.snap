@@ -38,7 +38,7 @@
                     "graph-tool": "2.77"
                 },
                 "ROBUST": {
-                    "python": "3.10.4",
+                    "python": "3.10.21",
                     "pcst-fast": "1.0.7",
                     "networkx": "2.8.3",
                     "numpy": "1.22.4"
@@ -173,7 +173,7 @@
                 "warn_empty_modules_mqc.tsv:md5,d633adeac429e1651f23f45153c4f1b9"
             ]
         ],
-        "timestamp": "2026-09-03T13:07:09.749167826",
+        "timestamp": "2026-09-03T13:56:53.081562836",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "26.04.6"
