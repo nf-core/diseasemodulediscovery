@@ -2,10 +2,10 @@
 process DOMINO_DOMINO {     // Process name, should be all upper case. Only the part before "_" will be used to define the output folder
     tag "$meta.id"
     label 'process_high'     // Used to allocate resources, "process_high" defines this process resource class; for more labels see conf/base.config
-    conda "bioconda::domino=1.0.0"  // Define software deployment via conda, "container" is more important right now
-    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/domino:1.0.0--pyhdfd78af_0' :
-        'quay.io/biocontainers/domino:1.0.0--pyhdfd78af_0' }"   // The preferred way to two define a container, if a biocontainer is available
+    conda "${moduleDir}/environment.yml"
+    container "${ workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
+?         'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/d1/d1e127804ca623639fc35b159206b564f3cc3e579ac1cad595c8a84d40609be5/data'
+:         'community.wave.seqera.io/library/domino:d7848ba6939a9ab0' }"   // The preferred way to two define a container, if a biocontainer is available
 
     input:
     tuple val(meta), path(seeds), path (network), path(slices)
@@ -33,6 +33,12 @@ process DOMINO_DOMINO {     // Process name, should be all upper case. Only the 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         python: "\$(python --version | sed 's/Python //g')"
+        domino: "\$(python -c "import json,importlib.metadata as m; u=json.loads(m.distribution('domino-python').read_text('direct_url.json'))['url']; print(u.rsplit('/',1)[-1].removeprefix('v').removesuffix('.tar.gz'))")"
+        pcst-fast: "\$(pip show pcst-fast | grep '^Version:' | awk '{print \$2}')"
+        statsmodels: "\$(pip show statsmodels | grep '^Version:' | awk '{print \$2}')"
+        networkx: "\$(pip show networkx | grep '^Version:' | awk '{print \$2}')"
+        scipy: "\$(pip show scipy | grep '^Version:' | awk '{print \$2}')"
+        numpy: "\$(pip show numpy | grep '^Version:' | awk '{print \$2}')"
     END_VERSIONS
     """
 }

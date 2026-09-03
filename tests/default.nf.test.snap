@@ -13,7 +13,10 @@
                     "biopax-validator": "6.0.0"
                 },
                 "DIAMOND": {
-                    "python": "3.8.5"
+                    "python": "3.8.20",
+                    "networkx": "2.5",
+                    "scipy": "1.5.2",
+                    "numpy": "1.19.2"
                 },
                 "DIGEST_REFERENCEBASED": {
                     "python": "3.10.13",
@@ -357,7 +360,7 @@
                 "node_degree_distribution_mqc.yaml:md5,d6a05ace0a3f6dc518c1106334462049"
             ]
         ],
-        "timestamp": "2026-08-13T16:28:02.021877556",
+        "timestamp": "2026-09-03T13:40:39.144040269",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "26.04.6"

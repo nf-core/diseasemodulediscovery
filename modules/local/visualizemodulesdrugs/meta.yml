@@ -1,0 +1,142 @@
+name: visualizemodulesdrugs
+description: Draws a disease module network together with the drugs targeting its nodes,
+  as static images and as an interactive HTML page
+keywords:
+  - visualization
+  - network
+  - disease module
+  - drugs
+  - interactive
+tools:
+  - visualizemodulesdrugs:
+      description: In-house Python script (visualize_modules.py) that adds the predicted
+        drugs to a module network as additional nodes connected to the nodes they target,
+        lays the result out and renders it both as static images and as an interactive
+        page in which every node exposes its properties.
+      homepage: https://github.com/nf-core/diseasemodulediscovery
+      documentation: https://nf-co.re/diseasemodulediscovery/output
+      licence:
+        - MIT
+  - graph-tool:
+      description: Efficient Python module for the manipulation and statistical analysis
+        of graphs, implemented in C++ on top of the Boost Graph Library. Used to compute
+        the SFDP layout and to render the static images.
+      homepage: https://graph-tool.skewed.de/
+      documentation: https://graph-tool.skewed.de/static/doc/index.html
+      licence:
+        - LGPL-3.0-or-later
+  - networkx:
+      description: Python package for the creation, manipulation and study of the structure
+        and dynamics of complex networks. Used as the intermediate representation for
+        the interactive output.
+      homepage: https://networkx.org/
+      documentation: https://networkx.org/documentation/stable/
+      licence:
+        - BSD-3-Clause
+  - pyintergraph:
+      description: Converts graph objects between networkx, python-igraph and graph-tool.
+        Used to turn the module into a networkx graph.
+      homepage: https://github.com/luerhard/pyintergraph
+      documentation: https://github.com/luerhard/pyintergraph
+      licence:
+        - MIT
+  - pyvis:
+      description: Python library for interactive network visualizations in the browser.
+        Used to write the interactive HTML page.
+      homepage: https://github.com/WestHealth/pyvis
+      documentation: https://pyvis.readthedocs.io/en/latest/
+      licence:
+        - BSD-3-Clause
+input:
+  - - meta:
+        type: map
+        description: Groovy Map containing sample information, must contain an `id`
+          field
+    - module:
+        type: file
+        description: Disease module network in graph-tool binary format. Its nodes need
+          a `name`, an `is_seed` and a `component_id` property, the first two to label
+          and color them and the last one to order the property tables shown in the interactive
+          output.
+    - drug_predictions:
+        type: file
+        description: Tab-separated table of drug predictions with a `name` column holding
+          the identifier of the targeted node and a `drug_name` column holding the name
+          of the drug. Rows without a drug name are skipped, and if the column is missing
+          entirely no drugs are added at all.
+output:
+  pdf:
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information, must contain an `id`
+            field
+      - ${meta.id}.pdf:
+          type: file
+          description: The laid out module network including the drug nodes as PDF. Seed
+            nodes, added nodes and drugs are distinguished by color and shape, and every
+            node is labelled.
+          pattern: ${meta.id}.pdf
+  png:
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information, must contain an `id`
+            field
+      - ${meta.id}.png:
+          type: file
+          description: The same drawing as PNG, rendered at a larger output size
+          pattern: ${meta.id}.png
+  svg:
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information, must contain an `id`
+            field
+      - ${meta.id}.svg:
+          type: file
+          description: The same drawing as SVG
+          pattern: ${meta.id}.svg
+  html:
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information, must contain an `id`
+            field
+      - ${meta.id}.html:
+          type: file
+          description: Interactive rendering of the module network including the drug
+            nodes, using the same layout as the static images. Hovering a node shows all
+            of its properties, and the physics, interaction and manipulation settings
+            can be changed in the page.
+          pattern: ${meta.id}.html
+  versions:
+    - versions.yml:
+        type: file
+        description: File containing software versions
+        pattern: versions.yml
+authors:
+  - "@lspindler2509"
+  - "@JohannesKersting"
+maintainers:
+  - "@JohannesKersting"
+containers:
+  docker:
+    linux/amd64:
+      name: community.wave.seqera.io/library/modulediscovery_python_dependencies:37beeaac11625203
+      build_id: bd-37beeaac11625203_1
+      scan_id: sc-60c9761227e3cfe0_1
+    linux/arm64:
+      name: community.wave.seqera.io/library/modulediscovery_python_dependencies:cd96a1d8b8cde552
+      build_id: bd-cd96a1d8b8cde552_1
+      scan_id: sc-50fcc0e70a021b38_1
+  singularity:
+    linux/arm64:
+      name: oras://community.wave.seqera.io/library/modulediscovery_python_dependencies:5881bc5613b9edfe
+      build_id: bd-5881bc5613b9edfe_1
+      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/bd/bdf908ab707e8af0ae80a72bd38411af7545e47b1d28798449ef26adf22bec20/data
+    linux/amd64:
+      name: oras://community.wave.seqera.io/library/modulediscovery_python_dependencies:97f911fbeabe5e6f
+      build_id: bd-97f911fbeabe5e6f_1
+      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/01/01231a4ef4a2196d65fda042c44442d7b41c3d0859e6766fdfd846f72acfdb23/data
+  conda:
+    linux/amd64:
+      lock_file: modules/local/visualizemodulesdrugs/.conda-lock/linux_amd64-bd-37beeaac11625203_1.txt
+    linux/arm64:
+      lock_file: modules/local/visualizemodulesdrugs/.conda-lock/linux_arm64-bd-cd96a1d8b8cde552_1.txt

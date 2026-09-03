@@ -1,7 +1,7 @@
 process BIOPAX_VALIDATOR {
     label 'process_single'
 
-    container "docker.io/quirinmanz/biopax-validator:6.0.0-SNAPSHOT"
+    container "docker.io/kerstingjohannes/biopax-validator:6.0.0"
 
     input:
     path biopax_files

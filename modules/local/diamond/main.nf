@@ -4,7 +4,7 @@
 process DIAMOND {                           // Process name, should be all upper case
     tag "$meta.id"                          // Used to display the process in the progress overview
     label 'process_low'                     // Used to allocate resources; see conf/base.config for label-specific settings
-    container 'docker.io/djskelton/diamond:2437974'   // The container on docker hub, other repositories are possible, use conda keyword to set a conda environment
+    container 'docker.io/kerstingjohannes/diamond:1.0.0-2437974'   // The container on docker hub, other repositories are possible, use conda keyword to set a conda environment
 
     input:                                            // Define the input channels
     tuple val(meta), path(seeds), path (network)      // Paths to seeds file and network file
@@ -33,6 +33,9 @@ process DIAMOND {                           // Process name, should be all upper
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         python: "\$(python --version | sed 's/Python //g')"
+        networkx: "\$(python -c "import networkx; print(networkx.__version__)")"
+        scipy: "\$(python -c "import scipy; print(scipy.__version__)")"
+        numpy: "\$(python -c "import numpy; print(numpy.__version__)")"
     END_VERSIONS
     """
 }

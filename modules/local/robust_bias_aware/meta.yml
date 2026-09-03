@@ -1,0 +1,62 @@
+name: robustbiasaware
+description: Identifies a disease module by repeatedly connecting the seed nodes through prize-collecting Steiner trees, correcting for study bias in the network
+keywords:
+  - robust
+  - study bias
+  - disease module
+  - module identification
+  - steiner tree
+tools:
+  - robustbiasaware:
+      description: ROBUST (bias-aware) computes a number of prize-collecting Steiner trees over the seed nodes, penalizing nodes that were already part of earlier solutions, and additionally raises the edge costs of nodes that are frequently used as baits in interaction detection experiments to counter study bias. The module is formed by the nodes that occur in a sufficient fraction of the solutions. Its parameters are passed through `task.ext.args`.
+      homepage: https://github.com/bionetslab/robust_bias_aware
+      documentation: https://github.com/bionetslab/robust_bias_aware
+      licence:
+        - GPL-3.0-or-later
+input:
+  - - meta:
+        type: map
+        description: Groovy Map containing sample information, must contain an `id` field
+    - seeds:
+        type: file
+        description: Seed nodes to build the module from, one node identifier per line
+    - network:
+        type: file
+        description: Interaction network as a tab-separated edge list
+  - - idspace:
+        type: string
+        description: ID space of the node identifiers, given in upper case. `SYMBOL`, `ENTREZ` and `UNIPROT` are supported, any other value falls back to gene symbols with a warning.
+output:
+  module:
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information, must contain an `id` field
+      - ${meta.id}.graphml:
+          type: file
+          description: The disease module as a GraphML network. Its nodes carry the seed status (`isSeed`), the number of solutions a node occurred in (`nrOfOccurrences`), the corresponding fraction of all solutions (`significance`), the trees a node was part of (`trees`) and a connected component identifier (`connected_components_id`).
+          pattern: ${meta.id}.graphml
+  versions:
+    - versions.yml:
+        type: file
+        description: File containing software versions
+        pattern: versions.yml
+authors:
+  - "@JohannesKersting"
+  - "@Schansiate"
+  - "@lspindler2509"
+maintainers:
+  - "@JohannesKersting"
+containers:
+  docker:
+    linux/amd64:
+      name: community.wave.seqera.io/library/robust_bias_aware:cc068c0e1d52ce0e
+      build_id: bd-cc068c0e1d52ce0e_1
+      scan_id: sc-8f62d9a089ecf025_1
+  singularity:
+    linux/amd64:
+      name: oras://community.wave.seqera.io/library/robust_bias_aware:43b9a90dd422dee1
+      build_id: bd-43b9a90dd422dee1_1
+      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/4b/4b151131c90d219fcc7c7a0c2b83149cff2cdaefa61a99882d32cc0b2439d671/data
+  conda:
+    linux/amd64:
+      lock_file: modules/local/robust_bias_aware/.conda-lock/linux_amd64-bd-cc068c0e1d52ce0e_1.txt
