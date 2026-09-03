@@ -316,6 +316,7 @@ def rwr(G, seed_genes, scaling, symmetrical, restart_parameter=0.8, alpha=1.0):
         connected_disease_module:   list of genes containing the seed genes and the top-k
                                     ranked genes that form a connected component on the
                                     interactome
+        d_gene_pvis_sorted:         dictionary of genes and their corresponding visiting probabilities
     """
 
     d_entz_idx, d_idx_entz = create_mapping_index_entrezID(G)
@@ -326,6 +327,9 @@ def rwr(G, seed_genes, scaling, symmetrical, restart_parameter=0.8, alpha=1.0):
 
     # select only the seed genes are on the PPI network
     seed_genes_on_PPI = [gene for gene in seed_genes if gene in d_entz_idx.keys()]
+    if len(seed_genes_on_PPI) == 0:
+        print("No seed genes on the PPI network!")
+        return [], {}
 
     # initialize (with optional scaling) of the visiting probability vector
     for gene in seed_genes_on_PPI:
@@ -371,19 +375,7 @@ def rwr(G, seed_genes, scaling, symmetrical, restart_parameter=0.8, alpha=1.0):
         subgraph = nx.subgraph(G, connected_disease_module)
         i += 1
 
-    with open(outfile_name, "w") as fout:
-        fout.write("\t".join(["#rank", "RWR_node", "visiting_probability"]))
-        fout.write("\n")
-        # fout.write('RWR_node' + '\t')
-        rank = 0
-        for g in connected_disease_module:
-            rank += 1
-            p = d_gene_pvis_sorted[g]
-            fout.write("\t".join(map(str, ([rank, g, p]))))
-            fout.write("\n")
-            # fout.write(str(g) + '\t')
-
-    return connected_disease_module
+    return connected_disease_module, d_gene_pvis_sorted
 
 
 # =============================================================================
@@ -397,6 +389,19 @@ if __name__ == "__main__":
 
     G, seed_genes = read_input(edgelist_file, seeds_file)
 
-    connected_disease_module = rwr(
+    connected_disease_module, d_gene_pvis_sorted = rwr(
         G, seed_genes, scaling, sym, restart_parameter=r, alpha=1.0
     )
+
+    # write the results to the output file
+    with open(outfile_name, "w") as fout:
+        fout.write("\t".join(["#rank", "RWR_node", "visiting_probability"]))
+        fout.write("\n")
+        # fout.write('RWR_node' + '\t')
+        rank = 0
+        for g in connected_disease_module:
+            rank += 1
+            p = d_gene_pvis_sorted[g]
+            fout.write("\t".join(map(str, ([rank, g, p]))))
+            fout.write("\n")
+            # fout.write(str(g) + '\t')
