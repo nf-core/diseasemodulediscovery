@@ -5,9 +5,12 @@ channels:
 
 dependencies:
   - nextflow>=26.04.0
+  - openjdk==21
   - prettier==3.1.0
   - black>=23.11
   - singularity>=3.8
+  - pre-commit
+  - nodejs
   - pip
   - pip:
-      - nf-core==4.0.3
+      - nf-core==4.1.0
