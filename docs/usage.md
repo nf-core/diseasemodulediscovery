@@ -207,6 +207,18 @@ seed_file_2.csv,network_2.csv,/path/to/perturbed/networks/network_2
 seed_file_2.csv,network_1.csv,/path/to/perturbed/networks/network_1
 ```
 
+### Overrepresentation analysis
+
+By default, [g:Profiler](https://biit.cs.ut.ee/gprofiler/gost) fetches gene set annotations from its servers at runtime. To use a custom GMT file instead, provide it via `--custom_gmt_file`:
+
+```bash
+nextflow run <PATH_TO_REPO>/modulediscovery/main.nf \
+   -profile <docker/singularity> \
+   --input samplesheet.csv \
+   --outdir <OUTDIR> \
+   --custom_gmt_file ./my_genesets.gmt
+```
+
 ### Using the pipeline with a different organism or custom ID space
 
 The pipeline is currently designed for human data, and all [inbuilt networks](#available-networks) are available for humans only. However, most steps are agnostic of the organism and the ID space of the network nodes and seeds. By providing your own [seed and network files](#running-the-pipeline) and [skipping the steps](#skipping-steps) that rely on matching node IDs to external, human-specific resources, you can run the pipeline with completely custom node IDs. The steps that need to be skipped are:
