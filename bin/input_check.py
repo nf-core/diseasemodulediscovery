@@ -9,6 +9,7 @@ import sys
 import graph_tool.all as gt
 from pathlib import Path
 import util
+import module_parser
 
 logger = logging.getLogger()
 
@@ -46,6 +47,12 @@ def parse_args(argv=None):
         help="The desired log level (default WARNING).",
         choices=("CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG"),
         default="WARNING",
+    )
+    parser.add_argument(
+        "-b",
+        "--blacklist",
+        help="Path to a file containing one node name per line. Nodes in this list will be removed from the module.",
+        type=Path,
     )
     return parser.parse_args(argv)
 
@@ -104,6 +111,7 @@ def main(argv=None):
     g.set_vertex_filter(g.vp["is_seed"])
     g.purge_vertices()
     g.clear_filters()
+    g = module_parser.filter_module(g, args.blacklist)
     g.save(f"{args.prefix}.no_tool.gt")
 
 

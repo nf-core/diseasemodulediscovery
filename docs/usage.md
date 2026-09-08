@@ -207,6 +207,29 @@ seed_file_2.csv,network_2.csv,/path/to/perturbed/networks/network_2
 seed_file_2.csv,network_1.csv,/path/to/perturbed/networks/network_1
 ```
 
+<<<<<<< HEAD
+### Blacklisting genes
+
+Some genes or proteins may be uninformative or undesirable for downstream interpretation. Use `--blacklist` to exclude such genes from the network and from the identified disease modules after the module identification methods have been run. The pipeline removes any blacklisted genes/proteins from the resulting modules.
+
+```
+nextflow run <PATH_TO_REPO>/modulediscovery/main.nf \
+   -profile <docker/singularity> \
+   --seeds <SEED_FILE_> \
+   --network <NETWORK_FILE_1,NETWORK_FILE_2,...> \
+   --blacklist <BLACKLIST_FILE_1,BLACKLIST_FILE_2,...> \
+   --outdir <OUTDIR>
+```
+
+Alternatively, they can be specified using the samplesheet:
+
+```
+seeds,network,blacklist
+seed_file_1.csv,network_1.csv,blacklist_file_1.csv
+seed_file_2.csv,network_2.csv,blacklist_file_2.csv
+seed_file_2.csv,network_1.csv,blacklist_file_1.csv
+```
+=======
 ### Using the pipeline with a different organism or custom ID space
 
 The pipeline is currently designed for human data, and all [inbuilt networks](#available-networks) are available for humans only. However, most steps are agnostic of the organism and the ID space of the network nodes and seeds. By providing your own [seed and network files](#running-the-pipeline) and [skipping the steps](#skipping-steps) that rely on matching node IDs to external, human-specific resources, you can run the pipeline with completely custom node IDs. The steps that need to be skipped are:
@@ -232,6 +255,7 @@ nextflow run nf-core/diseasemodulediscovery \
 
 > [!NOTE]
 > The node IDs in your seed and network files must use the same ID space. Since all steps that depend on `--id_space` are skipped here, the parameter can be left at its default value.
+>>>>>>> upstream/dev
 
 ### Updating the pipeline
 
