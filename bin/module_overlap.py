@@ -24,7 +24,7 @@ def parse_args(argv=None):
     )
     parser.add_argument(
         "--inputs",
-        help="Input files containing node lists (one line per row). Number has to match the number of ids.",
+        help="A list of TSV files providing module node lists with at least two columns 'name' and 'is_seed'.",
         type=Path,
         nargs="+",
         required=True,
@@ -37,14 +37,6 @@ def parse_args(argv=None):
         default="WARNING",
     )
     return parser.parse_args(argv)
-
-
-def read_node_set(file, skip_header=True):
-    """Read nodes from a file."""
-    with open(file, "r") as f:
-        if skip_header:
-            next(f)
-        return set([line.strip() for line in f.readlines()])
 
 
 def pairwise_matrix(sets, set_names, function):
@@ -73,8 +65,17 @@ def main(argv=None):
     assert len(args.ids) == len(args.inputs)
 
     module_map = {}
+    module_map_no_seeds = {}
     for id, file in zip(args.ids, args.inputs):
-        module_map[id] = read_node_set(file)
+        df = pd.read_csv(file, sep="\t")
+
+        assert set(["name", "is_seed"]).issubset(df.columns)
+        assert df["is_seed"].isin([0, 1]).all()
+
+        module_map[id] = set(df["name"])
+        module_map_no_seeds[id] = set(df[df["is_seed"] == 0]["name"])
+
+    # Sort the module map by ID for consistent output
     module_map = dict(sorted(module_map.items()))
     ids, modules = zip(*module_map.items())
 
@@ -83,6 +84,26 @@ def main(argv=None):
 
     shared_nodes_df = pairwise_matrix(modules, ids, shared_nodes)
     shared_nodes_df.to_csv("shared_nodes_matrix_mqc.tsv", sep="\t")
+
+    # Recalculate overlap without seeds
+    module_map_no_seeds = {
+        k: v for k, v in module_map_no_seeds.items() if v
+    }  # filter empty modules, after seed removal
+
+    # Only proceed if there are modules left after removing seeds
+    if module_map_no_seeds:
+        ids_no_seeds, modules_no_seeds = zip(*sorted(module_map_no_seeds.items()))
+        jaccard_no_seeds_df = pairwise_matrix(modules_no_seeds, ids_no_seeds, jaccard)
+        jaccard_no_seeds_df.to_csv(
+            "jaccard_similarity_no_seeds_matrix_mqc.tsv", sep="\t"
+        )
+
+        shared_nodes_no_seeds_df = pairwise_matrix(
+            modules_no_seeds, ids_no_seeds, shared_nodes
+        )
+        shared_nodes_no_seeds_df.to_csv(
+            "shared_nodes_no_seeds_matrix_mqc.tsv", sep="\t"
+        )
 
 
 if __name__ == "__main__":

@@ -1,0 +1,8 @@
+id: "seed_perturbation_jaccard"
+section_name: "Robustness (seeds perturbation)"
+description: "Jaccard index distributions between the original and perturbed modules."
+plot_type: "boxplot"
+pconfig:
+  id: "seed_perturbation_jaccard_box_plot"
+  title: "Jaccard index"
+data:

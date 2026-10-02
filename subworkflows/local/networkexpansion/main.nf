@@ -74,12 +74,12 @@ workflow NETWORKEXPANSION {
         // combine with seeds
         .combine(ch_seeds.map{meta, seeds -> [meta.seeds_id, meta.network_id, seeds]}, by: [0,1])
         .map{seeds_id, network_id, meta, module, seeds ->
-            [meta.permuted_network_id==null ?  meta.network_id: meta.permuted_network_id , meta, module, seeds] // Use permuted_network_id, if available
+            [meta.perturbed_network_id==null ?  meta.network_id: meta.perturbed_network_id , meta, module, seeds] // Use perturbed_network_id, if available
         }
-        // combine with network (permuted network, if available)
+        // combine with network (perturbed network, if available)
         .combine(
             ch_network.map{ meta, network ->
-                [meta.permuted_network_id==null ?  meta.network_id: meta.permuted_network_id, network] // Use permuted_network_id, if available
+                [meta.perturbed_network_id==null ?  meta.network_id: meta.perturbed_network_id, network] // Use perturbed_network_id, if available
             }, by: 0
         )
         // add amim to id and module_id
