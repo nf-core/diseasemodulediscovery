@@ -4,7 +4,11 @@
 process DIAMOND {                           // Process name, should be all upper case
     tag "$meta.id"                          // Used to display the process in the progress overview
     label 'process_low'                     // Used to allocate resources; see conf/base.config for label-specific settings
-    container 'docker.io/kerstingjohannes/diamond:1.0.0-2437974'   // The container on docker hub, other repositories are possible, use conda keyword to set a conda environment
+
+    conda "${moduleDir}/environment.yml"
+    container "${ workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
+?         'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/01/01231a4ef4a2196d65fda042c44442d7b41c3d0859e6766fdfd846f72acfdb23/data'
+:         'community.wave.seqera.io/library/modulediscovery_python_dependencies:37beeaac11625203' }" // automatically generated
 
     input:                                            // Define the input channels
     tuple val(meta), path(seeds), path (network)      // Paths to seeds file and network file
@@ -18,12 +22,16 @@ process DIAMOND {                           // Process name, should be all upper
     when:
     task.ext.when == null || task.ext.when  // Allows to prevent the execution of this process via a workflow logic, just put it in
 
-    // The script for executint DIAMOnD, in this case, the .py script is shipped with the container
+    // The script for executing DIAMOnD, which is vendored in bin/ and therefore on the PATH
     // Access inputs, parameters, etc. with the "$" operator
     // The part starting with "cat <<-END_VERSIONS > versions.yml" only collects software versions for the versions.yml file, not essential
     script:
     """
-    python /DIAMOnD/DIAMOnD.py \\
+    # DIAMOnD breaks ties between equally scoring nodes via set iteration order, which
+    # depends on the hash seed. Fix it so the reported ranks are reproducible.
+    export PYTHONHASHSEED=0
+
+    DIAMOnD.py \\
         $network \\
         $seeds \\
         $n \\
