@@ -26,7 +26,9 @@ process BIOPAX_VALIDATOR {
         java -jar /biopax-validator/biopax-validator-client.jar . biopax-validator-report.html notstrict
     else
         echo "Validating offline"
-        java --add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.lang.reflect=ALL-UNNAMED -javaagent:/biopax-validator/lib/spring-instrument-5.3.29.jar -Xmx${task.memory.toGiga().toInteger()}g -Dfile.encoding=UTF-8 -Djava.security.egd=file:/dev/./urandom -jar /biopax-validator/biopax-validator.jar . --output=biopax-validator-report.html --profile=notstrict
+        # resolve the Spring agent jar by glob, its version changes between validator releases
+        AGENT=\$(ls /biopax-validator/lib/spring-instrument-*.jar)
+        java --add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.lang.reflect=ALL-UNNAMED -javaagent:\$AGENT -Xmx${task.memory.toGiga().toInteger()}g -Dfile.encoding=UTF-8 -Djava.security.egd=file:/dev/./urandom -jar /biopax-validator/biopax-validator.jar . --output=biopax-validator-report.html --profile=notstrict
     fi
 
     cat <<-END_VERSIONS > versions.yml

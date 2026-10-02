@@ -1,0 +1,50 @@
+nextflow_pipeline {
+
+    name "Test offline BioPAX validation"
+    script "../main.nf"
+    tag "pipeline"
+
+    test("Test BioPAX validation without the online validator service") {
+
+        when {
+            params {
+                outdir = "$outputDir"
+
+                // The test profile validates against the baderlab server. Real runs default to
+                // the offline validator, so cover that path here as well.
+                validate_online         = false
+
+                // Skip everything that is not needed to reach the BioPAX validator.
+                // The seed and network perturbations are nested inside the evaluation block,
+                // so skipping the evaluation disables them too.
+                skip_diamond            = true
+                skip_visualization      = true
+                skip_drugstone_export   = true
+                skip_evaluation         = true
+                skip_drug_predictions   = true
+            }
+        }
+
+        then {
+            // stable_path: All files + folders in ${params.outdir}/ with a stable path (including file name)
+            def stable_path = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
+            // stable_content: All files in ${params.outdir}/ with stable content
+            def stable_content = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            assert workflow.success
+            assertAll(
+                // The validator writes its report only if the Java agent could be attached,
+                // so an existing, non-empty report is what makes this test meaningful
+                { assert path("$outputDir/reports/biopax-validator-report.html").exists() },
+                { assert path("$outputDir/reports/biopax-validator-report.html").text.contains("biopax") },
+                { assert snapshot(
+                    // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
+                    removeNextflowVersion("$outputDir/pipeline_info/nf_core_diseasemodulediscovery_software_mqc_versions.yml"),
+                    // All stable path name, with a relative path
+                    stable_path,
+                    // All files with stable contents
+                    stable_content
+                ).match() }
+            )
+        }
+    }
+}
