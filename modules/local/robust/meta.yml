@@ -1,0 +1,71 @@
+name: robust
+description: Identifies a disease module by repeatedly connecting the seed nodes through
+  prize-collecting Steiner trees
+keywords:
+  - robust
+  - disease module
+  - module identification
+  - steiner tree
+  - seed genes
+tools:
+  - robust:
+      description: ROBUST computes a number of prize-collecting Steiner trees over the
+        seed nodes, penalizing nodes that were already part of earlier solutions so that
+        the individual trees stay diverse. The module is then formed by the nodes that
+        occur in a sufficient fraction of the solutions. Its initial fraction, reduction
+        factor, number of trees and threshold are passed as positional arguments through
+        `task.ext.args`.
+      homepage: https://github.com/bionetslab/robust
+      documentation: https://github.com/bionetslab/robust
+      licence:
+        - GPL-3.0
+  - pcst-fast:
+      description: Fast C++ implementation of the Goemans-Williamson scheme for the
+        prize-collecting Steiner tree problem, exposed to Python.
+      homepage: https://github.com/fraenkel-lab/pcst_fast
+      documentation: https://github.com/fraenkel-lab/pcst_fast
+      licence:
+        - MIT
+  - networkx:
+      description: Python package for the creation, manipulation and study of the structure
+        and dynamics of complex networks.
+      homepage: https://networkx.org/
+      documentation: https://networkx.org/documentation/stable/
+      licence:
+        - BSD-3-Clause
+input:
+  - - meta:
+        type: map
+        description: Groovy Map containing sample information, must contain an `id`
+          field
+    - seeds:
+        type: file
+        description: Seed nodes to build the module from, one node identifier per line.
+          If the file has several tab-separated columns, only the first one is used.
+    - network:
+        type: file
+        description: Interaction network as a tab-separated edge list. Only the first
+          two columns are used.
+output:
+  module:
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information, must contain an `id`
+            field
+      - ${meta.id}.graphml:
+          type: file
+          description: The disease module as a GraphML network. Its nodes carry the seed
+            status (`isSeed`), the number of solutions a node occurred in (`nrOfOccurrences`),
+            the corresponding fraction of all solutions (`significance`), the trees a
+            node was part of (`trees`) and a connected component identifier (`connected_components_id`).
+          pattern: ${meta.id}.graphml
+  versions:
+    - versions.yml:
+        type: file
+        description: File containing software versions
+        pattern: versions.yml
+authors:
+  - "@JohannesKersting"
+  - "@quirinmanz"
+maintainers:
+  - "@JohannesKersting"

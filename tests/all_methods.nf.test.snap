@@ -3,13 +3,26 @@
         "content": [
             {
                 "DIAMOND": {
-                    "python": "3.8.5"
+                    "python": "3.12.13",
+                    "networkx": "3.3",
+                    "scipy": "1.14.1",
+                    "numpy": "2.1.3"
                 },
                 "DOMINO_DOMINO": {
-                    "python": "3.6.15"
+                    "python": "3.9.23",
+                    "domino": "1.0.0",
+                    "pcst-fast": "1.0.7",
+                    "statsmodels": "0.13.0",
+                    "networkx": "2.4",
+                    "scipy": "1.9.3",
+                    "numpy": "1.22.0"
                 },
                 "DOMINO_SLICER": {
-                    "python": "3.6.15"
+                    "python": "3.9.23",
+                    "domino": "1.0.0",
+                    "python-louvain": "0.14",
+                    "networkx": "2.4",
+                    "numpy": "1.22.0"
                 },
                 "FIRSTNEIGHBOR": {
                     "python": "3.12.13",
@@ -31,14 +44,20 @@
                     "graph-tool": "2.77"
                 },
                 "ROBUST": {
-                    "python": "3.10.4"
+                    "python": "3.10.21",
+                    "pcst-fast": "1.0.7",
+                    "networkx": "2.8.3",
+                    "numpy": "1.22.4"
                 },
                 "ROBUSTBIASAWARE": {
-                    "python": "3.10.14",
+                    "python": "3.12.14",
                     "robust-bias-aware": "0.0.1"
                 },
                 "RWR": {
-                    "python": "3.12.13"
+                    "python": "3.12.13",
+                    "networkx": "3.3",
+                    "scipy": "1.14.1",
+                    "numpy": "2.1.3"
                 },
                 "SAVEMODULES": {
                     "python": "3.12.13",
@@ -242,36 +261,52 @@
                 "pipeline_info/nf_core_diseasemodulediscovery_software_mqc_versions.yml"
             ],
             [
+                "entrez_seeds_1.entrez_ppi.diamond.graphml:md5,1468ddc37847deb78e71d3a06c47311d",
                 "entrez_seeds_1.entrez_ppi.firstneighbor.graphml:md5,a229468b6127abe0cd5c4fb9c397b21b",
                 "entrez_seeds_1.entrez_ppi.no_tool.graphml:md5,cc3311884751102ec002365dc513bb42",
+                "entrez_seeds_2.entrez_ppi.diamond.graphml:md5,ca2076d6b9f2bb5c26527a77e5c39614",
                 "entrez_seeds_2.entrez_ppi.firstneighbor.graphml:md5,c4e662ae304f8f3ae11713df81aeb35e",
                 "entrez_seeds_2.entrez_ppi.no_tool.graphml:md5,26fcd39b7f2aa5c70af600d77ee5a34e",
+                "entrez_seeds_2.string.human_physical_links_v12_0_min900.Entrez.diamond.graphml:md5,7419381a1f419607baff7310f88c767f",
                 "entrez_seeds_2.string.human_physical_links_v12_0_min900.Entrez.firstneighbor.graphml:md5,15d587d967c69dbf490143f75fb9908e",
                 "entrez_seeds_2.string.human_physical_links_v12_0_min900.Entrez.no_tool.graphml:md5,9faf27605ba1234ee2cb0399dcfe72af",
+                "entrez_single_seed.entrez_ppi.diamond.graphml:md5,fc9f1994b96fb7baaa764a05ba86c4a6",
                 "entrez_single_seed.entrez_ppi.firstneighbor.graphml:md5,d0515df210d3ce367c58b71a86963f43",
                 "entrez_single_seed.entrez_ppi.no_tool.graphml:md5,e20a99676350cf92727a0ee519143eea",
+                "entrez_seeds_1.entrez_ppi.diamond.gt:md5,df97901c1dcf0d2e71f385d0e1c933cc",
                 "entrez_seeds_1.entrez_ppi.firstneighbor.gt:md5,2f9c89b78edcc230922afe4e0b83daad",
                 "entrez_seeds_1.entrez_ppi.no_tool.gt:md5,d904aa651ab7267f077e75a6f0dc4f5c",
+                "entrez_seeds_2.entrez_ppi.diamond.gt:md5,db2906f5057c5591d34f55f84f9fbf16",
                 "entrez_seeds_2.entrez_ppi.firstneighbor.gt:md5,26211cda056e08b9939be55665e9a26b",
                 "entrez_seeds_2.entrez_ppi.no_tool.gt:md5,7eccfea5d8042fe24c25111440de94bd",
+                "entrez_seeds_2.string.human_physical_links_v12_0_min900.Entrez.diamond.gt:md5,7c5c3f6c3bd0aea6837937d28057ea4b",
                 "entrez_seeds_2.string.human_physical_links_v12_0_min900.Entrez.firstneighbor.gt:md5,78fcd3924baffbaf683ab316a833c941",
                 "entrez_seeds_2.string.human_physical_links_v12_0_min900.Entrez.no_tool.gt:md5,2d9aa4549def8cf4072e6440fbcdfef7",
+                "entrez_single_seed.entrez_ppi.diamond.gt:md5,60702141e866eabc9bfca095ae01a8c0",
                 "entrez_single_seed.entrez_ppi.firstneighbor.gt:md5,4fbc48e44c7bb7822fa11546217452f7",
                 "entrez_single_seed.entrez_ppi.no_tool.gt:md5,3c7212705a430a3db5712a43de4f1923",
+                "entrez_seeds_1.entrez_ppi.diamond.edges.tsv:md5,5c9d665e1a32ccafeac4739db93346ed",
                 "entrez_seeds_1.entrez_ppi.firstneighbor.edges.tsv:md5,2a254af844956e19e8ce534b851f2eeb",
                 "entrez_seeds_1.entrez_ppi.no_tool.edges.tsv:md5,99cbfff7b59f45c1de3e5e6d36692099",
+                "entrez_seeds_2.entrez_ppi.diamond.edges.tsv:md5,bb5a64b7de1e3882136bbc4a7d0f601f",
                 "entrez_seeds_2.entrez_ppi.firstneighbor.edges.tsv:md5,3d3eae948c76cbbfe6b0b3fadad89049",
                 "entrez_seeds_2.entrez_ppi.no_tool.edges.tsv:md5,a751a60fce7f58cfd44cda31b5c5ebd8",
+                "entrez_seeds_2.string.human_physical_links_v12_0_min900.Entrez.diamond.edges.tsv:md5,b63ae3e44a0ac41f94fdd8de3e7b90a9",
                 "entrez_seeds_2.string.human_physical_links_v12_0_min900.Entrez.firstneighbor.edges.tsv:md5,741ecd25e9fac163951740a1ddca5d66",
                 "entrez_seeds_2.string.human_physical_links_v12_0_min900.Entrez.no_tool.edges.tsv:md5,faf72d588bc41e39567125a519355a43",
+                "entrez_single_seed.entrez_ppi.diamond.edges.tsv:md5,a6a3b3a9081ad48343feebf4c0fccd28",
                 "entrez_single_seed.entrez_ppi.firstneighbor.edges.tsv:md5,1806f82679d19d2f00f2285b50359299",
                 "entrez_single_seed.entrez_ppi.no_tool.edges.tsv:md5,ef2e09272b3fbbe8dfe1d13ee0898108",
+                "entrez_seeds_1.entrez_ppi.diamond.nodes.tsv:md5,ceb9350a9d57bc624775d0c2388fbfef",
                 "entrez_seeds_1.entrez_ppi.firstneighbor.nodes.tsv:md5,a08c4863f3e7e6bad1df2203775814e8",
                 "entrez_seeds_1.entrez_ppi.no_tool.nodes.tsv:md5,6d067dc2849d56e45b7aadf4b5f02fbd",
+                "entrez_seeds_2.entrez_ppi.diamond.nodes.tsv:md5,22e0bf376a285b8b465d278f8dd9251b",
                 "entrez_seeds_2.entrez_ppi.firstneighbor.nodes.tsv:md5,02752930455b8944820278ba1eaa829b",
                 "entrez_seeds_2.entrez_ppi.no_tool.nodes.tsv:md5,8b20d4a17016b79b72744cc04f2d8d86",
+                "entrez_seeds_2.string.human_physical_links_v12_0_min900.Entrez.diamond.nodes.tsv:md5,522ade243d6c96ffefeb852d78661cd3",
                 "entrez_seeds_2.string.human_physical_links_v12_0_min900.Entrez.firstneighbor.nodes.tsv:md5,89c4b99c40e6dfa8d0eb7db9438c8c1c",
                 "entrez_seeds_2.string.human_physical_links_v12_0_min900.Entrez.no_tool.nodes.tsv:md5,40fa00501cbc3c97596b363167ba0eed",
+                "entrez_single_seed.entrez_ppi.diamond.nodes.tsv:md5,9a2034cc09d5181c81026781cd612c86",
                 "entrez_single_seed.entrez_ppi.firstneighbor.nodes.tsv:md5,1945c13cce007746f366656c0b15d65f",
                 "entrez_single_seed.entrez_ppi.no_tool.nodes.tsv:md5,2c277c798e39648e1ac204ff52f4c9de",
                 "entrez_ppi.diamond.csv:md5,59c734eaa00f2265dd1bb896f2aee772",
@@ -300,10 +335,10 @@
                 "warn_empty_modules_mqc.tsv:md5,29e74711f7ca35f312d791a64cb94515"
             ]
         ],
-        "timestamp": "2026-07-03T15:48:54.891219807",
+        "timestamp": "2026-10-02T17:07:51.063473868",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.0"
+            "nf-test": "0.9.4",
+            "nextflow": "26.04.6"
         }
     }
 }
