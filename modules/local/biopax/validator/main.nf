@@ -16,9 +16,6 @@ process BIOPAX_VALIDATOR {
 
     script:
     """
-    #!/bin/sh
-
-    java -version
     echo Running BioPAX Validator...
 
     if [ "${validate_online}" = true ]; then
