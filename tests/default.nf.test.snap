@@ -347,15 +347,10 @@
                 "reports/biopax-validator-report.html"
             ],
             [
-                "entrez_seeds_1.entrez_ppi.diamond.graphml:md5,1468ddc37847deb78e71d3a06c47311d",
                 "entrez_seeds_1.entrez_ppi.no_tool.graphml:md5,cc3311884751102ec002365dc513bb42",
-                "entrez_seeds_1.entrez_ppi.diamond.gt:md5,df97901c1dcf0d2e71f385d0e1c933cc",
                 "entrez_seeds_1.entrez_ppi.no_tool.gt:md5,d904aa651ab7267f077e75a6f0dc4f5c",
-                "entrez_seeds_1.entrez_ppi.diamond.edges.tsv:md5,5c9d665e1a32ccafeac4739db93346ed",
                 "entrez_seeds_1.entrez_ppi.no_tool.edges.tsv:md5,99cbfff7b59f45c1de3e5e6d36692099",
-                "entrez_seeds_1.entrez_ppi.diamond.nodes.tsv:md5,ceb9350a9d57bc624775d0c2388fbfef",
                 "entrez_seeds_1.entrez_ppi.no_tool.nodes.tsv:md5,6d067dc2849d56e45b7aadf4b5f02fbd",
-                "entrez_seeds_1.entrez_ppi.diamond.seed_perturbation_evaluation_summary.tsv:md5,b6e03393e2de7635744f167a40fe1832",
                 "entrez_ppi.diamond.csv:md5,59c734eaa00f2265dd1bb896f2aee772",
                 "entrez_ppi.gt:md5,c908f353a8a0e0cb04aa9cb67121521d",
                 "entrez_seeds_1.entrez_ppi.no_tool.gt:md5,e19b2d65dfd9fd20f1a8f843d52c1235",
@@ -365,7 +360,7 @@
                 "node_degree_distribution_mqc.yaml:md5,d6a05ace0a3f6dc518c1106334462049"
             ]
         ],
-        "timestamp": "2026-10-02T17:19:01.095882931",
+        "timestamp": "2026-10-05T16:07:25.482335372",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "26.04.6"

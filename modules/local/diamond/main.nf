@@ -27,10 +27,6 @@ process DIAMOND {                           // Process name, should be all upper
     // The part starting with "cat <<-END_VERSIONS > versions.yml" only collects software versions for the versions.yml file, not essential
     script:
     """
-    # DIAMOnD breaks ties between equally scoring nodes via set iteration order, which
-    # depends on the hash seed. Fix it so the reported ranks are reproducible.
-    export PYTHONHASHSEED=0
-
     DIAMOnD.py \\
         $network \\
         $seeds \\
