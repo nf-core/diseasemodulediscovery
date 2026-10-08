@@ -2,20 +2,48 @@
 
 import argparse
 import os
+import sys
 import pandas as pd
 import numpy as np
+import logging
 from biodigest.single_validation import single_validation, save_results
 from biodigest.evaluation.d_utils.plotting_utils import (
     create_plots,
     create_extended_plots,
 )
 
+logger = logging.getLogger()
 
-def run_analysis(target_set, target_type, network, network_type, output_directory):
+
+def run_analysis(
+    target_set, target_type, network, network_type, mode, output_directory
+):
     # ==== define required input ====
-    tar_set = pd.read_csv(target_set, header=0, sep="\t", dtype=str)["gene_id"]
-    tar_id_type = target_type
-    mode = "subnetwork"
+    df = pd.read_csv(target_set, header=0, sep="\t")
+    assert "name" in df.columns
+    df["name"] = df["name"].astype(str)
+
+    if mode == "subnetwork":
+        tar_set = df["name"]
+        tar_id_type = target_type
+        ref_set = None
+        ref_id_type = None
+
+    elif mode == "subnetwork-set":
+        assert set(["name", "is_seed"]).issubset(df.columns)
+        assert df["is_seed"].isin([0, 1]).all()
+
+        tar_set = df[df["is_seed"] == 0]["name"]
+        tar_id_type = target_type
+        ref_set = df[df["is_seed"] == 1]["name"]
+        ref_id_type = target_type
+
+        if tar_set.empty or ref_set.empty:
+            logger.warning("Target or reference set is empty. Exiting the program.")
+            sys.exit(0)
+
+    else:
+        raise ValueError(f"Unknown mode: {mode}")
 
     # ==== define input for network integration ====
     network_data = {
@@ -30,7 +58,6 @@ def run_analysis(target_set, target_type, network, network_type, output_director
         "network"  # for subnetwork mode the only option so it is set fixed
     )
     runs = 1000  # how many random runs for empirical p-value estimation
-    perc = 100  # how many % of the original input should be perturbated for the background model
     enriched = False  # Set True, if only enriched attributes of the reference set should be used (Only for set-set)
 
     # ==== define optional input influencing saving of results ====
@@ -41,6 +68,8 @@ def run_analysis(target_set, target_type, network, network_type, output_director
     results = single_validation(
         tar=tar_set,
         tar_id=tar_id_type,
+        ref=ref_set,
+        ref_id=ref_id_type,
         mode=mode,
         runs=runs,
         background_model=background_model,
@@ -54,7 +83,6 @@ def run_analysis(target_set, target_type, network, network_type, output_director
     pvalues_df = pd.DataFrame(results["p_values"]["values"])
     pvalues_df = pvalues_df.transpose().applymap(lambda x: -np.log10(x))
     pvalues_df.insert(0, "ID", prefix)
-    print(pvalues_df)
     pvalues_df.to_csv(f"{prefix}.multiqc.tsv", sep="\t", index=False)
 
     pd.DataFrame(results["input_values"]["values"])
@@ -88,15 +116,34 @@ if __name__ == "__main__":
     parser.add_argument("--target_type", required=True, help="Input target id")
     parser.add_argument("--network", required=True, help="Input network")
     parser.add_argument("--network_type", required=True, help="Input network id")
+    parser.add_argument(
+        "--mode",
+        default="subnetwork",
+        choices=["subnetwork", "subnetwork-set"],
+        help="Mode of analysis",
+    )
+    parser.add_argument(
+        "-l",
+        "--log-level",
+        help="The desired log level (default WARNING).",
+        choices=("CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG"),
+        default="WARNING",
+    )
     parser.add_argument("--outdir", required=True, help="Name for output directory")
 
     args = parser.parse_args()
+    logging.basicConfig(level=args.log_level, format="[%(levelname)s] %(message)s")
+    logger.debug(f"{args=}")
+
     target_file = args.target_file
     target_type = args.target_type
     network = args.network
     network_type = args.network_type
+    mode = args.mode
     output_directory = os.path.splitext(os.path.basename(target_file))[0]
     output_directory = args.outdir
     os.makedirs(output_directory, exist_ok=True)
 
-    run_analysis(target_file, target_type, network, network_type, output_directory)
+    run_analysis(
+        target_file, target_type, network, network_type, mode, output_directory
+    )

@@ -1,0 +1,52 @@
+nextflow_pipeline {
+
+    name "Test handling of seeds that are not in the largest connected component (LCC) of the network"
+    script "../main.nf"
+    tag "pipeline"
+
+    test("Test handling of seeds that are not in the largest connected component (LCC) of the network") {
+
+        when {
+            params {
+                outdir = "$outputDir"
+
+                // Input data
+                seeds                   = "https://raw.githubusercontent.com/nf-core/test-datasets/diseasemodulediscovery/issue_149/mondo.0009025.tsv"
+                network                 = "https://raw.githubusercontent.com/nf-core/test-datasets/diseasemodulediscovery/issue_149/string.human_physical_links_v12_0_min700.Entrez.csv"
+
+                // Run all module discovery methods (except DIAMOnD, which will not pass this test, but authors did not fix it yet)
+                skip_diamond            = true  // DIAMOnD will not pass this test, but authors did not fix it yet
+                skip_domino             = false
+                skip_rwr                = false
+                skip_robust             = false
+                skip_robust_bias_aware  = false
+                skip_firstneighbor      = false
+
+                // Skip all steps that are not needed for testing the module discovery methods
+                skip_visualization      = true
+                skip_drugstone_export   = true
+                skip_evaluation         = true
+                skip_annotation         = true
+                skip_drug_predictions   = true
+            }
+        }
+
+        then {
+            // stable_path: All files + folders in ${params.outdir}/ with a stable path (including file name)
+            def stable_path = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
+            // stable_content: All files in ${params.outdir}/ with stable content
+            def stable_content = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            assert workflow.success
+            assertAll(
+                { assert snapshot(
+                    // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
+                    removeNextflowVersion("$outputDir/pipeline_info/nf_core_diseasemodulediscovery_software_mqc_versions.yml"),
+                    // All stable path name, with a relative path
+                    stable_path,
+                    // All files with stable contents
+                    stable_content
+                ).match() }
+            )
+        }
+    }
+}
