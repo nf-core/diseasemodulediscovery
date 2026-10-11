@@ -125,19 +125,22 @@ workflow GT_SEEDPERTURBATION {
         }
 
     // Gene-level visualization
-    ch_visualization_input = SEEDPERTURBATIONEVALUATION.out.detailed
+    // only run with leave one out perturbation
+    if(!params.leave_frac_out_perturbation){
+        ch_visualization_input = SEEDPERTURBATIONEVALUATION.out.detailed
         .multiMap { meta, path ->
             seeds_id: meta.seeds_id
             network_id: meta.network_id
             amim: meta.amim
             path: path
         }
-    SEEDPERTURBATIONVISUALIZATION(
-        ch_visualization_input.seeds_id.collect(),
-        ch_visualization_input.network_id.collect(),
-        ch_visualization_input.amim.collect(),
-        ch_visualization_input.path.collect()
-    )
+        SEEDPERTURBATIONVISUALIZATION(
+            ch_visualization_input.seeds_id.collect(),
+            ch_visualization_input.network_id.collect(),
+            ch_visualization_input.amim.collect(),
+            ch_visualization_input.path.collect()
+        )
+    }
 
 
 
