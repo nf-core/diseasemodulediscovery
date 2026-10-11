@@ -212,6 +212,11 @@
                     "description": "Flag for skipping g:Profiler",
                     "fa_icon": "fas fa-forward"
                 },
+                "custom_gmt_file": {
+                    "type": "string",
+                    "description": "Custom gmt file for overrepresentation analysis",
+                    "fa_icon": "fas fa-file-alt"
+                },
                 "gprofiler_organism": {
                     "type": "string",
                     "default": "hsapiens",
