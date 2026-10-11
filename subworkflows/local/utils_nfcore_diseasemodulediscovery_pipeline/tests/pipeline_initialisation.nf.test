@@ -29,6 +29,8 @@ nextflow_workflow {
                 input[11] = null                                            //  string: Path(s) to perturbed networks file
                 input[12] = 'https://zenodo.org/records/18702264/files/'    //  string: URL to prepared networks
                 input[13] = 'entrez'                                        //  string: ID space to use for prepared networks
+
+                input[14] = null                     //  string: Path to blacklist file
                 """
             }
         }

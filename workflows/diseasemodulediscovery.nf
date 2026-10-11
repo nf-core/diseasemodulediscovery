@@ -117,6 +117,8 @@ workflow DISEASEMODULEDISCOVERY {
     ch_seeds                // channel: [ val(meta[id,seeds_id,network_id]), path(seeds) ]
     ch_network              // channel: [ val(meta[id,network_id]), path(network) ]
     ch_perturbed_networks    // channel: [ val(meta[id,network_id]), [path(perturbed_networks)] ]
+    ch_blacklist                    // channel: [ val(meta[id,seeds_id,network_id]), path(blacklist) ]
+
 
     main:
 
@@ -152,9 +154,17 @@ workflow DISEASEMODULEDISCOVERY {
     // Check input
     // channel: [ val(meta[id,seeds_id,network_id]), path(seeds), path(network) ]
     ch_seeds_network = ch_seeds
-        .map{ meta, seeds -> [meta.network_id, meta, seeds]}
+        .map{meta, seeds -> [meta.network_id, meta.seeds_id, meta, seeds]}
         .combine(ch_network_gt.map{meta, network -> [meta.network_id, network]}, by: 0)
-        .map{key, meta, seeds, network -> [meta, seeds, network]}
+        .map{network_id, seeds_id, meta, seeds, network -> [network_id, seeds_id,  meta, seeds, network]}
+        // combine with blacklist (if available)
+        .combine(
+            ch_blacklist.map{meta, blacklist -> [meta.network_id, meta.seeds_id, blacklist]},
+            by: [0,1]
+        )
+        .map{network_id, seeds_id, meta, seeds, network, blacklist -> [meta, seeds, network, blacklist]}
+
+
 
     INPUTCHECK(ch_seeds_network)
     ch_seeds = INPUTCHECK.out.seeds
@@ -171,7 +181,7 @@ workflow DISEASEMODULEDISCOVERY {
 
     // Save status for workflow summary
     ch_seeds_empty_status = ch_seeds_network
-        .map{meta, seeds, network -> meta.id}
+        .map{meta, seeds, network, blacklist -> meta.id}
         .join(INPUTCHECK.out.seeds.map{ meta, seeds -> [meta.id, seeds]}, by: 0, remainder: true)
         .map{id, seeds -> [id, seeds == null] }
 
@@ -194,7 +204,7 @@ workflow DISEASEMODULEDISCOVERY {
     */
 
     // Network expansion tools
-    NETWORKEXPANSION(ch_seeds, ch_network_gt)
+    NETWORKEXPANSION(ch_seeds, ch_network_gt, ch_blacklist)
     ch_modules = ch_modules.mix(NETWORKEXPANSION.out.modules) // channel: [ val(meta[id,module_id,amim,seeds_id,network_id]), path(module)]
     ch_versions = ch_versions.mix(NETWORKEXPANSION.out.versions)
 
@@ -473,11 +483,13 @@ workflow DISEASEMODULEDISCOVERY {
                     fail: nodes < 2
                     pass: true
                 }
+
             ch_seed_perturbation_input  = ch_filtered_seeds.pass.map{_seeds_id, _network_id, _nodes, meta, seeds -> [meta, seeds]}
             GT_SEEDPERTURBATION(
                 ch_modules.filter{ meta, path -> meta.amim != "no_tool" }, // Filter out no_tool modules
                 ch_seed_perturbation_input,
-                ch_network_gt
+                ch_network_gt,
+                ch_blacklist
             )
             ch_versions = ch_versions.mix(GT_SEEDPERTURBATION.out.versions)
             ch_multiqc_files = ch_multiqc_files
@@ -491,7 +503,8 @@ workflow DISEASEMODULEDISCOVERY {
                 ch_modules.filter{ meta, path -> meta.amim != "no_tool" }, // Filter out no_tool modules
                 ch_seeds,
                 ch_network_gt,
-                ch_perturbed_networks
+                ch_perturbed_networks,
+                ch_blacklist
             )
             ch_versions = ch_versions.mix(GT_NETWORKPERTURBATION.out.versions)
             ch_multiqc_files = ch_multiqc_files

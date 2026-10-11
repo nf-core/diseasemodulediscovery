@@ -20,6 +20,7 @@ workflow GT_FIRSTNEIGHBOR {
         .map{network_id, seeds_meta, seeds, network_meta, network ->
             def meta = seeds_meta + network_meta
             meta.id = seeds_meta.seeds_id + "." + network_meta.id
+            meta.amim = "firstneighbor"
             [meta, seeds, network]
         }
 
@@ -27,16 +28,8 @@ workflow GT_FIRSTNEIGHBOR {
     ch_versions = ch_versions.mix(FIRSTNEIGHBOR.out.versions.first())
 
     // channel: [ val(meta[id,module_id,amim,seeds_id,network_id]), path(module) ]
-    ch_module = FIRSTNEIGHBOR.out.module
-        .map{meta, path ->
-            def dup = meta.clone()
-            dup.amim = "firstneighbor"
-            dup.id = meta.id + "." + dup.amim
-            dup.module_id = dup.id
-            [ dup, path ]
-        }
 
     emit:
-    module = ch_module      // channel: [ val(meta[id,module_id,amim,seeds_id,network_id]), path(module) ]
+    module = FIRSTNEIGHBOR.out.module      // channel: [ val(meta[id,module_id,amim,seeds_id,network_id]), path(module) ]
     versions = ch_versions  // channel: [ versions.yml ]
 }

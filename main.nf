@@ -33,6 +33,7 @@ workflow NFCORE_DISEASEMODULEDISCOVERY {
     ch_seeds                // channel: [ val(meta[id,seeds_id,network_id]), path(seeds) ]
     ch_network              // channel: [ val(meta[id,network_id]), path(network) ]
     ch_perturbed_networks    // channel: [ val(meta[id,network_id]), [path(perturbed_networks)] ]
+    ch_blacklist                    // channel: [ val(meta[id,seeds_id,network_id]), path(blacklist) ]
 
     main:
 
@@ -49,7 +50,8 @@ workflow NFCORE_DISEASEMODULEDISCOVERY {
         params.outdir,
         ch_seeds,
         ch_network,
-        ch_perturbed_networks
+        ch_perturbed_networks,
+        ch_blacklist
     )
     ch_versions = ch_versions.mix(DISEASEMODULEDISCOVERY.out.versions)
 
@@ -81,6 +83,9 @@ params {
 
     // Path(s) to one or multiple PPI network(s) in gt, csv, tsv, graphml, xml, dot, or gml format.
     network: String?
+
+    // Path(s) to one or multiple file(s) with genes to be blacklisted. One gene/protein per line.
+    blacklist: String?
 
     // Set a custom repository link for the prepared networks.
     prepared_networks_url: String = 'https://zenodo.org/records/18702264/files/'
@@ -272,13 +277,19 @@ workflow {
         params.network,
         params.perturbed_networks,
         params.prepared_networks_url,
-        params.id_space
+        params.id_space,
+        params.blacklist
     )
-
+    
     //
     // WORKFLOW: Run main workflow
     //
-    NFCORE_DISEASEMODULEDISCOVERY (PIPELINE_INITIALISATION.out.seeds, PIPELINE_INITIALISATION.out.network, PIPELINE_INITIALISATION.out.perturbed_networks)
+    NFCORE_DISEASEMODULEDISCOVERY (
+        PIPELINE_INITIALISATION.out.seeds, 
+        PIPELINE_INITIALISATION.out.network, 
+        PIPELINE_INITIALISATION.out.perturbed_networks, 
+        PIPELINE_INITIALISATION.out.blacklist
+    )
 
     //
     // SUBWORKFLOW: Run completion tasks
