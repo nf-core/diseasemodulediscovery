@@ -30,6 +30,9 @@
 
 > Köhler S, Bauer S, Horn D, Robinson PN. Walking the interactome for prioritization of candidate disease genes. Am J Hum Genet. 2008;82: 949–958.
 
+- [Topas](https://doi.org/10.1093/nargab/lqac093)
+> Buzzao D, Castresana-Aguirre M, Guala D, Sonnhammer EL. TOPAS, a network-based approach to detect disease modules in a top-down fashion. NAR Genom Bioinform. 2022;4(4):lqac093.
+
 - [g:Profiler](https://doi.org/10.12688/f1000research.24956.2)
 
 > Kolberg L, Raudvere U, Kuzmin I, Vilo J, Peterson H. gprofiler2 -- an R package for gene list functional enrichment analysis and namespace conversion toolset g:Profiler. F1000Res. 2020;9: 709.

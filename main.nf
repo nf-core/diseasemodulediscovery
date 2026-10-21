@@ -103,6 +103,9 @@ params {
     // Flag for skipping DIAMOnD
     skip_diamond: Boolean
 
+    // Flag for skipping TOPAS
+    skip_topas: Boolean
+
     // Desired number of DIAMOnD genes.
     diamond_n: Integer = 200
 
