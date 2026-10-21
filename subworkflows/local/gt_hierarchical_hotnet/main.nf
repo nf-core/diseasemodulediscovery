@@ -15,7 +15,6 @@ workflow GT_HIERARCHICAL_HOTNET {
     main:
     ch_versions = Channel.empty()
     HIERARCHICAL_HOTNET_INPUT_PARSER(ch_network) //emits: [val(meta), node_list, edge_list]
-    ch_versions = ch_versions.mix(HIERARCHICAL_HOTNET_INPUT_PARSER.out.versions)
     ch_parsed_inputs = ch_seeds
         .map{ meta, seeds -> [meta.network_id, meta, seeds] }
         .combine(HIERARCHICAL_HOTNET_INPUT_PARSER.out.network.map{ meta, node_list, edge_list -> [meta.network_id, meta, node_list, edge_list] }, by: 0)
@@ -27,12 +26,10 @@ workflow GT_HIERARCHICAL_HOTNET {
         }
     HIERARCHICAL_HOTNET_SCORE_PARSER(ch_parsed_inputs.map{meta, seeds, node_list, _edge_list -> [meta, seeds, node_list] })
     HIERARCHICAL_HOTNET_CONSTRUCT_SIMILARITY_MATRIX(ch_parsed_inputs.map{meta, _seeds, _node_list, edge_list -> [meta, edge_list] })
-    ch_versions = ch_versions.mix(HIERARCHICAL_HOTNET_CONSTRUCT_SIMILARITY_MATRIX.out.versions)
     ch_permutation_input = ch_parsed_inputs
         .map{ meta, _seeds, node_list, edge_list -> [meta, node_list, edge_list]}
         .join(HIERARCHICAL_HOTNET_SCORE_PARSER.out)
     HIERARCHICAL_HOTNET_PERMUTE_SCORES(ch_permutation_input, num_permutations)
-    ch_versions = ch_versions.mix(HIERARCHICAL_HOTNET_PERMUTE_SCORES.out.versions)
 
     ch_parsed_inputs = ch_parsed_inputs
         .map{ meta, _seeds, node_list, edge_list -> [meta, node_list, edge_list]}
@@ -49,7 +46,6 @@ workflow GT_HIERARCHICAL_HOTNET {
                 }
         , by: 0)
     CONSTRUCT_PERMUTED_HIERARCHIES(ch_permuted_hierarchy_input)
-    ch_versions = ch_versions.mix(CONSTRUCT_PERMUTED_HIERARCHIES.out.versions)
     ch_hierarchy_input = ch_parsed_inputs
         .join(HIERARCHICAL_HOTNET_SCORE_PARSER.out, by: 0)
         .map{
@@ -62,7 +58,6 @@ workflow GT_HIERARCHICAL_HOTNET {
     ch_hierarchies = HIERARCHICAL_HOTNET_CONSTRUCT_HIERARCHIES.out.hierarchy
         .join(CONSTRUCT_PERMUTED_HIERARCHIES.out.hierarchy.groupTuple())
     HIERARCHICAL_HOTNET_PROCESS_HIERARCHIES(ch_hierarchies, lower_size_bound)
-    ch_versions = ch_versions.mix(HIERARCHICAL_HOTNET_PROCESS_HIERARCHIES.out.versions)
     emit:
     module = HIERARCHICAL_HOTNET_PROCESS_HIERARCHIES.out.modules
     versions = ch_versions
