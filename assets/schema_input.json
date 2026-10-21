@@ -11,18 +11,13 @@
                 "type": "string",
                 "format": "file-path",
                 "exists": true,
-                "pattern": "^\\S+$",
-                "errorMessage": "Seed file path cannot contain spaces"
+                "pattern": "^\\S+\\.(txt|csv|tsv)$",
+                "errorMessage": "The seed file cannot contain spaces and must end with .(txt|csv|tsv)"
             },
             "network": {
-                "type": "string"
-            },
-            "shortest_paths": {
                 "type": "string",
-                "format": "file-path",
-                "exists": true,
-                "pattern": "^\\S+\\.(pickle|pkl|pck|pcl)$",
-                "errorMessage": "The shortest_paths file cannot contain spaces and must end with .(pickle|pkl|pck|pcl)"
+                "pattern": "^(\\S+\\.(gt|csv|tsv|graphml|xml|dot|gml)|[^\\s.]+)$",
+                "errorMessage": "The network must be a keyword referring to an inbuilt network, or a file ending with .(gt|csv|tsv|graphml|xml|dot|gml), and cannot contain spaces"
             },
             "perturbed_networks": {
                 "type": "string",
@@ -30,6 +25,7 @@
                 "exists": true,
                 "errorMessage": "The perturbed_networks path must point to an existing directory and cannot contain spaces."
             }
-        }
+        },
+        "required": ["seeds", "network"]
     }
 }

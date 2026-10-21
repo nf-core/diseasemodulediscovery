@@ -67,7 +67,7 @@ def send_requests(nodes, edges, identifier):
     }
     post_request = requests.post(url, json=data)
     id = post_request.text.strip('"')
-    result_url = f"https://drugst.one?id={id}"
+    result_url = f"https://drugst.one/standalone?id={id}"
     get_r = requests.get(result_url)
     return get_r.url
 
