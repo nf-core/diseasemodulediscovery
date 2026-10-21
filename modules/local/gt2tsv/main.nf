@@ -1,6 +1,6 @@
 process GT2TSV {
     tag "$meta.id"
-
+    label 'process_single'
     input:
     tuple val(meta), path(gt_file)
 
