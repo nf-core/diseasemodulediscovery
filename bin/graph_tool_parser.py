@@ -140,6 +140,20 @@ def save_rwr(g, stem):
             )  # raw edge values are hashed vertex names
 
 
+def save_sca(g, stem):
+    with open(f"{stem}.sca.tsv", "w") as file:
+        writer = csv.writer(file, delimiter="\t")
+        for e in g.iter_edges():
+            writer.writerow(
+                [
+                    g.vp["name"][e[0]],
+                    g.vp["name"][e[0]],
+                    g.vp["name"][e[1]],
+                    g.vp["name"][e[1]],
+                ]
+            )
+
+
 def save(g, stem, format):
     """
     Saves a graph_tools Graph object in a specified format
@@ -156,6 +170,8 @@ def save(g, stem, format):
         save_robust(g=g, stem=stem)
     elif format == "rwr":
         save_rwr(g=g, stem=stem)
+    elif format == "sca":
+        save_sca(g=g, stem=stem)
     else:
         logger.critical(f"Unknown output format: {format}")
         sys.exit(1)
@@ -216,6 +232,7 @@ def parse_args(argv=None):
             "domino",
             "robust",
             "rwr",
+            "sca",
         ),
         default="gt",
     )
