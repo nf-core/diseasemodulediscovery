@@ -1,7 +1,7 @@
 
 process ROBUST {
     tag "$meta.id"
-    label 'process_single'
+    label 'process_low'
     container 'docker.io/djskelton/robust:cc669c6'
 
     input:
@@ -26,7 +26,7 @@ process ROBUST {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        python: \$(python3 --version | sed 's/Python //g')
+        python: "\$(python3 --version | sed 's/Python //g')"
     END_VERSIONS
     """
 }

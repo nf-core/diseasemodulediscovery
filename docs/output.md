@@ -6,8 +6,6 @@ This document describes the output produced by the pipeline. Most of the plots a
 
 The directories listed below will be created in the results directory after the pipeline has finished. All paths are relative to the top-level results directory.
 
-<!-- TODO nf-core: Write this documentation describing your workflow's output -->
-
 ## File naming
 
 Many output files are named based on the combination of seed file, network file, disease module discovery method, and drug prioritization method used:
@@ -35,7 +33,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 - [Disease module evaluation](#disease-module-evaluation)
   - [g:Profiler](#gprofiler)
   - [DIGEST](#digest)
-  - [Network topology](#topology)
+  - [Network topology](#network-topology)
   - [Overlap](#overlap)
   - [Seed perturbation](#seed-perturbation)
   - [Network perturbation](#network-perturbation)
@@ -53,7 +51,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 
 ### Prepare network
 
-The [graph-tool](https://graph-tool.skewed.de/) library is used to parse the input network(s) into the [`.gt`](https://graph-tool.skewed.de/static/docs/stable/gt_format.html) format, the internal representation used for networks within the pipeline. Additionally, it is used to generate networks in the specific formats required by the various disease module inference methods. This step also gathers summary statistics for the MultiQC report, including the number of nodes and edges, the network [diameter](https://graph-tool.skewed.de/static/docs/stable/autosummary/graph_tool.topology.pseudo_diameter.html#graph_tool.topology.pseudo_diameter), the number of connected components, the size of the largest connected component, the count of self-loops (nodes with edges to themselves), and the number of duplicate edges (multiple edges connecting the same two nodes).
+The [graph-tool](https://graph-tool.skewed.de/) library is used to parse the input network(s) into the [`.gt`](https://graph-tool.skewed.de/static/docs/stable/gt_format.html) format, the internal representation used for networks within the pipeline. Additionally, it is used to generate networks in the specific formats required by the various disease module inference methods. This step also gathers summary statistics for the MultiQC report, including the number of nodes and edges, the network [diameter](https://graph-tool.skewed.de/static/docs/stable/autosummary/graph_tool.topology.pseudo_diameter.html#graph_tool.topology.pseudo_diameter), the number of connected components, the size of the largest connected component, the distribution of node degrees, the count of self-loops (nodes with edges to themselves), and the number of duplicate edges (multiple edges connecting the same two nodes).
 
 <details markdown="1">
 <summary>Output files</summary>
@@ -65,6 +63,7 @@ The [graph-tool](https://graph-tool.skewed.de/) library is used to parse the inp
   - `<network>.robust.tsv`: Input network in the format required for ROBUST or ROBUST (bias-aware). Only created if the methods are used.
   - `<network>.rwr.csv`: Input network in the format required for RWR. Only created if the method is used.
 - `mqc_summaries/`
+  - ` node_degree_distribution_mqc.yaml`: Network node degree distribution for the MultiQC report.
   - ` input_network_mqc.tsv`: Network summary statistics for the MultiQC report.
 
 </details>
@@ -86,7 +85,7 @@ The format of the input seed file(s) is validated, and any seed nodes not presen
 
 ## Disease module inference
 
-The inferred disease modules are exported in multiple formats, including [`.gt`](https://graph-tool.skewed.de/static/docs/stable/gt_format.html), [`.graphml`](https://de.wikipedia.org/wiki/GraphML), and node and edge lists in `.tsv`. If a method returns only a node list rather than a full network, the connecting edges are extracted from the input network. Module nodes are annotated with their seed status (`is_seed`), their subnetwork participation degree ([`spd`](https://nedrex.net/tutorial/availableFunctions.html)), and a component identifier (`component_id`) to indicate which connected component they belong to. Additionally, tool-specific node properties are added, which are explained in the sections below.
+The inferred disease modules are exported in multiple formats, including [`.gt`](https://graph-tool.skewed.de/static/docs/stable/gt_format.html), [`.graphml`](https://de.wikipedia.org/wiki/GraphML), and node and edge lists in `.tsv`. If a method returns only a node list rather than a full network, the connecting edges are extracted from the input network. Module nodes are annotated with their seed status (`is_seed`), their degree within both the whole network (`degree_in_full_network`) and the disease module(`degree_in_module`), their subnetwork participation degree ([`spd`](https://nedrex.net/tutorial/availableFunctions.html)), and a component identifier (`component_id`) to indicate which connected component they belong to. Additionally, tool-specific node properties are added, which are explained in the sections below.
 
 ### Only seeds
 
@@ -95,7 +94,7 @@ In addition to the inferred disease modules, the pipeline provides a dummy modul
 <details markdown="1">
 <summary>Output files</summary>
 
-- `modules/{gt,graphml,tsv_nodes,tsv_edges}/`
+- `disease_modules/{gt,graphml,tsv_nodes,tsv_edges}/`
   - `<seeds>.<network>.no_tool.{gt,grahml,nodes.tsv,edges.tsv}`: Module containing only the seed nodes in different formats.
 
 </details>
@@ -107,19 +106,19 @@ In addition to the inferred disease modules, the pipeline provides a dummy modul
 <details markdown="1">
 <summary>Output files</summary>
 
-- `modules/{gt,graphml,tsv_nodes,tsv_edges}/`
+- `disease_modules/{gt,graphml,tsv_nodes,tsv_edges}/`
   - `<seeds>.<network>.domino.{gt,grahml,nodes.tsv,edges.tsv}`: DOMINO module in different formats.
 
 </details>
 
 ### DIAMOnD
 
-[DIAMOnD](https://github.com/dinaghiassian/DIAMOnD) iteratively expands the initial set of seed nodes by adding one node at a time. At each step, the algorithm selects the node with the highest connectivity significance to the current seed set, as determined by a hypergeometric test. This process continues until a predefined number of nodes have been incorporated. DIAMOnD itself only returns the nodes added to the module, which is why the pipeline adds the seed nodes to the module at the end. DIAMOnD returns only the nodes added to the module, so the pipeline appends the original seed nodes to the module at the end. Each node is annotated with the order in which it was added (`rank`) and the corresponding hypergeometric test p-value (`p_hyper`). Both values are 0 for seed nodes.
+[DIAMOnD](https://github.com/dinaghiassian/DIAMOnD) iteratively expands the initial set of seed nodes by adding one node at a time. At each step, the algorithm selects the node with the highest connectivity significance to the current seed set, as determined by a hypergeometric test. This process continues until a predefined number of nodes have been incorporated. DIAMOnD returns only the nodes added to the module, so the pipeline appends the original seed nodes to the module at the end. Each node is annotated with the order in which it was added (`rank`) and the corresponding hypergeometric test p-value (`p_hyper`). Both values are 0 for seed nodes.
 
 <details markdown="1">
 <summary>Output files</summary>
 
-- `modules/{gt,graphml,tsv_nodes,tsv_edges}/`
+- `disease_modules/{gt,graphml,tsv_nodes,tsv_edges}/`
   - `<seeds>.<network>.diamond.{gt,grahml,nodes.tsv,edges.tsv}`: DIAMOnD module in different formats.
 
 </details>
@@ -144,7 +143,7 @@ For the reported hierarchy, Hierarchical HotNet records additional statistical m
 <details markdown="1">
 <summary>Output files</summary>
 
-- `modules/{gt,graphml,tsv_nodes,tsv_edges}/`
+- `disease_modules/{gt,graphml,tsv_nodes,tsv_edges}/`
   - `<seeds>.<network>.robust.{gt,grahml,nodes.tsv,edges.tsv}`: ROBUST module in different formats.
 
 </details>
@@ -156,7 +155,7 @@ For the reported hierarchy, Hierarchical HotNet records additional statistical m
 <details markdown="1">
 <summary>Output files</summary>
 
-- `modules/{gt,graphml,tsv_nodes,tsv_edges}/`
+- `disease_modules/{gt,graphml,tsv_nodes,tsv_edges}/`
   - `<seeds>.<network>.robust_bias_aware.{gt,grahml,nodes.tsv,edges.tsv}`: ROBUST (bias-aware) module in different formats.
 
 </details>
@@ -166,7 +165,7 @@ For the reported hierarchy, Hierarchical HotNet records additional statistical m
 <details markdown="1">
 <summary>Output files</summary>
 
-- `modules/{gt,graphml,tsv_nodes,tsv_edges}/`
+- `disease_modules/{gt,graphml,tsv_nodes,tsv_edges}/`
   - `<seeds>.<network>.rwr.{gt,grahml,nodes.tsv,edges.tsv}`: RWR module in different formats.
 
 </details>
@@ -178,7 +177,7 @@ For the reported hierarchy, Hierarchical HotNet records additional statistical m
 <details markdown="1">
 <summary>Output files</summary>
 
-- `modules/{gt,graphml,tsv_nodes,tsv_edges}/`
+- `disease_modules/{gt,graphml,tsv_nodes,tsv_edges}/`
   - `<seeds>.<network>.firstneighbor.{gt,grahml,nodes.tsv,edges.tsv}`: 1st Neighbors module in different formats.
 
 </details>
@@ -201,8 +200,9 @@ Output file documentation is based on the nf-core module [gprofiler2_gost](https
   - `<seeds>.<network>.<amim>.gprofiler2.gost_results.rds`: R object containing the results of the gost query.
   - `<seeds>.<network>.<amim>.gprofiler2.<source>.sub_enriched_pathways.tsv`: Table listing enriched pathways that were found from one particular source.
   - `<seeds>.<network>.<amim>.gprofiler2.<source>.sub_enriched_pathways.png`: Bar plot showing the fraction of genes that were found enriched in each pathway.
-  - `*ENSG_filtered.gmt`: GMT file that was provided as input or that was downloaded from g:profiler if no input GMT file was given; filtered for the selected datasources.
   - `R_sessionInfo.log`: Log file containing information about the R session that was run for this module.
+- `evaluation/gprofiler/`
+  - `*ENSG_filtered.gmt`: GMT file that was provided as input or that was downloaded from g:profiler if no input GMT file was given; filtered for the selected datasources.
 
 </details>
 
@@ -401,7 +401,7 @@ The resulting files have the following structure:
 <details markdown="1">
 <summary>Output files</summary>
 
-- `modules/biopax/`
+- `disease_modules/biopax/`
   - `<seeds>.<network>.<amim>.owl`: BioPax-files for each module in BioPax-format.
 
 - `reports/`
@@ -440,4 +440,4 @@ Results generated by MultiQC collate pipeline QC from supported tools e.g. FastQ
 
 </details>
 
-[Nextflow](https://www.nextflow.io/docs/latest/tracing.html) provides excellent functionality for generating various reports relevant to the running and execution of the pipeline. This will allow you to troubleshoot errors with the running of the pipeline, and also provide you with other information such as launch commands, run times and resource usage.
+[Nextflow](https://docs.seqera.io/platform-cloud/reports/overview) provides excellent functionality for generating various reports relevant to the running and execution of the pipeline. This will allow you to troubleshoot errors with the running of the pipeline, and also provide you with other information such as launch commands, run times and resource usage.
