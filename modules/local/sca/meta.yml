@@ -1,0 +1,65 @@
+name: sca
+description: Identifies a disease module from the seed nodes with the SCA algorithm
+keywords:
+  - sca
+  - disease module
+  - module identification
+tools:
+  - sca:
+      description: SCA expands a set of seed nodes into a disease module using the network topology (bin/SCA2024.py).
+      homepage: https://github.com/repo4eu/modulediscovery
+      documentation: https://github.com/repo4eu/modulediscovery
+      licence:
+        - ""
+input:
+  - - meta:
+        type: map
+        description: Groovy Map containing sample information, must contain an `id` field
+    - seeds:
+        type: file
+        description: Seed nodes to build the module from, one node identifier per line
+    - network:
+        type: file
+        description: Interaction network as a tab-separated edge list
+output:
+  module:
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information, must contain an `id` field
+      - Predicted_genelist.txt:
+          type: file
+          description: The disease module as a list of genes
+          pattern: Predicted_genelist.txt
+  versions:
+    - versions.yml:
+        type: file
+        description: File containing software versions
+        pattern: versions.yml
+authors:
+  - "@Schansiate"
+maintainers:
+  - "@Schansiate"
+containers:
+  docker:
+    linux/arm64:
+      name: community.wave.seqera.io/library/sca:48bc136a597ede14
+      build_id: bd-48bc136a597ede14_1
+      scan_id: sc-1a18fbf99b9cc501_1
+    linux/amd64:
+      name: community.wave.seqera.io/library/sca:94730ae961d2eb6d
+      build_id: bd-94730ae961d2eb6d_1
+      scan_id: sc-ec687e4d484f5adc_1
+  singularity:
+    linux/amd64:
+      name: oras://community.wave.seqera.io/library/sca:64dc667e8dc459d5
+      build_id: bd-64dc667e8dc459d5_1
+      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/d8/d833535377b556a1ff9d58d57e45fa1c488b56ba5fa7e0b9fb4da3eb670d6610/data
+    linux/arm64:
+      name: oras://community.wave.seqera.io/library/sca:703b4bd7e4e3dd28
+      build_id: bd-703b4bd7e4e3dd28_1
+      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/0b/0b3419dd937011c2a822486629c2737d9d844d973b84aa8c036baf8981bf155b/data
+  conda:
+    linux/amd64:
+      lock_file: modules/local/sca/.conda-lock/linux_amd64-bd-94730ae961d2eb6d_1.txt
+    linux/arm64:
+      lock_file: modules/local/sca/.conda-lock/linux_arm64-bd-48bc136a597ede14_1.txt
