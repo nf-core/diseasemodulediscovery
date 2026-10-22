@@ -6,7 +6,7 @@ TOPAS = function(network,
   if (is.null(network) | ncol(network) < 2){
     stop('Network file is missing.', call. = FALSE)
   }
-  if (is.null(seeds))
+  if (is.null(seeds)) {
     stop('Seeds are missing.', call. = FALSE)
   }
   if (is.null(expansion_steps)) {
