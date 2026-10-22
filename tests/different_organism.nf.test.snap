@@ -12,7 +12,7 @@
                     "r-base": "4.3.3",
                     "r-ggplot2": "3.4.3",
                     "r-gprofiler2": "0.2.2",
-                    "gprofiler-data": "e114_eg62_p19_27110d83"
+                    "gprofiler-data": "e114_eg62_p19_9dc92ac8"
                 },
                 "GRAPHTOOLPARSER": {
                     "python": "3.12.13",
@@ -150,7 +150,7 @@
                 "node_degree_distribution_mqc.yaml:md5,2ddf480cd88385fb69af47d0750b6a70"
             ]
         ],
-        "timestamp": "2026-10-05T16:08:46.810580302",
+        "timestamp": "2026-10-22T17:02:03.905092489",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "26.04.6"

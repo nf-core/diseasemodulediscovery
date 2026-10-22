@@ -10,8 +10,9 @@ nextflow_pipeline {
             params {
                 outdir = "$outputDir"
 
-                // The test profile validates against the baderlab server. Real runs default to
-                // the offline validator, so cover that path here as well.
+                // Annotation is disabled by default, so this is the only test covering it.
+                // Use the offline validator, which is also the default for real runs.
+                run_annotation          = true
                 validate_online         = false
 
                 // Skip everything that is not needed to reach the BioPAX validator.

@@ -364,6 +364,7 @@ Visual network representations of the inferred modules — both with and without
 ### Annotation
 
 The disease modules are annotated with supplementary biological information queried from [NeDRex database](https://nedrex.net/).
+This step is only run if `--run_annotation` is set, and only for Entrez or UniProt IDs.
 The annotated modules are saved using [BioPax](http://www.biopax.org/release/biopax-level3-documentation.pdf), short for Biological Pathway Exchange. BioPax is a standard language and format for representing biological pathway knowledge. The format of the files is validated using the [BioPax Validator](https://github.com/BioPAX/validator).
 
 The resulting files have the following structure:

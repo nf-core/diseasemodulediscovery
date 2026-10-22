@@ -156,18 +156,17 @@ nextflow run nf-core/diseasemodulediscovery \
 
 ### Skipping steps
 
-Most pipeline steps can be skipped using `--skip_<PIPELINE_STEP>`. E.g., if you are only interested in module discovery, you can skip the annotation and evaluation steps using:
+Most pipeline steps can be skipped using `--skip_<PIPELINE_STEP>`. E.g., if you are only interested in module discovery, you can skip the evaluation steps using:
 
 ```bash
 nextflow run nf-core/diseasemodulediscovery \
    -profile <docker/singularity> \
    --input samplesheet.csv \
    --outdir <OUTDIR> \
-   --skip_annotation \
    --skip_evaluation
 ```
 
-You can then later continue the pipeline (including evaluation and annotation) using the `-resume` option:
+You can then later continue the pipeline (including evaluation) using the `-resume` option:
 
 ```bash
 nextflow run nf-core/diseasemodulediscovery \
@@ -207,13 +206,27 @@ seed_file_2.csv,network_2.csv,/path/to/perturbed/networks/network_2
 seed_file_2.csv,network_1.csv,/path/to/perturbed/networks/network_1
 ```
 
+### Module annotation
+
+The pipeline can annotate the disease modules with biological data (targeting drugs, side effects, associated disorders, cellular localization) queried from [NeDRexDB](https://nedrex.net/), and export them in [BioPAX](https://www.biopax.org/) format. Since this step queries an external database and validating the BioPAX files can take some time, it is not run by default. Use `--run_annotation` to enable it. It is currently only supported for Entrez and UniProt IDs (`--id_space entrez` or `--id_space uniprot`).
+
+The resulting BioPAX files are validated with the [BioPAX Validator](https://github.com/BioPAX/validator). Use `--add_variants` to also add genetic variants to the BioPAX files (this disables the validation).
+
+```bash
+nextflow run nf-core/diseasemodulediscovery \
+   -profile <docker/singularity> \
+   --seeds <SEED_FILE> \
+   --network <NETWORK_FILE> \
+   --run_annotation \
+   --outdir <OUTDIR>
+```
+
 ### Using the pipeline with a different organism or custom ID space
 
 The pipeline is currently designed for human data, and all [inbuilt networks](#available-networks) are available for humans only. However, most steps are agnostic of the organism and the ID space of the network nodes and seeds. By providing your own [seed and network files](#running-the-pipeline) and [skipping the steps](#skipping-steps) that rely on matching node IDs to external, human-specific resources, you can run the pipeline with completely custom node IDs. The steps that need to be skipped are:
 
 - **ROBUST (bias-aware)** (`--skip_robust_bias_aware`) – maps node IDs to a human study-bias dataset
 - **g:Profiler** (`--skip_gprofiler`) and **DIGEST** (`--skip_digest`) – functional evaluation against external annotations. If your IDs are valid genes/proteins of a [supported organism](https://biit.cs.ut.ee/gprofiler/page/organism-list), you can keep g:Profiler by setting `--gprofiler_organism <organism>` instead of skipping it.
-- **Module annotation** (`--skip_annotation`) – biological data from NeDRex
 - **Drugst.One export** (`--skip_drugstone_export`) and **drug prioritization** (`--skip_drug_predictions`) – rely on Drugst.One
 
 ```bash
@@ -222,7 +235,6 @@ nextflow run nf-core/diseasemodulediscovery \
    --seeds <CUSTOM_ID_SPACE_SEED_FILE> \
    --network <CUSTOM_ID_SPACE_NETWORK_FILE> \
    --skip_robust_bias_aware \
-   --skip_annotation \
    --skip_gprofiler \
    --skip_digest \
    --skip_drugstone_export \
