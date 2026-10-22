@@ -1,7 +1,10 @@
 process HIERARCHICAL_HOTNET_PROCESS_HIERARCHIES {
     tag "$meta.id"
     label 'process_single'
-    container "docker.io/motan04/hierarchical_hotnet:latest"
+    conda "${moduleDir}/environment.yml"
+    container "${workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
+        ? 'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/0f/0ff202606a65efc9b3c4898270051a4caaf044a3c2550831a4e1f79dce421bca/data'
+        : 'community.wave.seqera.io/library/hierarchical_hotnet:8bea4d8e8f9b32f2'}"
 
     input:
     tuple val(meta), path(original_hierarchy_edges), path(original_hierarchy_nodes), path(permuted_hierarchy_edges), path(permuted_hierarchy_nodes)
@@ -15,7 +18,7 @@ process HIERARCHICAL_HOTNET_PROCESS_HIERARCHIES {
     script:
     def args = task.ext.args ?: ''
     """
-    python /hierarchical-hotnet/src/process_hierarchies.py \
+    python ${projectDir}/bin/hierarchical_hotnet/process_hierarchies.py \
         $args \
         --observed_edge_list_file ${original_hierarchy_edges} \
         --observed_index_gene_file ${original_hierarchy_nodes} \

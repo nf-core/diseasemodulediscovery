@@ -1,7 +1,10 @@
 process HIERARCHICAL_HOTNET_PERMUTE_SCORES {
     tag "$meta.id"
     label 'process_single'
-    container "docker.io/motan04/hierarchical_hotnet:latest"
+    conda "${moduleDir}/environment.yml"
+    container "${workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
+        ? 'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/0f/0ff202606a65efc9b3c4898270051a4caaf044a3c2550831a4e1f79dce421bca/data'
+        : 'community.wave.seqera.io/library/hierarchical_hotnet:8bea4d8e8f9b32f2'}"
 
     input:
     tuple val(meta), path(node_list), path(edge_list), path(node_scores)
@@ -14,7 +17,7 @@ process HIERARCHICAL_HOTNET_PERMUTE_SCORES {
 
     script:
     """
-    python /hierarchical-hotnet/src/find_permutation_bins.py \
+    python ${projectDir}/bin/hierarchical_hotnet/find_permutation_bins.py \
         -gsf ${node_scores} \
         -igf ${node_list} \
         -elf ${edge_list} \
@@ -22,7 +25,7 @@ process HIERARCHICAL_HOTNET_PERMUTE_SCORES {
 
     for i in `seq $num_permutations`
     do
-        python /hierarchical-hotnet/src/permute_scores.py \
+        python ${projectDir}/bin/hierarchical_hotnet/permute_scores.py \
             -i ${node_scores} \
             -bf ${meta.id}.score_bins.tsv \
             -s \$i \

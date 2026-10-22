@@ -1,0 +1,64 @@
+name: hierarchical_hotnet_process_hierarchies
+description: Compares original and permuted hierarchies and identifies significant clusters with Hierarchical HotNet
+keywords:
+  - hierarchical hotnet
+  - disease module
+  - module identification
+tools:
+  - hierarchical_hotnet_process_hierarchies:
+      description: Hierarchical HotNet identifies significantly altered subnetworks using a hierarchy of strongly connected components.
+      homepage: https://github.com/raphael-group/hierarchical-hotnet
+      documentation: https://github.com/raphael-group/hierarchical-hotnet
+      licence:
+        - BSD-3-Clause
+input:
+  - - meta:
+        type: map
+        description: Groovy Map containing sample information
+    - original_hierarchy_edges:
+        type: file
+        description: File used by the Hierarchical HotNet step
+    - original_hierarchy_nodes:
+        type: file
+        description: File used by the Hierarchical HotNet step
+    - permuted_hierarchy_edges:
+        type: file
+        description: File used by the Hierarchical HotNet step
+    - permuted_hierarchy_nodes:
+        type: file
+        description: File used by the Hierarchical HotNet step
+  - - lower_size_bound:
+        type: string
+        description: File used by the Hierarchical HotNet step
+output:
+  modules:
+    - meta:
+        type: map
+        description: Groovy Map containing sample information
+    - ${meta.id}.module:
+        type: file
+        description: File used by the Hierarchical HotNet step
+        pattern: ${meta.id}.module
+  versions:
+    - versions.yml:
+        type: file
+        description: File used by the Hierarchical HotNet step
+        pattern: versions.yml
+authors:
+  - "@Schansiate"
+maintainers:
+  - "@Schansiate"
+containers:
+  docker:
+    linux/amd64:
+      name: community.wave.seqera.io/library/hierarchical_hotnet:8bea4d8e8f9b32f2
+      build_id: bd-8bea4d8e8f9b32f2_1
+      scan_id: sc-3e30cc68b418a9bb_1
+  singularity:
+    linux/amd64:
+      name: oras://community.wave.seqera.io/library/hierarchical_hotnet:912050260d5d9987
+      build_id: bd-912050260d5d9987_1
+      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/0f/0ff202606a65efc9b3c4898270051a4caaf044a3c2550831a4e1f79dce421bca/data
+  conda:
+    linux/amd64:
+      lock_file: modules/local/hierarchical_hotnet/process_hierarchies/.conda-lock/linux_amd64-bd-8bea4d8e8f9b32f2_1.txt

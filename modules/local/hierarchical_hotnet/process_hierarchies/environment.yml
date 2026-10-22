@@ -1,0 +1,13 @@
+name: hierarchical_hotnet
+channels:
+  - conda-forge
+  - bioconda
+  - nodefaults
+dependencies:
+  - python=2.7
+  - numpy=1.13.3
+  - scipy=0.19
+  - networkx=2.0
+  - h5py=2.7.0
+  - matplotlib-base=2.2.3
+  - libgfortran=3
