@@ -1,7 +1,10 @@
 process TOPAS{
     tag "$meta.id"
     label 'process_single'
-    container 'ghcr.io/repo4eu/modulediscovery_topas_dependencies:v0.1.0'
+    conda "${moduleDir}/environment.yml"
+    container "${ workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
+?         'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/8c/8c8ba6ae70658a1ac90aa6631bd8074ffb843b009e49027c6dd807ab24ab035a/data'
+:         'community.wave.seqera.io/library/modulediscovery_topas_dependencies:c05c97da1d163962' }" // automatically generated
 
     input:
     tuple val(meta), path(seeds), path(network)

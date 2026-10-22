@@ -1,7 +1,8 @@
 #!/usr/bin/env Rscript
 
 
-source('/topas/src/TOPAS.R')
+script_dir = dirname(sub("^--file=", "", grep("^--file=", commandArgs(FALSE), value = TRUE)[1]))
+source(file.path(script_dir, 'TOPAS.R'))  # vendored from https://bitbucket.org/sonnhammergroup/topas
 
 library("optparse")
 option_list = list(

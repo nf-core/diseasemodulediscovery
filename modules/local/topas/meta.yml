@@ -1,0 +1,55 @@
+name: topas
+description: Identifies a disease module by expanding the seed nodes in the network with TOPAS
+keywords:
+  - topas
+  - disease module
+  - module identification
+tools:
+  - topas:
+      description: TOPAS (TOpology-based Pathway Analysis of Seeds) expands a set of seed genes into a disease module using the network topology.
+      homepage: https://bitbucket.org/sonnhammergroup/topas
+      documentation: https://bitbucket.org/sonnhammergroup/topas
+      licence:
+        - ""
+input:
+  - - meta:
+        type: map
+        description: Groovy Map containing sample information, must contain an `id` field
+    - seeds:
+        type: file
+        description: Seed nodes to build the module from, one node identifier per line
+    - network:
+        type: file
+        description: Interaction network as a tab-separated edge list
+output:
+  module:
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information, must contain an `id` field
+      - ${meta.id}.topas.txt:
+          type: file
+          description: The disease module as a list of nodes
+          pattern: ${meta.id}.topas.txt
+  versions:
+    - versions.yml:
+        type: file
+        description: File containing software versions
+        pattern: versions.yml
+authors:
+  - "@Schansiate"
+maintainers:
+  - "@Schansiate"
+containers:
+  docker:
+    linux/amd64:
+      name: community.wave.seqera.io/library/modulediscovery_topas_dependencies:c05c97da1d163962
+      build_id: bd-c05c97da1d163962_1
+      scan_id: sc-6168b365505458c8_1
+  singularity:
+    linux/amd64:
+      name: oras://community.wave.seqera.io/library/modulediscovery_topas_dependencies:eecbc19238904f0e
+      build_id: bd-eecbc19238904f0e_1
+      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/8c/8c8ba6ae70658a1ac90aa6631bd8074ffb843b009e49027c6dd807ab24ab035a/data
+  conda:
+    linux/amd64:
+      lock_file: modules/local/topas/.conda-lock/linux_amd64-bd-c05c97da1d163962_1.txt
