@@ -1,0 +1,65 @@
+name: diamond
+description: Expands a set of seed nodes into a disease module using the DIAMOnD algorithm
+keywords:
+  - diamond
+  - disease module
+  - module identification
+  - network expansion
+  - seed genes
+  - interactome
+tools:
+  - diamond:
+      description: DIAMOnD (DIseAse MOdule Detection) iteratively grows a module around
+        a set of seed nodes. In each step it adds the node with the highest connectivity
+        significance to the current seed set, determined by a hypergeometric test, until
+        the requested number of nodes has been added.
+      homepage: https://github.com/dinaghiassian/DIAMOnD
+      documentation: https://github.com/dinaghiassian/DIAMOnD
+      licence:
+        - MIT
+  - networkx:
+      description: Python package for the creation, manipulation and study of the structure
+        and dynamics of complex networks.
+      homepage: https://networkx.org/
+      documentation: https://networkx.org/documentation/stable/
+      licence:
+        - BSD-3-Clause
+input:
+  - - meta:
+        type: map
+        description: Groovy Map containing sample information, must contain an `id`
+          field
+    - seeds:
+        type: file
+        description: Seed nodes to expand the module from, one node identifier per line
+    - network:
+        type: file
+        description: Interaction network as a headerless two-column CSV edge list
+  - - n:
+        type: integer
+        description: Number of nodes DIAMOnD adds to the seed set
+  - - alpha:
+        type: integer
+        description: Weight assigned to the seed nodes
+output:
+  module:
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information, must contain an `id`
+            field
+      - "*.first_*_added_nodes_weight_*.txt":
+          type: file
+          description: Tab-separated file listing the nodes added by DIAMOnD, with the
+            rank at which each node was added (`#rank`) and the p-value of the corresponding
+            hypergeometric test (`p_hyper`). The seed nodes themselves are not part
+            of the output.
+          pattern: "*.first_*_added_nodes_weight_*.txt"
+  versions:
+    - versions.yml:
+        type: file
+        description: File containing software versions
+        pattern: versions.yml
+authors:
+  - "@JohannesKersting"
+maintainers:
+  - "@JohannesKersting"

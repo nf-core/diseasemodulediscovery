@@ -1,0 +1,102 @@
+name: biopax_parser
+description: Converts a disease module network into a BioPAX Level 3 OWL file, enriching
+  it with biological annotations queried from NeDRexDB
+keywords:
+  - biopax
+  - disease module
+  - network
+  - annotation
+  - nedrex
+  - owl
+tools:
+  - biopax_parser:
+      description: In-house Python script (gt2biopax.py) that converts a graph-tool
+        module network into BioPAX Level 3. Genes, proteins, targeting drugs (including
+        side effects, indications and contraindications), associated disorders and,
+        optionally, genomic variants are queried from NeDRexDB and added as BioPAX
+        entities.
+      homepage: https://github.com/nf-core/diseasemodulediscovery
+      documentation: https://nf-co.re/diseasemodulediscovery/output
+      licence:
+        - MIT
+  - pybiopax:
+      description: A Python implementation of the BioPAX object model, and parts of
+        PaxTools. Used to build the BioPAX model and serialise it to OWL.
+      homepage: https://github.com/indralab/pybiopax
+      documentation: https://pybiopax.readthedocs.io/
+      licence:
+        - BSD-2-Clause
+  - nedrex:
+      description: A Python library for interfacing with the NeDRex API, the heterogeneous
+        biomedical knowledge graph the module annotations are retrieved from.
+      homepage: https://nedrex.net/
+      documentation: https://pypi.org/project/nedrex/
+      licence:
+        - MIT
+  - graph-tool:
+      description: Efficient Python module for the manipulation and statistical analysis
+        of graphs, implemented in C++ on top of the Boost Graph Library. It also defines
+        the binary `.gt` network format.
+      homepage: https://graph-tool.skewed.de/
+      documentation: https://graph-tool.skewed.de/static/doc/index.html
+      licence:
+        - LGPL-3.0-or-later
+input:
+  - - meta:
+        type: map
+        description: Groovy Map containing sample information, must contain an `id`
+          field
+    - network:
+        type: file
+        description: Disease module network in graph-tool binary format
+  - - idspace:
+        type: string
+        description: ID space of the node identifiers in the module network. Only `entrez`
+          and `uniprot` are supported.
+  - - add_variants:
+        type: boolean
+        description: If true, genomic variants affecting the module genes and their
+          disorder associations are queried from NeDRexDB and added to the BioPAX output
+          (`-v` flag of gt2biopax.py)
+output:
+  biopax:
+    - "*.owl":
+        type: file
+        description: BioPAX Level 3 representation of the disease module, named after
+          the input module file
+        pattern: "*.owl"
+  versions:
+    - versions.yml:
+        type: file
+        description: File containing software versions
+        pattern: versions.yml
+authors:
+  - "@lspindler2509"
+  - "@quirinmanz"
+maintainers:
+  - "@lspindler2509"
+  - "@JohannesKersting"
+containers:
+  docker:
+    linux/amd64:
+      name: community.wave.seqera.io/library/modulediscovery_python_dependencies:37beeaac11625203
+      build_id: bd-37beeaac11625203_1
+      scan_id: sc-60c9761227e3cfe0_1
+    linux/arm64:
+      name: community.wave.seqera.io/library/modulediscovery_python_dependencies:cd96a1d8b8cde552
+      build_id: bd-cd96a1d8b8cde552_1
+      scan_id: sc-50fcc0e70a021b38_1
+  singularity:
+    linux/amd64:
+      name: oras://community.wave.seqera.io/library/modulediscovery_python_dependencies:97f911fbeabe5e6f
+      build_id: bd-97f911fbeabe5e6f_1
+      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/01/01231a4ef4a2196d65fda042c44442d7b41c3d0859e6766fdfd846f72acfdb23/data
+    linux/arm64:
+      name: oras://community.wave.seqera.io/library/modulediscovery_python_dependencies:5881bc5613b9edfe
+      build_id: bd-5881bc5613b9edfe_1
+      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/bd/bdf908ab707e8af0ae80a72bd38411af7545e47b1d28798449ef26adf22bec20/data
+  conda:
+    linux/amd64:
+      lock_file: modules/local/biopax/parser/.conda-lock/linux_amd64-bd-37beeaac11625203_1.txt
+    linux/arm64:
+      lock_file: modules/local/biopax/parser/.conda-lock/linux_arm64-bd-cd96a1d8b8cde552_1.txt

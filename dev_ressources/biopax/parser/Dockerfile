@@ -1,4 +1,4 @@
-FROM mambaorg/micromamba:1.5.1-alpine
+    FROM mambaorg/micromamba:1.5.1-alpine
 # use alpine such that ps is available
 LABEL image.author.name "Quirin Manz"
 LABEL image.author.email "quirin.manz@tum.de"

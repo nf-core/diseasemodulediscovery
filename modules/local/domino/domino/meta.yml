@@ -1,0 +1,78 @@
+name: domino_domino
+description: Identifies disease modules around a set of seed nodes with DOMINO
+keywords:
+  - domino
+  - disease module
+  - module identification
+  - active module
+  - seed genes
+tools:
+  - domino_domino:
+      description: DOMINO keeps the network slices that are enriched for seed nodes according to a hypergeometric test, refines them by solving the Prize Collecting Steiner Tree problem and subdivides them into putative modules of at most 10 nodes, each of which is tested for seed enrichment again. Several non-overlapping modules can be reported for a single seed set.
+      homepage: https://github.com/Shamir-Lab/DOMINO
+      documentation: https://github.com/Shamir-Lab/DOMINO
+      licence:
+        - MIT
+  - pcst-fast:
+      description: Fast C++ implementation of the Goemans-Williamson scheme for the prize-collecting Steiner tree problem, exposed to Python.
+      homepage: https://github.com/fraenkel-lab/pcst_fast
+      documentation: https://github.com/fraenkel-lab/pcst_fast
+      licence:
+        - MIT
+  - statsmodels:
+      description: Python package for statistical models and tests, used here for the multiple testing correction of the enrichment p-values.
+      homepage: https://www.statsmodels.org/
+      documentation: https://www.statsmodels.org/stable/index.html
+      licence:
+        - BSD-3-Clause
+  - networkx:
+      description: Python package for the creation, manipulation and study of the structure and dynamics of complex networks.
+      homepage: https://networkx.org/
+      documentation: https://networkx.org/documentation/stable/
+      licence:
+        - BSD-3-Clause
+input:
+  - - meta:
+        type: map
+        description: Groovy Map containing sample information, must contain an `id` field
+    - seeds:
+        type: file
+        description: Seed nodes to grow the modules around, one node identifier per line. The identifiers must not be purely numeric, since DOMINO would interpret them as integers.
+    - network:
+        type: file
+        description: Interaction network as a tab-separated SIF file with the header columns `node_1`, `type` and `node_2`
+    - slices:
+        type: file
+        description: Precomputed disjoint slices of the network, each given as a bracketed, comma-separated list of its node identifiers
+output:
+  modules:
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information, must contain an `id` field
+      - ${seeds.baseName}/modules.out:
+          type: file
+          description: One module per line, given as a bracketed, comma-separated list of node identifiers. Empty if no module passed the seed enrichment test. DOMINO writes the file into a directory named after the seed file.
+          pattern: ${seeds.baseName}/modules.out
+  versions:
+    - versions.yml:
+        type: file
+        description: File containing software versions
+        pattern: versions.yml
+authors:
+  - "@JohannesKersting"
+maintainers:
+  - "@JohannesKersting"
+containers:
+  docker:
+    linux/amd64:
+      name: community.wave.seqera.io/library/domino:d7848ba6939a9ab0
+      build_id: bd-d7848ba6939a9ab0_1
+      scan_id: sc-a84c81913a138e70_1
+  singularity:
+    linux/amd64:
+      name: oras://community.wave.seqera.io/library/domino:c6cf246e01593ebb
+      build_id: bd-c6cf246e01593ebb_1
+      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/d1/d1e127804ca623639fc35b159206b564f3cc3e579ac1cad595c8a84d40609be5/data
+  conda:
+    linux/amd64:
+      lock_file: modules/local/domino/domino/.conda-lock/linux_amd64-bd-d7848ba6939a9ab0_1.txt
