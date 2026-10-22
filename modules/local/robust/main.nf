@@ -2,11 +2,13 @@
 process ROBUST {
     tag "$meta.id"
     label 'process_low'
-    container 'docker.io/kerstingjohannes/robust:1.0.0-e8861de'
+    conda "${moduleDir}/environment.yml"
+    container "${ workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
+?         'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/cb/cba1bc45713a153a51cb10a8d34edc68e506a4d47d108db0726aa560ba9c41e1/data'
+:         'community.wave.seqera.io/library/robust:6a0d16d512611aaa' }" // automatically generated
 
     input:
     tuple val(meta), path(seeds), path (network)
-    // TODO: check whether the values in args should be converted to nextflow values and set defaults via nextflow
 
     output:
     tuple val(meta), path("${meta.id}.graphml")  , emit: module
@@ -16,9 +18,9 @@ process ROBUST {
     task.ext.when == null || task.ext.when
 
     script:
-    def args = task.ext.args ?: ''          // Get possible alpha, beta, n, and tau arguments for robust, see TODO above
+    def args = task.ext.args ?: ''          // Initial fraction, reduction factor, number of trees, and threshold
     """
-    python3 /robust/robust.py \\
+    robust-pcst \\
         $network \\
         $seeds \\
         "${meta.id}.graphml" \\
@@ -26,10 +28,8 @@ process ROBUST {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        python: "\$(python3 --version | sed 's/Python //g')"
-        pcst-fast: "\$(python3 -c "from importlib.metadata import version; print(version('pcst_fast'))")"
-        networkx: "\$(python3 -c "import networkx; print(networkx.__version__)")"
-        numpy: "\$(python3 -c "import numpy; print(numpy.__version__)")"
+        python: "\$(python --version | sed 's/Python //g')"
+        robust-pcst: "\$(python -c "from importlib.metadata import version; print(version('robust-pcst'))")"
     END_VERSIONS
     """
 }
