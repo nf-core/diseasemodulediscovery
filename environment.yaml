@@ -13,4 +13,4 @@ dependencies:
   - nodejs
   - pip
   - pip:
-      - nf-core==4.1.0
+      - nf-core==4.2.1
