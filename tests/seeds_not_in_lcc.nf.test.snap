@@ -1,0 +1,166 @@
+{
+    "Test handling of seeds that are not in the largest connected component (LCC) of the network": {
+        "content": [
+            {
+                "DOMINO_DOMINO": {
+                    "python": "3.6.15"
+                },
+                "DOMINO_SLICER": {
+                    "python": "3.6.15"
+                },
+                "FIRSTNEIGHBOR": {
+                    "python": "3.12.13",
+                    "graph-tool": "2.77"
+                },
+                "GRAPHTOOLPARSER": {
+                    "python": "3.12.13",
+                    "graph-tool": "2.77"
+                },
+                "MODULEPARSER": {
+                    "python": "3.12.13",
+                    "graph-tool": "2.77"
+                },
+                "MULTIQCFORMATTER": {
+                    "python": "3.12.13"
+                },
+                "NETWORKANNOTATION": {
+                    "python": "3.12.13",
+                    "graph-tool": "2.77"
+                },
+                "ROBUST": {
+                    "python": "3.10.4"
+                },
+                "ROBUSTBIASAWARE": {
+                    "python": "3.10.14",
+                    "robust-bias-aware": "0.0.1"
+                },
+                "RWR": {
+                    "python": "3.12.13"
+                },
+                "SAVEMODULES": {
+                    "python": "3.12.13",
+                    "graph-tool": "2.77",
+                    "pandas": "2.2.3"
+                },
+                "TOPOLOGY": {
+                    "python": "3.12.13",
+                    "graph-tool": "2.77"
+                },
+                "Workflow": {
+                    "nf-core/diseasemodulediscovery": "v1.0.0"
+                }
+            },
+            [
+                "disease_modules",
+                "disease_modules/graphml",
+                "disease_modules/graphml/mondo.0009025.string.human_physical_links_v12_0_min700.Entrez.domino.graphml",
+                "disease_modules/graphml/mondo.0009025.string.human_physical_links_v12_0_min700.Entrez.firstneighbor.graphml",
+                "disease_modules/graphml/mondo.0009025.string.human_physical_links_v12_0_min700.Entrez.no_tool.graphml",
+                "disease_modules/graphml/mondo.0009025.string.human_physical_links_v12_0_min700.Entrez.robust.graphml",
+                "disease_modules/graphml/mondo.0009025.string.human_physical_links_v12_0_min700.Entrez.robust_bias_aware.graphml",
+                "disease_modules/graphml/mondo.0009025.string.human_physical_links_v12_0_min700.Entrez.rwr.graphml",
+                "disease_modules/gt",
+                "disease_modules/gt/mondo.0009025.string.human_physical_links_v12_0_min700.Entrez.domino.gt",
+                "disease_modules/gt/mondo.0009025.string.human_physical_links_v12_0_min700.Entrez.firstneighbor.gt",
+                "disease_modules/gt/mondo.0009025.string.human_physical_links_v12_0_min700.Entrez.no_tool.gt",
+                "disease_modules/gt/mondo.0009025.string.human_physical_links_v12_0_min700.Entrez.robust.gt",
+                "disease_modules/gt/mondo.0009025.string.human_physical_links_v12_0_min700.Entrez.robust_bias_aware.gt",
+                "disease_modules/gt/mondo.0009025.string.human_physical_links_v12_0_min700.Entrez.rwr.gt",
+                "disease_modules/tsv_edges",
+                "disease_modules/tsv_edges/mondo.0009025.string.human_physical_links_v12_0_min700.Entrez.domino.edges.tsv",
+                "disease_modules/tsv_edges/mondo.0009025.string.human_physical_links_v12_0_min700.Entrez.firstneighbor.edges.tsv",
+                "disease_modules/tsv_edges/mondo.0009025.string.human_physical_links_v12_0_min700.Entrez.no_tool.edges.tsv",
+                "disease_modules/tsv_edges/mondo.0009025.string.human_physical_links_v12_0_min700.Entrez.robust.edges.tsv",
+                "disease_modules/tsv_edges/mondo.0009025.string.human_physical_links_v12_0_min700.Entrez.robust_bias_aware.edges.tsv",
+                "disease_modules/tsv_edges/mondo.0009025.string.human_physical_links_v12_0_min700.Entrez.rwr.edges.tsv",
+                "disease_modules/tsv_nodes",
+                "disease_modules/tsv_nodes/mondo.0009025.string.human_physical_links_v12_0_min700.Entrez.domino.nodes.tsv",
+                "disease_modules/tsv_nodes/mondo.0009025.string.human_physical_links_v12_0_min700.Entrez.firstneighbor.nodes.tsv",
+                "disease_modules/tsv_nodes/mondo.0009025.string.human_physical_links_v12_0_min700.Entrez.no_tool.nodes.tsv",
+                "disease_modules/tsv_nodes/mondo.0009025.string.human_physical_links_v12_0_min700.Entrez.robust.nodes.tsv",
+                "disease_modules/tsv_nodes/mondo.0009025.string.human_physical_links_v12_0_min700.Entrez.robust_bias_aware.nodes.tsv",
+                "disease_modules/tsv_nodes/mondo.0009025.string.human_physical_links_v12_0_min700.Entrez.rwr.nodes.tsv",
+                "input",
+                "input/networks",
+                "input/networks/string.human_physical_links_v12_0_min700.Entrez.domino.sif",
+                "input/networks/string.human_physical_links_v12_0_min700.Entrez.gt",
+                "input/networks/string.human_physical_links_v12_0_min700.Entrez.robust.tsv",
+                "input/networks/string.human_physical_links_v12_0_min700.Entrez.rwr.csv",
+                "input/seeds",
+                "input/seeds/mondo.0009025.string.human_physical_links_v12_0_min700.Entrez.no_tool.gt",
+                "input/seeds/mondo.0009025.string.human_physical_links_v12_0_min700.Entrez.tsv",
+                "mqc_summaries",
+                "mqc_summaries/input_network_mqc.tsv",
+                "mqc_summaries/input_seeds_mqc.tsv",
+                "mqc_summaries/node_degree_distribution_mqc.yaml",
+                "mqc_summaries/topology_mqc.tsv",
+                "mqc_summaries/warn_empty_modules_mqc.tsv",
+                "multiqc",
+                "multiqc/multiqc_data",
+                "multiqc/multiqc_data/llms-full.txt",
+                "multiqc/multiqc_data/multiqc.log",
+                "multiqc/multiqc_data/multiqc.parquet",
+                "multiqc/multiqc_data/multiqc_citations.txt",
+                "multiqc/multiqc_data/multiqc_data.json",
+                "multiqc/multiqc_data/multiqc_general_stats.txt",
+                "multiqc/multiqc_data/multiqc_input_network.txt",
+                "multiqc/multiqc_data/multiqc_input_seeds.txt",
+                "multiqc/multiqc_data/multiqc_network_node_degree_distribution_line_graph.txt",
+                "multiqc/multiqc_data/multiqc_network_node_degree_distribution_line_graph_1.txt",
+                "multiqc/multiqc_data/multiqc_software_versions.txt",
+                "multiqc/multiqc_data/multiqc_sources.txt",
+                "multiqc/multiqc_data/multiqc_warn_empty_modules_table.txt",
+                "multiqc/multiqc_plots",
+                "multiqc/multiqc_plots/pdf",
+                "multiqc/multiqc_plots/pdf/input_network.pdf",
+                "multiqc/multiqc_plots/pdf/input_seeds-cnt.pdf",
+                "multiqc/multiqc_plots/pdf/input_seeds-pct.pdf",
+                "multiqc/multiqc_plots/pdf/network_node_degree_distribution_line_graph_Counts.pdf",
+                "multiqc/multiqc_plots/pdf/network_node_degree_distribution_line_graph_Percentages.pdf",
+                "multiqc/multiqc_plots/pdf/warn_empty_modules_table.pdf",
+                "multiqc/multiqc_plots/png",
+                "multiqc/multiqc_plots/png/input_network.png",
+                "multiqc/multiqc_plots/png/input_seeds-cnt.png",
+                "multiqc/multiqc_plots/png/input_seeds-pct.png",
+                "multiqc/multiqc_plots/png/network_node_degree_distribution_line_graph_Counts.png",
+                "multiqc/multiqc_plots/png/network_node_degree_distribution_line_graph_Percentages.png",
+                "multiqc/multiqc_plots/png/warn_empty_modules_table.png",
+                "multiqc/multiqc_plots/svg",
+                "multiqc/multiqc_plots/svg/input_network.svg",
+                "multiqc/multiqc_plots/svg/input_seeds-cnt.svg",
+                "multiqc/multiqc_plots/svg/input_seeds-pct.svg",
+                "multiqc/multiqc_plots/svg/network_node_degree_distribution_line_graph_Counts.svg",
+                "multiqc/multiqc_plots/svg/network_node_degree_distribution_line_graph_Percentages.svg",
+                "multiqc/multiqc_plots/svg/warn_empty_modules_table.svg",
+                "multiqc/multiqc_report.html",
+                "pipeline_info",
+                "pipeline_info/nf_core_diseasemodulediscovery_software_mqc_versions.yml"
+            ],
+            [
+                "mondo.0009025.string.human_physical_links_v12_0_min700.Entrez.firstneighbor.graphml:md5,8fcca135ae294cc6df038910c094293e",
+                "mondo.0009025.string.human_physical_links_v12_0_min700.Entrez.no_tool.graphml:md5,6774d187001fbd6c46b598e534e14383",
+                "mondo.0009025.string.human_physical_links_v12_0_min700.Entrez.firstneighbor.gt:md5,b38d445b58bc090307132a0b9da40e82",
+                "mondo.0009025.string.human_physical_links_v12_0_min700.Entrez.no_tool.gt:md5,9ac30e6c0cdf2b44f59055c4f1c840a3",
+                "mondo.0009025.string.human_physical_links_v12_0_min700.Entrez.firstneighbor.edges.tsv:md5,9c840d52e72fac49b17f37ee0f0006bf",
+                "mondo.0009025.string.human_physical_links_v12_0_min700.Entrez.no_tool.edges.tsv:md5,6539530493b51c5d7fc3f27ab9c33ba0",
+                "mondo.0009025.string.human_physical_links_v12_0_min700.Entrez.firstneighbor.nodes.tsv:md5,21b7a3d84a9c21896eea3d0f5651bb2a",
+                "mondo.0009025.string.human_physical_links_v12_0_min700.Entrez.no_tool.nodes.tsv:md5,a7f321fff57ce69d0bc7e46fd7ac4de2",
+                "string.human_physical_links_v12_0_min700.Entrez.domino.sif:md5,deb4c0dca2e3c5efc28e3380b989c049",
+                "string.human_physical_links_v12_0_min700.Entrez.gt:md5,3255a2ecb0f872e00dd5509afdadacc8",
+                "string.human_physical_links_v12_0_min700.Entrez.robust.tsv:md5,eaa752ebb048c38ba76c283bc342751e",
+                "string.human_physical_links_v12_0_min700.Entrez.rwr.csv:md5,d28fcfcdce5a672fbb9424d12248e883",
+                "mondo.0009025.string.human_physical_links_v12_0_min700.Entrez.no_tool.gt:md5,a85f1b1ea18d6df4de0657ba4ea1f55f",
+                "mondo.0009025.string.human_physical_links_v12_0_min700.Entrez.tsv:md5,b528a7936685a6c359a4234dfaee7ae7",
+                "input_network_mqc.tsv:md5,d6871c23d13eb757b99c7c85c0583083",
+                "input_seeds_mqc.tsv:md5,9943e814c2419557c2918124969824b4",
+                "node_degree_distribution_mqc.yaml:md5,d91b984eea5758eb1e4027a214745b3a",
+                "warn_empty_modules_mqc.tsv:md5,d633adeac429e1651f23f45153c4f1b9"
+            ]
+        ],
+        "timestamp": "2026-07-03T16:06:45.799197821",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.0"
+        }
+    }
+}
