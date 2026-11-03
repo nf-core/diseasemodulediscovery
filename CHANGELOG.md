@@ -9,6 +9,8 @@ Initial release of nf-core/diseasemodulediscovery, created with the [nf-core](ht
 
 ### `Added`
 
+- The module annotation and BioPAX conversion are now disabled by default and can be enabled with `--run_annotation` (replaces `--skip_annotation`).
+
 ### `Fixed`
 
 ### `Dependencies`
