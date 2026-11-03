@@ -26,7 +26,6 @@ nextflow_pipeline {
                 // Skip all steps that are not needed for testing the sample sheet
                 skip_visualization      = true
                 skip_drugstone_export   = true
-                skip_annotation         = true
                 skip_drug_predictions   = true
                 skip_digest             = true
                 skip_gprofiler          = true
