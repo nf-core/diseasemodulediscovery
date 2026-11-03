@@ -1,0 +1,13 @@
+name: modulediscovery_topas_dependencies
+channels:
+  - conda-forge
+  - bioconda
+  - nodefaults
+dependencies:
+  - r-base=4.1.0
+  - r-readr=2.1.2
+  - r-rlang=1.1.0
+  - r-igraph=1.2.11
+  - r-dnet=1.1.7
+  - r-dosnow=1.0.20
+  - r-optparse=1.7.3
