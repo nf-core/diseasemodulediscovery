@@ -30,6 +30,10 @@
 
 > Köhler S, Bauer S, Horn D, Robinson PN. Walking the interactome for prioritization of candidate disease genes. Am J Hum Genet. 2008;82: 949–958.
 
+-[SCA](https://doi.org/10.1016/j.jmb.2018.05.016)
+
+> Wang RS, Loscalzo J. Network-Based Disease Module Discovery by a Novel Seed Connector Algorithm with Pathobiological Implications. J Mol Biol. 2018 Sep 14;430(18 Pt A):2939-2950.
+
 - [g:Profiler](https://doi.org/10.12688/f1000research.24956.2)
 
 > Kolberg L, Raudvere U, Kuzmin I, Vilo J, Peterson H. gprofiler2 -- an R package for gene list functional enrichment analysis and namespace conversion toolset g:Profiler. F1000Res. 2020;9: 709.

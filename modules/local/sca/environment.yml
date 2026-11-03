@@ -1,0 +1,7 @@
+name: sca
+channels:
+  - conda-forge
+  - nodefaults
+dependencies:
+  - conda-forge::python=3.12
+  - conda-forge::networkx=3.3
