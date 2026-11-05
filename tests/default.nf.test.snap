@@ -3,67 +3,67 @@
         "content": [
             {
                 "BIOPAX_PARSER": {
-                    "python": "3.12.13",
                     "graph-tool": "2.77",
+                    "nedrex": "0.1.4",
                     "pybiopax": "0.1.4",
-                    "nedrex": "0.1.4"
+                    "python": "3.12.13"
                 },
                 "BIOPAX_VALIDATOR": {
-                    "openjdk": "20.0.2.1",
-                    "biopax-validator": "6.0.0"
+                    "biopax-validator": "6.0.0",
+                    "openjdk": "20.0.2.1"
                 },
                 "DIAMOND": {
                     "python": "3.8.5"
                 },
                 "DIGEST_REFERENCEBASED": {
-                    "python": "3.10.13",
-                    "biodigest": "0.2.16"
+                    "biodigest": "0.2.16",
+                    "python": "3.10.13"
                 },
                 "DIGEST_REFERENCEFREE": {
-                    "python": "3.10.13",
-                    "biodigest": "0.2.16"
+                    "biodigest": "0.2.16",
+                    "python": "3.10.13"
                 },
                 "DRUGPREDICTIONS": {
-                    "python": "3.12.13",
+                    "drugstone": "0.4.5",
                     "pandas": "2.2.3",
-                    "drugstone": "0.4.5"
+                    "python": "3.12.13"
                 },
                 "DRUGSTONEEXPORT": {
-                    "python": "3.12.13",
-                    "graph-tool": "2.77"
+                    "graph-tool": "2.77",
+                    "python": "3.12.13"
                 },
                 "GPROFILER2_GOST\"": {
+                    "gprofiler-data": "e114_eg62_p19_9dc92ac8",
                     "r-base": "4.3.3",
                     "r-ggplot2": "3.4.3",
-                    "r-gprofiler2": "0.2.2",
-                    "gprofiler-data": "e114_eg62_p19_27110d83"
+                    "r-gprofiler2": "0.2.2"
                 },
                 "GRAPHTOOLPARSER": {
-                    "python": "3.12.13",
-                    "graph-tool": "2.77"
+                    "graph-tool": "2.77",
+                    "python": "3.12.13"
                 },
                 "MODULEPARSER": {
-                    "python": "3.12.13",
-                    "graph-tool": "2.77"
+                    "graph-tool": "2.77",
+                    "python": "3.12.13"
                 },
                 "MULTIQCFORMATTER": {
                     "python": "3.12.13"
                 },
                 "NETWORKANNOTATION": {
-                    "python": "3.12.13",
-                    "graph-tool": "2.77"
+                    "graph-tool": "2.77",
+                    "python": "3.12.13"
                 },
                 "NETWORKPERTURBATION": {
-                    "python": "3.12.13",
-                    "graph-tool": "2.77"
+                    "graph-tool": "2.77",
+                    "python": "3.12.13"
                 },
                 "NETWORKPERTURBATIONEVALUATION": {
                     "python": "3.12.13"
                 },
                 "SAVEMODULES": {
-                    "python": "3.12.13",
                     "graph-tool": "2.77",
-                    "pandas": "2.2.3"
+                    "pandas": "2.2.3",
+                    "python": "3.12.13"
                 },
                 "SEEDPERTURBATION": {
                     "python": "3.12.13"
@@ -72,21 +72,21 @@
                     "python": "3.12.13"
                 },
                 "TOPOLOGY": {
-                    "python": "3.12.13",
-                    "graph-tool": "2.77"
+                    "graph-tool": "2.77",
+                    "python": "3.12.13"
                 },
                 "VISUALIZEMODULES": {
-                    "python": "3.12.13",
                     "graph-tool": "2.77",
                     "networkx": "3.3",
                     "pyintergraph": "1.3.3",
+                    "python": "3.12.13",
                     "pyvis": "0.3.1"
                 },
                 "VISUALIZEMODULESDRUGS": {
-                    "python": "3.12.13",
                     "graph-tool": "2.77",
                     "networkx": "3.3",
                     "pyintergraph": "1.3.3",
+                    "python": "3.12.13",
                     "pyvis": "0.3.1"
                 },
                 "Workflow": {
