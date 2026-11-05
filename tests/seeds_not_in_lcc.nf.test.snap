@@ -9,23 +9,23 @@
                     "python": "3.6.15"
                 },
                 "FIRSTNEIGHBOR": {
-                    "python": "3.12.13",
-                    "graph-tool": "2.77"
+                    "graph-tool": "2.77",
+                    "python": "3.12.13"
                 },
                 "GRAPHTOOLPARSER": {
-                    "python": "3.12.13",
-                    "graph-tool": "2.77"
+                    "graph-tool": "2.77",
+                    "python": "3.12.13"
                 },
                 "MODULEPARSER": {
-                    "python": "3.12.13",
-                    "graph-tool": "2.77"
+                    "graph-tool": "2.77",
+                    "python": "3.12.13"
                 },
                 "MULTIQCFORMATTER": {
                     "python": "3.12.13"
                 },
                 "NETWORKANNOTATION": {
-                    "python": "3.12.13",
-                    "graph-tool": "2.77"
+                    "graph-tool": "2.77",
+                    "python": "3.12.13"
                 },
                 "ROBUST": {
                     "python": "3.10.4"
@@ -38,13 +38,13 @@
                     "python": "3.12.13"
                 },
                 "SAVEMODULES": {
-                    "python": "3.12.13",
                     "graph-tool": "2.77",
-                    "pandas": "2.2.3"
+                    "pandas": "2.2.3",
+                    "python": "3.12.13"
                 },
                 "TOPOLOGY": {
-                    "python": "3.12.13",
-                    "graph-tool": "2.77"
+                    "graph-tool": "2.77",
+                    "python": "3.12.13"
                 },
                 "Workflow": {
                     "nf-core/diseasemodulediscovery": "v1.0.0"

@@ -6,34 +6,34 @@
                     "python": "3.8.5"
                 },
                 "GPROFILER2_GOST\"": {
+                    "gprofiler-data": "e114_eg62_p19_27110d83",
                     "r-base": "4.3.3",
                     "r-ggplot2": "3.4.3",
-                    "r-gprofiler2": "0.2.2",
-                    "gprofiler-data": "e114_eg62_p19_27110d83"
+                    "r-gprofiler2": "0.2.2"
                 },
                 "GRAPHTOOLPARSER": {
-                    "python": "3.12.13",
-                    "graph-tool": "2.77"
+                    "graph-tool": "2.77",
+                    "python": "3.12.13"
                 },
                 "MODULEPARSER": {
-                    "python": "3.12.13",
-                    "graph-tool": "2.77"
+                    "graph-tool": "2.77",
+                    "python": "3.12.13"
                 },
                 "MULTIQCFORMATTER": {
                     "python": "3.12.13"
                 },
                 "NETWORKANNOTATION": {
-                    "python": "3.12.13",
-                    "graph-tool": "2.77"
+                    "graph-tool": "2.77",
+                    "python": "3.12.13"
                 },
                 "SAVEMODULES": {
-                    "python": "3.12.13",
                     "graph-tool": "2.77",
-                    "pandas": "2.2.3"
+                    "pandas": "2.2.3",
+                    "python": "3.12.13"
                 },
                 "TOPOLOGY": {
-                    "python": "3.12.13",
-                    "graph-tool": "2.77"
+                    "graph-tool": "2.77",
+                    "python": "3.12.13"
                 },
                 "Workflow": {
                     "nf-core/diseasemodulediscovery": "v1.0.0"
