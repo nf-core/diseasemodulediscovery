@@ -5,6 +5,9 @@ lint:
   files_unchanged:
     - .github/CONTRIBUTING.md
     - assets/sendmail_template.txt
+    - assets/nf-core-diseasemodulediscovery_logo_light.png
+    - docs/images/nf-core-diseasemodulediscovery_logo_light.png
+    - docs/images/nf-core-diseasemodulediscovery_logo_dark.png
   multiqc_config:
     - report_comment
   nextflow_config: false
