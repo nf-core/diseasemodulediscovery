@@ -6,34 +6,34 @@
                     "python": "3.8.5"
                 },
                 "GPROFILER2_GOST\"": {
+                    "gprofiler-data": "e114_eg62_p19_9dc92ac8",
                     "r-base": "4.3.3",
                     "r-ggplot2": "3.4.3",
-                    "r-gprofiler2": "0.2.2",
-                    "gprofiler-data": "e114_eg62_p19_27110d83"
+                    "r-gprofiler2": "0.2.2"
                 },
                 "GRAPHTOOLPARSER": {
-                    "python": "3.12.13",
-                    "graph-tool": "2.77"
+                    "graph-tool": "2.77",
+                    "python": "3.12.13"
                 },
                 "MODULEPARSER": {
-                    "python": "3.12.13",
-                    "graph-tool": "2.77"
+                    "graph-tool": "2.77",
+                    "python": "3.12.13"
                 },
                 "MULTIQCFORMATTER": {
                     "python": "3.12.13"
                 },
                 "NETWORKANNOTATION": {
-                    "python": "3.12.13",
-                    "graph-tool": "2.77"
+                    "graph-tool": "2.77",
+                    "python": "3.12.13"
                 },
                 "SAVEMODULES": {
-                    "python": "3.12.13",
                     "graph-tool": "2.77",
-                    "pandas": "2.2.3"
+                    "pandas": "2.2.3",
+                    "python": "3.12.13"
                 },
                 "TOPOLOGY": {
-                    "python": "3.12.13",
-                    "graph-tool": "2.77"
+                    "graph-tool": "2.77",
+                    "python": "3.12.13"
                 },
                 "Workflow": {
                     "nf-core/diseasemodulediscovery": "v1.0.0"
@@ -147,10 +147,10 @@
                 "node_degree_distribution_mqc.yaml:md5,2ddf480cd88385fb69af47d0750b6a70"
             ]
         ],
-        "timestamp": "2026-08-13T16:29:31.115506049",
+        "timestamp": "2026-11-06T10:15:24.137847459",
         "meta": {
             "nf-test": "0.9.4",
-            "nextflow": "26.04.6"
+            "nextflow": "26.10.4"
         }
     }
 }
