@@ -149,6 +149,10 @@ In addition to the inferred disease modules, the pipeline provides a dummy modul
 
 ### RWR
 
+Random walk with restart (RWR) ranks all nodes of the network by their proximity to the seed nodes. A walker starts at the seed nodes and, in each step, either restarts at a seed node with the probability given by `--rwr_r` or moves on to a randomly chosen neighbor. The visiting probability that a node accumulates in this process serves as its proximity score. The walk is based on either the column-wise normalized or the symmetric Markov matrix of the network (`--rwr_symmetrical`), and the visiting probabilities can optionally be scaled by the square root of the node degree (`--rwr_scaling`).
+
+To turn this ranking into a module, the highest ranking non-seed nodes are added to the seed nodes one at a time, until the seed nodes form a single connected component. The module thus consists of the seed nodes plus the smallest number of top ranking nodes required to connect them, which means that no nodes are added if the seed nodes are already connected. Each node is annotated with its position within the module (`rank`), starting with the seed nodes, and with its visiting probability (`visiting_probability`).
+
 <details markdown="1">
 <summary>Output files</summary>
 
@@ -360,6 +364,7 @@ Visual network representations of the inferred modules — both with and without
 ### Annotation
 
 The disease modules are annotated with supplementary biological information queried from [NeDRex database](https://nedrex.net/).
+This step is only run if `--run_annotation` is set, and only for Entrez or UniProt IDs.
 The annotated modules are saved using [BioPax](http://www.biopax.org/release/biopax-level3-documentation.pdf), short for Biological Pathway Exchange. BioPax is a standard language and format for representing biological pathway knowledge. The format of the files is validated using the [BioPax Validator](https://github.com/BioPAX/validator).
 
 The resulting files have the following structure:
