@@ -7,27 +7,25 @@
     "items": {
         "type": "object",
         "properties": {
-            "sample": {
-                "type": "string",
-                "pattern": "^\\S+$",
-                "errorMessage": "Sample name must be provided and cannot contain spaces",
-                "meta": ["id"]
-            },
-            "fastq_1": {
+            "seeds": {
                 "type": "string",
                 "format": "file-path",
                 "exists": true,
-                "pattern": "^([\\S\\s]*\\/)?[^\\s\\/]+\\.f(ast)?q\\.gz$",
-                "errorMessage": "FastQ file for reads 1 must be provided, cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'"
+                "pattern": "^\\S+\\.(txt|csv|tsv)$",
+                "errorMessage": "The seed file cannot contain spaces and must end with .(txt|csv|tsv)"
             },
-            "fastq_2": {
+            "network": {
                 "type": "string",
-                "format": "file-path",
+                "pattern": "^(\\S+\\.(gt|csv|tsv|graphml|xml|dot|gml)|[^\\s.]+)$",
+                "errorMessage": "The network must be a keyword referring to an inbuilt network, or a file ending with .(gt|csv|tsv|graphml|xml|dot|gml), and cannot contain spaces"
+            },
+            "perturbed_networks": {
+                "type": "string",
+                "format": "directory-path",
                 "exists": true,
-                "pattern": "^([\\S\\s]*\\/)?[^\\s\\/]+\\.f(ast)?q\\.gz$",
-                "errorMessage": "FastQ file for reads 2 cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'"
+                "errorMessage": "The perturbed_networks path must point to an existing directory and cannot contain spaces."
             }
         },
-        "required": ["sample", "fastq_1"]
+        "required": ["seeds", "network"]
     }
 }
