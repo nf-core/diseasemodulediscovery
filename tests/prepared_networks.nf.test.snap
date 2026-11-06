@@ -3,24 +3,24 @@
         "content": [
             {
                 "GRAPHTOOLPARSER": {
-                    "python": "3.12.13",
-                    "graph-tool": "2.77"
+                    "graph-tool": "2.77",
+                    "python": "3.12.13"
                 },
                 "MULTIQCFORMATTER": {
                     "python": "3.12.13"
                 },
                 "NETWORKANNOTATION": {
-                    "python": "3.12.13",
-                    "graph-tool": "2.77"
+                    "graph-tool": "2.77",
+                    "python": "3.12.13"
                 },
                 "SAVEMODULES": {
-                    "python": "3.12.13",
                     "graph-tool": "2.77",
-                    "pandas": "2.2.3"
+                    "pandas": "2.2.3",
+                    "python": "3.12.13"
                 },
                 "TOPOLOGY": {
-                    "python": "3.12.13",
-                    "graph-tool": "2.77"
+                    "graph-tool": "2.77",
+                    "python": "3.12.13"
                 },
                 "Workflow": {
                     "nf-core/diseasemodulediscovery": "v1.0.0"
@@ -235,10 +235,10 @@
                 "node_degree_distribution_mqc.yaml:md5,9bc45460b748c4a7276973cdb6e6de8d"
             ]
         ],
-        "timestamp": "2026-06-30T19:12:23.998470919",
+        "timestamp": "2026-11-06T10:17:00.842235898",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.0"
+            "nf-test": "0.9.4",
+            "nextflow": "26.10.4"
         }
     }
 }
