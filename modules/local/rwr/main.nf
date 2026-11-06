@@ -1,7 +1,7 @@
 
 process RWR {
     tag "$meta.id"
-    label 'process_low'
+    label 'process_high'
 
     input:
     tuple val(meta), path(seeds), path (network)    // Input files
@@ -27,7 +27,7 @@ process RWR {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        python: \$(python --version | sed 's/Python //g')
+        python: "\$(python --version | sed 's/Python //g')"
     END_VERSIONS
     """
 }
