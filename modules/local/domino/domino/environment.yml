@@ -1,0 +1,18 @@
+name: domino
+channels:
+  - conda-forge
+  - bioconda
+  - nodefaults
+dependencies:
+  # conda-forge's newest 3.9 is 3.9.23 (3.9.25 exists upstream but not on conda-forge)
+  - conda-forge::python=3.9.23
+  - conda-forge::pip=25.2
+  - pip:
+      # DOMINO v1.0.0 from the release tarball: PyPI's latest is only v0.1.1, and
+      # `bioconda::domino=1.0.0` cannot be solved under strict channel priority
+      # (its pcst-fast 1.0.7.* and python-louvain 0.14.* each exist in one channel only).
+      # v1.0.0's setup.py pins every dependency exactly, so pip resolves them itself:
+      # networkx 2.4, numpy 1.22.0, scipy 1.9.3, pandas 1.5.1,
+      # pcst-fast 1.0.7, statsmodels 0.13.0, python-louvain 0.14
+      # PEP 508 direct reference: pixi (used by the Wave builder) rejects a bare URL
+      - domino-python @ https://github.com/Shamir-Lab/DOMINO/archive/refs/tags/v1.0.0.tar.gz

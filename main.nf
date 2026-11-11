@@ -139,8 +139,8 @@ params {
     //
     // Annotation
     //
-    // Flag for skipping the annotation part of the process.
-    skip_annotation: Boolean
+    // Flag for running the annotation with NeDRex and the BioPAX conversion.
+    run_annotation: Boolean
 
     // Type of gene/protein ids
     id_space: String = 'entrez'
