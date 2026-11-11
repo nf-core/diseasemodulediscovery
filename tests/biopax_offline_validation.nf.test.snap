@@ -10,7 +10,7 @@
                 },
                 "BIOPAX_VALIDATOR": {
                     "biopax-validator": "6.0.0",
-                    "openjdk": "20.0.2.1"
+                    "openjdk": "25.0.2"
                 },
                 "GRAPHTOOLPARSER": {
                     "graph-tool": "2.77",
@@ -111,7 +111,7 @@
                 "node_degree_distribution_mqc.yaml:md5,d6a05ace0a3f6dc518c1106334462049"
             ]
         ],
-        "timestamp": "2026-11-06T10:56:40.913402978",
+        "timestamp": "2026-11-11T17:22:45.92729514",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "26.10.4"

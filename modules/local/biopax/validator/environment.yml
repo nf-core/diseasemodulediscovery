@@ -1,0 +1,7 @@
+name: biopax-validator
+channels:
+  - conda-forge
+  - bioconda
+  - nodefaults
+dependencies:
+  - bioconda::biopax-validator=6.0.0
