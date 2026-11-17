@@ -1,0 +1,66 @@
+name: domino_slicer
+description: Partitions a network into disjoint slices via modularity optimization, the preprocessing step of DOMINO
+keywords:
+  - domino
+  - slicer
+  - network partitioning
+  - louvain
+  - preprocessing
+tools:
+  - domino_slicer:
+      description: Preprocessing step shipped with DOMINO that partitions a network into disjoint slices using Louvain modularity optimization. The resulting slices depend only on the network and can be reused for any seed set.
+      homepage: https://github.com/Shamir-Lab/DOMINO
+      documentation: https://github.com/Shamir-Lab/DOMINO
+      licence:
+        - MIT
+  - python-louvain:
+      description: Implementation of the Louvain method for community detection in large networks.
+      homepage: https://github.com/taynaud/python-louvain
+      documentation: https://github.com/taynaud/python-louvain
+      licence:
+        - BSD-3-Clause
+  - networkx:
+      description: Python package for the creation, manipulation and study of the structure and dynamics of complex networks.
+      homepage: https://networkx.org/
+      documentation: https://networkx.org/documentation/stable/
+      licence:
+        - BSD-3-Clause
+input:
+  - - meta:
+        type: map
+        description: Groovy Map containing sample information, must contain an `id` field
+    - network:
+        type: file
+        description: Interaction network as a tab-separated SIF file with the header columns `node_1`, `type` and `node_2`
+output:
+  slices:
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information, must contain an `id` field
+      - ${meta.id}.slices.txt:
+          type: file
+          description: "Text file listing the network slices. The first line reports the total number of slices, and every slice is given as a `cc #<i>: n=<size>` line followed by a bracketed, comma-separated list of its node identifiers."
+          pattern: ${meta.id}.slices.txt
+  versions:
+    - versions.yml:
+        type: file
+        description: File containing software versions
+        pattern: versions.yml
+authors:
+  - "@JohannesKersting"
+maintainers:
+  - "@JohannesKersting"
+containers:
+  docker:
+    linux/amd64:
+      name: community.wave.seqera.io/library/domino:d7848ba6939a9ab0
+      build_id: bd-d7848ba6939a9ab0_1
+      scan_id: sc-a84c81913a138e70_1
+  singularity:
+    linux/amd64:
+      name: oras://community.wave.seqera.io/library/domino:c6cf246e01593ebb
+      build_id: bd-c6cf246e01593ebb_1
+      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/d1/d1e127804ca623639fc35b159206b564f3cc3e579ac1cad595c8a84d40609be5/data
+  conda:
+    linux/amd64:
+      lock_file: modules/local/domino/slicer/.conda-lock/linux_amd64-bd-d7848ba6939a9ab0_1.txt

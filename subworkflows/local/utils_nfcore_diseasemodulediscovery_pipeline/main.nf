@@ -16,6 +16,7 @@ include { completionEmail           } from '../../nf-core/utils_nfcore_pipeline'
 include { completionSummary         } from '../../nf-core/utils_nfcore_pipeline'
 include { UTILS_NFCORE_PIPELINE     } from '../../nf-core/utils_nfcore_pipeline'
 include { UTILS_NEXTFLOW_PIPELINE   } from '../../nf-core/utils_nextflow_pipeline'
+include { logColours                } from '../../nf-core/utils_nfcore_pipeline'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -31,10 +32,15 @@ workflow PIPELINE_INITIALISATION {
     monochrome_logs   // boolean: Do not use coloured log outputs
     nextflow_cli_args //   array: List of positional nextflow CLI args
     outdir            //  string: The output directory where the results will be saved
-    input             //  string: Path to input samplesheet
     help              // boolean: Display help message and exit
     help_full         // boolean: Show the full help message
     show_hidden       // boolean: Show hidden parameters in the help message
+    param_input             //  string: Path to input samplesheet
+    param_seeds             //  string: Path(s) to seed genes file(s)
+    param_network           //  string: Path(s) to network file(s)
+    param_perturbed_networks //  string: Path(s) to perturbed networks file
+    param_prepared_networks_url //  string: URL to prepared networks
+    param_id_space          //  string: ID space to use for prepared networks
 
     main:
 
@@ -99,33 +105,116 @@ workflow PIPELINE_INITIALISATION {
         nextflow_cli_args
     )
 
-    //
-    // Create channel from input file provided through params.input
-    //
+    def prepared_networks_url = param_prepared_networks_url
+    def network_map = loadYamlAsMap("${param_prepared_networks_url}network_map.yaml")
+    def id_space_map = loadYamlAsMap("${prepared_networks_url}id_space_map.yaml")
 
-    channel
-        .fromList(samplesheetToList(input, "${projectDir}/assets/schema_input.json"))
-        .map {
-            meta, fastq_1, fastq_2 ->
-                if (!fastq_2) {
-                    return [ meta.id, meta + [ single_end:true ], [ fastq_1 ] ]
-                } else {
-                    return [ meta.id, meta + [ single_end:false ], [ fastq_1, fastq_2 ] ]
+    ch_seeds = Channel.empty()          // channel: [ val(meta[id,seeds_id,network_id]), path(seeds) ]
+    ch_network = Channel.empty()        // channel: [ val(meta[id,network_id]), path(network) ]
+    ch_perturbed_networks = Channel.empty() // channel: [ val(meta[id,network_id]), [path(perturbed_network)] ]
+
+    seed_param_set = (param_seeds != null)
+    network_param_set = (param_network != null)
+    perturbed_networks_param_set = (param_perturbed_networks != null)
+
+    if(param_input){
+
+        // check if seeds, network, or perturbed_networks parameters are set and if so, throw an error since they cannot be used together with the sample sheet
+        if (seed_param_set || network_param_set || perturbed_networks_param_set){
+            error("You need to specify either a sample sheet (--input) OR the seeds (--seeds) and network (--network) files (including perturbed networks). You cannot specify both at the same time.")
+        }
+
+        //
+        // Create channel from input file provided through params.input
+        //
+
+        // channel: [ path(seeds), path(network), path(perturbed_networks) ]
+        ch_input = Channel
+            .fromList(samplesheetToList(param_input, "${projectDir}/assets/schema_input.json"))
+            .map{seeds, network, perturbed_networks ->
+                if(seeds.size()==0){
+                    error("No seeds files specified in the sample sheet")
                 }
+                if(network.size()==0){
+                    error("No network file specified in the sample sheet")
+                }
+                [seeds, network, perturbed_networks]
+            }
+
+        log.info("Creating network and seeds channels based on tuples in the sample sheet")
+
+        ch_network = ch_input
+            .map{ it -> [it[1], it[2]]}
+            .map{ network, perturbed_networks ->
+                [ mapPreparedNetwork(network_map, id_space_map, prepared_networks_url, network, param_id_space), perturbed_networks ]
+            }
+            .map{ network, perturbed_networks ->
+                [ [ id: network.baseName, network_id: network.baseName ], network, perturbed_networks ]
+            }
+            .unique()
+
+        ch_seeds = ch_input
+            .map{ it ->
+                def seeds = it[0]
+                def network = it[1]
+                def network_id = mapPreparedNetwork(network_map, id_space_map, prepared_networks_url, network, param_id_space).baseName
+                [ [ id: seeds.baseName + "." + network_id, seeds_id: seeds.baseName, network_id: network_id ] , seeds ]
+            }
+
+    } else if (seed_param_set && network_param_set){
+
+        log.info("Creating network and seeds channels based on the combination of all seed and network files provided")
+
+        ch_network = Channel.fromList(param_network.split(',').flatten())
+            .map{network -> mapPreparedNetwork(network_map, id_space_map, prepared_networks_url, network, param_id_space)}
+            .map{ it -> [ [ id: it.baseName, network_id: it.baseName ], it ] }
+
+        ch_seeds = Channel
+            .fromPath(param_seeds.split(',').flatten(), checkIfExists: true)
+            .combine(ch_network.map{meta, _network -> meta.network_id})
+            .map{seeds, network_id ->
+                [ [ id: seeds.baseName + "." + network_id, seeds_id: seeds.baseName, network_id: network_id ] , seeds ]
+            }
+
+        // Add perturbed network folders, if provided (currently does not check if the number of the perturbed networks matches the number of the networks and does not work with missing values)
+        if(perturbed_networks_param_set){
+            ch_network = ch_network.merge(
+                Channel
+                .fromPath(param_perturbed_networks.split(',').flatten())
+            )
+        } else{
+            ch_network = ch_network.map{meta, network -> [meta, network, []]}
         }
-        .groupTuple()
-        .map { samplesheet ->
-            validateInputSamplesheet(samplesheet)
+
+    } else {
+        error("You need to specify either a sample sheet (--input) or the seeds (--seeds) and network (--network) files")
+    }
+
+    // check if IDs are unique
+    ch_network.map{ meta, _network, _perturbed_networks -> [meta.id] }
+        .collect()
+        .subscribe { list ->
+            def unique = list.size() == list.toSet().size()
+            if (!unique) { error("IDs in ch_network are not unique.") }
         }
-        .map {
-            meta, fastqs ->
-                return [ meta, fastqs.flatten() ]
+    ch_seeds.map{ meta, _seeds -> [meta.id] }
+        .collect()
+        .subscribe { list ->
+            def unique = list.size() == list.toSet().size()
+            if (!unique) { error("IDs in ch_seeds are not unique.") }
         }
-        .set { ch_samplesheet }
+
+    ch_perturbed_networks = ch_network.map{meta, _network, perturbed_networks ->
+        [meta, perturbed_networks.size() > 0 ? file(perturbed_networks+"/*.gt") : []]
+    }
+
+    ch_network = ch_network.map{meta, network, _perturbed_networks -> [meta, network]}
 
     emit:
-    samplesheet = ch_samplesheet
     versions    = ch_versions
+    seeds       = ch_seeds                      // channel: [ val(meta[id,seeds_id,network_id]), path(seeds) ]
+    network     = ch_network                    // channel: [ val(meta[id,network_id]), path(network) ]
+    perturbed_networks = ch_perturbed_networks    // channel: [ val(meta[id,network_id]), [path(perturbed_network)] ]
 }
 
 /*
@@ -143,10 +232,41 @@ workflow PIPELINE_COMPLETION {
     outdir          //    path: Path to output directory where results will be published
     monochrome_logs // boolean: Disable ANSI colour codes in log output
     multiqc_report  //  string: Path to MultiQC report
+    seeds_empty_status           //  map: Empty/not empty status per seed file - network file combination
+    module_empty_status          //  map: Empty/not empty status per module
+    visualization_skipped_status //  map: Skipped/not skipped status per module
+    drugstone_skipped_status     //  map: Skipped/not skipped status per module
+
 
     main:
+
+    def seeds_empty = [:]
+    def module_empty = [:]
+    def visualization_skipped = [:]
+    def drugstone_skipped = [:]
+
     summary_params = paramsSummaryMap(workflow, parameters_schema: "nextflow_schema.json")
     def multiqc_reports = multiqc_report.toList()
+
+    seeds_empty_status
+        .map{
+            id, status -> seeds_empty[id] = status
+        }
+    module_empty_status
+        .map{
+            id, status -> module_empty[id] = status
+        }
+
+    visualization_skipped_status
+        .map{
+            id, status -> visualization_skipped[id] = status
+        }
+
+    drugstone_skipped_status
+        .map{
+            id, status -> drugstone_skipped[id] = status
+        }
+
 
     //
     // Completion email and summary
@@ -164,6 +284,7 @@ workflow PIPELINE_COMPLETION {
             )
         }
 
+        logWarnings(monochrome_logs, seeds_empty, module_empty, visualization_skipped, drugstone_skipped)
         completionSummary(monochrome_logs)
 
     }
@@ -178,6 +299,69 @@ workflow PIPELINE_COMPLETION {
     FUNCTIONS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
+
+//
+// Load a YAML file and return its content as a map
+//
+def loadYamlAsMap(path) {
+    def yaml = new  org.yaml.snakeyaml.Yaml()
+    def parsed = yaml.load(file(path, checkIfExists: true).text)
+
+    assert parsed instanceof Map : "YAML root must be a dictionary"
+    return parsed
+}
+
+//
+// Check if the network is a prepared network or a file
+//
+def mapPreparedNetwork(network_map, id_space_map, prepared_networks_url, network, id_space) {
+    if (network_map.containsKey(network)) {
+        return file("${prepared_networks_url}${network_map[network]}.${id_space_map[id_space]}.gt", checkIfExists: true)
+    } else {
+        return file(network, checkIfExists: true)
+    }
+}
+//
+// Read a tsv file and return its content as a list of groovy maps
+//
+def List<Map<String, String>> readTsvAsListOfMaps(file) {
+    def lines = file.readLines()
+
+    if (lines.size() < 2) {
+        throw new IllegalArgumentException("TSV must have at least one header and one data row")
+    }
+
+    def headers = lines[0].split("\t")
+    def result = []
+
+    lines.tail().each { line ->
+        def values = line.split("\t")
+        if (values.size() != headers.size()) {
+            throw new IllegalArgumentException("Mismatch between header and data line: $line")
+        }
+
+        def rowMap = [:]
+        headers.eachWithIndex { header, idx ->
+            rowMap[header] = values[idx]
+        }
+        result << rowMap
+    }
+
+    return result
+}
+
+//
+// Create MultiQC tsv custom content from a list of values
+//
+def multiqcTsvFromList(tsv_data, header) {
+    def tsv_string = ""
+    if (tsv_data.size() > 0) {
+        tsv_string += "${header.join('\t')}\n"
+        tsv_string += tsv_data.join('\n')
+    }
+    return tsv_string
+}
+
 
 //
 // Validate channels from input samplesheet
@@ -255,4 +439,28 @@ def methodsDescriptionText(mqc_methods_yaml) {
     def description_html = engine.createTemplate(methods_text).make(meta)
 
     return description_html.toString()
+}
+
+def logWarnings(monochrome_logs=true, seeds_empty=[:], module_empty=[:], visualization_skipped=[:], drugstone_skipped=[:]) {
+    def colors = logColours(monochrome_logs)
+
+    def seeds_empty_count = seeds_empty.count  { key, value -> value == true }
+    def module_empty_count = module_empty.count  { key, value -> value == true }
+    def visualization_skipped_count = visualization_skipped.count  { key, value -> value == true }
+    def drugstone_skipped_count = drugstone_skipped.count  { key, value -> value == true }
+
+    if (workflow.success) {
+        if (seeds_empty_count > 0) {
+            log.info "-${colors.purple}[$workflow.manifest.name]${colors.red} Please check MultiQC report: ${seeds_empty_count}/${seeds_empty.size()} combinations of seed files and network files did not have any overlapping nodes and were not used in subsequent processes.${colors.reset}-"
+        }
+        if (module_empty_count > 0) {
+            log.info "-${colors.purple}[$workflow.manifest.name]${colors.red} Please check MultiQC report: ${module_empty_count}/${module_empty.size()} modules were empty and not used in subsequent processes.${colors.reset}-"
+        }
+        if (visualization_skipped_count > 0) {
+            log.info "-${colors.purple}[$workflow.manifest.name]${colors.red} Please check MultiQC report: ${visualization_skipped_count}/${visualization_skipped.size()} modules were too large for visualization (> ${params.visualization_max_nodes} nodes). You can adjust the threshold with the '--visualization_max_nodes' parameter.${colors.reset}-"
+        }
+        if (drugstone_skipped_count > 0) {
+            log.info "-${colors.purple}[$workflow.manifest.name]${colors.red} Please check MultiQC report: ${drugstone_skipped_count}/${drugstone_skipped.size()} modules were too large for Drugst.One (> ${params.drugstone_max_nodes} nodes). You can adjust the threshold with the '--drugstone_max_nodes' parameter.${colors.reset}-"
+        }
+    }
 }

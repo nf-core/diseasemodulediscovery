@@ -1,5 +1,8 @@
 {
-    "@context": ["https://w3id.org/ro/crate/1.3/context", "https://w3id.org/ro/terms/test"],
+    "@context": [
+        "https://w3id.org/ro/crate/1.3/context",
+        "https://w3id.org/ro/terms/test"
+    ],
     "@graph": [
         {
             "@id": "./",
@@ -20,7 +23,13 @@
                     "@id": "main.nf"
                 },
                 {
+                    "@id": "docs/images/nf-core-diseasemodulediscovery_metro_map.png"
+                },
+                {
                     "@id": "assets/"
+                },
+                {
+                    "@id": "bin/"
                 },
                 {
                     "@id": "conf/"
@@ -33,6 +42,9 @@
                 },
                 {
                     "@id": "modules/"
+                },
+                {
+                    "@id": "modules/local/"
                 },
                 {
                     "@id": "modules/nf-core/"
@@ -107,7 +119,28 @@
         },
         {
             "@id": "main.nf",
-            "@type": ["File", "SoftwareSourceCode", "ComputationalWorkflow"],
+            "@type": [
+                "File",
+                "SoftwareSourceCode",
+                "ComputationalWorkflow"
+            ],
+            "author": [
+                {
+                    "@id": "https://orcid.org/0000-0002-3882-0093"
+                },
+                {
+                    "@id": "https://orcid.org/0009-0004-0699-6475"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-1971-1350"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-5706-2718"
+                },
+                {
+                    "@id": "https://orcid.org/0009-0001-6706-2789"
+                }
+            ],
             "contributor": [
                 {
                     "@id": "#d7e94da1-e498-4f16-af6b-2ab57e6b85a4"
@@ -116,6 +149,9 @@
             "dateCreated": "",
             "dateModified": "2026-11-11T13:41:11Z",
             "dct:conformsTo": "https://bioschemas.org/profiles/ComputationalWorkflow/1.0-RELEASE/",
+            "image": {
+                "@id": "docs/images/nf-core-diseasemodulediscovery_metro_map.png"
+            },
             "keywords": [
                 "nf-core",
                 "nextflow",
@@ -133,8 +169,17 @@
                 "systems-medicine",
                 "workfllow"
             ],
-            "license": ["MIT"],
-            "name": ["nf-core/diseasemodulediscovery"],
+            "license": [
+                "MIT"
+            ],
+            "maintainer": [
+                {
+                    "@id": "https://orcid.org/0000-0002-3882-0093"
+                }
+            ],
+            "name": [
+                "nf-core/diseasemodulediscovery"
+            ],
             "programmingLanguage": {
                 "@id": "https://w3id.org/workflowhub/workflow-ro-crate#nextflow"
             },
@@ -145,7 +190,9 @@
                 "https://github.com/nf-core/diseasemodulediscovery",
                 "https://nf-co.re/diseasemodulediscovery/1.0.0/"
             ],
-            "version": ["1.0.0"]
+            "version": [
+                "1.0.0"
+            ]
         },
         {
             "@id": "https://w3id.org/workflowhub/workflow-ro-crate#nextflow",
@@ -161,7 +208,10 @@
         },
         {
             "@id": "https://w3id.org/workflowhub/workflow-ro-crate/1.1",
-            "@type": ["CreativeWork", "Profile"],
+            "@type": [
+                "CreativeWork",
+                "Profile"
+            ],
             "name": "Workflow RO-Crate",
             "version": "1.1"
         },
@@ -180,7 +230,10 @@
         },
         {
             "@id": "https://w3id.org/ro/wftest/0.2",
-            "@type": ["CreativeWork", "Profile"],
+            "@type": [
+                "CreativeWork",
+                "Profile"
+            ],
             "name": "Workflow Testing RO-Crate",
             "version": "0.2"
         },
@@ -208,6 +261,11 @@
             "description": "Additional files"
         },
         {
+            "@id": "bin/",
+            "@type": "Dataset",
+            "description": "Scripts that must be callable from a pipeline process"
+        },
+        {
             "@id": "conf/",
             "@type": "Dataset",
             "description": "Configuration files"
@@ -226,6 +284,11 @@
             "@id": "modules/",
             "@type": "Dataset",
             "description": "Modules used by the pipeline"
+        },
+        {
+            "@id": "modules/local/",
+            "@type": "Dataset",
+            "description": "Pipeline-specific modules"
         },
         {
             "@id": "modules/nf-core/",
@@ -316,7 +379,58 @@
         {
             "@id": "#d7e94da1-e498-4f16-af6b-2ab57e6b85a4",
             "@type": "Person",
-            "name": "REPO4EU"
+            "affiliation": "Data Science in Systems Biology, TUM School of Life Sciences, Technical University of Munich, Germany.",
+            "email": "johannes.kersting@tum.de",
+            "name": "Johannes Kersting",
+            "url": "https://github.com/JohannesKersting"
+        },
+        {
+            "@id": "https://orcid.org/0009-0004-0699-6475",
+            "@type": "Person",
+            "affiliation": "Max Perutz Labs, Department of Structural and Computational Biology, University of Vienna, Vienna, Austria.",
+            "email": "chloe.bucheron@univie.ac.at",
+            "name": "Chlo\u00e9 Bucheron",
+            "url": "https://github.com/ChloeBubu"
+        },
+        {
+            "@id": "https://orcid.org/0009-0007-3502-3033",
+            "@type": "Person",
+            "affiliation": "Data Science in Systems Biology, TUM School of Life Sciences, Technical University of Munich, Germany.",
+            "email": "lisa.spindler@tum.de",
+            "name": "Lisa M. Spindler",
+            "url": "https://github.com/lspindler2509"
+        },
+        {
+            "@id": "https://orcid.org/0000-0002-1971-1350",
+            "@type": "Person",
+            "affiliation": "Discovery and Data Science (DDS) Unit, STALICLA SL, Barcelona, Spain.",
+            "email": "joaquim.aguirre@stalicla.com",
+            "name": "Joaquim Aguirre-Plans",
+            "url": "https://github.com/quimaguirre"
+        },
+        {
+            "@id": "https://orcid.org/0000-0002-5706-2718",
+            "@type": "Person",
+            "affiliation": "Data Science in Systems Biology, TUM School of Life Sciences, Technical University of Munich, Germany.",
+            "email": "quirin.manz@tum.de",
+            "name": "Quirin Manz",
+            "url": "https://github.com/quirinmanz"
+        },
+        {
+            "@id": "https://orcid.org/0009-0007-4106-4659",
+            "@type": "Person",
+            "affiliation": "Data Science in Systems Biology, TUM School of Life Sciences, Technical University of Munich, Germany.",
+            "email": "e28saf@mytum.de",
+            "name": "Tanja Pock",
+            "url": "https://github.com/tanjapock"
+        },
+        {
+            "@id": "https://orcid.org/0009-0001-6706-2789",
+            "@type": "Person",
+            "affiliation": "Data Science in Systems Biology, TUM School of Life Sciences, Technical University of Munich, Germany.",
+            "email": "mo.tan@tum.de",
+            "name": "Mo Tan",
+            "url": "https://github.com/Schansiate"
         }
     ]
 }
