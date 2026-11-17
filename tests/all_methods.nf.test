@@ -27,7 +27,6 @@ nextflow_pipeline {
                 skip_visualization      = true
                 skip_drugstone_export   = true
                 skip_evaluation         = true
-                skip_annotation         = true
                 skip_drug_predictions   = true
             }
         }

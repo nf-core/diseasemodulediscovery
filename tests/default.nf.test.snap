@@ -2,18 +2,11 @@
     "-profile test": {
         "content": [
             {
-                "BIOPAX_PARSER": {
-                    "graph-tool": "2.77",
-                    "nedrex": "0.1.4",
-                    "pybiopax": "0.1.4",
-                    "python": "3.12.13"
-                },
-                "BIOPAX_VALIDATOR": {
-                    "biopax-validator": "6.0.0",
-                    "openjdk": "20.0.2.1"
-                },
                 "DIAMOND": {
-                    "python": "3.8.5"
+                    "networkx": "3.3",
+                    "numpy": "2.1.3",
+                    "python": "3.12.13",
+                    "scipy": "1.14.1"
                 },
                 "DIGEST_REFERENCEBASED": {
                     "biodigest": "0.2.16",
@@ -95,9 +88,6 @@
             },
             [
                 "disease_modules",
-                "disease_modules/biopax",
-                "disease_modules/biopax/entrez_seeds_1.entrez_ppi.diamond.owl",
-                "disease_modules/biopax/entrez_seeds_1.entrez_ppi.no_tool.owl",
                 "disease_modules/graphml",
                 "disease_modules/graphml/entrez_seeds_1.entrez_ppi.diamond.graphml",
                 "disease_modules/graphml/entrez_seeds_1.entrez_ppi.no_tool.graphml",
@@ -339,9 +329,7 @@
                 "multiqc/multiqc_plots/svg/shared_nodes_no_seeds.svg",
                 "multiqc/multiqc_report.html",
                 "pipeline_info",
-                "pipeline_info/nf_core_diseasemodulediscovery_software_mqc_versions.yml",
-                "reports",
-                "reports/biopax-validator-report.html"
+                "pipeline_info/nf_core_diseasemodulediscovery_software_mqc_versions.yml"
             ],
             [
                 "entrez_seeds_1.entrez_ppi.no_tool.graphml:md5,cc3311884751102ec002365dc513bb42",
@@ -357,7 +345,7 @@
                 "node_degree_distribution_mqc.yaml:md5,d6a05ace0a3f6dc518c1106334462049"
             ]
         ],
-        "timestamp": "2026-11-06T10:13:11.238663069",
+        "timestamp": "2026-11-06T10:59:05.282337901",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "26.10.4"

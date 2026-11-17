@@ -43,7 +43,7 @@
 - Export to the network medicine web visualization tool [`Drugst.One`](https://drugst.one/)
 - Drug prioritization using the API of [`Drugst.One`](https://drugst.one/)
 - Visualization of the module networks ([`graph-tool`](https://graph-tool.skewed.de/), [`pyvis`](https://github.com/WestHealth/pyvis))
-- Annotation with biological data (targeting drugs, side effects, associated disorders, cellular localization) queried from [`NeDRexDB`](https://nedrex.net/) and conversion to [`BioPAX`](https://www.biopax.org/) format.
+- Annotation with biological data (targeting drugs, side effects, associated disorders, cellular localization) queried from [`NeDRexDB`](https://nedrex.net/) and conversion to [`BioPAX`](https://www.biopax.org/) format (enabled by `--run_annotation`).
 - Result and evaluation summary ([`MultiQC`](https://seqera.io/multiqc/))
 
 ## Usage

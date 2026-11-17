@@ -16,7 +16,6 @@ nextflow_pipeline {
 
                 // Skip all steps that only work with human data
                 skip_robust_bias_aware  = true
-                skip_annotation         = true
                 skip_digest             = true
                 skip_drugstone_export   = true
                 skip_drug_predictions   = true

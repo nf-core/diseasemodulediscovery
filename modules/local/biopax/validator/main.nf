@@ -1,7 +1,10 @@
 process BIOPAX_VALIDATOR {
     label 'process_single'
 
-    container "docker.io/quirinmanz/biopax-validator:6.0.0-SNAPSHOT"
+    conda "${moduleDir}/environment.yml"
+    container "${workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
+        ? 'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/da/daf717f9ae2604fcfee3b28c493ee67554b40ebd05e13837ca4fe607f9044703/data'
+        : 'community.wave.seqera.io/library/biopax-validator:ec92f1efa2d11d2e'}" // automatically generated
 
     input:
     path biopax_files
@@ -16,23 +19,22 @@ process BIOPAX_VALIDATOR {
 
     script:
     """
-    #!/bin/sh
-
-    java -version
-    echo Running BioPAX Validator...
 
     if [ "${validate_online}" = true ]; then
         echo "Validating online"
-        java -jar /biopax-validator/biopax-validator-client.jar . biopax-validator-report.html notstrict
+        biopax-validator-client . biopax-validator-report.html notstrict
     else
         echo "Validating offline"
-        java --add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.lang.reflect=ALL-UNNAMED -javaagent:/biopax-validator/lib/spring-instrument-5.3.29.jar -Xmx${task.memory.toGiga().toInteger()}g -Dfile.encoding=UTF-8 -Djava.security.egd=file:/dev/./urandom -jar /biopax-validator/biopax-validator.jar . --output=biopax-validator-report.html --profile=notstrict
+        # the wrapper sets the Spring agent and --add-opens flags, extra JVM options go through JAVA_OPTS
+        export JAVA_OPTS="-Xmx${task.memory.toGiga().toInteger()}g -Djava.security.egd=file:/dev/./urandom"
+        biopax-validator . --output=biopax-validator-report.html --profile=notstrict
     fi
 
+    # the tool has no version flag, so the version is taken from its conda share directory name
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        openjdk: "\$(java -version 2>&1 | head -n1 | cut -d'"' -f2)"
-        biopax-validator: "\$(ls /biopax-validator/lib/biopax-validator*.jar | grep -oE '[0-9]+[.][0-9]+[.][0-9]+')"
+        openjdk: "\$(java -version 2>&1 | head -n1 | cut -d'"' -f2 | cut -d'-' -f1)"
+        biopax-validator: "\$(ls \$(dirname \$(readlink -f \$(which biopax-validator)))/../share | sed -n 's/^biopax-validator-//p')"
     END_VERSIONS
     """
 }
