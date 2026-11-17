@@ -22,9 +22,6 @@ process SEEDPERTURBATIONEVALUATION {
     tuple val(meta), path("${meta.id}.seed_perturbation_multiqc_jaccard.txt")     , emit: multiqc_jaccard
     path "versions.yml"                                                          , emit: versions
 
-    when:
-    task.ext.when == null || task.ext.when
-
 
     script:
     """

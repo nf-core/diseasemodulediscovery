@@ -16,7 +16,7 @@ workflow GT_SEEDPERTURBATION {
 
     main:
 
-    ch_versions = Channel.empty()
+    ch_versions = channel.empty()
 
     // Perturbe the input seeds
     SEEDPERTURBATION(ch_seeds)
@@ -54,14 +54,14 @@ workflow GT_SEEDPERTURBATION {
         .map{meta, perturbed_module -> [meta.seeds_id, meta.network_id, meta, perturbed_module]}
         .combine(ch_perturbed_seeds.map{meta, perturbed_seeds -> [meta.seeds_id, meta.network_id, perturbed_seeds]}, by: [0,1])
         // Add original_seeds_id, amim, and network_id to tuple for grouping
-        .map{seeds_id, network_id, meta, perturbed_module, perturbed_seeds ->
+        .map{_seeds_id, _network_id, meta, perturbed_module, perturbed_seeds ->
             def key = groupKey(meta.subMap("original_seeds_id", "amim", "network_id"), meta.n_perturbations)
             [key, meta, perturbed_module, perturbed_seeds]
         }
         // Group by original_seeds_id, amim, and network_id
         .groupTuple()
         // Add an ID (based on the original seeds)
-        .map{key, meta, perturbed_modules, perturbed_seeds ->
+        .map{key, _meta, perturbed_modules, perturbed_seeds ->
             [ [ id: key.original_seeds_id + "." + key.network_id + "." + key.amim, module_id: key.original_seeds_id + "." + key.network_id + "." + key.amim, amim: key.amim, seeds_id: key.original_seeds_id, network_id: key.network_id], perturbed_modules, perturbed_seeds]
         }
 
@@ -72,7 +72,7 @@ workflow GT_SEEDPERTURBATION {
         // Combine modules with seeds
         .map{meta, module -> [meta.seeds_id, meta.network_id, meta, module]}
         .combine(ch_seeds.map{meta, seeds -> [meta.seeds_id, meta.network_id, seeds]}, by: [0,1])
-        .map{seeds_id, network_id, meta, module, seeds -> [meta.module_id, meta, module, seeds]}
+        .map{_seeds_id, _network_id, meta, module, seeds -> [meta.module_id, meta, module, seeds]}
         // Joine modules with perturbed modules and seeds
         .join(ch_perturbed_modules
             .map{ meta, perturbed_modules, perturbed_seeds ->
@@ -80,12 +80,12 @@ workflow GT_SEEDPERTURBATION {
             }, by: 0, failOnDuplicate: true, failOnMismatch: true
         )
         // Combine with network (key is network_id)
-        .map{module_id, meta, module, seeds, perturbed_modules, perturbed_seeds ->
+        .map{_module_id, meta, module, seeds, perturbed_modules, perturbed_seeds ->
             [meta.network_id, meta, module, seeds, perturbed_modules, perturbed_seeds]
         }
         .combine(ch_network.map{meta, network-> [meta.network_id, network]}, by: 0)
         // Multimap to create the final shape
-        .multiMap{network_id, meta, module, seeds, perturbed_modules, perturbed_seeds, network ->
+        .multiMap{_network_id, meta, module, seeds, perturbed_modules, perturbed_seeds, network ->
             module: [meta, module]
             seeds: seeds
             perturbed_seeds: perturbed_seeds
@@ -104,7 +104,7 @@ workflow GT_SEEDPERTURBATION {
     )
     ch_versions = ch_versions.mix(SEEDPERTURBATIONEVALUATION.out.versions)
     ch_multiqc_summary =  SEEDPERTURBATIONEVALUATION.out.multiqc_summary
-        .map{ meta, path -> path }
+        .map{ _meta, path -> path }
         .collectFile(
             cache: false,
             storeDir: "${params.outdir}/mqc_summaries",
@@ -113,7 +113,7 @@ workflow GT_SEEDPERTURBATION {
         )
     ch_multiqc_jaccard =
         SEEDPERTURBATIONEVALUATION.out.multiqc_jaccard
-        .map{ meta, path -> path }
+        .map{ _meta, path -> path }
         .collectFile(
             cache: false,
             storeDir: "${params.outdir}/mqc_summaries",

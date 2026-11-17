@@ -13,8 +13,6 @@ process ROBUSTBIASAWARE {
     output:
     tuple val(meta), path("${meta.id}.graphml")  , emit: module
     path "versions.yml"     , emit: versions
-    when:
-    task.ext.when == null || task.ext.when
     script:
     def args = task.ext.args ?: ''          // Get possible alpha, beta, n, and tau arguments for robust, see TODO above
     def identifier ="${idspace}" == "SYMBOL" ? "GENE_SYMBOL":

@@ -15,9 +15,6 @@ process NETWORKPERTURBATION {
     tuple val(meta), path("${output_name}"), emit: perturbed_network
     path "versions.yml"                    , emit: versions
 
-    when:
-    task.ext.when == null || task.ext.when
-
     script:
     """
     randomize_network.py --network ${network} --output ${output_name}

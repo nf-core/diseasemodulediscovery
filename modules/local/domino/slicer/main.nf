@@ -15,9 +15,6 @@ process DOMINO_SLICER {             // Process name, should be all upper case. O
     path "versions.yml"                           , emit: versions
 
 
-    when:
-    task.ext.when == null || task.ext.when
-
 
     // The script for executing slicer
     // Access inputs, parameters, etc. with the "$" operator

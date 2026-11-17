@@ -14,9 +14,6 @@ process FIRSTNEIGHBOR {
     tuple val(meta), path("${meta.id}.firstneighbor.gt"), emit: module
     path "versions.yml"                                 , emit: versions
 
-    when:
-    task.ext.when == null || task.ext.when
-
     script:
     """
     firstneighbor_tool.py -n $network -s $seeds -o "${meta.id}.firstneighbor.gt"

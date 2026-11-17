@@ -14,9 +14,6 @@ process NETWORKANNOTATION {
     tuple val(meta), path("${meta.id}.gt"), emit: module
     path "versions.yml"                   , emit: versions
 
-    when:
-    task.ext.when == null || task.ext.when
-
     script:
     """
     network_annotation.py -s $subnetwork -n $network -o ""${meta.id}.gt""

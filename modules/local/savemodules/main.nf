@@ -16,9 +16,6 @@ process SAVEMODULES {
     tuple val(meta), path("${meta.id}.edges.tsv"), emit: edges_tsv
     path "versions.yml"                          , emit: versions
 
-    when:
-    task.ext.when == null || task.ext.when
-
     script:
     """
     save_modules.py -m "${module}" -p "${meta.id}" -l DEBUG

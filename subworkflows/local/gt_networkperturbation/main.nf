@@ -14,13 +14,13 @@ workflow GT_NETWORKPERTURBATION {
     ch_perturbed_networks    // channel: [ val(meta[id,network_id]), [path(perturbed_networks)] ]
 
     main:
-    ch_versions = Channel.empty()
+    ch_versions = channel.empty()
 
     // Branch ch_perturbed_networks based on whether the perturbed_networks have already been pre-computed
     ch_perturbed_networks = ch_network
         .join(ch_perturbed_networks, by: 0, failOnDuplicate: true, failOnMismatch: true)
-        .branch{
-            precomputed: it[2].size() > 0
+        .branch{ _meta, _network, perturbed_networks ->
+            precomputed: perturbed_networks.size() > 0
             not_precomputed: true
         }
 
@@ -28,9 +28,9 @@ workflow GT_NETWORKPERTURBATION {
     // channel: [val(meta[id,network_id,n_perturbations]), path(perturbed_networks), val(output_name)]
     ch_perturbation_input = ch_perturbed_networks.not_precomputed
         // add n_perturbations to meta
-        .map{meta, network, perturbed_networks -> [meta + [n_perturbations: params.n_network_perturbations], network]}
+        .map{meta, network, _perturbed_networks -> [meta + [n_perturbations: params.n_network_perturbations], network]}
         // expand by number of perturbations
-        .combine(Channel.of(0..(params.n_network_perturbations-1)))
+        .combine(channel.of(0..(params.n_network_perturbations-1)))
         // add output file names
         .map{meta, network, perturbation -> [meta, network, network.baseName + ".perm_" + perturbation + "." + network.extension]}
 
@@ -42,7 +42,7 @@ workflow GT_NETWORKPERTURBATION {
     // channel: [val(meta[id,seeds_id,network_id,perturbed_network_id,n_perturbations]), path(perturbed_network)]
     ch_perturbed_networks =
         // Bring precomputed perturbed networks in right shape
-        ch_perturbed_networks.precomputed.map{ meta, network, perturbed_networks -> [meta, perturbed_networks] }
+        ch_perturbed_networks.precomputed.map{ meta, _network, perturbed_networks -> [meta, perturbed_networks] }
         // Add n_perturbations for later grouping
         .map{ meta, perturbed_networks -> [ meta + [n_perturbations: perturbed_networks.size()], perturbed_networks] }
         // Convert to long format
@@ -71,7 +71,7 @@ workflow GT_NETWORKPERTURBATION {
         // Group by seeds_id, amim, and network_id
         .groupTuple()
         // Add id and module_id based on the original modules
-        .map{key, meta, perturbed_modules ->
+        .map{key, _meta, perturbed_modules ->
             [ [ id: key.seeds_id + "." + key.network_id + "." + key.amim, module_id: key.seeds_id + "." + key.network_id + "." + key.amim, amim: key.amim, seeds_id: key.seeds_id, network_id: key.network_id], perturbed_modules]
         }
 
@@ -83,7 +83,7 @@ workflow GT_NETWORKPERTURBATION {
             by: 0, failOnDuplicate: true, failOnMismatch: true
         )
         // Prepare channel for evaluation
-        .multiMap{module_id, meta, module, perturbed_modules ->
+        .multiMap{_module_id, meta, module, perturbed_modules ->
             module: [meta, module]
             perturbed_modules: perturbed_modules
         }
@@ -94,7 +94,7 @@ workflow GT_NETWORKPERTURBATION {
     )
     ch_versions = ch_versions.mix(NETWORKPERTURBATIONEVALUATION.out.versions)
     ch_multiqc_summary =  NETWORKPERTURBATIONEVALUATION.out.multiqc_summary
-        .map{ meta, path -> path }
+        .map{ _meta, path -> path }
         .collectFile(
             cache: false,
             storeDir: "${params.outdir}/mqc_summaries",
@@ -103,7 +103,7 @@ workflow GT_NETWORKPERTURBATION {
         )
     ch_multiqc_jaccard =
         NETWORKPERTURBATIONEVALUATION.out.multiqc_jaccard
-        .map{ meta, path -> path }
+        .map{ _meta, path -> path }
         .collectFile(
             cache: false,
             storeDir: "${params.outdir}/mqc_summaries",

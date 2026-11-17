@@ -20,9 +20,6 @@ process DRUGPREDICTIONS {
     tuple val(meta), val(algorithm), path("${meta.id}.csv")                    , emit: drugstone_download
     path "versions.yml"                                                        , emit: versions
 
-    when:
-    task.ext.when == null || task.ext.when
-
     script:
     def drugstone_id_space = "${idspace}" == "ensembl" ? "ensg" : "${idspace}"
     """

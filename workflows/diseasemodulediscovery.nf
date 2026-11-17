@@ -121,24 +121,24 @@ workflow DISEASEMODULEDISCOVERY {
     main:
 
     // Params
-    id_space = Channel.value(params.id_space)
-    validate_online = Channel.value(params.validate_online)
+    id_space = channel.value(params.id_space)
+    validate_online = channel.value(params.validate_online)
 
 
 
     // Channels
-    ch_versions = Channel.empty()
-    ch_multiqc_files = Channel.empty()
-    ch_seeds_empty_status = Channel.empty()
-    ch_module_empty_status = Channel.empty()
-    ch_visualization_skipped_status = Channel.empty()
-    ch_drugstone_skipped_status = Channel.empty()
+    ch_versions = channel.empty()
+    ch_multiqc_files = channel.empty()
+    ch_seeds_empty_status = channel.empty()
+    ch_module_empty_status = channel.empty()
+    ch_visualization_skipped_status = channel.empty()
+    ch_drugstone_skipped_status = channel.empty()
 
     // Run network parser for  networks, supported by graph-tool
     GRAPHTOOLPARSER(ch_network, 'gt')
     ch_versions = ch_versions.mix(GRAPHTOOLPARSER.out.versions)
     ch_network_multiqc = GRAPHTOOLPARSER.out.multiqc
-        .map{ meta, path -> path }
+        .map{ _meta, path -> path }
         .collectFile(
             cache: false,
             storeDir: "${params.outdir}/mqc_summaries",
@@ -154,12 +154,12 @@ workflow DISEASEMODULEDISCOVERY {
     ch_seeds_network = ch_seeds
         .map{ meta, seeds -> [meta.network_id, meta, seeds]}
         .combine(ch_network_gt.map{meta, network -> [meta.network_id, network]}, by: 0)
-        .map{key, meta, seeds, network -> [meta, seeds, network]}
+        .map{_key, meta, seeds, network -> [meta, seeds, network]}
 
     INPUTCHECK(ch_seeds_network)
     ch_seeds = INPUTCHECK.out.seeds
     ch_seeds_multiqc = INPUTCHECK.out.multiqc
-        .map{ meta, path -> path }
+        .map{ _meta, path -> path }
         .collectFile(
             cache: false,
             storeDir: "${params.outdir}/mqc_summaries",
@@ -171,7 +171,7 @@ workflow DISEASEMODULEDISCOVERY {
 
     // Save status for workflow summary
     ch_seeds_empty_status = ch_seeds_network
-        .map{meta, seeds, network -> meta.id}
+        .map{meta, _seeds, _network -> meta.id}
         .join(INPUTCHECK.out.seeds.map{ meta, seeds -> [meta.id, seeds]}, by: 0, remainder: true)
         .map{id, seeds -> [id, seeds == null] }
 
@@ -203,7 +203,7 @@ workflow DISEASEMODULEDISCOVERY {
     TOPOLOGY(ch_modules)
     ch_versions = ch_versions.mix(TOPOLOGY.out.versions)
     ch_topology_multiqc = TOPOLOGY.out.topology
-        .map{ meta, path -> path }
+        .map{ _meta, path -> path }
         .collectFile(
             cache: false,
             storeDir: "${params.outdir}/mqc_summaries",
@@ -229,7 +229,7 @@ workflow DISEASEMODULEDISCOVERY {
     ch_module_network = ch_modules
         .map{ meta, module -> [meta.network_id, meta, module]}
         .combine(ch_network_gt.map{meta, network -> [meta.network_id, network]}, by: 0)
-        .map{newtork_id, meta, module, network -> [meta, module, network]}
+        .map{_network_id, meta, module, network -> [meta, module, network]}
 
     NETWORKANNOTATION(ch_module_network)
     ch_modules = NETWORKANNOTATION.out.module
@@ -239,13 +239,13 @@ workflow DISEASEMODULEDISCOVERY {
     // Save modules
     SAVEMODULES(ch_modules)
     ch_nodes_tsv_not_empty = SAVEMODULES.out.nodes_tsv
-        .filter{meta, module -> meta.nodes > 0} // Filter out empty modules
+        .filter{meta, _module -> meta.nodes > 0} // Filter out empty modules
 
     ch_versions = ch_versions.mix(SAVEMODULES.out.versions)
 
     // Separate empty modules
     ch_modules_empty_not_empty = ch_modules
-        .branch{ meta, module ->
+        .branch{ meta, _module ->
             empty: meta.nodes == 0
             not_empty: meta.nodes > 0
         }
@@ -253,13 +253,13 @@ workflow DISEASEMODULEDISCOVERY {
 
     // Save status for workflow summary
     ch_module_empty_status = ch_module_empty_status
-        .mix(ch_modules_empty_not_empty.empty.map {meta, module -> [meta.id, true] })
-        .mix(ch_modules_empty_not_empty.not_empty.map {meta, module -> [meta.id, false] })
+        .mix(ch_modules_empty_not_empty.empty.map {meta, _module -> [meta.id, true] })
+        .mix(ch_modules_empty_not_empty.not_empty.map {meta, _module -> [meta.id, false] })
 
     // Warning for empty modules in MultiQC report
     ch_modules_empty_not_empty
         .empty
-        .map {meta, module -> "$meta.id\t$meta.nodes" }
+        .map {meta, _module -> "$meta.id\t$meta.nodes" }
         .collect()
         .map { tsv_data ->
             def header = ["Module\tNodes"]
@@ -277,20 +277,20 @@ workflow DISEASEMODULEDISCOVERY {
     // Visualize modules
     if(!params.skip_visualization){
         ch_visualization_input = ch_modules_not_empty
-            .branch {meta, module ->
+            .branch {meta, _module ->
                 fail: meta.nodes > params.visualization_max_nodes
                 pass: true
             }
 
         // Save status for workflow summary
         ch_visualization_skipped_status = ch_visualization_skipped_status
-            .mix(ch_visualization_input.fail.map {meta, module -> [meta.id, true] })
-            .mix(ch_visualization_input.pass.map {meta, module -> [meta.id, false] })
+            .mix(ch_visualization_input.fail.map {meta, _module -> [meta.id, true] })
+            .mix(ch_visualization_input.pass.map {meta, _module -> [meta.id, false] })
 
         // MultiQC report warning for too many nodes
         ch_visualization_input
             .fail
-            .map {meta, module -> "$meta.id\t$meta.nodes" }
+            .map {meta, _module -> "$meta.id\t$meta.nodes" }
             .collect()
             .map { tsv_data ->
                 def header = ["Module\tNodes"]
@@ -310,20 +310,20 @@ workflow DISEASEMODULEDISCOVERY {
     // Drugstone export
     if(!params.skip_drugstone_export){
         ch_drugstone_export_input = ch_modules_not_empty
-            .branch {meta, module ->
+            .branch {meta, _module ->
                 fail: meta.nodes > params.drugstone_max_nodes
                 pass: true
             }
 
         // Save status for workflow summary
         ch_drugstone_skipped_status = ch_drugstone_skipped_status
-        .mix(ch_drugstone_export_input.fail.map {meta, module -> [meta.id, true] })
-        .mix(ch_drugstone_export_input.pass.map {meta, module -> [meta.id, false] })
+        .mix(ch_drugstone_export_input.fail.map {meta, _module -> [meta.id, true] })
+        .mix(ch_drugstone_export_input.pass.map {meta, _module -> [meta.id, false] })
 
         // MultiQC report warning for too many nodes
         ch_drugstone_export_input
             .fail
-            .map {meta, module -> "$meta.id\t$meta.nodes" }
+            .map {meta, _module -> "$meta.id\t$meta.nodes" }
             .collect()
             .map { tsv_data ->
                 def header = ["Module\tNodes"]
@@ -339,7 +339,7 @@ workflow DISEASEMODULEDISCOVERY {
         DRUGSTONEEXPORT(ch_drugstone_export_input.pass, id_space)
         ch_versions = ch_versions.mix(DRUGSTONEEXPORT.out.versions)
         ch_drugstone_export_multiqc = DRUGSTONEEXPORT.out.link
-            .map{ meta, path -> path }
+            .map{ _meta, path -> path }
             .collectFile(
                 cache: false,
                 storeDir: "${params.outdir}/mqc_summaries",
@@ -393,7 +393,7 @@ workflow DISEASEMODULEDISCOVERY {
             ch_gprofiler_input = ch_nodes
                 .map{ meta, path -> [meta.network_id, meta, path]}
                 .combine(GT2TSV_NETWORK.out.map{meta, path -> [meta.id, path]}, by: 0)
-                .multiMap{key, meta, nodes, network ->
+                .multiMap{_key, meta, nodes, network ->
                     nodes: [meta, nodes]
                     network: [meta, network]
                 }
@@ -415,7 +415,7 @@ workflow DISEASEMODULEDISCOVERY {
                 ch_digest_reference_free_input = ch_nodes_tsv_not_empty
                 .map{ meta, nodes -> [meta.network_id, meta, nodes]}
                 .combine(ch_network_gt.map{meta, network -> [meta.id, network]}, by: 0)
-                .multiMap{key, meta, nodes, network ->
+                .multiMap{_key, meta, nodes, network ->
                     nodes: [meta, nodes]
                     network: network
                 }
@@ -424,7 +424,7 @@ workflow DISEASEMODULEDISCOVERY {
                 ch_versions = ch_versions.mix(DIGEST_REFERENCEFREE.out.versions)
                 ch_multiqc_files = ch_multiqc_files.mix(
                     DIGEST_REFERENCEFREE.out.multiqc
-                    .map{ meta, path -> path }
+                    .map{ _meta, path -> path }
                     .collectFile(
                         cache: false,
                         storeDir: "${params.outdir}/mqc_summaries",
@@ -437,10 +437,10 @@ workflow DISEASEMODULEDISCOVERY {
             // Reference-based evaluation
             if(!params.skip_digest_reference_based){
                 ch_digest_reference_based_input = ch_nodes_tsv_not_empty
-                    .filter{ meta, nodes -> meta.amim != "no_tool" } // Filter out no_tool modules
+                    .filter{ meta, _nodes -> meta.amim != "no_tool" } // Filter out no_tool modules
                     .map{ meta, nodes -> [meta.network_id, meta, nodes]}
                     .combine(ch_network_gt.map{meta, network -> [meta.id, network]}, by: 0)
-                    .multiMap{key, meta, nodes, network ->
+                    .multiMap{_key, meta, nodes, network ->
                         nodes: [meta, nodes]
                         network: network
                     }
@@ -449,7 +449,7 @@ workflow DISEASEMODULEDISCOVERY {
                 ch_versions = ch_versions.mix(DIGEST_REFERENCEBASED.out.versions)
                 ch_multiqc_files = ch_multiqc_files.mix(
                     DIGEST_REFERENCEBASED.out.multiqc
-                    .map{ meta, path -> path }
+                    .map{ _meta, path -> path }
                     .collectFile(
                         cache: false,
                         storeDir: "${params.outdir}/mqc_summaries",
@@ -475,7 +475,7 @@ workflow DISEASEMODULEDISCOVERY {
                 }
             ch_seed_perturbation_input  = ch_filtered_seeds.pass.map{_seeds_id, _network_id, _nodes, meta, seeds -> [meta, seeds]}
             GT_SEEDPERTURBATION(
-                ch_modules.filter{ meta, path -> meta.amim != "no_tool" }, // Filter out no_tool modules
+                ch_modules.filter{ meta, _path -> meta.amim != "no_tool" }, // Filter out no_tool modules
                 ch_seed_perturbation_input,
                 ch_network_gt
             )
@@ -488,7 +488,7 @@ workflow DISEASEMODULEDISCOVERY {
         // Network perturbation based evaluation
         if(params.run_network_perturbation){
             GT_NETWORKPERTURBATION(
-                ch_modules.filter{ meta, path -> meta.amim != "no_tool" }, // Filter out no_tool modules
+                ch_modules.filter{ meta, _path -> meta.amim != "no_tool" }, // Filter out no_tool modules
                 ch_seeds,
                 ch_network_gt,
                 ch_perturbed_networks
@@ -512,7 +512,7 @@ workflow DISEASEMODULEDISCOVERY {
         def valid_algorithms = ['trustrank', 'closeness', 'degree']
 
         // Split the algorithms and check if they are valid
-        ch_algorithms_drugs = Channel
+        ch_algorithms_drugs = channel
             .of(params.drugstone_algorithms.split(','))
             .filter { algorithm ->
                 if (!valid_algorithms.contains(algorithm)) {
@@ -522,7 +522,7 @@ workflow DISEASEMODULEDISCOVERY {
             }
 
         ch_drugstone_input = ch_nodes_tsv_not_empty
-            .branch {meta, module ->
+            .branch {meta, _module ->
                 fail: meta.nodes > params.drugstone_max_nodes
                 pass: true
             }
@@ -536,19 +536,19 @@ workflow DISEASEMODULEDISCOVERY {
                 module: [meta, module]
                 algorithm: algorithm
             }
-        includeIndirectDrugs = Channel.value(params.includeIndirectDrugs).map{it ? 1 : 0}
-        includeNonApprovedDrugs = Channel.value(params.includeNonApprovedDrugs).map{it ? 1 : 0}
+        includeIndirectDrugs = channel.value(params.includeIndirectDrugs).map{flag -> flag ? 1 : 0}
+        includeNonApprovedDrugs = channel.value(params.includeNonApprovedDrugs).map{flag -> flag ? 1 : 0}
         DRUGPREDICTIONS(ch_drugstone_input.module, id_space, ch_drugstone_input.algorithm, includeIndirectDrugs, includeNonApprovedDrugs, params.result_size)
         ch_versions = ch_versions.mix(DRUGPREDICTIONS.out.versions)
 
         if(!params.skip_visualization){
 
             ch_drug_visualization_input = DRUGPREDICTIONS.out.drug_predictions
-                .map{ meta, algorithm, drug_predictions -> [meta, drug_predictions] }
-                .filter{ meta, drug_predictions -> meta.nodes <= params.visualization_max_nodes }       // Filter out modules with too many nodes
+                .map{ meta, _algorithm, drug_predictions -> [meta, drug_predictions] }
+                .filter{ meta, _drug_predictions -> meta.nodes <= params.visualization_max_nodes }       // Filter out modules with too many nodes
                 .map{ meta, drug_predictions -> [meta.module_id, meta, drug_predictions] }              // Format for combining with modules
                 .combine(ch_modules_not_empty.map{meta, module -> [meta.module_id, module]}, by: 0)     // Combine with modules
-                .map{module_id, meta, drug_predictions, module -> [meta, module, drug_predictions] }    // Format for visualization
+                .map{_module_id, meta, drug_predictions, module -> [meta, module, drug_predictions] }    // Format for visualization
 
             VISUALIZEMODULESDRUGS(ch_drug_visualization_input)
             ch_versions = ch_versions.mix(VISUALIZEMODULESDRUGS.out.versions)

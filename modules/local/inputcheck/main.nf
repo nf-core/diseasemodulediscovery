@@ -17,9 +17,6 @@ process INPUTCHECK {
     tuple val(meta), path("${meta.id}.multiqc.tsv"), emit: multiqc
     path "versions.yml"                            , emit: versions
 
-    when:
-    task.ext.when == null || task.ext.when
-
     script:
     """
     input_check.py -s $seeds -p $meta.id -n $network -l DEBUG

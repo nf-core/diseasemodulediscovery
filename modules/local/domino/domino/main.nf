@@ -15,9 +15,6 @@ process DOMINO_DOMINO {     // Process name, should be all upper case. Only the 
     path "versions.yml"                                     , emit: versions      // The software versions, in this case it is only the python version
 
 
-    when:
-    task.ext.when == null || task.ext.when
-
     // Run DOMINO, it supports muliple threads, which are set using the "label" keyword and accessed using $task.cpus
     script:
     def args = task.ext.args ?: ''          // Get possible optional arguments (e.g. turning off visualization, see conf/modules.config)

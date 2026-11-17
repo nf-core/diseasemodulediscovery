@@ -36,7 +36,7 @@ workflow NFCORE_DISEASEMODULEDISCOVERY {
 
     main:
 
-    ch_versions = Channel.empty()
+    ch_versions = channel.empty()
 
     //
     // WORKFLOW: Run pipeline

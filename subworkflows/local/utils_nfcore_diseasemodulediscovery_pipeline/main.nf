@@ -109,9 +109,9 @@ workflow PIPELINE_INITIALISATION {
     def network_map = loadYamlAsMap("${param_prepared_networks_url}network_map.yaml")
     def id_space_map = loadYamlAsMap("${prepared_networks_url}id_space_map.yaml")
 
-    ch_seeds = Channel.empty()          // channel: [ val(meta[id,seeds_id,network_id]), path(seeds) ]
-    ch_network = Channel.empty()        // channel: [ val(meta[id,network_id]), path(network) ]
-    ch_perturbed_networks = Channel.empty() // channel: [ val(meta[id,network_id]), [path(perturbed_network)] ]
+    ch_seeds = channel.empty()          // channel: [ val(meta[id,seeds_id,network_id]), path(seeds) ]
+    ch_network = channel.empty()        // channel: [ val(meta[id,network_id]), path(network) ]
+    ch_perturbed_networks = channel.empty() // channel: [ val(meta[id,network_id]), [path(perturbed_network)] ]
 
     seed_param_set = (param_seeds != null)
     network_param_set = (param_network != null)
@@ -129,7 +129,7 @@ workflow PIPELINE_INITIALISATION {
         //
 
         // channel: [ path(seeds), path(network), path(perturbed_networks) ]
-        ch_input = Channel
+        ch_input = channel
             .fromList(samplesheetToList(param_input, "${projectDir}/assets/schema_input.json"))
             .map{seeds, network, perturbed_networks ->
                 if(seeds.size()==0){
@@ -165,11 +165,11 @@ workflow PIPELINE_INITIALISATION {
 
         log.info("Creating network and seeds channels based on the combination of all seed and network files provided")
 
-        ch_network = Channel.fromList(param_network.split(',').flatten())
+        ch_network = channel.fromList(param_network.split(',').flatten())
             .map{network -> mapPreparedNetwork(network_map, id_space_map, prepared_networks_url, network, param_id_space)}
             .map{ it -> [ [ id: it.baseName, network_id: it.baseName ], it ] }
 
-        ch_seeds = Channel
+        ch_seeds = channel
             .fromPath(param_seeds.split(',').flatten(), checkIfExists: true)
             .combine(ch_network.map{meta, _network -> meta.network_id})
             .map{seeds, network_id ->
@@ -179,7 +179,7 @@ workflow PIPELINE_INITIALISATION {
         // Add perturbed network folders, if provided (currently does not check if the number of the perturbed networks matches the number of the networks and does not work with missing values)
         if(perturbed_networks_param_set){
             ch_network = ch_network.merge(
-                Channel
+                channel
                 .fromPath(param_perturbed_networks.split(',').flatten())
             )
         } else{
@@ -444,10 +444,10 @@ def methodsDescriptionText(mqc_methods_yaml) {
 def logWarnings(monochrome_logs=true, seeds_empty=[:], module_empty=[:], visualization_skipped=[:], drugstone_skipped=[:]) {
     def colors = logColours(monochrome_logs)
 
-    def seeds_empty_count = seeds_empty.count  { key, value -> value == true }
-    def module_empty_count = module_empty.count  { key, value -> value == true }
-    def visualization_skipped_count = visualization_skipped.count  { key, value -> value == true }
-    def drugstone_skipped_count = drugstone_skipped.count  { key, value -> value == true }
+    def seeds_empty_count = seeds_empty.count  { _key, value -> value == true }
+    def module_empty_count = module_empty.count  { _key, value -> value == true }
+    def visualization_skipped_count = visualization_skipped.count  { _key, value -> value == true }
+    def drugstone_skipped_count = drugstone_skipped.count  { _key, value -> value == true }
 
     if (workflow.success) {
         if (seeds_empty_count > 0) {

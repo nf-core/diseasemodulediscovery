@@ -18,9 +18,6 @@ process RWR {
     tuple val(meta), path("*.txt") , emit: module
     path "versions.yml"            , emit: versions
 
-    when:
-    task.ext.when == null || task.ext.when
-
     script:
     """
     rwr.py \\

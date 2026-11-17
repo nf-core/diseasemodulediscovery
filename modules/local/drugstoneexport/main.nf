@@ -15,9 +15,6 @@ process DRUGSTONEEXPORT{
     tuple val(meta), path("${meta.id}.drugstonelink.tsv")   , emit: link
     path "versions.yml"     , emit: versions
 
-    when:
-    task.ext.when == null || task.ext.when
-
     script:
     """
     drugstone_export.py -m $module -i $id_space -p "${meta.id}"

@@ -16,9 +16,6 @@ process BIOPAX_PARSER {
     path "*.owl" , emit: biopax
     path "versions.yml", emit: versions
 
-    when:
-    task.ext.when == null || task.ext.when
-
     script:
     """
     gt2biopax.py $network -i $idspace -l DEBUG ${add_variants ? '-v' : ''}

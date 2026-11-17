@@ -17,9 +17,6 @@ process GRAPHTOOLPARSER {
     tuple val(meta), path("*node_degree_distribution.yaml") , emit: node_degree , optional: true
     path "versions.yml"                                     , emit: versions
 
-    when:
-    task.ext.when == null || task.ext.when
-
     script:
     """
     graph_tool_parser.py $network -f $format -l DEBUG

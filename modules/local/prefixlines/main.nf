@@ -16,9 +16,6 @@ process PREFIXLINES {
     output:
     tuple val(meta), path("${file.baseName}.prefixed.${file.extension}")
 
-    when:
-    task.ext.when == null || task.ext.when
-
 
     script:
     """

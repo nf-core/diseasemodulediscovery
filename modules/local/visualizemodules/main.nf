@@ -17,9 +17,6 @@ process VISUALIZEMODULES {
     tuple val(meta), path("${meta.id}.html")     , emit: html , optional: true
     path "versions.yml"                          , emit: versions
 
-    when:
-    task.ext.when == null || task.ext.when
-
     script:
     """
     visualize_modules.py -m "${module}" -p "${meta.id}" -l DEBUG

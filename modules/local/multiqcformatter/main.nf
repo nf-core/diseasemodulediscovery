@@ -12,8 +12,6 @@ process MULTIQCFORMATTER {
     path("*mqc*")       , emit : multiqc
     path "versions.yml" , emit: versions
 
-    when:
-    task.ext.when == null || task.ext.when
     script:
     """
     multiqc_formatter.py -i $inputFiles -H $header

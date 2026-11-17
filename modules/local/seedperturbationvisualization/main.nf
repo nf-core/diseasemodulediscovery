@@ -20,9 +20,6 @@ process SEEDPERTURBATIONVISUALIZATION {
     path ("*.robustness.pdf")
     path ("*.robustness.tsv")
 
-    when:
-    task.ext.when == null || task.ext.when
-
     script:
     def args = task.ext.args ?: ''
     def concatenated_seed_ids = seed_ids.join(" ")

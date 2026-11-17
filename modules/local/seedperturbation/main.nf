@@ -15,9 +15,6 @@ process SEEDPERTURBATION {
     tuple val(meta), path("${meta.seeds_id}.*.${seeds.extension}") , emit: perturbed_seeds
     path "versions.yml"                                            , emit: versions
 
-    when:
-    task.ext.when == null || task.ext.when
-
     script:
     """
     seed_perturbation.py --seeds ${seeds} --prefix ${meta.seeds_id}

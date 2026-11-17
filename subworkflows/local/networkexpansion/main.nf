@@ -18,19 +18,19 @@ workflow NETWORKEXPANSION {
 
     main:
     // Params
-    diamond_n = Channel.value(params.diamond_n)
-    diamond_alpha = Channel.value(params.diamond_alpha)
+    diamond_n = channel.value(params.diamond_n)
+    diamond_alpha = channel.value(params.diamond_alpha)
 
-    rwr_scaling = Channel.value(params.rwr_scaling).map{it ? 1 : 0}
-    rwr_symmetrical = Channel.value(params.rwr_symmetrical).map{it ? 1 : 0}
-    rwr_r = Channel.value(params.rwr_r)
+    rwr_scaling = channel.value(params.rwr_scaling).map{flag -> flag ? 1 : 0}
+    rwr_symmetrical = channel.value(params.rwr_symmetrical).map{flag -> flag ? 1 : 0}
+    rwr_r = channel.value(params.rwr_r)
 
-    id_space = Channel.value(params.id_space)
+    id_space = channel.value(params.id_space)
 
 
-    ch_versions = Channel.empty()
-    ch_modules  = Channel.empty()
-    ch_raw_modules = Channel.empty()
+    ch_versions = channel.empty()
+    ch_modules  = channel.empty()
+    ch_raw_modules = channel.empty()
 
     if(!params.skip_diamond){
         GT_DIAMOND(ch_seeds, ch_network, diamond_n, diamond_alpha)
@@ -73,7 +73,7 @@ workflow NETWORKEXPANSION {
         .map{meta, module -> [meta.seeds_id, meta.network_id, meta, module]}
         // combine with seeds
         .combine(ch_seeds.map{meta, seeds -> [meta.seeds_id, meta.network_id, seeds]}, by: [0,1])
-        .map{seeds_id, network_id, meta, module, seeds ->
+        .map{_seeds_id, _network_id, meta, module, seeds ->
             [meta.perturbed_network_id==null ?  meta.network_id: meta.perturbed_network_id , meta, module, seeds] // Use perturbed_network_id, if available
         }
         // combine with network (perturbed network, if available)
@@ -83,7 +83,7 @@ workflow NETWORKEXPANSION {
             }, by: 0
         )
         // add amim to id and module_id
-        .map{network_id, meta, module, seeds, network ->
+        .map{_network_id, meta, module, seeds, network ->
             def dup = meta.clone()
             dup.id = meta.id + "." + dup.amim
             dup.module_id = dup.id

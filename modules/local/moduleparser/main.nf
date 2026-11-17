@@ -14,9 +14,6 @@ process MODULEPARSER {
     tuple val(meta), path("${meta.id}.gt")  , emit: module
     path "versions.yml"                     , emit: versions
 
-    when:
-    task.ext.when == null || task.ext.when
-
     script:
     """
     module_parser.py $network -t ${meta.amim} -l DEBUG -m $module -s $seeds -o ${meta.id}.gt

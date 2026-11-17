@@ -19,9 +19,6 @@ process DIAMOND {                           // Process name, should be all upper
     tuple val(meta), path("${meta.id}.first_${n}_added_nodes_weight_${alpha}.txt")   , emit: module       // Define a pattern for the output file (can also be the full name, if known), emit -> the active module
     path "versions.yml"                                                              , emit: versions     // Software versions, this is not essential but nice, the collected versions will be part of the final multiqc report
 
-    when:
-    task.ext.when == null || task.ext.when  // Allows to prevent the execution of this process via a workflow logic, just put it in
-
     // The script for executing DIAMOnD, which is vendored in bin/ and therefore on the PATH
     // Access inputs, parameters, etc. with the "$" operator
     // The part starting with "cat <<-END_VERSIONS > versions.yml" only collects software versions for the versions.yml file, not essential

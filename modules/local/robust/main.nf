@@ -14,9 +14,6 @@ process ROBUST {
     tuple val(meta), path("${meta.id}.graphml")  , emit: module
     path "versions.yml"                          , emit: versions
 
-    when:
-    task.ext.when == null || task.ext.when
-
     script:
     def args = task.ext.args ?: ''          // Initial fraction, reduction factor, number of trees, and threshold
     """
