@@ -1,0 +1,87 @@
+name: moduleoverlap
+description: Computes pairwise overlaps between the node sets of several disease modules
+keywords:
+  - overlap
+  - jaccard
+  - similarity
+  - disease module
+  - comparison
+tools:
+  - moduleoverlap:
+      description: In-house Python script (module_overlap.py) that computes the pairwise
+        Jaccard similarity and the pairwise number of shared nodes between the node
+        sets of the given modules, once over all module nodes and once over the added
+        nodes only, i.e. after removing the seed nodes.
+      homepage: https://github.com/nf-core/diseasemodulediscovery
+      documentation: https://nf-co.re/diseasemodulediscovery/output
+      licence:
+        - MIT
+input:
+  - - ids:
+        type: string
+        description: List of identifiers naming the rows and columns of the output matrices,
+          one per input file and in the same order
+  - - inputs:
+        type: file
+        description: List of tab-separated module node lists, each with at least a `name`
+          column holding the node identifiers and an `is_seed` column with values 0
+          and 1
+output:
+  jaccard_multiqc:
+    - jaccard_similarity_matrix_mqc.tsv:
+        type: file
+        description: Symmetric matrix of the pairwise Jaccard similarities between the
+          full node sets of the modules, tab-separated and indexed by the `ID` column.
+          Rows and columns are sorted by identifier.
+        pattern: jaccard_similarity_matrix_mqc.tsv
+  shared_multiqc:
+    - shared_nodes_matrix_mqc.tsv:
+        type: file
+        description: Symmetric matrix of the pairwise numbers of shared nodes between
+          the full node sets of the modules, tab-separated and indexed by the `ID` column.
+          Rows and columns are sorted by identifier.
+        pattern: shared_nodes_matrix_mqc.tsv
+  jaccard_no_seeds_multiqc:
+    - jaccard_similarity_no_seeds_matrix_mqc.tsv:
+        type: file
+        description: Same as the Jaccard similarity matrix, but restricted to the nodes
+          with `is_seed` equal to 0. Modules that are left without any node after removing
+          the seeds are dropped, and the file is not written if that applies to all of
+          them.
+        pattern: jaccard_similarity_no_seeds_matrix_mqc.tsv
+  shared_no_seeds_multiqc:
+    - shared_nodes_no_seeds_matrix_mqc.tsv:
+        type: file
+        description: Same as the shared nodes matrix, but restricted to the nodes with
+          `is_seed` equal to 0. Modules that are left without any node after removing
+          the seeds are dropped, and the file is not written if that applies to all of
+          them.
+        pattern: shared_nodes_no_seeds_matrix_mqc.tsv
+authors:
+  - "@JohannesKersting"
+maintainers:
+  - "@JohannesKersting"
+containers:
+  docker:
+    linux/arm64:
+      name: community.wave.seqera.io/library/modulediscovery_python_dependencies:cd96a1d8b8cde552
+      build_id: bd-cd96a1d8b8cde552_1
+      scan_id: sc-50fcc0e70a021b38_1
+    linux/amd64:
+      name: community.wave.seqera.io/library/modulediscovery_python_dependencies:37beeaac11625203
+      build_id: bd-37beeaac11625203_1
+      scan_id: sc-60c9761227e3cfe0_1
+  singularity:
+    linux/arm64:
+      name: oras://community.wave.seqera.io/library/modulediscovery_python_dependencies:5881bc5613b9edfe
+      build_id: bd-5881bc5613b9edfe_1
+      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/bd/bdf908ab707e8af0ae80a72bd38411af7545e47b1d28798449ef26adf22bec20/data
+    linux/amd64:
+      name: oras://community.wave.seqera.io/library/modulediscovery_python_dependencies:97f911fbeabe5e6f
+      build_id: bd-97f911fbeabe5e6f_1
+      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/01/01231a4ef4a2196d65fda042c44442d7b41c3d0859e6766fdfd846f72acfdb23/data
+  conda:
+    linux/amd64:
+      lock_file: modules/local/moduleoverlap/.conda-lock/linux_amd64-bd-37beeaac11625203_1.txt
+    linux/arm64:
+      lock_file: modules/local/moduleoverlap/.conda-lock/linux_arm64-bd-cd96a1d8b8cde552_1.txt

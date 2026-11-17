@@ -9,7 +9,7 @@ on:
       - "**/*.svg"
   release:
     types: [published]
-  workflow_dispatch:
+  workflow_dispatch: null
 
 # Cancel if a newer run is started
 concurrency:
@@ -68,7 +68,8 @@ jobs:
       fail-fast: false
       matrix:
         shard: ${{ fromJson(needs.nf-test-changes.outputs.shard) }}
-        profile: [conda, docker, singularity]
+        profile: [docker, singularity]
+        #profile: [conda, docker, singularity]
         isMain:
           - ${{ github.base_ref == 'master' || github.base_ref == 'main' }}
         # Exclude conda and singularity on dev
@@ -78,8 +79,8 @@ jobs:
           - isMain: false
             profile: "singularity"
         NXF_VER:
-          - "25.10.4"
-          - "latest-everything"
+          - 26.04.0
+          - latest-everything
     env:
       NXF_ANSI_LOG: false
       TOTAL_SHARDS: ${{ needs.nf-test-changes.outputs.total_shards }}
