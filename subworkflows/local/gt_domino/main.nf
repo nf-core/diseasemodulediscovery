@@ -15,7 +15,7 @@ workflow GT_DOMINO {                        // Define the subworkflow, usually s
 
     main:
 
-    ch_versions = Channel.empty()                                           // For collecting tool versions
+    ch_versions = channel.empty()                                           // For collecting tool versions
 
     PREFIXLINES(ch_seeds, "entrez.")                                        // DOMINO interprets entrez ids as integers, so they are prefixed
 
@@ -32,7 +32,7 @@ workflow GT_DOMINO {                        // Define the subworkflow, usually s
     ch_domino_input = PREFIXLINES.out
         .map{ meta, seeds -> [meta.network_id, meta, seeds]}
         .combine(ch_domino_network.map{ meta, network, slices -> [meta.network_id, meta, network, slices]}, by: 0)
-        .map{network_id, seeds_meta, seeds, network_meta, network, slices ->
+        .map{_network_id, seeds_meta, seeds, network_meta, network, slices ->
             def meta = seeds_meta + network_meta
             meta.id = seeds_meta.seeds_id + "." + network_meta.id
             meta.amim = "domino"

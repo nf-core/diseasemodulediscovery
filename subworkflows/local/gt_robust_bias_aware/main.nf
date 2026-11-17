@@ -13,7 +13,7 @@ workflow GT_ROBUSTBIASAWARE {
 
     main:
 
-    ch_versions = Channel.empty()
+    ch_versions = channel.empty()
 
     GRAPHTOOLPARSER(ch_network, "robust")
     ch_versions = ch_versions.mix(GRAPHTOOLPARSER.out.versions)
@@ -24,7 +24,7 @@ workflow GT_ROBUSTBIASAWARE {
     ch_robust_bias_aware_input = ch_seeds
         .map{ meta, seeds -> [meta.network_id, meta, seeds]}
         .combine(GRAPHTOOLPARSER.out.network.map{ meta, network -> [meta.network_id, meta, network]}, by: 0)
-        .map{network_id, seeds_meta, seeds, network_meta, network ->
+        .map{_network_id, seeds_meta, seeds, network_meta, network ->
             def meta = seeds_meta + network_meta
             meta.id = seeds_meta.seeds_id + "." + network_meta.id
             meta.amim = "robust_bias_aware"

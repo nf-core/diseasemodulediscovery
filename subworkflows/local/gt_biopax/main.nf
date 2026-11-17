@@ -11,7 +11,7 @@ workflow GT_BIOPAX {
 
     main:
 
-    ch_versions = Channel.empty()                                           // For collecting tool versions
+    ch_versions = channel.empty()                                           // For collecting tool versions
 
     BIOPAX_PARSER(ch_modules, idspace, params.add_variants)                        // Parse the biopax files
     ch_versions = ch_versions.mix(BIOPAX_PARSER.out.versions)
@@ -21,7 +21,7 @@ workflow GT_BIOPAX {
         ch_versions = ch_versions.mix(BIOPAX_VALIDATOR.out.versions)
         module = BIOPAX_VALIDATOR.out.validation
     } else {
-        module = Channel.empty()
+        module = channel.empty()
     }
 
 

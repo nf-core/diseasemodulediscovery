@@ -1,0 +1,59 @@
+name: biopax_validator
+description: Checks BioPAX OWL files for syntactic errors and violations of BioPAX best practices and writes a single HTML validation report
+keywords:
+  - biopax
+  - validation
+  - owl
+  - quality control
+tools:
+  - biopax_validator:
+      description: Java tool that validates BioPAX Level 3 data against the BioPAX specification and a set of best-practice rules. Run either against the remote validator service or fully offline, in which case the required OBO ontologies are loaded locally.
+      homepage: https://biopax.github.io/validator/
+      documentation: https://github.com/BioPAX/validator/wiki
+      licence:
+        - MIT
+input:
+  - - biopax_files:
+        type: file
+        description: One or more BioPAX OWL files to validate, staged into the working directory
+  - - validate_online:
+        type: boolean
+        description: If true, validation is delegated to the remote validator service via the validator client. If false, validation runs offline and the OBO files are loaded locally, which is slower but recommended for large inputs.
+output:
+  validation:
+    - biopax-validator-report.html:
+        type: file
+        description: HTML validation report covering all input files, using the `notstrict` validation profile
+        pattern: biopax-validator-report.html
+  versions:
+    - versions.yml:
+        type: file
+        description: File containing software versions
+        pattern: versions.yml
+authors:
+  - "@quirinmanz"
+maintainers:
+  - "@quirinmanz"
+  - "@JohannesKersting"
+containers:
+  docker:
+    linux/arm64:
+      name: community.wave.seqera.io/library/biopax-validator:17e66a61b34e8586
+      build_id: bd-17e66a61b34e8586_1
+      scan_id: sc-059084232b91ab88_1
+    linux/amd64:
+      name: community.wave.seqera.io/library/biopax-validator:ec92f1efa2d11d2e
+      build_id: bd-ec92f1efa2d11d2e_1
+      scan_id: sc-a1793cdd47c72d78_1
+  singularity:
+    linux/arm64:
+      name: oras://community.wave.seqera.io/library/biopax-validator:4502ca82f7e81ca3
+      build_id: bd-4502ca82f7e81ca3_1
+      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/6f/6f5d8a04d59fadfffaa586c23d95c1088ab92bf3eb2048d0a56b66386fb70a0a/data
+    linux/amd64:
+      name: oras://community.wave.seqera.io/library/biopax-validator:4784a325dfebff0e
+      build_id: bd-4784a325dfebff0e_1
+      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/da/daf717f9ae2604fcfee3b28c493ee67554b40ebd05e13837ca4fe607f9044703/data
+  conda:
+    linux/amd64:
+      lock_file: modules/local/biopax/validator/.conda-lock/linux_amd64-bd-ec92f1efa2d11d2e_1.txt

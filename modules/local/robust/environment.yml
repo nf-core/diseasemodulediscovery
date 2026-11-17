@@ -1,0 +1,8 @@
+name: robust
+channels:
+  - conda-forge
+  - bioconda
+  - nodefaults
+dependencies:
+  - conda-forge::python=3.12
+  - bioconda::robust-pcst=1.0.0
