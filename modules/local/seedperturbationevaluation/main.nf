@@ -21,6 +21,11 @@ process SEEDPERTURBATIONEVALUATION {
     tuple val(meta), path("${meta.id}.seed_perturbation_multiqc_summary.tsv")     , emit: multiqc_summary
     tuple val(meta), path("${meta.id}.seed_perturbation_multiqc_jaccard.txt")     , emit: multiqc_jaccard
     tuple val("${task.process}"), val('python'), eval("python --version | sed 's/Python //g'"), emit: versions_python, topic: versions
+    tuple val("${task.process}"), val('graph-tool'), eval('python -c "import graph_tool; print(graph_tool.__version__)" | cut -d" " -f1'), emit: versions_graphtool, topic: versions
+    tuple val("${task.process}"), val('networkx'), eval('python -c "import networkx; print(networkx.__version__)"'), emit: versions_networkx, topic: versions
+    tuple val("${task.process}"), val('numpy'), eval('python -c "import numpy; print(numpy.__version__)"'), emit: versions_numpy, topic: versions
+    tuple val("${task.process}"), val('matplotlib'), eval('python -c "import matplotlib; print(matplotlib.__version__)"'), emit: versions_matplotlib, topic: versions
+    tuple val("${task.process}"), val('pyintergraph'), eval("pip show pyintergraph | sed -n 's/^Version: //p'"), emit: versions_pyintergraph, topic: versions
 
 
     script:

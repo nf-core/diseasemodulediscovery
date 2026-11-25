@@ -95,14 +95,14 @@ output:
       - python -c "import pybiopax; print(pybiopax.__version__)":
           type: eval
           description: The expression to obtain the version of the tool
-  versions_nedrex:
+  versions_requests:
     - - ${task.process}:
           type: string
           description: The process the versions were collected from
-      - nedrex:
+      - requests:
           type: string
           description: The tool name
-      - python -c "import nedrex; print(nedrex.__version__)":
+      - python -c "import requests; print(requests.__version__)":
           type: eval
           description: The expression to obtain the version of the tool
 topics:
@@ -137,10 +137,10 @@ topics:
     - - ${task.process}:
           type: string
           description: The process the versions were collected from
-      - nedrex:
+      - requests:
           type: string
           description: The tool name
-      - python -c "import nedrex; print(nedrex.__version__)":
+      - python -c "import requests; print(requests.__version__)":
           type: eval
           description: The expression to obtain the version of the tool
 authors:

@@ -17,6 +17,7 @@ process GRAPHTOOLPARSER {
     tuple val(meta), path("*node_degree_distribution.yaml") , emit: node_degree , optional: true
     tuple val("${task.process}"), val('python'), eval("python --version | sed 's/Python //g'"), emit: versions_python, topic: versions
     tuple val("${task.process}"), val('graph-tool'), eval('python -c "import graph_tool; print(graph_tool.__version__)" | cut -d" " -f1'), emit: versions_graphtool, topic: versions
+    tuple val("${task.process}"), val('pyyaml'), eval('python -c "import yaml; print(yaml.__version__)"'), emit: versions_pyyaml, topic: versions
 
     script:
     """

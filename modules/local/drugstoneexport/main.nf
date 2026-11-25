@@ -15,6 +15,7 @@ process DRUGSTONEEXPORT{
     tuple val(meta), path("${meta.id}.drugstonelink.tsv")   , emit: link
     tuple val("${task.process}"), val('python'), eval("python --version | sed 's/Python //g'"), emit: versions_python, topic: versions
     tuple val("${task.process}"), val('graph-tool'), eval('python -c "import graph_tool; print(graph_tool.__version__)" | cut -d" " -f1'), emit: versions_graphtool, topic: versions
+    tuple val("${task.process}"), val('requests'), eval('python -c "import requests; print(requests.__version__)"'), emit: versions_requests, topic: versions
 
     script:
     """

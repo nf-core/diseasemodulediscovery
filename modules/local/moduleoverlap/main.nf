@@ -15,6 +15,8 @@ process MODULEOVERLAP {
     path('shared_nodes_matrix_mqc.tsv')                 , emit: shared_multiqc
     path('jaccard_similarity_no_seeds_matrix_mqc.tsv')  , emit: jaccard_no_seeds_multiqc, optional: true
     path('shared_nodes_no_seeds_matrix_mqc.tsv')        , emit: shared_no_seeds_multiqc, optional: true
+    tuple val("${task.process}"), val('python'), eval("python --version | sed 's/Python //g'"), emit: versions_python, topic: versions
+    tuple val("${task.process}"), val('pandas'), eval('python -c "import pandas; print(pandas.__version__)"'), emit: versions_pandas, topic: versions
 
     script:
     def concatenated_ids = ids.join(" ")

@@ -70,6 +70,16 @@ output:
       - python -c "import graph_tool; print(graph_tool.__version__)" | cut -d" " -f1:
           type: eval
           description: The expression to obtain the version of the tool
+  versions_requests:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - requests:
+          type: string
+          description: The tool name
+      - python -c "import requests; print(requests.__version__)":
+          type: eval
+          description: The expression to obtain the version of the tool
 topics:
   versions:
     - - ${task.process}:
@@ -88,6 +98,15 @@ topics:
           type: string
           description: The tool name
       - python -c "import graph_tool; print(graph_tool.__version__)" | cut -d" " -f1:
+          type: eval
+          description: The expression to obtain the version of the tool
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - requests:
+          type: string
+          description: The tool name
+      - python -c "import requests; print(requests.__version__)":
           type: eval
           description: The expression to obtain the version of the tool
 authors:

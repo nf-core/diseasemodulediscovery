@@ -18,7 +18,7 @@ process BIOPAX_PARSER {
     tuple val("${task.process}"), val('python'), eval("python --version | sed 's/Python //g'"), emit: versions_python, topic: versions
     tuple val("${task.process}"), val('graph-tool'), eval('python -c "import graph_tool; print(graph_tool.__version__)" | cut -d" " -f1'), emit: versions_graphtool, topic: versions
     tuple val("${task.process}"), val('pybiopax'), eval('python -c "import pybiopax; print(pybiopax.__version__)"'), emit: versions_pybiopax, topic: versions
-    tuple val("${task.process}"), val('nedrex'), eval('python -c "import nedrex; print(nedrex.__version__)"'), emit: versions_nedrex, topic: versions
+    tuple val("${task.process}"), val('requests'), eval('python -c "import requests; print(requests.__version__)"'), emit: versions_requests, topic: versions
 
     script:
     """

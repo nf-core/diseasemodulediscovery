@@ -15,6 +15,8 @@ process DIGEST {
     tuple val(meta), path("${meta.id}.multiqc.tsv"), emit: multiqc, optional: true
     tuple val("${task.process}"), val('python'), eval("python --version | sed 's/Python //g'"), emit: versions_python, topic: versions
     tuple val("${task.process}"), val('biodigest'), eval("pip show biodigest | sed -n 's/^Version: //p'"), emit: versions_biodigest, topic: versions
+    tuple val("${task.process}"), val('pandas'), eval('python -c "import pandas; print(pandas.__version__)"'), emit: versions_pandas, topic: versions
+    tuple val("${task.process}"), val('numpy'), eval('python -c "import numpy; print(numpy.__version__)"'), emit: versions_numpy, topic: versions
 
     script:
     """

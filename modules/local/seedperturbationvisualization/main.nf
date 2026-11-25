@@ -19,6 +19,11 @@ process SEEDPERTURBATIONVISUALIZATION {
     path ("*.robustness.png")
     path ("*.robustness.pdf")
     path ("*.robustness.tsv")
+    tuple val("${task.process}"), val('python'), eval("python --version | sed 's/Python //g'"), emit: versions_python, topic: versions
+    tuple val("${task.process}"), val('pandas'), eval('python -c "import pandas; print(pandas.__version__)"'), emit: versions_pandas, topic: versions
+    tuple val("${task.process}"), val('numpy'), eval('python -c "import numpy; print(numpy.__version__)"'), emit: versions_numpy, topic: versions
+    tuple val("${task.process}"), val('matplotlib'), eval('python -c "import matplotlib; print(matplotlib.__version__)"'), emit: versions_matplotlib, topic: versions
+    tuple val("${task.process}"), val('seaborn'), eval('python -c "import seaborn; print(seaborn.__version__)"'), emit: versions_seaborn, topic: versions
 
     script:
     def args = task.ext.args ?: ''

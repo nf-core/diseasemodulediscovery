@@ -71,6 +71,103 @@ output:
         description: Tab-separated table underlying the robustness heatmap, with the
           omitted seeds as rows and the module inference methods as columns
         pattern: "*.robustness.tsv"
+  versions_python:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - python:
+          type: string
+          description: The tool name
+      - python --version | sed 's/Python //g':
+          type: eval
+          description: The expression to obtain the version of the tool
+  versions_pandas:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - pandas:
+          type: string
+          description: The tool name
+      - python -c "import pandas; print(pandas.__version__)":
+          type: eval
+          description: The expression to obtain the version of the tool
+  versions_numpy:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - numpy:
+          type: string
+          description: The tool name
+      - python -c "import numpy; print(numpy.__version__)":
+          type: eval
+          description: The expression to obtain the version of the tool
+  versions_matplotlib:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - matplotlib:
+          type: string
+          description: The tool name
+      - python -c "import matplotlib; print(matplotlib.__version__)":
+          type: eval
+          description: The expression to obtain the version of the tool
+  versions_seaborn:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - seaborn:
+          type: string
+          description: The tool name
+      - python -c "import seaborn; print(seaborn.__version__)":
+          type: eval
+          description: The expression to obtain the version of the tool
+topics:
+  versions:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - python:
+          type: string
+          description: The tool name
+      - python --version | sed 's/Python //g':
+          type: eval
+          description: The expression to obtain the version of the tool
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - pandas:
+          type: string
+          description: The tool name
+      - python -c "import pandas; print(pandas.__version__)":
+          type: eval
+          description: The expression to obtain the version of the tool
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - numpy:
+          type: string
+          description: The tool name
+      - python -c "import numpy; print(numpy.__version__)":
+          type: eval
+          description: The expression to obtain the version of the tool
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - matplotlib:
+          type: string
+          description: The tool name
+      - python -c "import matplotlib; print(matplotlib.__version__)":
+          type: eval
+          description: The expression to obtain the version of the tool
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - seaborn:
+          type: string
+          description: The tool name
+      - python -c "import seaborn; print(seaborn.__version__)":
+          type: eval
+          description: The expression to obtain the version of the tool
 authors:
   - "@JohannesKersting"
 maintainers:

@@ -42,6 +42,16 @@ output:
       - python --version | sed 's/Python //g':
           type: eval
           description: The expression to obtain the version of the tool
+  versions_pyyaml:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - pyyaml:
+          type: string
+          description: The tool name
+      - python -c "import yaml; print(yaml.__version__)":
+          type: eval
+          description: The expression to obtain the version of the tool
 topics:
   versions:
     - - ${task.process}:
@@ -51,6 +61,15 @@ topics:
           type: string
           description: The tool name
       - python --version | sed 's/Python //g':
+          type: eval
+          description: The expression to obtain the version of the tool
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - pyyaml:
+          type: string
+          description: The tool name
+      - python -c "import yaml; print(yaml.__version__)":
           type: eval
           description: The expression to obtain the version of the tool
 authors:

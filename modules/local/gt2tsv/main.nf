@@ -11,7 +11,9 @@ process GT2TSV {
     tuple val(meta), path(gt_file)
 
     output:
-    tuple val(meta), path("${meta.id}.nodes.tsv")
+    tuple val(meta), path("${meta.id}.nodes.tsv"), emit: nodes
+    tuple val("${task.process}"), val('python'), eval("python --version | sed 's/Python //g'"), emit: versions_python, topic: versions
+    tuple val("${task.process}"), val('graph-tool'), eval('python -c "import graph_tool; print(graph_tool.__version__)" | cut -d" " -f1'), emit: versions_graphtool, topic: versions
 
     script:
     """

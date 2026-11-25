@@ -11,6 +11,7 @@ process MULTIQCFORMATTER {
     output:
     path("*mqc*")       , emit : multiqc
     tuple val("${task.process}"), val('python'), eval("python --version | sed 's/Python //g'"), emit: versions_python, topic: versions
+    tuple val("${task.process}"), val('pyyaml'), eval('python -c "import yaml; print(yaml.__version__)"'), emit: versions_pyyaml, topic: versions
 
     script:
     """

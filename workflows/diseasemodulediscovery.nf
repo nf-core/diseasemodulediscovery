@@ -363,7 +363,7 @@ workflow DISEASEMODULEDISCOVERY {
         GT2TSV_NETWORK(ch_network_gt)
 
         // channel: [ val(meta), path(nodes) ]
-        ch_nodes = GT2TSV_MODULES.out
+        ch_nodes = GT2TSV_MODULES.out.nodes
 
         // Module overlap
         ch_overlap_input = ch_nodes_tsv_not_empty
@@ -375,14 +375,18 @@ workflow DISEASEMODULEDISCOVERY {
             ch_overlap_input.ids.collect(),
             ch_overlap_input.nodes.collect()
         )
-        ch_multiqc_files = ch_multiqc_files.mix(MODULEOVERLAP.out)
+        ch_multiqc_files = ch_multiqc_files
+            .mix(MODULEOVERLAP.out.jaccard_multiqc)
+            .mix(MODULEOVERLAP.out.shared_multiqc)
+            .mix(MODULEOVERLAP.out.jaccard_no_seeds_multiqc)
+            .mix(MODULEOVERLAP.out.shared_no_seeds_multiqc)
 
         // Overrepresentation analysis
         if(!params.skip_gprofiler){
 
             ch_gprofiler_input = ch_nodes
                 .map{ meta, path -> [meta.network_id, meta, path]}
-                .combine(GT2TSV_NETWORK.out.map{meta, path -> [meta.id, path]}, by: 0)
+                .combine(GT2TSV_NETWORK.out.nodes.map{meta, path -> [meta.id, path]}, by: 0)
                 .multiMap{_key, meta, nodes, network ->
                     nodes: [meta, nodes]
                     network: [meta, network]
