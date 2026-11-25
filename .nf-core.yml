@@ -4,6 +4,7 @@ lint:
     - conf/igenomes_ignored.config
   files_unchanged:
     - .github/CONTRIBUTING.md
+    - .github/PULL_REQUEST_TEMPLATE.md
     - assets/sendmail_template.txt
   multiqc_config:
     - report_comment
