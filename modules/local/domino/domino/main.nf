@@ -12,7 +12,13 @@ process DOMINO_DOMINO {     // Process name, should be all upper case. Only the 
 
     output:                                                                       // Define the expected outputs, the "emit:" keyword defines, how the output can be accessed by other processes
     tuple val(meta), path("${seeds.baseName}/modules.out")  , emit: modules       // DOMINO will place a modules.out file in a folder, named as the seed gene file
-    path "versions.yml"                                     , emit: versions      // The software versions, in this case it is only the python version
+    tuple val("${task.process}"), val('python'), eval("python --version | sed 's/Python //g'"), emit: versions_python, topic: versions
+    tuple val("${task.process}"), val('domino'), eval("python -c \"import json,importlib.metadata as m; u=json.loads(m.distribution('domino-python').read_text('direct_url.json'))['url']; print(u.rsplit('/',1)[-1].removeprefix('v').removesuffix('.tar.gz'))\""), emit: versions_domino, topic: versions
+    tuple val("${task.process}"), val('pcst-fast'), eval("pip show pcst-fast | sed -n 's/^Version: //p'"), emit: versions_pcstfast, topic: versions
+    tuple val("${task.process}"), val('statsmodels'), eval("pip show statsmodels | sed -n 's/^Version: //p'"), emit: versions_statsmodels, topic: versions
+    tuple val("${task.process}"), val('networkx'), eval("pip show networkx | sed -n 's/^Version: //p'"), emit: versions_networkx, topic: versions
+    tuple val("${task.process}"), val('scipy'), eval("pip show scipy | sed -n 's/^Version: //p'"), emit: versions_scipy, topic: versions
+    tuple val("${task.process}"), val('numpy'), eval("pip show numpy | sed -n 's/^Version: //p'"), emit: versions_numpy, topic: versions
 
 
     // Run DOMINO, it supports muliple threads, which are set using the "label" keyword and accessed using $task.cpus
@@ -26,16 +32,5 @@ process DOMINO_DOMINO {     // Process name, should be all upper case. Only the 
     -n $network \\
     -s $slices \\
     -o .
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        python: "\$(python --version | sed 's/Python //g')"
-        domino: "\$(python -c "import json,importlib.metadata as m; u=json.loads(m.distribution('domino-python').read_text('direct_url.json'))['url']; print(u.rsplit('/',1)[-1].removeprefix('v').removesuffix('.tar.gz'))")"
-        pcst-fast: "\$(pip show pcst-fast | grep '^Version:' | awk '{print \$2}')"
-        statsmodels: "\$(pip show statsmodels | grep '^Version:' | awk '{print \$2}')"
-        networkx: "\$(pip show networkx | grep '^Version:' | awk '{print \$2}')"
-        scipy: "\$(pip show scipy | grep '^Version:' | awk '{print \$2}')"
-        numpy: "\$(pip show numpy | grep '^Version:' | awk '{print \$2}')"
-    END_VERSIONS
     """
 }

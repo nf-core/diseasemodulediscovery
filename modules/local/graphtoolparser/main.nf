@@ -15,16 +15,11 @@ process GRAPHTOOLPARSER {
     tuple val(meta), path("*${format}*")                    , emit: network
     tuple val(meta), path("input_network_multiqc.tsv")      , emit: multiqc     , optional: true
     tuple val(meta), path("*node_degree_distribution.yaml") , emit: node_degree , optional: true
-    path "versions.yml"                                     , emit: versions
+    tuple val("${task.process}"), val('python'), eval("python --version | sed 's/Python //g'"), emit: versions_python, topic: versions
+    tuple val("${task.process}"), val('graph-tool'), eval('python -c "import graph_tool; print(graph_tool.__version__)" | cut -d" " -f1'), emit: versions_graphtool, topic: versions
 
     script:
     """
     graph_tool_parser.py $network -f $format -l DEBUG
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        python: "\$(python --version | sed 's/Python //g')"
-        graph-tool: "\$(python -c "import graph_tool; print(graph_tool.__version__)" | cut -d' ' -f1)"
-    END_VERSIONS
     """
 }

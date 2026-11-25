@@ -16,7 +16,10 @@ process RWR {
 
     output:
     tuple val(meta), path("*.txt") , emit: module
-    path "versions.yml"            , emit: versions
+    tuple val("${task.process}"), val('python'), eval("python --version | sed 's/Python //g'"), emit: versions_python, topic: versions
+    tuple val("${task.process}"), val('networkx'), eval('python -c "import networkx; print(networkx.__version__)"'), emit: versions_networkx, topic: versions
+    tuple val("${task.process}"), val('scipy'), eval('python -c "import scipy; print(scipy.__version__)"'), emit: versions_scipy, topic: versions
+    tuple val("${task.process}"), val('numpy'), eval('python -c "import numpy; print(numpy.__version__)"'), emit: versions_numpy, topic: versions
 
     script:
     """
@@ -26,13 +29,5 @@ process RWR {
         $scaling \\
         $symmetrical \\
         $r
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        python: "\$(python --version | sed 's/Python //g')"
-        networkx: "\$(python -c "import networkx; print(networkx.__version__)")"
-        scipy: "\$(python -c "import scipy; print(scipy.__version__)")"
-        numpy: "\$(python -c "import numpy; print(numpy.__version__)")"
-    END_VERSIONS
     """
 }

@@ -44,11 +44,46 @@ output:
           type: file
           description: The disease module as a GraphML network. Its nodes carry the seed status (`isSeed`), the number of solutions a node occurred in (`nrOfOccurrences`), the corresponding fraction of all solutions (`significance`), the trees a node was part of (`trees`) and a connected component identifier (`connected_components_id`).
           pattern: ${meta.id}.graphml
+  versions_python:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - python:
+          type: string
+          description: The tool name
+      - python --version | sed 's/Python //g':
+          type: eval
+          description: The expression to obtain the version of the tool
+  versions_robustpcst:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - robust-pcst:
+          type: string
+          description: The tool name
+      - python -c "from importlib.metadata import version; print(version('robust-pcst'))":
+          type: eval
+          description: The expression to obtain the version of the tool
+topics:
   versions:
-    - versions.yml:
-        type: file
-        description: File containing software versions
-        pattern: versions.yml
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - python:
+          type: string
+          description: The tool name
+      - python --version | sed 's/Python //g':
+          type: eval
+          description: The expression to obtain the version of the tool
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - robust-pcst:
+          type: string
+          description: The tool name
+      - python -c "from importlib.metadata import version; print(version('robust-pcst'))":
+          type: eval
+          description: The expression to obtain the version of the tool
 authors:
   - "@JohannesKersting"
   - "@quirinmanz"

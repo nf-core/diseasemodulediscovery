@@ -42,11 +42,46 @@ output:
             but randomized edges. Rewiring attempts that would create a parallel edge
             or a self-loop are rejected and reported as a warning.
           pattern: ${output_name}
+  versions_python:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - python:
+          type: string
+          description: The tool name
+      - python3 --version | sed 's/Python //g':
+          type: eval
+          description: The expression to obtain the version of the tool
+  versions_graphtool:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - graph-tool:
+          type: string
+          description: The tool name
+      - python -c "import graph_tool; print(graph_tool.__version__)" | cut -d" " -f1:
+          type: eval
+          description: The expression to obtain the version of the tool
+topics:
   versions:
-    - versions.yml:
-        type: file
-        description: File containing software versions
-        pattern: versions.yml
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - python:
+          type: string
+          description: The tool name
+      - python3 --version | sed 's/Python //g':
+          type: eval
+          description: The expression to obtain the version of the tool
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - graph-tool:
+          type: string
+          description: The tool name
+      - python -c "import graph_tool; print(graph_tool.__version__)" | cut -d" " -f1:
+          type: eval
+          description: The expression to obtain the version of the tool
 authors:
   - "@JohannesKersting"
   - "@ChloeBubu"

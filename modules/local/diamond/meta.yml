@@ -54,11 +54,84 @@ output:
             hypergeometric test (`p_hyper`). The seed nodes themselves are not part
             of the output.
           pattern: "*.first_*_added_nodes_weight_*.txt"
+  versions_python:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - python:
+          type: string
+          description: The tool name
+      - python --version | sed 's/Python //g':
+          type: eval
+          description: The expression to obtain the version of the tool
+  versions_networkx:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - networkx:
+          type: string
+          description: The tool name
+      - python -c "import networkx; print(networkx.__version__)":
+          type: eval
+          description: The expression to obtain the version of the tool
+  versions_scipy:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - scipy:
+          type: string
+          description: The tool name
+      - python -c "import scipy; print(scipy.__version__)":
+          type: eval
+          description: The expression to obtain the version of the tool
+  versions_numpy:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - numpy:
+          type: string
+          description: The tool name
+      - python -c "import numpy; print(numpy.__version__)":
+          type: eval
+          description: The expression to obtain the version of the tool
+topics:
   versions:
-    - versions.yml:
-        type: file
-        description: File containing software versions
-        pattern: versions.yml
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - python:
+          type: string
+          description: The tool name
+      - python --version | sed 's/Python //g':
+          type: eval
+          description: The expression to obtain the version of the tool
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - networkx:
+          type: string
+          description: The tool name
+      - python -c "import networkx; print(networkx.__version__)":
+          type: eval
+          description: The expression to obtain the version of the tool
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - scipy:
+          type: string
+          description: The tool name
+      - python -c "import scipy; print(scipy.__version__)":
+          type: eval
+          description: The expression to obtain the version of the tool
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - numpy:
+          type: string
+          description: The tool name
+      - python -c "import numpy; print(numpy.__version__)":
+          type: eval
+          description: The expression to obtain the version of the tool
 authors:
   - "@JohannesKersting"
 maintainers:

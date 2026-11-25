@@ -11,8 +11,6 @@ workflow GT_FIRSTNEIGHBOR {
 
     main:
 
-    ch_versions = channel.empty()
-
     // channel: [ val(meta[id,seeds_id,network_id), path(seeds), path(network) ]
     ch_seeds_network = ch_seeds
         .map{ meta, seeds -> [meta.network_id, meta, seeds]}
@@ -24,7 +22,6 @@ workflow GT_FIRSTNEIGHBOR {
         }
 
     FIRSTNEIGHBOR(ch_seeds_network)
-    ch_versions = ch_versions.mix(FIRSTNEIGHBOR.out.versions.first())
 
     // channel: [ val(meta[id,module_id,amim,seeds_id,network_id]), path(module) ]
     ch_module = FIRSTNEIGHBOR.out.module
@@ -38,5 +35,4 @@ workflow GT_FIRSTNEIGHBOR {
 
     emit:
     module = ch_module      // channel: [ val(meta[id,module_id,amim,seeds_id,network_id]), path(module) ]
-    versions = ch_versions  // channel: [ versions.yml ]
 }

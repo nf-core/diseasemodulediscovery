@@ -15,15 +15,11 @@ workflow GT_DOMINO {                        // Define the subworkflow, usually s
 
     main:
 
-    ch_versions = channel.empty()                                           // For collecting tool versions
-
     PREFIXLINES(ch_seeds, "entrez.")                                        // DOMINO interprets entrez ids as integers, so they are prefixed
 
     GRAPHTOOLPARSER(ch_network, "domino")                                   // Convert gt file to domino specific format, including prefixes
-    ch_versions = ch_versions.mix(GRAPHTOOLPARSER.out.versions)             // Collect versions
 
     DOMINO_SLICER(GRAPHTOOLPARSER.out.network)                              // Run the DOMINO preprocessing step on the parsed networks
-    ch_versions = ch_versions.mix(DOMINO_SLICER.out.versions)               // Collect versions
 
     ch_domino_network = GRAPHTOOLPARSER.out.network
         .join(DOMINO_SLICER.out.slices, failOnMismatch: true, failOnDuplicate: true)
@@ -40,9 +36,7 @@ workflow GT_DOMINO {                        // Define the subworkflow, usually s
         }
 
     DOMINO_DOMINO(ch_domino_input)                                          // Run DOMINO on the preprocessed network
-    ch_versions = ch_versions.mix(DOMINO_DOMINO.out.versions.first())       // Collect versions
 
     emit:
     module   = DOMINO_DOMINO.out.modules  // channel: [ val(meta[id,module_id,amim,seeds_id,network_id]), path(module) ]
-    versions = ch_versions                // channel: [ versions.yml ]        emit collected versions
 }

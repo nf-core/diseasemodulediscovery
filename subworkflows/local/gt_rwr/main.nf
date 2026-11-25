@@ -15,10 +15,7 @@ workflow GT_RWR {
 
     main:
 
-    ch_versions = channel.empty()                                           // For collecting tool versions
-
     GRAPHTOOLPARSER(ch_network, "rwr")                                      // Convert gt file to rwr specific format
-    ch_versions = ch_versions.mix(GRAPHTOOLPARSER.out.versions)             // Collect versions
 
     // channel: [ val(meta[id,seeds_id,network_id), path(seeds), path(network) ]
     ch_rwr_input = ch_seeds
@@ -32,9 +29,7 @@ workflow GT_RWR {
         }
 
     RWR(ch_rwr_input, scaling, symmetrical, r)                              // Run RWR on parsed network
-    ch_versions = ch_versions.mix(RWR.out.versions.first())
 
     emit:
     module   = RWR.out.module  // channel: [ val(meta[id,module_id,amim,seeds_id,network_id]), path(module) ]
-    versions = ch_versions              // channel: [ versions.yml ]        emit collected versions
 }

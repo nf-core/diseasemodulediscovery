@@ -17,11 +17,13 @@ process DIAMOND {                           // Process name, should be all upper
 
     output:                                 // Define output files, "emit" is only used to access the corresponding outputs externally
     tuple val(meta), path("${meta.id}.first_${n}_added_nodes_weight_${alpha}.txt")   , emit: module       // Define a pattern for the output file (can also be the full name, if known), emit -> the active module
-    path "versions.yml"                                                              , emit: versions     // Software versions, this is not essential but nice, the collected versions will be part of the final multiqc report
+    tuple val("${task.process}"), val('python'), eval("python --version | sed 's/Python //g'"), emit: versions_python, topic: versions
+    tuple val("${task.process}"), val('networkx'), eval('python -c "import networkx; print(networkx.__version__)"'), emit: versions_networkx, topic: versions
+    tuple val("${task.process}"), val('scipy'), eval('python -c "import scipy; print(scipy.__version__)"'), emit: versions_scipy, topic: versions
+    tuple val("${task.process}"), val('numpy'), eval('python -c "import numpy; print(numpy.__version__)"'), emit: versions_numpy, topic: versions
 
     // The script for executing DIAMOnD, which is vendored in bin/ and therefore on the PATH
     // Access inputs, parameters, etc. with the "$" operator
-    // The part starting with "cat <<-END_VERSIONS > versions.yml" only collects software versions for the versions.yml file, not essential
     script:
     """
     DIAMOnD.py \\
@@ -30,13 +32,5 @@ process DIAMOND {                           // Process name, should be all upper
         $n \\
         $alpha \\
         ${meta.id}.first_${n}_added_nodes_weight_${alpha}.txt
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        python: "\$(python --version | sed 's/Python //g')"
-        networkx: "\$(python -c "import networkx; print(networkx.__version__)")"
-        scipy: "\$(python -c "import scipy; print(scipy.__version__)")"
-        numpy: "\$(python -c "import numpy; print(numpy.__version__)")"
-    END_VERSIONS
     """
 }

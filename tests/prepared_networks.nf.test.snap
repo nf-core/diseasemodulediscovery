@@ -6,6 +6,10 @@
                     "graph-tool": "2.77",
                     "python": "3.12.13"
                 },
+                "INPUTCHECK": {
+                    "graph-tool": "2.77",
+                    "python": "3.12.13"
+                },
                 "MULTIQCFORMATTER": {
                     "python": "3.12.13"
                 },
@@ -235,10 +239,10 @@
                 "node_degree_distribution_mqc.yaml:md5,9bc45460b748c4a7276973cdb6e6de8d"
             ]
         ],
-        "timestamp": "2026-11-06T10:17:00.842235898",
+        "timestamp": "2026-11-25T17:39:20.522788218",
         "meta": {
             "nf-test": "0.9.4",
-            "nextflow": "26.10.4"
+            "nextflow": "26.10.6"
         }
     }
 }

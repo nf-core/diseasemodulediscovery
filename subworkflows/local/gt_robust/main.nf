@@ -13,10 +13,7 @@ workflow GT_ROBUST {
 
     main:
 
-    ch_versions = channel.empty()
-
     GRAPHTOOLPARSER(ch_network, "robust")
-    ch_versions = ch_versions.mix(GRAPHTOOLPARSER.out.versions)
 
     // channel: [ val(meta[id,seeds_id,network_id), path(seeds), path(network) ]
     ch_robust_input = ch_seeds
@@ -30,9 +27,7 @@ workflow GT_ROBUST {
         }
 
     ROBUST(ch_robust_input)
-    ch_versions = ch_versions.mix(ROBUST.out.versions.first())
 
     emit:
     module   = ROBUST.out.module  // channel: [ val(meta[id,module_id,amim,seeds_id,network_id]), path(module) ]
-    versions = ch_versions              // channel: [ versions.yml ]        emit collected versions
 }

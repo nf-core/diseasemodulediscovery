@@ -13,10 +13,7 @@ workflow GT_ROBUSTBIASAWARE {
 
     main:
 
-    ch_versions = channel.empty()
-
     GRAPHTOOLPARSER(ch_network, "robust")
-    ch_versions = ch_versions.mix(GRAPHTOOLPARSER.out.versions)
 
     def idspaceUpper = idspace.toUpperCase()
 
@@ -32,11 +29,9 @@ workflow GT_ROBUSTBIASAWARE {
         }
 
     ROBUSTBIASAWARE(ch_robust_bias_aware_input, idspaceUpper)
-    ch_versions = ch_versions.mix(ROBUSTBIASAWARE.out.versions.first())
 
 
 
     emit:
     module   = ROBUSTBIASAWARE.out.module  // channel: [ val(meta[id,module_id,amim,seeds_id,network_id]), path(module) ]
-    versions = ch_versions                 // channel: [ versions.yml ]        emit collected versions
 }

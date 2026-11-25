@@ -14,17 +14,12 @@ process SAVEMODULES {
     tuple val(meta), path("${meta.id}.graphml")  , emit: graphml
     tuple val(meta), path("${meta.id}.nodes.tsv"), emit: nodes_tsv
     tuple val(meta), path("${meta.id}.edges.tsv"), emit: edges_tsv
-    path "versions.yml"                          , emit: versions
+    tuple val("${task.process}"), val('python'), eval("python --version | sed 's/Python //g'"), emit: versions_python, topic: versions
+    tuple val("${task.process}"), val('graph-tool'), eval('python -c "import graph_tool; print(graph_tool.__version__)" | cut -d" " -f1'), emit: versions_graphtool, topic: versions
+    tuple val("${task.process}"), val('pandas'), eval('python -c "import pandas; print(pandas.__version__)"'), emit: versions_pandas, topic: versions
 
     script:
     """
     save_modules.py -m "${module}" -p "${meta.id}" -l DEBUG
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        python: "\$(python --version | sed 's/Python //g')"
-        graph-tool: "\$(python -c "import graph_tool; print(graph_tool.__version__)" | cut -d' ' -f1)"
-        pandas: "\$(python -c "import pandas; print(pandas.__version__)")"
-    END_VERSIONS
     """
 }

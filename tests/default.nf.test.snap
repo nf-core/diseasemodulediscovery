@@ -35,6 +35,10 @@
                     "graph-tool": "2.77",
                     "python": "3.12.13"
                 },
+                "INPUTCHECK": {
+                    "graph-tool": "2.77",
+                    "python": "3.12.13"
+                },
                 "MODULEPARSER": {
                     "graph-tool": "2.77",
                     "python": "3.12.13"
@@ -305,7 +309,7 @@
                 "node_degree_distribution_mqc.yaml:md5,d6a05ace0a3f6dc518c1106334462049"
             ]
         ],
-        "timestamp": "2026-11-25T16:27:47.278722563",
+        "timestamp": "2026-11-25T17:36:39.577802662",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "26.10.6"

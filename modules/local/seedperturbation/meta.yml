@@ -36,11 +36,27 @@ output:
             by the position of the omitted seed in the input and keep the extension of
             the input file.
           pattern: ${meta.seeds_id}.*.${seeds.extension}
+  versions_python:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - python:
+          type: string
+          description: The tool name
+      - python3 --version | sed 's/Python //g':
+          type: eval
+          description: The expression to obtain the version of the tool
+topics:
   versions:
-    - versions.yml:
-        type: file
-        description: File containing software versions
-        pattern: versions.yml
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - python:
+          type: string
+          description: The tool name
+      - python3 --version | sed 's/Python //g':
+          type: eval
+          description: The expression to obtain the version of the tool
 authors:
   - "@JohannesKersting"
 maintainers:

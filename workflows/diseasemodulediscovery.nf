@@ -127,7 +127,6 @@ workflow DISEASEMODULEDISCOVERY {
 
 
     // Channels
-    ch_versions = channel.empty()
     ch_multiqc_files = channel.empty()
     ch_seeds_empty_status = channel.empty()
     ch_module_empty_status = channel.empty()
@@ -136,7 +135,6 @@ workflow DISEASEMODULEDISCOVERY {
 
     // Run network parser for  networks, supported by graph-tool
     GRAPHTOOLPARSER(ch_network, 'gt')
-    ch_versions = ch_versions.mix(GRAPHTOOLPARSER.out.versions)
     ch_network_multiqc = GRAPHTOOLPARSER.out.multiqc
         .map{ _meta, path -> path }
         .collectFile(
@@ -196,12 +194,10 @@ workflow DISEASEMODULEDISCOVERY {
     // Network expansion tools
     NETWORKEXPANSION(ch_seeds, ch_network_gt)
     ch_modules = ch_modules.mix(NETWORKEXPANSION.out.modules) // channel: [ val(meta[id,module_id,amim,seeds_id,network_id]), path(module)]
-    ch_versions = ch_versions.mix(NETWORKEXPANSION.out.versions)
 
 
     // Topology evaluation
     TOPOLOGY(ch_modules)
-    ch_versions = ch_versions.mix(TOPOLOGY.out.versions)
     ch_topology_multiqc = TOPOLOGY.out.topology
         .map{ _meta, path -> path }
         .collectFile(
@@ -233,15 +229,12 @@ workflow DISEASEMODULEDISCOVERY {
 
     NETWORKANNOTATION(ch_module_network)
     ch_modules = NETWORKANNOTATION.out.module
-    ch_versions = ch_versions.mix(NETWORKANNOTATION.out.versions)
 
 
     // Save modules
     SAVEMODULES(ch_modules)
     ch_nodes_tsv_not_empty = SAVEMODULES.out.nodes_tsv
         .filter{meta, _module -> meta.nodes > 0} // Filter out empty modules
-
-    ch_versions = ch_versions.mix(SAVEMODULES.out.versions)
 
     // Separate empty modules
     ch_modules_empty_not_empty = ch_modules
@@ -304,7 +297,6 @@ workflow DISEASEMODULEDISCOVERY {
         ch_multiqc_files = ch_multiqc_files.mix(ch_visualization_multiqc)
 
         VISUALIZEMODULES(ch_visualization_input.pass)
-        ch_versions = ch_versions.mix(VISUALIZEMODULES.out.versions)
     }
 
     // Drugstone export
@@ -337,7 +329,6 @@ workflow DISEASEMODULEDISCOVERY {
         ch_multiqc_files = ch_multiqc_files.mix(ch_drugstone_multiqc)
 
         DRUGSTONEEXPORT(ch_drugstone_export_input.pass, id_space)
-        ch_versions = ch_versions.mix(DRUGSTONEEXPORT.out.versions)
         ch_drugstone_export_multiqc = DRUGSTONEEXPORT.out.link
             .map{ _meta, path -> path }
             .collectFile(
@@ -353,7 +344,6 @@ workflow DISEASEMODULEDISCOVERY {
     if(params.run_annotation){
         if( params.id_space != "symbol" & params.id_space != "ensembl" ){
             GT_BIOPAX(ch_modules, id_space, validate_online)
-            ch_versions = ch_versions.mix(GT_BIOPAX.out.versions)
         } else {
             log.warn("Ignoring --run_annotation: annotation and BioPAX conversion currently only support uniprot or entrez IDs")
         }
@@ -403,7 +393,6 @@ workflow DISEASEMODULEDISCOVERY {
                 [[],[]],
                 ch_gprofiler_input.network
             )
-            ch_versions = ch_versions.mix(GPROFILER2_GOST.out.versions)
         }
 
         // Digest
@@ -421,7 +410,6 @@ workflow DISEASEMODULEDISCOVERY {
                 }
 
                 DIGEST_REFERENCEFREE (ch_digest_reference_free_input.nodes, id_space, ch_digest_reference_free_input.network, id_space, "subnetwork")
-                ch_versions = ch_versions.mix(DIGEST_REFERENCEFREE.out.versions)
                 ch_multiqc_files = ch_multiqc_files.mix(
                     DIGEST_REFERENCEFREE.out.multiqc
                     .map{ _meta, path -> path }
@@ -446,7 +434,6 @@ workflow DISEASEMODULEDISCOVERY {
                     }
 
                 DIGEST_REFERENCEBASED (ch_digest_reference_based_input.nodes, id_space, ch_digest_reference_based_input.network, id_space, "subnetwork-set")
-                ch_versions = ch_versions.mix(DIGEST_REFERENCEBASED.out.versions)
                 ch_multiqc_files = ch_multiqc_files.mix(
                     DIGEST_REFERENCEBASED.out.multiqc
                     .map{ _meta, path -> path }
@@ -481,7 +468,6 @@ workflow DISEASEMODULEDISCOVERY {
             ch_seed_perturbation_input,
             ch_network_gt
         )
-        ch_versions = ch_versions.mix(GT_SEEDPERTURBATION.out.versions)
         ch_multiqc_files = ch_multiqc_files
             .mix(GT_SEEDPERTURBATION.out.multiqc_summary)
             .mix(GT_SEEDPERTURBATION.out.multiqc_jaccard)
@@ -495,7 +481,6 @@ workflow DISEASEMODULEDISCOVERY {
             ch_network_gt,
             ch_perturbed_networks
         )
-        ch_versions = ch_versions.mix(GT_NETWORKPERTURBATION.out.versions)
         ch_multiqc_files = ch_multiqc_files
             .mix(GT_NETWORKPERTURBATION.out.multiqc_summary)
             .mix(GT_NETWORKPERTURBATION.out.multiqc_jaccard)
@@ -539,7 +524,6 @@ workflow DISEASEMODULEDISCOVERY {
         includeIndirectDrugs = channel.value(params.includeIndirectDrugs).map{flag -> flag ? 1 : 0}
         includeNonApprovedDrugs = channel.value(params.includeNonApprovedDrugs).map{flag -> flag ? 1 : 0}
         DRUGPREDICTIONS(ch_drugstone_input.module, id_space, ch_drugstone_input.algorithm, includeIndirectDrugs, includeNonApprovedDrugs, params.result_size)
-        ch_versions = ch_versions.mix(DRUGPREDICTIONS.out.versions)
 
         if(!params.skip_visualization){
 
@@ -551,7 +535,6 @@ workflow DISEASEMODULEDISCOVERY {
                 .map{_module_id, meta, drug_predictions, module -> [meta, module, drug_predictions] }    // Format for visualization
 
             VISUALIZEMODULESDRUGS(ch_drug_visualization_input)
-            ch_versions = ch_versions.mix(VISUALIZEMODULESDRUGS.out.versions)
         }
     }
 
@@ -563,7 +546,6 @@ workflow DISEASEMODULEDISCOVERY {
         }
     )
     ch_multiqc_files = ch_multiqc_files.mix(MULTIQCFORMATTER.out.multiqc)
-    ch_versions = ch_versions.mix(MULTIQCFORMATTER.out.versions)
 
     // Collate and save software versions
     //
@@ -576,7 +558,9 @@ workflow DISEASEMODULEDISCOVERY {
 
     def topic_versions_string = topic_versions.versions_tuple
         .map { process, tool, version ->
-            [ process[process.lastIndexOf(':')+1..-1], "  ${tool}: ${version}" ]
+            // quote the version so YAML keeps it a string (e.g. 2.77 instead of the float 2.77, 1.20 instead of 1.2)
+            // TODO: workaround for https://github.com/nf-core/tools/issues/4500, revert to the template code once that is fixed
+            [ process[process.lastIndexOf(':')+1..-1], "  ${tool}: \"${version}\"" ]
         }
         .groupTuple(by:0)
         .map { process, tool_versions ->
@@ -584,7 +568,7 @@ workflow DISEASEMODULEDISCOVERY {
             "${process}:\n${tool_versions.join('\n')}"
         }
 
-    def ch_collated_versions = softwareVersionsToYAML(ch_versions.mix(topic_versions.versions_file))
+    def ch_collated_versions = softwareVersionsToYAML(topic_versions.versions_file)
         .mix(topic_versions_string)
         .collectFile(
             storeDir: "${outdir}/pipeline_info",
@@ -625,7 +609,6 @@ workflow DISEASEMODULEDISCOVERY {
     visualization_skipped_status    = ch_visualization_skipped_status   // channel: [id, boolean]
     drugstone_skipped_status        = ch_drugstone_skipped_status       // channel: [id, boolean]
     multiqc_report = MULTIQC.out.report.map { _meta, report -> [report] }.toList() // channel: /path/to/multiqc_report.html
-    versions       = ch_versions                 // channel: [ path(versions.yml) ]
 }
 
 /*

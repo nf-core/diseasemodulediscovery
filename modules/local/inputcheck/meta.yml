@@ -81,11 +81,46 @@ output:
             `Seeds` (number of retained seeds) and `Not in network` (number of dropped
             seeds)
           pattern: ${meta.id}.multiqc.tsv
+  versions_python:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - python:
+          type: string
+          description: The tool name
+      - python --version | sed 's/Python //g':
+          type: eval
+          description: The expression to obtain the version of the tool
+  versions_graphtool:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - graph-tool:
+          type: string
+          description: The tool name
+      - python -c "import graph_tool; print(graph_tool.__version__)" | cut -d" " -f1:
+          type: eval
+          description: The expression to obtain the version of the tool
+topics:
   versions:
-    - versions.yml:
-        type: file
-        description: File containing software versions
-        pattern: versions.yml
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - python:
+          type: string
+          description: The tool name
+      - python --version | sed 's/Python //g':
+          type: eval
+          description: The expression to obtain the version of the tool
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - graph-tool:
+          type: string
+          description: The tool name
+      - python -c "import graph_tool; print(graph_tool.__version__)" | cut -d" " -f1:
+          type: eval
+          description: The expression to obtain the version of the tool
 authors:
   - "@JohannesKersting"
 maintainers:

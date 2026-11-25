@@ -12,7 +12,8 @@ process ROBUSTBIASAWARE {
 
     output:
     tuple val(meta), path("${meta.id}.graphml")  , emit: module
-    path "versions.yml"     , emit: versions
+    tuple val("${task.process}"), val('python'), eval("python --version | sed 's/Python //g'"), emit: versions_python, topic: versions
+    tuple val("${task.process}"), val('robust-bias-aware'), eval("pip show robust-bias-aware | sed -n 's/^Version: //p'"), emit: versions_robustbiasaware, topic: versions
     script:
     def args = task.ext.args ?: ''          // Get possible alpha, beta, n, and tau arguments for robust, see TODO above
     def identifier ="${idspace}" == "SYMBOL" ? "GENE_SYMBOL":
@@ -24,10 +25,5 @@ process ROBUSTBIASAWARE {
     }
     """
     robust-bias-aware --seeds $seeds --outfile "${meta.id}.graphml" --namespace $identifier --network $network  $args
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        python: "\$(python --version | sed 's/Python //g')"
-        robust-bias-aware: "\$(pip show robust-bias-aware | grep '^Version:' | awk '{print \$2}')"
-    END_VERSIONS
     """
 }

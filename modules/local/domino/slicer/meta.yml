@@ -41,11 +41,103 @@ output:
           type: file
           description: "Text file listing the network slices. The first line reports the total number of slices, and every slice is given as a `cc #<i>: n=<size>` line followed by a bracketed, comma-separated list of its node identifiers."
           pattern: ${meta.id}.slices.txt
+  versions_python:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - python:
+          type: string
+          description: The tool name
+      - python --version | sed 's/Python //g':
+          type: eval
+          description: The expression to obtain the version of the tool
+  versions_domino:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - domino:
+          type: string
+          description: The tool name
+      - python -c "import json,importlib.metadata as m; u=json.loads(m.distribution('domino-python').read_text('direct_url.json'))['url']; print(u.rsplit('/',1)[-1].removeprefix('v').removesuffix('.tar.gz'))":
+          type: eval
+          description: The expression to obtain the version of the tool
+  versions_pythonlouvain:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - python-louvain:
+          type: string
+          description: The tool name
+      - "pip show python-louvain | sed -n 's/^Version: //p'":
+          type: eval
+          description: The expression to obtain the version of the tool
+  versions_networkx:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - networkx:
+          type: string
+          description: The tool name
+      - "pip show networkx | sed -n 's/^Version: //p'":
+          type: eval
+          description: The expression to obtain the version of the tool
+  versions_numpy:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - numpy:
+          type: string
+          description: The tool name
+      - "pip show numpy | sed -n 's/^Version: //p'":
+          type: eval
+          description: The expression to obtain the version of the tool
+topics:
   versions:
-    - versions.yml:
-        type: file
-        description: File containing software versions
-        pattern: versions.yml
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - python:
+          type: string
+          description: The tool name
+      - python --version | sed 's/Python //g':
+          type: eval
+          description: The expression to obtain the version of the tool
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - domino:
+          type: string
+          description: The tool name
+      - python -c "import json,importlib.metadata as m; u=json.loads(m.distribution('domino-python').read_text('direct_url.json'))['url']; print(u.rsplit('/',1)[-1].removeprefix('v').removesuffix('.tar.gz'))":
+          type: eval
+          description: The expression to obtain the version of the tool
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - python-louvain:
+          type: string
+          description: The tool name
+      - "pip show python-louvain | sed -n 's/^Version: //p'":
+          type: eval
+          description: The expression to obtain the version of the tool
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - networkx:
+          type: string
+          description: The tool name
+      - "pip show networkx | sed -n 's/^Version: //p'":
+          type: eval
+          description: The expression to obtain the version of the tool
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - numpy:
+          type: string
+          description: The tool name
+      - "pip show numpy | sed -n 's/^Version: //p'":
+          type: eval
+          description: The expression to obtain the version of the tool
 authors:
   - "@JohannesKersting"
 maintainers:

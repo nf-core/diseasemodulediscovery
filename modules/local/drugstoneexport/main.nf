@@ -13,15 +13,11 @@ process DRUGSTONEEXPORT{
 
     output:
     tuple val(meta), path("${meta.id}.drugstonelink.tsv")   , emit: link
-    path "versions.yml"     , emit: versions
+    tuple val("${task.process}"), val('python'), eval("python --version | sed 's/Python //g'"), emit: versions_python, topic: versions
+    tuple val("${task.process}"), val('graph-tool'), eval('python -c "import graph_tool; print(graph_tool.__version__)" | cut -d" " -f1'), emit: versions_graphtool, topic: versions
 
     script:
     """
     drugstone_export.py -m $module -i $id_space -p "${meta.id}"
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        python: "\$(python --version | sed 's/Python //g')"
-        graph-tool: "\$(python -c "import graph_tool; print(graph_tool.__version__)" | cut -d' ' -f1)"
-    END_VERSIONS
     """
 }

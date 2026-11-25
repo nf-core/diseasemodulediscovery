@@ -25,11 +25,46 @@ output:
         type: file
         description: HTML validation report covering all input files, using the `notstrict` validation profile
         pattern: biopax-validator-report.html
+  versions_openjdk:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - openjdk:
+          type: string
+          description: The tool name
+      - java -version 2>&1 | head -n1 | cut -d'"' -f2 | cut -d'-' -f1:
+          type: eval
+          description: The expression to obtain the version of the tool
+  versions_biopaxvalidator:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - biopax-validator:
+          type: string
+          description: The tool name
+      - ls $(dirname $(readlink -f $(which biopax-validator)))/../share | sed -n "s/^biopax-validator-//p":
+          type: eval
+          description: The expression to obtain the version of the tool
+topics:
   versions:
-    - versions.yml:
-        type: file
-        description: File containing software versions
-        pattern: versions.yml
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - openjdk:
+          type: string
+          description: The tool name
+      - java -version 2>&1 | head -n1 | cut -d'"' -f2 | cut -d'-' -f1:
+          type: eval
+          description: The expression to obtain the version of the tool
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - biopax-validator:
+          type: string
+          description: The tool name
+      - ls $(dirname $(readlink -f $(which biopax-validator)))/../share | sed -n "s/^biopax-validator-//p":
+          type: eval
+          description: The expression to obtain the version of the tool
 authors:
   - "@quirinmanz"
 maintainers:

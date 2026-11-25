@@ -14,7 +14,6 @@ workflow GT_NETWORKPERTURBATION {
     ch_perturbed_networks    // channel: [ val(meta[id,network_id]), [path(perturbed_networks)] ]
 
     main:
-    ch_versions = channel.empty()
 
     // Branch ch_perturbed_networks based on whether the perturbed_networks have already been pre-computed
     ch_perturbed_networks = ch_network
@@ -36,7 +35,6 @@ workflow GT_NETWORKPERTURBATION {
 
     // Run network perturbations
     NETWORKPERTURBATION(ch_perturbation_input)
-    ch_versions = ch_versions.mix(NETWORKPERTURBATION.out.versions)
 
     // Create required shape for NETWORKEXPANSION
     // channel: [val(meta[id,seeds_id,network_id,perturbed_network_id,n_perturbations]), path(perturbed_network)]
@@ -59,7 +57,6 @@ workflow GT_NETWORKPERTURBATION {
 
     // Run network expansion tools on perturbed networks
     NETWORKEXPANSION(ch_seeds, ch_perturbed_networks)
-    ch_versions = ch_versions.mix(NETWORKEXPANSION.out.versions)
 
     // Group by seeds_id, amim, and network_id to get one element per original module
     // channel: [ val(meta[id,module_id,amim,seeds_id,network_id]), [path(perturbed_modules)] ]
@@ -92,7 +89,6 @@ workflow GT_NETWORKPERTURBATION {
         ch_evaluation.module,
         ch_evaluation.perturbed_modules,
     )
-    ch_versions = ch_versions.mix(NETWORKPERTURBATIONEVALUATION.out.versions)
     ch_multiqc_summary =  NETWORKPERTURBATIONEVALUATION.out.multiqc_summary
         .map{ _meta, path -> path }
         .collectFile(
@@ -118,7 +114,6 @@ workflow GT_NETWORKPERTURBATION {
 
 
     emit:
-    versions = ch_versions                  // channel: [ versions.yml ]        emit collected versions
     multiqc_summary = ch_multiqc_summary    // channel: [ multiqc_summary ]     emit collected multiqc files
     multiqc_jaccard = ch_multiqc_jaccard    // channel: [ multiqc_jaccard ]     emit collected multiqc files
 }

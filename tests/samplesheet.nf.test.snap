@@ -10,6 +10,10 @@
                     "graph-tool": "2.77",
                     "python": "3.12.13"
                 },
+                "INPUTCHECK": {
+                    "graph-tool": "2.77",
+                    "python": "3.12.13"
+                },
                 "MULTIQCFORMATTER": {
                     "python": "3.12.13"
                 },
@@ -261,10 +265,10 @@
                 "node_degree_distribution_mqc.yaml:md5,0860049cf61b6a366e9664f40f96d0fe"
             ]
         ],
-        "timestamp": "2026-11-06T10:19:47.12008295",
+        "timestamp": "2026-11-25T17:40:34.968083877",
         "meta": {
             "nf-test": "0.9.4",
-            "nextflow": "26.10.4"
+            "nextflow": "26.10.6"
         }
     }
 }

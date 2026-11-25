@@ -15,10 +15,7 @@ workflow GT_DIAMOND {
 
     main:
 
-    ch_versions = channel.empty()                                           // For collecting tool versions
-
     GRAPHTOOLPARSER(ch_network, "diamond")                                  // Convert gt file to diamond specific format
-    ch_versions = ch_versions.mix(GRAPHTOOLPARSER.out.versions)             // Collect versions
 
     // channel: [ val(meta[id,seeds_id,network_id), path(seeds), path(network) ]
     ch_diamond_input = ch_seeds
@@ -32,9 +29,7 @@ workflow GT_DIAMOND {
         }
 
     DIAMOND(ch_diamond_input, n, alpha)                                     // Run diamond on parsed network
-    ch_versions = ch_versions.mix(DIAMOND.out.versions.first())
 
     emit:
     module   = DIAMOND.out.module       // channel: [ val(meta[id,module_id,amim,seeds_id,network_id]), path(module) ]
-    versions = ch_versions              // channel: [ versions.yml ]        emit collected versions
 }

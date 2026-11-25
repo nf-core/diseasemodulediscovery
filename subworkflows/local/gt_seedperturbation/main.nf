@@ -16,11 +16,8 @@ workflow GT_SEEDPERTURBATION {
 
     main:
 
-    ch_versions = channel.empty()
-
     // Perturbe the input seeds
     SEEDPERTURBATION(ch_seeds)
-    ch_versions = ch_versions.mix(SEEDPERTURBATION.out.versions)
 
     // Create required shape for NETWORKEXPANSION
     // channel: [val(meta[id,seeds_id,network_id,original_seeds_id,n_perturbations]), path(perturbed_seeds)]
@@ -45,7 +42,6 @@ workflow GT_SEEDPERTURBATION {
 
     // Run network expansion tools on perturbed seeds
     NETWORKEXPANSION(ch_perturbed_seeds, ch_network)
-    ch_versions = ch_versions.mix(NETWORKEXPANSION.out.versions)
 
     // Group by original_seeds_id, amim, and network_id to get one element per original module
     // channel: [ val(meta[id,module_id,amim,seeds_id,network_id]), [path(perturbed_modules)], [path(perturbed_seeds)] ]
@@ -102,7 +98,6 @@ workflow GT_SEEDPERTURBATION {
         ch_evaluation.perturbed_seeds,
         ch_evaluation.network
     )
-    ch_versions = ch_versions.mix(SEEDPERTURBATIONEVALUATION.out.versions)
     ch_multiqc_summary =  SEEDPERTURBATIONEVALUATION.out.multiqc_summary
         .map{ _meta, path -> path }
         .collectFile(
@@ -142,7 +137,6 @@ workflow GT_SEEDPERTURBATION {
 
 
     emit:
-    versions = ch_versions                  // channel: [ versions.yml ]        emit collected versions
     multiqc_summary = ch_multiqc_summary    // channel: [ multiqc_summary ]     emit collected multiqc files
     multiqc_jaccard = ch_multiqc_jaccard    // channel: [ multiqc_jaccard ]     emit collected multiqc files
 }

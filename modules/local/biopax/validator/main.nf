@@ -12,7 +12,9 @@ process BIOPAX_VALIDATOR {
 
     output:
     path "biopax-validator-report.html", emit: validation
-    path "versions.yml", emit: versions
+    tuple val("${task.process}"), val('openjdk'), eval("java -version 2>&1 | head -n1 | cut -d'\"' -f2 | cut -d'-' -f1"), emit: versions_openjdk, topic: versions
+    // the tool has no version flag, so the version is taken from its conda share directory name
+    tuple val("${task.process}"), val('biopax-validator'), eval('ls $(dirname $(readlink -f $(which biopax-validator)))/../share | sed -n "s/^biopax-validator-//p"'), emit: versions_biopaxvalidator, topic: versions
 
     script:
     """
@@ -26,12 +28,5 @@ process BIOPAX_VALIDATOR {
         export JAVA_OPTS="-Xmx${task.memory.toGiga().toInteger()}g -Djava.security.egd=file:/dev/./urandom"
         biopax-validator . --output=biopax-validator-report.html --profile=notstrict
     fi
-
-    # the tool has no version flag, so the version is taken from its conda share directory name
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        openjdk: "\$(java -version 2>&1 | head -n1 | cut -d'"' -f2 | cut -d'-' -f1)"
-        biopax-validator: "\$(ls \$(dirname \$(readlink -f \$(which biopax-validator)))/../share | sed -n 's/^biopax-validator-//p')"
-    END_VERSIONS
     """
 }

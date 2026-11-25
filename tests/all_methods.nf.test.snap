@@ -32,6 +32,10 @@
                     "graph-tool": "2.77",
                     "python": "3.12.13"
                 },
+                "INPUTCHECK": {
+                    "graph-tool": "2.77",
+                    "python": "3.12.13"
+                },
                 "MODULEPARSER": {
                     "graph-tool": "2.77",
                     "python": "3.12.13"
@@ -317,10 +321,10 @@
                 "warn_empty_modules_mqc.tsv:md5,29e74711f7ca35f312d791a64cb94515"
             ]
         ],
-        "timestamp": "2026-11-06T10:54:46.38494166",
+        "timestamp": "2026-11-25T17:32:07.452791009",
         "meta": {
             "nf-test": "0.9.4",
-            "nextflow": "26.10.4"
+            "nextflow": "26.10.6"
         }
     }
 }

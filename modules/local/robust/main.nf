@@ -12,7 +12,8 @@ process ROBUST {
 
     output:
     tuple val(meta), path("${meta.id}.graphml")  , emit: module
-    path "versions.yml"                          , emit: versions
+    tuple val("${task.process}"), val('python'), eval("python --version | sed 's/Python //g'"), emit: versions_python, topic: versions
+    tuple val("${task.process}"), val('robust-pcst'), eval("python -c \"from importlib.metadata import version; print(version('robust-pcst'))\""), emit: versions_robustpcst, topic: versions
 
     script:
     def args = task.ext.args ?: ''          // Initial fraction, reduction factor, number of trees, and threshold
@@ -22,11 +23,5 @@ process ROBUST {
         $seeds \\
         "${meta.id}.graphml" \\
         $args
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        python: "\$(python --version | sed 's/Python //g')"
-        robust-pcst: "\$(python -c "from importlib.metadata import version; print(version('robust-pcst'))")"
-    END_VERSIONS
     """
 }

@@ -12,24 +12,18 @@ process DOMINO_SLICER {             // Process name, should be all upper case. O
 
     output:                                                // Define the expected outputs, the "emit:" keyword defines, how the output can be accessed by other processes
     tuple val(meta), path("${meta.id}.slices.txt"), emit: slices
-    path "versions.yml"                           , emit: versions
+    tuple val("${task.process}"), val('python'), eval("python --version | sed 's/Python //g'"), emit: versions_python, topic: versions
+    tuple val("${task.process}"), val('domino'), eval("python -c \"import json,importlib.metadata as m; u=json.loads(m.distribution('domino-python').read_text('direct_url.json'))['url']; print(u.rsplit('/',1)[-1].removeprefix('v').removesuffix('.tar.gz'))\""), emit: versions_domino, topic: versions
+    tuple val("${task.process}"), val('python-louvain'), eval("pip show python-louvain | sed -n 's/^Version: //p'"), emit: versions_pythonlouvain, topic: versions
+    tuple val("${task.process}"), val('networkx'), eval("pip show networkx | sed -n 's/^Version: //p'"), emit: versions_networkx, topic: versions
+    tuple val("${task.process}"), val('numpy'), eval("pip show numpy | sed -n 's/^Version: //p'"), emit: versions_numpy, topic: versions
 
 
 
     // The script for executing slicer
     // Access inputs, parameters, etc. with the "$" operator
-    // The part starting with "cat <<-END_VERSIONS > versions.yml" only collects software versions for the versions.yml file, not essential
     script:
     """
     slicer -n $network -o ${meta.id}.slices.txt
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        python: "\$(python --version | sed 's/Python //g')"
-        domino: "\$(python -c "import json,importlib.metadata as m; u=json.loads(m.distribution('domino-python').read_text('direct_url.json'))['url']; print(u.rsplit('/',1)[-1].removeprefix('v').removesuffix('.tar.gz'))")"
-        python-louvain: "\$(pip show python-louvain | grep '^Version:' | awk '{print \$2}')"
-        networkx: "\$(pip show networkx | grep '^Version:' | awk '{print \$2}')"
-        numpy: "\$(pip show numpy | grep '^Version:' | awk '{print \$2}')"
-    END_VERSIONS
     """
 }

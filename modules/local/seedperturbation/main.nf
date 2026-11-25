@@ -13,15 +13,10 @@ process SEEDPERTURBATION {
 
     output:
     tuple val(meta), path("${meta.seeds_id}.*.${seeds.extension}") , emit: perturbed_seeds
-    path "versions.yml"                                            , emit: versions
+    tuple val("${task.process}"), val('python'), eval("python3 --version | sed 's/Python //g'"), emit: versions_python, topic: versions
 
     script:
     """
     seed_perturbation.py --seeds ${seeds} --prefix ${meta.seeds_id}
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        python: "\$(python3 --version | sed 's/Python //g')"
-    END_VERSIONS
     """
 }

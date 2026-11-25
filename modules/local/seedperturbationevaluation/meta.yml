@@ -86,11 +86,27 @@ output:
           description: "Single YAML mapping entry of the form `<id>: [<jaccard indices>]`,
             listing the Jaccard index of every perturbed module"
           pattern: ${meta.id}.seed_perturbation_multiqc_jaccard.txt
+  versions_python:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - python:
+          type: string
+          description: The tool name
+      - python --version | sed 's/Python //g':
+          type: eval
+          description: The expression to obtain the version of the tool
+topics:
   versions:
-    - versions.yml:
-        type: file
-        description: File containing software versions
-        pattern: versions.yml
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - python:
+          type: string
+          description: The tool name
+      - python --version | sed 's/Python //g':
+          type: eval
+          description: The expression to obtain the version of the tool
 authors:
   - "@ChloeBubu"
   - "@JohannesKersting"

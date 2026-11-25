@@ -13,16 +13,11 @@ process NETWORKPERTURBATION {
 
     output:
     tuple val(meta), path("${output_name}"), emit: perturbed_network
-    path "versions.yml"                    , emit: versions
+    tuple val("${task.process}"), val('python'), eval("python3 --version | sed 's/Python //g'"), emit: versions_python, topic: versions
+    tuple val("${task.process}"), val('graph-tool'), eval('python -c "import graph_tool; print(graph_tool.__version__)" | cut -d" " -f1'), emit: versions_graphtool, topic: versions
 
     script:
     """
     randomize_network.py --network ${network} --output ${output_name}
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        python: "\$(python3 --version | sed 's/Python //g')"
-        graph-tool: "\$(python -c "import graph_tool; print(graph_tool.__version__)" | cut -d' ' -f1)"
-    END_VERSIONS
     """
 }

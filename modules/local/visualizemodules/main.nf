@@ -15,19 +15,14 @@ process VISUALIZEMODULES {
     tuple val(meta), path("${meta.id}.png")      , emit: png  , optional: true
     tuple val(meta), path("${meta.id}.svg")      , emit: svg  , optional: true
     tuple val(meta), path("${meta.id}.html")     , emit: html , optional: true
-    path "versions.yml"                          , emit: versions
+    tuple val("${task.process}"), val('python'), eval("python --version | sed 's/Python //g'"), emit: versions_python, topic: versions
+    tuple val("${task.process}"), val('graph-tool'), eval('python -c "import graph_tool; print(graph_tool.__version__)" | cut -d" " -f1'), emit: versions_graphtool, topic: versions
+    tuple val("${task.process}"), val('networkx'), eval('python -c "import networkx; print(networkx.__version__)"'), emit: versions_networkx, topic: versions
+    tuple val("${task.process}"), val('pyintergraph'), eval("pip show pyintergraph | sed -n 's/^Version: //p'"), emit: versions_pyintergraph, topic: versions
+    tuple val("${task.process}"), val('pyvis'), eval("pip show pyvis | sed -n 's/^Version: //p'"), emit: versions_pyvis, topic: versions
 
     script:
     """
     visualize_modules.py -m "${module}" -p "${meta.id}" -l DEBUG
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        python: "\$(python --version | sed 's/Python //g')"
-        graph-tool: "\$(python -c "import graph_tool; print(graph_tool.__version__)" | cut -d' ' -f1)"
-        networkx: "\$(python -c "import networkx; print(networkx.__version__)")"
-        pyintergraph: "\$(pip show pyintergraph | grep '^Version:' | awk '{print \$2}')"
-        pyvis: "\$(pip show pyvis | grep '^Version:' | awk '{print \$2}')"
-    END_VERSIONS
     """
 }

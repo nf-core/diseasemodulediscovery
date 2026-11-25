@@ -15,18 +15,13 @@ process BIOPAX_PARSER {
 
     output:
     path "*.owl" , emit: biopax
-    path "versions.yml", emit: versions
+    tuple val("${task.process}"), val('python'), eval("python --version | sed 's/Python //g'"), emit: versions_python, topic: versions
+    tuple val("${task.process}"), val('graph-tool'), eval('python -c "import graph_tool; print(graph_tool.__version__)" | cut -d" " -f1'), emit: versions_graphtool, topic: versions
+    tuple val("${task.process}"), val('pybiopax'), eval('python -c "import pybiopax; print(pybiopax.__version__)"'), emit: versions_pybiopax, topic: versions
+    tuple val("${task.process}"), val('nedrex'), eval('python -c "import nedrex; print(nedrex.__version__)"'), emit: versions_nedrex, topic: versions
 
     script:
     """
     gt2biopax.py $network -i $idspace -l DEBUG ${add_variants ? '-v' : ''}
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        python: "\$(python --version | sed 's/Python //g')"
-        graph-tool: "\$(python -c "import graph_tool; print(graph_tool.__version__)" | cut -d' ' -f1)"
-        pybiopax: "\$(python -c "import pybiopax; print(pybiopax.__version__)")"
-        nedrex: "\$(python -c "import nedrex; print(nedrex.__version__)")"
-    END_VERSIONS
     """
 }

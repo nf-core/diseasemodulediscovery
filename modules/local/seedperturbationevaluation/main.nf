@@ -20,7 +20,7 @@ process SEEDPERTURBATIONEVALUATION {
     tuple val(meta), path("${meta.id}.seed_perturbation_evaluation_detailed.tsv") , emit: detailed
     tuple val(meta), path("${meta.id}.seed_perturbation_multiqc_summary.tsv")     , emit: multiqc_summary
     tuple val(meta), path("${meta.id}.seed_perturbation_multiqc_jaccard.txt")     , emit: multiqc_jaccard
-    path "versions.yml"                                                          , emit: versions
+    tuple val("${task.process}"), val('python'), eval("python --version | sed 's/Python //g'"), emit: versions_python, topic: versions
 
 
     script:
@@ -32,10 +32,5 @@ process SEEDPERTURBATIONEVALUATION {
         --perturbed_modules ${perturbed_modules} \\
         --perturbed_seeds ${perturbed_seeds} \\
         --network ${network}
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        python: "\$(python --version | sed 's/Python //g')"
-    END_VERSIONS
     """
 }

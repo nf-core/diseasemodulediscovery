@@ -28,43 +28,36 @@ workflow NETWORKEXPANSION {
     id_space = channel.value(params.id_space)
 
 
-    ch_versions = channel.empty()
     ch_modules  = channel.empty()
     ch_raw_modules = channel.empty()
 
     if(!params.skip_diamond){
         GT_DIAMOND(ch_seeds, ch_network, diamond_n, diamond_alpha)
-        ch_versions = ch_versions.mix(GT_DIAMOND.out.versions)
         ch_raw_modules = ch_raw_modules.mix(GT_DIAMOND.out.module)
     }
 
     if(!params.skip_domino){
         GT_DOMINO(ch_seeds, ch_network)
-        ch_versions = ch_versions.mix(GT_DOMINO.out.versions)
         ch_raw_modules = ch_raw_modules.mix(GT_DOMINO.out.module)
     }
 
     if(!params.skip_robust){
         GT_ROBUST(ch_seeds, ch_network)
-        ch_versions = ch_versions.mix(GT_ROBUST.out.versions)
         ch_raw_modules = ch_raw_modules.mix(GT_ROBUST.out.module)
     }
 
     if(!params.skip_robust_bias_aware){
         GT_ROBUSTBIASAWARE(ch_seeds, ch_network, id_space)
-        ch_versions = ch_versions.mix(GT_ROBUSTBIASAWARE.out.versions)
         ch_raw_modules = ch_raw_modules.mix(GT_ROBUSTBIASAWARE.out.module)
     }
 
     if(!params.skip_firstneighbor){
         GT_FIRSTNEIGHBOR(ch_seeds, ch_network)
-        ch_versions = ch_versions.mix(GT_FIRSTNEIGHBOR.out.versions)
         ch_modules = ch_modules.mix(GT_FIRSTNEIGHBOR.out.module)
     }
 
     if(!params.skip_rwr){
         GT_RWR(ch_seeds, ch_network, rwr_scaling, rwr_symmetrical, rwr_r)
-        ch_versions = ch_versions.mix(GT_RWR.out.versions)
         ch_raw_modules = ch_raw_modules.mix(GT_RWR.out.module)
     }
 
@@ -91,11 +84,9 @@ workflow NETWORKEXPANSION {
         }
 
     MODULEPARSER(ch_module_parser_input)
-    ch_versions = ch_versions.mix(MODULEPARSER.out.versions.first())
     ch_modules = ch_modules.mix(MODULEPARSER.out.module)
 
 
     emit:
     modules  = ch_modules               // channel: [ val(meta[id,module_id,amim,seeds_id,network_id]), path(module) ]
-    versions = ch_versions              // channel: [ versions.yml ]
 }
