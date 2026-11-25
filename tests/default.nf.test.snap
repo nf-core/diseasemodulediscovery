@@ -46,22 +46,9 @@
                     "graph-tool": "2.77",
                     "python": "3.12.13"
                 },
-                "NETWORKPERTURBATION": {
-                    "graph-tool": "2.77",
-                    "python": "3.12.13"
-                },
-                "NETWORKPERTURBATIONEVALUATION": {
-                    "python": "3.12.13"
-                },
                 "SAVEMODULES": {
                     "graph-tool": "2.77",
                     "pandas": "2.2.3",
-                    "python": "3.12.13"
-                },
-                "SEEDPERTURBATION": {
-                    "python": "3.12.13"
-                },
-                "SEEDPERTURBATIONEVALUATION": {
                     "python": "3.12.13"
                 },
                 "TOPOLOGY": {
@@ -194,25 +181,10 @@
                 "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.no_tool/entrez_seeds_1.entrez_ppi.no_tool.gprofiler2.gostplot.html",
                 "evaluation/gprofiler/entrez_seeds_1.entrez_ppi.no_tool/entrez_seeds_1.entrez_ppi.no_tool.gprofiler2.gostplot.png",
                 "evaluation/gprofiler/gprofiler_full_hsapiens.GO_WP_REAC_KEGG.ENSG_filtered.gmt",
-                "evaluation/seed_perturbation",
-                "evaluation/seed_perturbation/entrez_seeds_1.entrez_ppi.diamond",
-                "evaluation/seed_perturbation/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond.seed_perturbation_evaluation_detailed.tsv",
-                "evaluation/seed_perturbation/entrez_seeds_1.entrez_ppi.diamond/entrez_seeds_1.entrez_ppi.diamond.seed_perturbation_evaluation_summary.tsv",
-                "evaluation/seed_perturbation/entrez_seeds_1.entrez_ppi.robustness.pdf",
-                "evaluation/seed_perturbation/entrez_seeds_1.entrez_ppi.robustness.png",
-                "evaluation/seed_perturbation/entrez_seeds_1.entrez_ppi.robustness.tsv",
-                "evaluation/seed_perturbation/entrez_seeds_1.entrez_ppi.seed_rediscovery.pdf",
-                "evaluation/seed_perturbation/entrez_seeds_1.entrez_ppi.seed_rediscovery.png",
-                "evaluation/seed_perturbation/entrez_seeds_1.entrez_ppi.seed_rediscovery.tsv",
                 "input",
                 "input/networks",
                 "input/networks/entrez_ppi.diamond.csv",
                 "input/networks/entrez_ppi.gt",
-                "input/perturbed_networks",
-                "input/perturbed_networks/entrez_ppi",
-                "input/perturbed_networks/entrez_ppi/entrez_ppi.perm_0.gt",
-                "input/perturbed_networks/entrez_ppi/entrez_ppi.perm_1.gt",
-                "input/perturbed_networks/entrez_ppi/entrez_ppi.perm_2.gt",
                 "input/seeds",
                 "input/seeds/entrez_seeds_1.entrez_ppi.no_tool.gt",
                 "input/seeds/entrez_seeds_1.entrez_ppi.tsv",
@@ -250,11 +222,7 @@
                 "mqc_summaries/input_seeds_mqc.tsv",
                 "mqc_summaries/jaccard_similarity_matrix_mqc.tsv",
                 "mqc_summaries/jaccard_similarity_no_seeds_matrix_mqc.tsv",
-                "mqc_summaries/network_perturbation_jaccard_mqc.yaml",
-                "mqc_summaries/network_perturbation_mqc.tsv",
                 "mqc_summaries/node_degree_distribution_mqc.yaml",
-                "mqc_summaries/seed_perturbation_jaccard_mqc.yaml",
-                "mqc_summaries/seed_perturbation_mqc.tsv",
                 "mqc_summaries/shared_nodes_matrix_mqc.tsv",
                 "mqc_summaries/shared_nodes_no_seeds_matrix_mqc.tsv",
                 "mqc_summaries/topology_mqc.tsv",
@@ -275,8 +243,6 @@
                 "multiqc/multiqc_data/multiqc_jaccard_similarity_no_seeds.txt",
                 "multiqc/multiqc_data/multiqc_network_node_degree_distribution_line_graph.txt",
                 "multiqc/multiqc_data/multiqc_network_node_degree_distribution_line_graph_1.txt",
-                "multiqc/multiqc_data/multiqc_network_perturbation_jaccard_box_plot.txt",
-                "multiqc/multiqc_data/multiqc_seed_perturbation_jaccard_box_plot.txt",
                 "multiqc/multiqc_data/multiqc_shared_nodes.txt",
                 "multiqc/multiqc_data/multiqc_shared_nodes_no_seeds.txt",
                 "multiqc/multiqc_data/multiqc_software_versions.txt",
@@ -293,8 +259,6 @@
                 "multiqc/multiqc_plots/pdf/jaccard_similarity_no_seeds.pdf",
                 "multiqc/multiqc_plots/pdf/network_node_degree_distribution_line_graph_Counts.pdf",
                 "multiqc/multiqc_plots/pdf/network_node_degree_distribution_line_graph_Percentages.pdf",
-                "multiqc/multiqc_plots/pdf/network_perturbation_jaccard_box_plot.pdf",
-                "multiqc/multiqc_plots/pdf/seed_perturbation_jaccard_box_plot.pdf",
                 "multiqc/multiqc_plots/pdf/shared_nodes.pdf",
                 "multiqc/multiqc_plots/pdf/shared_nodes_no_seeds.pdf",
                 "multiqc/multiqc_plots/png",
@@ -308,8 +272,6 @@
                 "multiqc/multiqc_plots/png/jaccard_similarity_no_seeds.png",
                 "multiqc/multiqc_plots/png/network_node_degree_distribution_line_graph_Counts.png",
                 "multiqc/multiqc_plots/png/network_node_degree_distribution_line_graph_Percentages.png",
-                "multiqc/multiqc_plots/png/network_perturbation_jaccard_box_plot.png",
-                "multiqc/multiqc_plots/png/seed_perturbation_jaccard_box_plot.png",
                 "multiqc/multiqc_plots/png/shared_nodes.png",
                 "multiqc/multiqc_plots/png/shared_nodes_no_seeds.png",
                 "multiqc/multiqc_plots/svg",
@@ -323,8 +285,6 @@
                 "multiqc/multiqc_plots/svg/jaccard_similarity_no_seeds.svg",
                 "multiqc/multiqc_plots/svg/network_node_degree_distribution_line_graph_Counts.svg",
                 "multiqc/multiqc_plots/svg/network_node_degree_distribution_line_graph_Percentages.svg",
-                "multiqc/multiqc_plots/svg/network_perturbation_jaccard_box_plot.svg",
-                "multiqc/multiqc_plots/svg/seed_perturbation_jaccard_box_plot.svg",
                 "multiqc/multiqc_plots/svg/shared_nodes.svg",
                 "multiqc/multiqc_plots/svg/shared_nodes_no_seeds.svg",
                 "multiqc/multiqc_report.html",
@@ -345,10 +305,10 @@
                 "node_degree_distribution_mqc.yaml:md5,d6a05ace0a3f6dc518c1106334462049"
             ]
         ],
-        "timestamp": "2026-11-06T10:59:05.282337901",
+        "timestamp": "2026-11-25T16:27:47.278722563",
         "meta": {
             "nf-test": "0.9.4",
-            "nextflow": "26.10.4"
+            "nextflow": "26.10.6"
         }
     }
 }

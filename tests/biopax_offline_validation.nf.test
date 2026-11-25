@@ -16,8 +16,6 @@ nextflow_pipeline {
                 validate_online         = false
 
                 // Skip everything that is not needed to reach the BioPAX validator.
-                // The seed and network perturbations are nested inside the evaluation block,
-                // so skipping the evaluation disables them too.
                 skip_diamond            = true
                 skip_visualization      = true
                 skip_drugstone_export   = true

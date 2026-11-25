@@ -461,44 +461,44 @@ workflow DISEASEMODULEDISCOVERY {
 
         }
 
-        // Seed perturbation based evaluation
-        if(params.run_seed_perturbation){
-            // Only use seed files with at least two nodes for the seed perturbation analysis
-            // The information comes from the meta map of the "no_tool" disease modules, which are equivalent to the seed sets
-            ch_filtered_seeds = ch_modules
-                .filter{meta, _path -> meta.amim == "no_tool"}
-                .map{meta, _module -> [meta.seeds_id, meta.network_id, meta.nodes]}
-                .join(ch_seeds.map{meta, seeds -> [meta.seeds_id, meta.network_id, meta, seeds]}, by: [0,1], failOnDuplicate: true, failOnMismatch: true)
-                .branch{_seeds_id, _network_id, nodes, _meta, _seeds ->
-                    fail: nodes < 2
-                    pass: true
-                }
-            ch_seed_perturbation_input  = ch_filtered_seeds.pass.map{_seeds_id, _network_id, _nodes, meta, seeds -> [meta, seeds]}
-            GT_SEEDPERTURBATION(
-                ch_modules.filter{ meta, _path -> meta.amim != "no_tool" }, // Filter out no_tool modules
-                ch_seed_perturbation_input,
-                ch_network_gt
-            )
-            ch_versions = ch_versions.mix(GT_SEEDPERTURBATION.out.versions)
-            ch_multiqc_files = ch_multiqc_files
-                .mix(GT_SEEDPERTURBATION.out.multiqc_summary)
-                .mix(GT_SEEDPERTURBATION.out.multiqc_jaccard)
-        }
+    }
 
-        // Network perturbation based evaluation
-        if(params.run_network_perturbation){
-            GT_NETWORKPERTURBATION(
-                ch_modules.filter{ meta, _path -> meta.amim != "no_tool" }, // Filter out no_tool modules
-                ch_seeds,
-                ch_network_gt,
-                ch_perturbed_networks
-            )
-            ch_versions = ch_versions.mix(GT_NETWORKPERTURBATION.out.versions)
-            ch_multiqc_files = ch_multiqc_files
-                .mix(GT_NETWORKPERTURBATION.out.multiqc_summary)
-                .mix(GT_NETWORKPERTURBATION.out.multiqc_jaccard)
-        }
+    // Seed perturbation based evaluation
+    if(params.run_seed_perturbation){
+        // Only use seed files with at least two nodes for the seed perturbation analysis
+        // The information comes from the meta map of the "no_tool" disease modules, which are equivalent to the seed sets
+        ch_filtered_seeds = ch_modules
+            .filter{meta, _path -> meta.amim == "no_tool"}
+            .map{meta, _module -> [meta.seeds_id, meta.network_id, meta.nodes]}
+            .join(ch_seeds.map{meta, seeds -> [meta.seeds_id, meta.network_id, meta, seeds]}, by: [0,1], failOnDuplicate: true, failOnMismatch: true)
+            .branch{_seeds_id, _network_id, nodes, _meta, _seeds ->
+                fail: nodes < 2
+                pass: true
+            }
+        ch_seed_perturbation_input  = ch_filtered_seeds.pass.map{_seeds_id, _network_id, _nodes, meta, seeds -> [meta, seeds]}
+        GT_SEEDPERTURBATION(
+            ch_modules.filter{ meta, _path -> meta.amim != "no_tool" }, // Filter out no_tool modules
+            ch_seed_perturbation_input,
+            ch_network_gt
+        )
+        ch_versions = ch_versions.mix(GT_SEEDPERTURBATION.out.versions)
+        ch_multiqc_files = ch_multiqc_files
+            .mix(GT_SEEDPERTURBATION.out.multiqc_summary)
+            .mix(GT_SEEDPERTURBATION.out.multiqc_jaccard)
+    }
 
+    // Network perturbation based evaluation
+    if(params.run_network_perturbation){
+        GT_NETWORKPERTURBATION(
+            ch_modules.filter{ meta, _path -> meta.amim != "no_tool" }, // Filter out no_tool modules
+            ch_seeds,
+            ch_network_gt,
+            ch_perturbed_networks
+        )
+        ch_versions = ch_versions.mix(GT_NETWORKPERTURBATION.out.versions)
+        ch_multiqc_files = ch_multiqc_files
+            .mix(GT_NETWORKPERTURBATION.out.multiqc_summary)
+            .mix(GT_NETWORKPERTURBATION.out.multiqc_jaccard)
     }
 
 
