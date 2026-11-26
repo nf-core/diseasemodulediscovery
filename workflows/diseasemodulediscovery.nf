@@ -16,8 +16,9 @@ include { VISUALIZEMODULES                  } from '../modules/local/visualizemo
 include { VISUALIZEMODULESDRUGS             } from '../modules/local/visualizemodulesdrugs/main'
 include { GT2TSV as GT2TSV_MODULES          } from '../modules/local/gt2tsv/main'
 include { GT2TSV as GT2TSV_NETWORK          } from '../modules/local/gt2tsv/main'
-include { DIGEST as DIGEST_REFERENCEFREE    } from '../modules/local/digest/main'
-include { DIGEST as DIGEST_REFERENCEBASED   } from '../modules/local/digest/main'
+include { DIGEST_DIGEST as DIGEST_REFERENCEFREE  } from '../modules/local/digest/digest/main'
+include { DIGEST_DIGEST as DIGEST_REFERENCEBASED } from '../modules/local/digest/digest/main'
+include { DIGEST_SETUP                      } from '../modules/local/digest/setup/main'
 include { MODULEOVERLAP                     } from '../modules/local/moduleoverlap/main'
 include { DRUGPREDICTIONS                   } from '../modules/local/drugpredictions/main'
 include { TOPOLOGY                          } from '../modules/local/topology/main'
@@ -402,6 +403,14 @@ workflow DISEASEMODULEDISCOVERY {
         // Digest
         if(!params.skip_digest){
 
+            // Mapping files: use the provided directory or download them once for all DIGEST runs
+            if(params.digest_mapping_files){
+                ch_digest_mapping_files = channel.value(file(params.digest_mapping_files, checkIfExists: true))
+            } else if(!params.skip_digest_reference_free || !params.skip_digest_reference_based){
+                DIGEST_SETUP()
+                ch_digest_mapping_files = DIGEST_SETUP.out.mapping_files
+            }
+
             // Reference-free evaluation
             if(!params.skip_digest_reference_free){
 
@@ -413,7 +422,7 @@ workflow DISEASEMODULEDISCOVERY {
                     network: network
                 }
 
-                DIGEST_REFERENCEFREE (ch_digest_reference_free_input.nodes, id_space, ch_digest_reference_free_input.network, id_space, "subnetwork")
+                DIGEST_REFERENCEFREE (ch_digest_reference_free_input.nodes, id_space, ch_digest_reference_free_input.network, id_space, ch_digest_mapping_files, "subnetwork")
                 ch_multiqc_files = ch_multiqc_files.mix(
                     DIGEST_REFERENCEFREE.out.multiqc
                     .map{ _meta, path -> path }
@@ -437,7 +446,7 @@ workflow DISEASEMODULEDISCOVERY {
                         network: network
                     }
 
-                DIGEST_REFERENCEBASED (ch_digest_reference_based_input.nodes, id_space, ch_digest_reference_based_input.network, id_space, "subnetwork-set")
+                DIGEST_REFERENCEBASED (ch_digest_reference_based_input.nodes, id_space, ch_digest_reference_based_input.network, id_space, ch_digest_mapping_files, "subnetwork-set")
                 ch_multiqc_files = ch_multiqc_files.mix(
                     DIGEST_REFERENCEBASED.out.multiqc
                     .map{ _meta, path -> path }

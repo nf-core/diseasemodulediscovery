@@ -168,6 +168,12 @@ params {
     // Flag for skipping only the reference-based mode of DIGEST
     skip_digest_reference_based: Boolean
 
+    // Path to a directory with the DIGEST mapping files. If not set, they are downloaded from the DIGEST API.
+    digest_mapping_files: String?
+
+    // Flag for saving the downloaded DIGEST mapping files to the output directory
+    save_digest_mapping_files: Boolean
+
     // Flag for running the seed perturbation-based evaluation
     run_seed_perturbation: Boolean
 

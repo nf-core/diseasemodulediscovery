@@ -223,6 +223,7 @@ Both modes use Jaccard similarity to measure functional overlap and generate 1,0
 
 - `mqc_summaries/`
   - `digest_{reference-free,reference-based}_mqc.tsv`: Summary of the empirical functional coherence p-values for the MultiQC report.
+- `reference/digest/mapping_files/`: The precomputed DIGEST mapping files downloaded from the DIGEST API. Only saved with `--save_digest_mapping_files`, and can be reused via `--digest_mapping_files`.
   </details>
 
 ### Network topology

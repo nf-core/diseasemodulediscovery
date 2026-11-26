@@ -235,6 +235,19 @@
                     "fa_icon": "fas fa-forward",
                     "description": "Flag for skipping only the reference-based mode of DIGEST"
                 },
+                "digest_mapping_files": {
+                    "type": "string",
+                    "format": "directory-path",
+                    "exists": true,
+                    "fa_icon": "fas fa-folder-open",
+                    "description": "Path to a directory with the DIGEST mapping files",
+                    "help_text": "DIGEST needs precomputed mapping files (~720 MB). If this parameter is not set, the pipeline downloads them from the DIGEST API, which takes several minutes and requires internet access. Use `--save_digest_mapping_files` to save the downloaded files to `<outdir>/reference/digest/mapping_files` and pass that directory here to reuse them in later runs."
+                },
+                "save_digest_mapping_files": {
+                    "type": "boolean",
+                    "fa_icon": "fas fa-save",
+                    "description": "Save the downloaded DIGEST mapping files to the output directory"
+                },
                 "run_seed_perturbation": {
                     "type": "boolean",
                     "fa_icon": "fas fa-caret-right",

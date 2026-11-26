@@ -206,6 +206,20 @@ seed_file_2.csv,network_2.csv,/path/to/perturbed/networks/network_2
 seed_file_2.csv,network_1.csv,/path/to/perturbed/networks/network_1
 ```
 
+### DIGEST mapping files
+
+DIGEST relies on precomputed mapping files (~720 MB), which the pipeline downloads from the DIGEST API once per run. This takes several minutes and requires internet access. To reuse the files in later runs, save them with `--save_digest_mapping_files` and pass the saved directory via `--digest_mapping_files`, which skips the download:
+
+```bash
+nextflow run nf-core/diseasemodulediscovery \
+   -profile <docker/singularity> \
+   --input samplesheet.csv \
+   --outdir <OUTDIR> \
+   --digest_mapping_files <OLD_OUTDIR>/reference/digest/mapping_files
+```
+
+This is also the way to run DIGEST on compute nodes without internet access: download the files once on a machine with internet access and point `--digest_mapping_files` to them.
+
 ### Module annotation
 
 The pipeline can annotate the disease modules with biological data (targeting drugs, side effects, associated disorders, cellular localization) queried from [NeDRexDB](https://nedrex.net/), and export them in [BioPAX](https://www.biopax.org/) format. Since this step queries an external database and validating the BioPAX files can take some time, it is not run by default. Use `--run_annotation` to enable it. It is currently only supported for Entrez and UniProt IDs (`--id_space entrez` or `--id_space uniprot`).

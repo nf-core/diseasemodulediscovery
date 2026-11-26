@@ -7,6 +7,7 @@ import pandas as pd
 import numpy as np
 import logging
 from biodigest.single_validation import single_validation, save_results
+from biodigest.evaluation.mappers.mapper import FileMapper
 from biodigest.evaluation.d_utils.plotting_utils import (
     create_plots,
     create_extended_plots,
@@ -16,7 +17,13 @@ logger = logging.getLogger()
 
 
 def run_analysis(
-    target_set, target_type, network, network_type, mode, output_directory
+    target_set,
+    target_type,
+    network,
+    network_type,
+    mode,
+    mapping_directory,
+    output_directory,
 ):
     # ==== define required input ====
     df = pd.read_csv(target_set, header=0, sep="\t")
@@ -52,6 +59,9 @@ def run_analysis(
         "id_type": network_type,
     }
 
+    # ==== read the mapping files from the given directory instead of the package directory ====
+    mapper = FileMapper(files_dir=mapping_directory)
+
     # ==== define optional input influencing results ====
     distance_measure = "jaccard"
     background_model = (
@@ -77,6 +87,7 @@ def run_analysis(
         enriched=enriched,
         distance=distance_measure,
         network_data=network_data,
+        mapper=mapper,
     )
 
     # ==== save results for multiqc ====
@@ -106,6 +117,7 @@ def run_analysis(
         out_dir=out_dir,
         prefix=prefix,
         file_type="png",
+        mapper=mapper,
     )
 
 
@@ -129,6 +141,11 @@ if __name__ == "__main__":
         choices=("CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG"),
         default="WARNING",
     )
+    parser.add_argument(
+        "--mapping_dir",
+        required=True,
+        help="Directory with the DIGEST mapping files",
+    )
     parser.add_argument("--outdir", required=True, help="Name for output directory")
 
     args = parser.parse_args()
@@ -145,5 +162,11 @@ if __name__ == "__main__":
     os.makedirs(output_directory, exist_ok=True)
 
     run_analysis(
-        target_file, target_type, network, network_type, mode, output_directory
+        target_file,
+        target_type,
+        network,
+        network_type,
+        mode,
+        args.mapping_dir,
+        output_directory,
     )

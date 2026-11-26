@@ -1,0 +1,7 @@
+name: digest
+channels:
+  - conda-forge
+  - bioconda
+  - nodefaults
+dependencies:
+  - bioconda::biodigest=0.2.16
