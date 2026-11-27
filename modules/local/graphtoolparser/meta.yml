@@ -1,0 +1,145 @@
+name: graphtoolparser
+description: Converts an interaction network into the internal graph-tool format or into the input format required by one of the module inference methods
+keywords:
+  - network
+  - format conversion
+  - parser
+  - network statistics
+  - edge list
+tools:
+  - graphtoolparser:
+      description: In-house Python script (graph_tool_parser.py) that reads a network in any of the formats understood by graph-tool and rewrites it either as a binary `.gt` file, in which case it also collects network summary statistics and the node degree distribution, or as the edge list format expected by a specific module inference method.
+      homepage: https://github.com/nf-core/diseasemodulediscovery
+      documentation: https://nf-co.re/diseasemodulediscovery/output
+      licence:
+        - MIT
+  - graph-tool:
+      description: Efficient Python module for the manipulation and statistical analysis of graphs, implemented in C++ on top of the Boost Graph Library. It also defines the binary `.gt` network format.
+      homepage: https://graph-tool.skewed.de/
+      documentation: https://graph-tool.skewed.de/static/doc/index.html
+      licence:
+        - LGPL-3.0-or-later
+input:
+  - - meta:
+        type: map
+        description: Groovy Map containing sample information, must contain an `id` field
+    - network:
+        type: file
+        description: Interaction network, either in one of the graph formats readable by graph-tool (`.gt`, `.graphml`, `.xml`, `.dot`, `.gml`) or as an edge list in `.csv` or `.tsv`. The network must contain at least one node and one edge.
+  - - format:
+        type: string
+        description: Output format, one of `gt`, `diamond`, `domino`, `robust` or `rwr`
+output:
+  network:
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information, must contain an `id` field
+      - "*${format}*":
+          type: file
+          description: The converted network, named after the input file and the requested format. `gt` gives the network in graph-tool's binary format, `diamond` and `rwr` a headerless two-column CSV edge list, `robust` the same as a TSV, and `domino` a tab-separated SIF file with the header columns `node_1`, `type` and `node_2` in which the node identifiers are prefixed with `entrez.`.
+          pattern: "*${format}*"
+  multiqc:
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information, must contain an `id` field
+      - input_network_multiqc.tsv:
+          type: file
+          description: Single-row tab-separated summary of the network with the columns `Network`, `nodes`, `edges`, `components`, `largest_component`, `diameter` (the pseudo-diameter), `self_loops` and `duplicate_edges`. Only written when the requested format is `gt`.
+          pattern: input_network_multiqc.tsv
+  node_degree:
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information, must contain an `id` field
+      - "*node_degree_distribution.yaml":
+          type: file
+          description: Node degree distribution of the network, holding the network name plus the `absolute` node counts and `relative` percentages per degree as lists of `[degree, value]` pairs. Only written when the requested format is `gt`.
+          pattern: "*node_degree_distribution.yaml"
+  versions_python:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - python:
+          type: string
+          description: The tool name
+      - python --version | sed 's/Python //g':
+          type: eval
+          description: The expression to obtain the version of the tool
+  versions_graphtool:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - graph-tool:
+          type: string
+          description: The tool name
+      - python -c "import graph_tool; print(graph_tool.__version__)" | cut -d" " -f1:
+          type: eval
+          description: The expression to obtain the version of the tool
+  versions_pyyaml:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - pyyaml:
+          type: string
+          description: The tool name
+      - python -c "import yaml; print(yaml.__version__)":
+          type: eval
+          description: The expression to obtain the version of the tool
+topics:
+  versions:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - python:
+          type: string
+          description: The tool name
+      - python --version | sed 's/Python //g':
+          type: eval
+          description: The expression to obtain the version of the tool
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - graph-tool:
+          type: string
+          description: The tool name
+      - python -c "import graph_tool; print(graph_tool.__version__)" | cut -d" " -f1:
+          type: eval
+          description: The expression to obtain the version of the tool
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - pyyaml:
+          type: string
+          description: The tool name
+      - python -c "import yaml; print(yaml.__version__)":
+          type: eval
+          description: The expression to obtain the version of the tool
+authors:
+  - "@JohannesKersting"
+  - "@quirinmanz"
+  - "@Schansiate"
+maintainers:
+  - "@JohannesKersting"
+containers:
+  docker:
+    linux/amd64:
+      name: community.wave.seqera.io/library/modulediscovery_python_dependencies:0ba80986ead7e04c
+      build_id: bd-0ba80986ead7e04c_1
+      scan_id: sc-9d11c6807a85459d_1
+    linux/arm64:
+      name: community.wave.seqera.io/library/modulediscovery_python_dependencies:e3f1e6cd63a4d51c
+      build_id: bd-e3f1e6cd63a4d51c_1
+      scan_id: sc-356cbaaf8190fe85_1
+  singularity:
+    linux/amd64:
+      name: oras://community.wave.seqera.io/library/modulediscovery_python_dependencies:9eeae17edb9a5109
+      build_id: bd-9eeae17edb9a5109_1
+      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/49/49f3bf62ff66b8c76807029ac4b555fb3d111326d258ac40b66d906136a9ca7c/data
+    linux/arm64:
+      name: oras://community.wave.seqera.io/library/modulediscovery_python_dependencies:0e69c2b8d4800864
+      build_id: bd-0e69c2b8d4800864_1
+      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/13/13c9084240a678b33199c4d3e6a943ff3d60da386ed5ac5d595da0153914dce7/data
+  conda:
+    linux/amd64:
+      lock_file: modules/local/graphtoolparser/.conda-lock/linux_amd64-bd-0ba80986ead7e04c_1.txt
+    linux/arm64:
+      lock_file: modules/local/graphtoolparser/.conda-lock/linux_arm64-bd-e3f1e6cd63a4d51c_1.txt

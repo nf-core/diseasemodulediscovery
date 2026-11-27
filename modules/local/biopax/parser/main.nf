@@ -1,0 +1,26 @@
+process BIOPAX_PARSER {
+    tag "$meta.id"
+    label 'process_single'
+
+    conda "${moduleDir}/environment.yml"
+    container "${workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
+        ? 'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/49/49f3bf62ff66b8c76807029ac4b555fb3d111326d258ac40b66d906136a9ca7c/data'
+        : 'community.wave.seqera.io/library/modulediscovery_python_dependencies:0ba80986ead7e04c'}"
+
+    input:
+    tuple val(meta), path(network)
+    val idspace
+    val add_variants
+
+    output:
+    path "*.owl" , emit: biopax
+    tuple val("${task.process}"), val('python'), eval("python --version | sed 's/Python //g'"), emit: versions_python, topic: versions
+    tuple val("${task.process}"), val('graph-tool'), eval('python -c "import graph_tool; print(graph_tool.__version__)" | cut -d" " -f1'), emit: versions_graphtool, topic: versions
+    tuple val("${task.process}"), val('pybiopax'), eval('python -c "import pybiopax; print(pybiopax.__version__)"'), emit: versions_pybiopax, topic: versions
+    tuple val("${task.process}"), val('requests'), eval('python -c "import requests; print(requests.__version__)"'), emit: versions_requests, topic: versions
+
+    script:
+    """
+    gt2biopax.py $network -i $idspace -l DEBUG ${add_variants ? '-v' : ''}
+    """
+}

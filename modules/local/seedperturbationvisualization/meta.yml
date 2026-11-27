@@ -1,0 +1,184 @@
+name: seedperturbationvisualization
+description: Visualizes the seed rediscovery and the robustness of several module inference methods as heatmaps
+keywords:
+  - visualization
+  - heatmap
+  - perturbation
+  - robustness
+  - rediscovery
+tools:
+  - seedperturbationvisualization:
+      description: In-house Python script (seed_perturbation_visualization.py) that collects the leave-one-out evaluations of several module inference methods and draws, per seed set and network, one heatmap of the seed rediscovery and one of the robustness, with the omitted seeds as rows and the methods as columns.
+      homepage: https://github.com/nf-core/diseasemodulediscovery
+      documentation: https://nf-co.re/diseasemodulediscovery/output
+      licence:
+        - MIT
+input:
+  - - seed_ids:
+        type: string
+        description: List of identifiers of the seed sets, one per input file and in the same order
+  - - network_ids:
+        type: string
+        description: List of identifiers of the networks, one per input file and in the same order
+  - - amim_ids:
+        type: string
+        description: List of identifiers of the module inference methods, one per input file and in the same order
+  - - inputs:
+        type: file
+        description: List of tab-separated leave-one-out evaluation tables, each with at least the columns `Removed seeds`, `Retrieval frequency`, `Normalized retrieval frequency` and `Jaccard index`
+output:
+  seed_rediscovery_png:
+    - "*.seed_rediscovery.png":
+        type: file
+        description: Heatmap of the retrieval frequency of every omitted seed per method, as PNG. Rows and columns are sorted by their sum in descending order.
+        pattern: "*.seed_rediscovery.png"
+  seed_rediscovery_pdf:
+    - "*.seed_rediscovery.pdf":
+        type: file
+        description: The seed rediscovery heatmap as PDF
+        pattern: "*.seed_rediscovery.pdf"
+  seed_rediscovery_tsv:
+    - "*.seed_rediscovery.tsv":
+        type: file
+        description: Tab-separated table underlying the seed rediscovery heatmap, with the omitted seeds as rows and the module inference methods as columns
+        pattern: "*.seed_rediscovery.tsv"
+  robustness_png:
+    - "*.robustness.png":
+        type: file
+        description: Heatmap of the Jaccard index between the reference and the perturbed module for every omitted seed per method, as PNG. Rows and columns are sorted by their sum in descending order.
+        pattern: "*.robustness.png"
+  robustness_pdf:
+    - "*.robustness.pdf":
+        type: file
+        description: The robustness heatmap as PDF
+        pattern: "*.robustness.pdf"
+  robustness_tsv:
+    - "*.robustness.tsv":
+        type: file
+        description: Tab-separated table underlying the robustness heatmap, with the omitted seeds as rows and the module inference methods as columns
+        pattern: "*.robustness.tsv"
+  versions_python:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - python:
+          type: string
+          description: The tool name
+      - python --version | sed 's/Python //g':
+          type: eval
+          description: The expression to obtain the version of the tool
+  versions_pandas:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - pandas:
+          type: string
+          description: The tool name
+      - python -c "import pandas; print(pandas.__version__)":
+          type: eval
+          description: The expression to obtain the version of the tool
+  versions_numpy:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - numpy:
+          type: string
+          description: The tool name
+      - python -c "import numpy; print(numpy.__version__)":
+          type: eval
+          description: The expression to obtain the version of the tool
+  versions_matplotlib:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - matplotlib:
+          type: string
+          description: The tool name
+      - python -c "import matplotlib; print(matplotlib.__version__)":
+          type: eval
+          description: The expression to obtain the version of the tool
+  versions_seaborn:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - seaborn:
+          type: string
+          description: The tool name
+      - python -c "import seaborn; print(seaborn.__version__)":
+          type: eval
+          description: The expression to obtain the version of the tool
+topics:
+  versions:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - python:
+          type: string
+          description: The tool name
+      - python --version | sed 's/Python //g':
+          type: eval
+          description: The expression to obtain the version of the tool
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - pandas:
+          type: string
+          description: The tool name
+      - python -c "import pandas; print(pandas.__version__)":
+          type: eval
+          description: The expression to obtain the version of the tool
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - numpy:
+          type: string
+          description: The tool name
+      - python -c "import numpy; print(numpy.__version__)":
+          type: eval
+          description: The expression to obtain the version of the tool
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - matplotlib:
+          type: string
+          description: The tool name
+      - python -c "import matplotlib; print(matplotlib.__version__)":
+          type: eval
+          description: The expression to obtain the version of the tool
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - seaborn:
+          type: string
+          description: The tool name
+      - python -c "import seaborn; print(seaborn.__version__)":
+          type: eval
+          description: The expression to obtain the version of the tool
+authors:
+  - "@JohannesKersting"
+maintainers:
+  - "@JohannesKersting"
+containers:
+  docker:
+    linux/arm64:
+      name: community.wave.seqera.io/library/modulediscovery_python_dependencies:e3f1e6cd63a4d51c
+      build_id: bd-e3f1e6cd63a4d51c_1
+      scan_id: sc-356cbaaf8190fe85_1
+    linux/amd64:
+      name: community.wave.seqera.io/library/modulediscovery_python_dependencies:0ba80986ead7e04c
+      build_id: bd-0ba80986ead7e04c_1
+      scan_id: sc-9d11c6807a85459d_1
+  singularity:
+    linux/amd64:
+      name: oras://community.wave.seqera.io/library/modulediscovery_python_dependencies:9eeae17edb9a5109
+      build_id: bd-9eeae17edb9a5109_1
+      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/49/49f3bf62ff66b8c76807029ac4b555fb3d111326d258ac40b66d906136a9ca7c/data
+    linux/arm64:
+      name: oras://community.wave.seqera.io/library/modulediscovery_python_dependencies:0e69c2b8d4800864
+      build_id: bd-0e69c2b8d4800864_1
+      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/13/13c9084240a678b33199c4d3e6a943ff3d60da386ed5ac5d595da0153914dce7/data
+  conda:
+    linux/amd64:
+      lock_file: modules/local/seedperturbationvisualization/.conda-lock/linux_amd64-bd-0ba80986ead7e04c_1.txt
+    linux/arm64:
+      lock_file: modules/local/seedperturbationvisualization/.conda-lock/linux_arm64-bd-e3f1e6cd63a4d51c_1.txt
