@@ -172,7 +172,9 @@ def main(argv=None):
     # convert to networkx and save as html with pyvis
     nx_graph = pyintergraph.gt2nx(g, labelname="label_node")
 
-    nt = Network()
+    # "in_line" embeds vis-network and pyvis' own helper script in the HTML file,
+    # so it works without a local lib/ directory and without internet access
+    nt = Network(cdn_resources="in_line")
     nt.from_nx(nx_graph)
 
     # get vertex properties as dataframe
@@ -193,8 +195,9 @@ def main(argv=None):
 
     # show setting buttons
     nt.show_buttons(filter_=["physics", "interaction", "manipulation"])
-    # save as html
-    nt.show(f"{args.prefix}.html")
+    # save as html, written directly because Network.show() also opens the file in a web browser
+    with open(f"{args.prefix}.html", "w") as out:
+        out.write(nt.generate_html())
 
 
 if __name__ == "__main__":
