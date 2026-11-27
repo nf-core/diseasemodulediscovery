@@ -1,7 +1,10 @@
 process BIOPAX_VALIDATOR {
     label 'process_single'
 
-    container "docker.io/quirinmanz/biopax-validator:6.0.0-SNAPSHOT"
+    conda "${moduleDir}/environment.yml"
+    container "${workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
+        ? 'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/fa/fa13adba157e9c32f42d6a00b70c1a59b0fc5d9309500982317852307793321e/data'
+        : 'community.wave.seqera.io/library/biopax-validator:1e0869ec1612389b'}" // automatically generated
 
     input:
     path biopax_files
@@ -9,30 +12,20 @@ process BIOPAX_VALIDATOR {
 
     output:
     path "biopax-validator-report.html", emit: validation
-    path "versions.yml", emit: versions
-
-    when:
-    task.ext.when == null || task.ext.when
+    tuple val("${task.process}"), val('openjdk'), eval("java -version 2>&1 | head -n1 | cut -d'\"' -f2 | cut -d'-' -f1"), emit: versions_openjdk, topic: versions
+    // the tool has no version flag, so the version is taken from its conda share directory name
+    tuple val("${task.process}"), val('biopax-validator'), eval('ls $(dirname $(readlink -f $(which biopax-validator)))/../share | sed -n "s/^biopax-validator-//p"'), emit: versions_biopaxvalidator, topic: versions
 
     script:
     """
-    #!/bin/sh
-
-    java -version
-    echo Running BioPAX Validator...
-
     if [ "${validate_online}" = true ]; then
         echo "Validating online"
-        java -jar /biopax-validator/biopax-validator-client.jar . biopax-validator-report.html notstrict
+        biopax-validator-client . biopax-validator-report.html notstrict
     else
         echo "Validating offline"
-        java --add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.lang.reflect=ALL-UNNAMED -javaagent:/biopax-validator/lib/spring-instrument-5.3.29.jar -Xmx${task.memory.toGiga().toInteger()}g -Dfile.encoding=UTF-8 -Djava.security.egd=file:/dev/./urandom -jar /biopax-validator/biopax-validator.jar . --output=biopax-validator-report.html --profile=notstrict
+        # the wrapper sets the Spring agent and --add-opens flags, extra JVM options go through JAVA_OPTS
+        export JAVA_OPTS="-Xmx${task.memory.toGiga().toInteger()}g -Djava.security.egd=file:/dev/./urandom"
+        biopax-validator . --output=biopax-validator-report.html --profile=notstrict
     fi
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        java: \$(java -version 2>&1 | head -n 1)
-        biopax-validator: \$(ls /biopax-validator/lib/biopax-validator*.jar)
-    END_VERSIONS
     """
 }

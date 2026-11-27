@@ -1,0 +1,292 @@
+{
+    "Test input channel creation for multiple seeds and networks": {
+        "content": [
+            {
+                "0": [
+                    
+                ],
+                "1": [
+                    [
+                        {
+                            "id": "entrez_seeds_1.entrez_ppi",
+                            "seeds_id": "entrez_seeds_1",
+                            "network_id": "entrez_ppi"
+                        },
+                        "/nf-core/test-datasets/diseasemodulediscovery/small/entrez_seeds_1.csv"
+                    ],
+                    [
+                        {
+                            "id": "entrez_seeds_1.string.human_physical_links_v12_0_min900.Entrez",
+                            "seeds_id": "entrez_seeds_1",
+                            "network_id": "string.human_physical_links_v12_0_min900.Entrez"
+                        },
+                        "/nf-core/test-datasets/diseasemodulediscovery/small/entrez_seeds_1.csv"
+                    ],
+                    [
+                        {
+                            "id": "entrez_seeds_2.entrez_ppi",
+                            "seeds_id": "entrez_seeds_2",
+                            "network_id": "entrez_ppi"
+                        },
+                        "/nf-core/test-datasets/diseasemodulediscovery/small/entrez_seeds_2.csv"
+                    ],
+                    [
+                        {
+                            "id": "entrez_seeds_2.string.human_physical_links_v12_0_min900.Entrez",
+                            "seeds_id": "entrez_seeds_2",
+                            "network_id": "string.human_physical_links_v12_0_min900.Entrez"
+                        },
+                        "/nf-core/test-datasets/diseasemodulediscovery/small/entrez_seeds_2.csv"
+                    ]
+                ],
+                "2": [
+                    [
+                        {
+                            "id": "entrez_ppi",
+                            "network_id": "entrez_ppi"
+                        },
+                        "/nf-core/test-datasets/diseasemodulediscovery/small/entrez_ppi.csv"
+                    ],
+                    [
+                        {
+                            "id": "string.human_physical_links_v12_0_min900.Entrez",
+                            "network_id": "string.human_physical_links_v12_0_min900.Entrez"
+                        },
+                        "/records/18702264/files/string.human_physical_links_v12_0_min900.Entrez.gt"
+                    ]
+                ],
+                "3": [
+                    [
+                        {
+                            "id": "entrez_ppi",
+                            "network_id": "entrez_ppi"
+                        },
+                        [
+                            
+                        ]
+                    ],
+                    [
+                        {
+                            "id": "string.human_physical_links_v12_0_min900.Entrez",
+                            "network_id": "string.human_physical_links_v12_0_min900.Entrez"
+                        },
+                        [
+                            
+                        ]
+                    ]
+                ],
+                "network": [
+                    [
+                        {
+                            "id": "entrez_ppi",
+                            "network_id": "entrez_ppi"
+                        },
+                        "/nf-core/test-datasets/diseasemodulediscovery/small/entrez_ppi.csv"
+                    ],
+                    [
+                        {
+                            "id": "string.human_physical_links_v12_0_min900.Entrez",
+                            "network_id": "string.human_physical_links_v12_0_min900.Entrez"
+                        },
+                        "/records/18702264/files/string.human_physical_links_v12_0_min900.Entrez.gt"
+                    ]
+                ],
+                "perturbed_networks": [
+                    [
+                        {
+                            "id": "entrez_ppi",
+                            "network_id": "entrez_ppi"
+                        },
+                        [
+                            
+                        ]
+                    ],
+                    [
+                        {
+                            "id": "string.human_physical_links_v12_0_min900.Entrez",
+                            "network_id": "string.human_physical_links_v12_0_min900.Entrez"
+                        },
+                        [
+                            
+                        ]
+                    ]
+                ],
+                "seeds": [
+                    [
+                        {
+                            "id": "entrez_seeds_1.entrez_ppi",
+                            "seeds_id": "entrez_seeds_1",
+                            "network_id": "entrez_ppi"
+                        },
+                        "/nf-core/test-datasets/diseasemodulediscovery/small/entrez_seeds_1.csv"
+                    ],
+                    [
+                        {
+                            "id": "entrez_seeds_1.string.human_physical_links_v12_0_min900.Entrez",
+                            "seeds_id": "entrez_seeds_1",
+                            "network_id": "string.human_physical_links_v12_0_min900.Entrez"
+                        },
+                        "/nf-core/test-datasets/diseasemodulediscovery/small/entrez_seeds_1.csv"
+                    ],
+                    [
+                        {
+                            "id": "entrez_seeds_2.entrez_ppi",
+                            "seeds_id": "entrez_seeds_2",
+                            "network_id": "entrez_ppi"
+                        },
+                        "/nf-core/test-datasets/diseasemodulediscovery/small/entrez_seeds_2.csv"
+                    ],
+                    [
+                        {
+                            "id": "entrez_seeds_2.string.human_physical_links_v12_0_min900.Entrez",
+                            "seeds_id": "entrez_seeds_2",
+                            "network_id": "string.human_physical_links_v12_0_min900.Entrez"
+                        },
+                        "/nf-core/test-datasets/diseasemodulediscovery/small/entrez_seeds_2.csv"
+                    ]
+                ],
+                "versions": [
+                    
+                ]
+            }
+        ],
+        "timestamp": "2026-08-13T15:49:30.201582825",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "26.04.6"
+        }
+    },
+    "Test input channel creation with pre-computed perturbed networks": {
+        "content": [
+            {
+                "0": [
+                    
+                ],
+                "1": [
+                    [
+                        {
+                            "id": "entrez_seeds_1.entrez_ppi",
+                            "seeds_id": "entrez_seeds_1",
+                            "network_id": "entrez_ppi"
+                        },
+                        "/nf-core/test-datasets/diseasemodulediscovery/small/entrez_seeds_1.csv"
+                    ],
+                    [
+                        {
+                            "id": "entrez_seeds_1.entrez_ppi_small",
+                            "seeds_id": "entrez_seeds_1",
+                            "network_id": "entrez_ppi_small"
+                        },
+                        "/nf-core/test-datasets/diseasemodulediscovery/small/entrez_seeds_1.csv"
+                    ]
+                ],
+                "2": [
+                    [
+                        {
+                            "id": "entrez_ppi",
+                            "network_id": "entrez_ppi"
+                        },
+                        "/nf-core/test-datasets/diseasemodulediscovery/small/entrez_ppi.csv"
+                    ],
+                    [
+                        {
+                            "id": "entrez_ppi_small",
+                            "network_id": "entrez_ppi_small"
+                        },
+                        "/nf-core/test-datasets/diseasemodulediscovery/small/entrez_ppi_small.csv"
+                    ]
+                ],
+                "3": [
+                    [
+                        {
+                            "id": "entrez_ppi",
+                            "network_id": "entrez_ppi"
+                        },
+                        [
+                            "entrez_ppi.perm_0.gt:md5,0568a4dbd02f6c8e6b4b5f433ccf847b",
+                            "entrez_ppi.perm_1.gt:md5,2fac6544d92c465319f9630eed59da5b",
+                            "entrez_ppi.perm_2.gt:md5,b143b832aae0ac3a64b2fc76ec961ed1"
+                        ]
+                    ],
+                    [
+                        {
+                            "id": "entrez_ppi_small",
+                            "network_id": "entrez_ppi_small"
+                        },
+                        [
+                            "entrez_ppi_small.perm_0.gt:md5,af7aaedf2b155aee671746449cb26bfa",
+                            "entrez_ppi_small.perm_1.gt:md5,4ac1caa17f933b4f6fecae64a0cc0c7f",
+                            "entrez_ppi_small.perm_2.gt:md5,d9ee173127e9cf2f87b422982353c428"
+                        ]
+                    ]
+                ],
+                "network": [
+                    [
+                        {
+                            "id": "entrez_ppi",
+                            "network_id": "entrez_ppi"
+                        },
+                        "/nf-core/test-datasets/diseasemodulediscovery/small/entrez_ppi.csv"
+                    ],
+                    [
+                        {
+                            "id": "entrez_ppi_small",
+                            "network_id": "entrez_ppi_small"
+                        },
+                        "/nf-core/test-datasets/diseasemodulediscovery/small/entrez_ppi_small.csv"
+                    ]
+                ],
+                "perturbed_networks": [
+                    [
+                        {
+                            "id": "entrez_ppi",
+                            "network_id": "entrez_ppi"
+                        },
+                        [
+                            "entrez_ppi.perm_0.gt:md5,0568a4dbd02f6c8e6b4b5f433ccf847b",
+                            "entrez_ppi.perm_1.gt:md5,2fac6544d92c465319f9630eed59da5b",
+                            "entrez_ppi.perm_2.gt:md5,b143b832aae0ac3a64b2fc76ec961ed1"
+                        ]
+                    ],
+                    [
+                        {
+                            "id": "entrez_ppi_small",
+                            "network_id": "entrez_ppi_small"
+                        },
+                        [
+                            "entrez_ppi_small.perm_0.gt:md5,af7aaedf2b155aee671746449cb26bfa",
+                            "entrez_ppi_small.perm_1.gt:md5,4ac1caa17f933b4f6fecae64a0cc0c7f",
+                            "entrez_ppi_small.perm_2.gt:md5,d9ee173127e9cf2f87b422982353c428"
+                        ]
+                    ]
+                ],
+                "seeds": [
+                    [
+                        {
+                            "id": "entrez_seeds_1.entrez_ppi",
+                            "seeds_id": "entrez_seeds_1",
+                            "network_id": "entrez_ppi"
+                        },
+                        "/nf-core/test-datasets/diseasemodulediscovery/small/entrez_seeds_1.csv"
+                    ],
+                    [
+                        {
+                            "id": "entrez_seeds_1.entrez_ppi_small",
+                            "seeds_id": "entrez_seeds_1",
+                            "network_id": "entrez_ppi_small"
+                        },
+                        "/nf-core/test-datasets/diseasemodulediscovery/small/entrez_seeds_1.csv"
+                    ]
+                ],
+                "versions": [
+                    
+                ]
+            }
+        ],
+        "timestamp": "2026-11-27T12:36:57.645770361",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "26.10.6"
+        }
+    }
+}

@@ -1,0 +1,21 @@
+Changes in component 'nf-core/gprofiler2/gost'
+'modules/nf-core/gprofiler2/gost/meta.yml' is unchanged
+'modules/nf-core/gprofiler2/gost/environment.yml' is unchanged
+'modules/nf-core/gprofiler2/gost/main.nf' is unchanged
+'modules/nf-core/gprofiler2/gost/tests/main.nf.test' is unchanged
+'modules/nf-core/gprofiler2/gost/tests/nextflow.config' is unchanged
+'modules/nf-core/gprofiler2/gost/tests/main.nf.test.snap' is unchanged
+Changes in 'gprofiler2/gost/templates/gprofiler2_gost.R':
+--- modules/nf-core/gprofiler2/gost/templates/gprofiler2_gost.R
++++ modules/nf-core/gprofiler2/gost/templates/gprofiler2_gost.R
+@@ -457,7 +457,7 @@
+ # when we use writeLines and gprofiler_data, so I write it via yaml
+ write_yaml(
+     list(
+-    '"$task.process"'=list(
++    "$task.process"=list(
+         "r-base"=r.version,
+         "r-ggplot2"=ggplot2.version,
+         "r-gprofiler2"=gprofiler2.version,
+
+************************************************************

@@ -1,0 +1,132 @@
+name: inputcheck
+description: Validates a seed file against a network, drops the seeds that are not network nodes and extracts the subnetwork induced by the remaining seeds
+keywords:
+  - input check
+  - validation
+  - seed genes
+  - filtering
+  - disease module
+tools:
+  - inputcheck:
+      description: In-house Python script (input_check.py) that splits the given seeds into those present in the network and those missing from it, reports both sets and saves the subnetwork induced by the retained seeds as a baseline module.
+      homepage: https://github.com/nf-core/diseasemodulediscovery
+      documentation: https://nf-co.re/diseasemodulediscovery/output
+      licence:
+        - MIT
+  - graph-tool:
+      description: Efficient Python module for the manipulation and statistical analysis of graphs, implemented in C++ on top of the Boost Graph Library. It also defines the binary `.gt` network format.
+      homepage: https://graph-tool.skewed.de/
+      documentation: https://graph-tool.skewed.de/static/doc/index.html
+      licence:
+        - LGPL-3.0-or-later
+input:
+  - - meta:
+        type: map
+        description: Groovy Map containing sample information, must contain an `id` field
+    - seeds:
+        type: file
+        description: Seed nodes, one node identifier per line. Empty lines are ignored.
+    - network:
+        type: file
+        description: Interaction network to validate the seeds against, either in one of the graph formats readable by graph-tool (`.gt`, `.graphml`, `.xml`, `.dot`, `.gml`) or as an edge list, with the node identifiers in the `name` vertex property
+output:
+  seeds:
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information, must contain an `id` field
+      - ${meta.id}.tsv:
+          type: file
+          description: The retained seeds, one node identifier per line without a header. Not written if none of the seeds is part of the network.
+          pattern: ${meta.id}.tsv
+  seeds_module:
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information, must contain an `id` field
+      - ${meta.id}.no_tool.gt:
+          type: file
+          description: Subnetwork induced by the retained seeds in graph-tool binary format, serving as a baseline module without any module inference method. The added `is_seed` vertex property is true for all of its nodes.
+          pattern: ${meta.id}.no_tool.gt
+  removed_seeds:
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information, must contain an `id` field
+      - ${meta.id}.removed.tsv:
+          type: file
+          description: The dropped seeds that are not nodes of the network, one identifier per line without a header. Not written if all seeds were retained.
+          pattern: ${meta.id}.removed.tsv
+  multiqc:
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information, must contain an `id` field
+      - ${meta.id}.multiqc.tsv:
+          type: file
+          description: Single-row tab-separated summary with the columns `Seed file`, `Seeds` (number of retained seeds) and `Not in network` (number of dropped seeds)
+          pattern: ${meta.id}.multiqc.tsv
+  versions_python:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - python:
+          type: string
+          description: The tool name
+      - python --version | sed 's/Python //g':
+          type: eval
+          description: The expression to obtain the version of the tool
+  versions_graphtool:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - graph-tool:
+          type: string
+          description: The tool name
+      - python -c "import graph_tool; print(graph_tool.__version__)" | cut -d" " -f1:
+          type: eval
+          description: The expression to obtain the version of the tool
+topics:
+  versions:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - python:
+          type: string
+          description: The tool name
+      - python --version | sed 's/Python //g':
+          type: eval
+          description: The expression to obtain the version of the tool
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - graph-tool:
+          type: string
+          description: The tool name
+      - python -c "import graph_tool; print(graph_tool.__version__)" | cut -d" " -f1:
+          type: eval
+          description: The expression to obtain the version of the tool
+authors:
+  - "@JohannesKersting"
+maintainers:
+  - "@JohannesKersting"
+containers:
+  docker:
+    linux/arm64:
+      name: community.wave.seqera.io/library/modulediscovery_python_dependencies:e3f1e6cd63a4d51c
+      build_id: bd-e3f1e6cd63a4d51c_1
+      scan_id: sc-356cbaaf8190fe85_1
+    linux/amd64:
+      name: community.wave.seqera.io/library/modulediscovery_python_dependencies:0ba80986ead7e04c
+      build_id: bd-0ba80986ead7e04c_1
+      scan_id: sc-9d11c6807a85459d_1
+  singularity:
+    linux/arm64:
+      name: oras://community.wave.seqera.io/library/modulediscovery_python_dependencies:0e69c2b8d4800864
+      build_id: bd-0e69c2b8d4800864_1
+      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/13/13c9084240a678b33199c4d3e6a943ff3d60da386ed5ac5d595da0153914dce7/data
+    linux/amd64:
+      name: oras://community.wave.seqera.io/library/modulediscovery_python_dependencies:9eeae17edb9a5109
+      build_id: bd-9eeae17edb9a5109_1
+      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/49/49f3bf62ff66b8c76807029ac4b555fb3d111326d258ac40b66d906136a9ca7c/data
+  conda:
+    linux/amd64:
+      lock_file: modules/local/inputcheck/.conda-lock/linux_amd64-bd-0ba80986ead7e04c_1.txt
+    linux/arm64:
+      lock_file: modules/local/inputcheck/.conda-lock/linux_arm64-bd-e3f1e6cd63a4d51c_1.txt

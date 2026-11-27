@@ -1,0 +1,48 @@
+nextflow_pipeline {
+
+    name "Test DIGEST"
+    script "../main.nf"
+    tag "pipeline"
+
+    test("Test DIGEST with downloaded mapping files") {
+
+        when {
+            params {
+                outdir = "$outputDir"
+
+                // DIGEST is skipped in the test profile, because it downloads ~720 MB of mapping files,
+                // so this is the only test covering it. Both modes share one download.
+                skip_digest                 = false
+                skip_digest_reference_free  = false
+                skip_digest_reference_based = false
+
+                // Skip everything that is not needed to reach DIGEST.
+                skip_gprofiler          = true
+                skip_visualization      = true
+                skip_drugstone_export   = true
+                skip_drug_predictions   = true
+            }
+        }
+
+        then {
+            // stable_path: All files + folders in ${params.outdir}/ with a stable path (including file name)
+            def stable_path = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
+            // stable_content: All files in ${params.outdir}/ with stable content
+            def stable_content = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            assert workflow.success
+            assertAll(
+                // The DIGEST p-values come from random runs, so only check that both modes produced results
+                { assert path("$outputDir/mqc_summaries/digest_reference_free_mqc.tsv").exists() },
+                { assert path("$outputDir/mqc_summaries/digest_reference_based_mqc.tsv").exists() },
+                { assert snapshot(
+                    // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
+                    removeNextflowVersion("$outputDir/pipeline_info/nf_core_diseasemodulediscovery_software_mqc_versions.yml"),
+                    // All stable path name, with a relative path
+                    stable_path,
+                    // All files with stable contents
+                    stable_content
+                ).match() }
+            )
+        }
+    }
+}

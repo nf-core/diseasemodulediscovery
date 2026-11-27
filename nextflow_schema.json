@@ -1,7 +1,7 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://raw.githubusercontent.com/REPO4EU/modulediscovery/main/nextflow_schema.json",
-    "title": "REPO4EU/modulediscovery pipeline parameters",
+    "$id": "https://raw.githubusercontent.com/nf-core/diseasemodulediscovery/main/nextflow_schema.json",
+    "title": "nf-core/diseasemodulediscovery pipeline parameters",
     "description": "A pipeline for network-based disease module identification",
     "type": "object",
     "$defs": {
@@ -15,8 +15,7 @@
                 "input": {
                     "type": "string",
                     "description": "Path to a CSV sample sheet defining seed file-network combinations",
-                    "help_text": "The file must have a header and can have two columns: \"seeds\" and \"network\". If either \"seeds\" or \"network\" are missing, the --seeds and --network parameters are expected as replacement. ",
-                    "fa_icon": "fas fa-file-csv",
+                    "help_text": "The file must have a header and must include columns: \"seeds\" and \"network\". Optional columns: \"perturbed_networks\". When using --input, do not also set --seeds/--network/--perturbed_networks.",
                     "pattern": "^\\S+\\.csv$",
                     "format": "file-path",
                     "mimetype": "text/csv",
@@ -25,15 +24,17 @@
                 "seeds": {
                     "type": "string",
                     "fa_icon": "fas fa-file-csv",
-                    "description": "Path(s) to one or multiple file(s) with seed genes",
-                    "help_text": "Multiple files have to be \",\" separated. Each file must have one line per seed gene. This parameter cannot be set, if there is a \"seeds\" column, in the sample sheet provided via --input."
+                    "description": "Path(s) to one or multiple file(s) with seed genes, in txt, csv, or tsv format. ",
+                    "help_text": "Multiple files have to be \",\" separated. Each file must have one line per seed gene. This parameter cannot be set, if there is a \"seeds\" column, in the sample sheet provided via --input.  NOT compatible with the sample sheet input.",
+                    "pattern": "^[^,\\s]+\\.(txt|csv|tsv)(,[^,\\s]+\\.(txt|csv|tsv))*$"
                 },
                 "network": {
                     "type": "string",
-                    "description": "Path(s) to one or multiple PPI network(s) in gt, csv, graphml, xml, dot, or gml format.",
+                    "description": "Path(s) to one or multiple PPI network(s) as file(s) in gt, csv, tsv, graphml, xml, dot, or gml format, or keyword(s) referring to inbuilt networks.",
                     "format": "file-path",
                     "fa_icon": "fas fa-file-csv",
-                    "help_text": "Multiple files have to be \",\" separated."
+                    "help_text": "Multiple files have to be \",\" separated. NOT compatible with the sample sheet input",
+                    "pattern": "^([^,\\s]+\\.(gt|csv|tsv|graphml|xml|dot|gml)|[^,\\s.]+)(,([^,\\s]+\\.(gt|csv|tsv|graphml|xml|dot|gml)|[^,\\s.]+))*$"
                 },
                 "id_space": {
                     "type": "string",
@@ -59,6 +60,13 @@
                     "type": "string",
                     "description": "MultiQC report title. Printed as page header, used for filename if not otherwise specified.",
                     "fa_icon": "fas fa-file-signature"
+                },
+                "prepared_networks_url": {
+                    "type": "string",
+                    "default": "https://zenodo.org/records/18702264/files/",
+                    "fa_icon": "fas fa-link",
+                    "hidden": true,
+                    "description": "Set a custom repository link for the prepared networks."
                 }
             }
         },
@@ -86,7 +94,7 @@
                 },
                 "skip_robust_bias_aware": {
                     "type": "boolean",
-                    "description": "Flag for skipping Robust-bias-aware",
+                    "description": "Flag for skipping Robust (bias-aware)",
                     "fa_icon": "fas fa-forward"
                 },
                 "skip_diamond": {
@@ -153,6 +161,12 @@
                     "type": "boolean",
                     "fa_icon": "fas fa-forward",
                     "description": "Flag for skipping the export to the Drugst.One platform"
+                },
+                "drugstone_max_nodes": {
+                    "type": "integer",
+                    "default": 500,
+                    "fa_icon": "fas fa-project-diagram",
+                    "description": "If a module has more nodes it will not be exported to the Drugst.One platform. Includes drug prioritization."
                 }
             }
         },
@@ -162,20 +176,21 @@
             "description": "Set parameters regarding the annotation.",
             "default": "",
             "properties": {
-                "skip_annotation": {
+                "run_annotation": {
                     "type": "boolean",
-                    "description": "Flag for skipping the annotation part of the process.",
-                    "fa_icon": "fas fa-forward"
+                    "description": "Flag for running the module annotation with NeDRex and the BioPAX conversion.",
+                    "help_text": "Annotates the disease modules with biological data queried from NeDRexDB, exports them in BioPAX format, and validates the resulting files. Only supported for entrez or uniprot IDs.",
+                    "fa_icon": "fas fa-caret-right"
                 },
                 "validate_online": {
                     "type": "boolean",
-                    "help_text": "Flag for running the BioPAX validator client, i.e. validating at the baderlab server. If \"false\" will load OBO files locally, which can take some time but is recommended for files > 100Mb.",
+                    "help_text": "Flag for running the BioPAX validator client, i.e. validating at the baderlab server. If \"false\" will load OBO files locally, which can take some time but is recommended for files > 100Mb. Only applies if `--run_annotation` is set.",
                     "description": "Flag for validating online at baderlab.org.",
                     "fa_icon": "fas fa-globe"
                 },
                 "add_variants": {
                     "type": "boolean",
-                    "description": "Flag for adding variants to the biopax annotation file.",
+                    "description": "Flag for adding variants to the biopax annotation file. Only applies if `--run_annotation` is set.",
                     "fa_icon": "fas fa-dna"
                 }
             },
@@ -191,38 +206,68 @@
                 "skip_evaluation": {
                     "type": "boolean",
                     "fa_icon": "fas fa-forward",
-                    "description": "Flag skipping the entire evaluation workflow"
+                    "description": "Flag skipping the entire default evaluation workflow"
                 },
                 "skip_gprofiler": {
                     "type": "boolean",
                     "description": "Flag for skipping g:Profiler",
                     "fa_icon": "fas fa-forward"
                 },
+                "gprofiler_organism": {
+                    "type": "string",
+                    "default": "hsapiens",
+                    "description": "Organism for g:Profiler",
+                    "help_text": "See https://biit.cs.ut.ee/gprofiler/page/organism-list for a list of supported organisms.",
+                    "fa_icon": "fas fa-dna"
+                },
                 "skip_digest": {
                     "type": "boolean",
                     "description": "Flag for skipping DIGEST",
                     "fa_icon": "fas fa-forward"
                 },
-                "run_seed_permutation": {
+                "skip_digest_reference_free": {
+                    "type": "boolean",
+                    "fa_icon": "fas fa-forward",
+                    "description": "Flag for skipping only the reference-free mode of DIGEST"
+                },
+                "skip_digest_reference_based": {
+                    "type": "boolean",
+                    "fa_icon": "fas fa-forward",
+                    "description": "Flag for skipping only the reference-based mode of DIGEST"
+                },
+                "digest_mapping_files": {
+                    "type": "string",
+                    "format": "directory-path",
+                    "exists": true,
+                    "fa_icon": "fas fa-folder-open",
+                    "description": "Path to a directory with the DIGEST mapping files",
+                    "help_text": "DIGEST needs precomputed mapping files (~720 MB). If this parameter is not set, the pipeline downloads them from the DIGEST API, which takes several minutes and requires internet access. Use `--save_digest_mapping_files` to save the downloaded files to `<outdir>/reference/digest/mapping_files` and pass that directory here to reuse them in later runs."
+                },
+                "save_digest_mapping_files": {
+                    "type": "boolean",
+                    "fa_icon": "fas fa-save",
+                    "description": "Save the downloaded DIGEST mapping files to the output directory"
+                },
+                "run_seed_perturbation": {
                     "type": "boolean",
                     "fa_icon": "fas fa-caret-right",
-                    "description": "Flag for running the seed permutation-based evaluation"
+                    "description": "Flag for running the seed perturbation-based evaluation"
                 },
-                "run_network_permutation": {
+                "run_network_perturbation": {
                     "type": "boolean",
                     "fa_icon": "fas fa-caret-right",
-                    "description": "Flag for running the network permutation-base evaluation"
+                    "description": "Flag for running the network perturbation-base evaluation"
                 },
-                "n_network_permutations": {
+                "n_network_perturbations": {
                     "type": "integer",
-                    "default": 1000,
+                    "default": 100,
                     "fa_icon": "fas fa-cogs",
-                    "description": "Number of times the network will be permuted for the network permutation-based evaluation"
+                    "description": "Number of times the network will be perturbed for the network perturbation-based evaluation"
                 },
-                "permuted_networks": {
+                "perturbed_networks": {
                     "type": "string",
                     "fa_icon": "fas fa-folder-open",
-                    "description": "Path(s) to folder(s) with pre-computed permuted networks for the network permutation-based evaluation"
+                    "description": "Path(s) to folder(s) with pre-computed perturbed networks for the network perturbation-based evaluation"
                 }
             }
         },
@@ -233,23 +278,6 @@
             "default": "",
             "fa_icon": "fas fa-capsules",
             "properties": {
-                "run_proximity": {
-                    "type": "boolean",
-                    "fa_icon": "fas fa-caret-right",
-                    "description": "Flag for running proximity"
-                },
-                "shortest_paths": {
-                    "type": "string",
-                    "fa_icon": "fas fa-project-diagram",
-                    "description": "Path(s) to the shortest path pickle file(s) used for proximity.",
-                    "hidden": true
-                },
-                "drug_to_target": {
-                    "type": "string",
-                    "fa_icon": "fas fa-file-csv",
-                    "description": "Local path to the drug to targets file used for proximity.",
-                    "hidden": true
-                },
                 "skip_drug_predictions": {
                     "type": "boolean",
                     "description": "Flag for skipping drug predictions",
@@ -377,13 +405,6 @@
                     "fa_icon": "fas fa-palette",
                     "hidden": true
                 },
-                "hook_url": {
-                    "type": "string",
-                    "description": "Incoming hook URL for messaging service",
-                    "fa_icon": "fas fa-people-group",
-                    "help_text": "Incoming hook URL for messaging service. Currently, MS Teams and Slack are supported.",
-                    "hidden": true
-                },
                 "multiqc_config": {
                     "type": "string",
                     "format": "file-path",
@@ -418,9 +439,21 @@
                 },
                 "trace_report_suffix": {
                     "type": "string",
-                    "fa_icon": "far calendar",
+                    "fa_icon": "far fa-calendar",
                     "description": "Suffix to add to the trace report filename. Default is the date and time in the format yyyy-MM-dd_HH-mm-ss.",
                     "hidden": true
+                },
+                "help": {
+                    "type": ["boolean", "string"],
+                    "description": "Display the help message."
+                },
+                "help_full": {
+                    "type": "boolean",
+                    "description": "Display the full detailed help message."
+                },
+                "show_hidden": {
+                    "type": "boolean",
+                    "description": "Display hidden parameters in the help message (only works when --help or --help_full are provided)."
                 }
             }
         }

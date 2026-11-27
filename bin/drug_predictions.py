@@ -126,7 +126,7 @@ class DrugPredictions:
         drugs, nodeDetails = self.get_drug_set_trustrank(
             self.nodes,
             self.id_space,
-            str(self.prefix) + "." + str(self.algorithm),
+            str(self.prefix),
             self.algorithm,
             self.includeIndirectDrugs,
             self.includeNonApprovedDrugs,
@@ -134,7 +134,7 @@ class DrugPredictions:
         )
         self.parse_drug_predictions(drugs, nodeDetails)
         self.df.to_csv(
-            str(self.prefix) + "." + str(self.algorithm) + ".drug_predictions.tsv",
+            str(self.prefix) + ".drug_predictions.tsv",
             sep="\t",
             index=False,
         )

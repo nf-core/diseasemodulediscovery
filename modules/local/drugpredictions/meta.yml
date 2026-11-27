@@ -1,0 +1,148 @@
+name: drugpredictions
+description: Prioritizes drug candidates targeting the nodes of a disease module via the Drugst.One platform
+keywords:
+  - drugstone
+  - drug prioritization
+  - drug repurposing
+  - disease module
+  - trustrank
+tools:
+  - drugstone:
+      description: Python package for the Drugst.One platform. It submits a set of nodes to the platform and returns the drugs targeting them, ranked by the selected prioritization algorithm - TrustRank (network propagation), degree centrality (number of module nodes a compound targets) or harmonic centrality (average shortest path from a compound to the module nodes).
+      homepage: https://drugst.one/
+      documentation: https://github.com/drugst-one/python-package
+      licence:
+        - MIT
+input:
+  - - meta:
+        type: map
+        description: Groovy Map containing sample information, must contain an `id` field
+    - module:
+        type: file
+        description: Tab-separated table of the disease module nodes, with a `name` column holding the node identifiers
+  - - idspace:
+        type: string
+        description: ID space of the node identifiers in the module. `ensembl` is translated to Drugst.One's `ensg`, all other values are passed through unchanged.
+  - - algorithm:
+        type: string
+        description: Drug prioritization algorithm, one of `trustrank`, `degree` or `closeness`
+  - - includeIndirectDrugs:
+        type: integer
+        description: Set to 1 to also return drugs that do not target a module node directly, 0 to restrict the results to direct targets
+  - - includeNonApprovedDrugs:
+        type: integer
+        description: Set to 1 to also return compounds that are not approved drugs, 0 to restrict the results to approved drugs
+  - - result_size:
+        type: integer
+        description: Maximum number of drugs returned by Drugst.One
+output:
+  drug_predictions:
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information, must contain an `id` field
+      - algorithm:
+          type: string
+          description: Drug prioritization algorithm the results were produced with
+      - ${meta.id}.drug_predictions.tsv:
+          type: file
+          description: Tab-separated table of the module node annotations merged with the prioritization results. Each node is repeated once per targeting compound, with the DrugBank identifier (`drug_id`), the prioritization `score`, the compound name (`drug_name`) and its `status` added. Nodes without a predicted compound are kept as a single row, and the rows of a node are sorted by descending score.
+          pattern: ${meta.id}.drug_predictions.tsv
+  drugstone_download:
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information, must contain an `id` field
+      - algorithm:
+          type: string
+          description: Drug prioritization algorithm the results were produced with
+      - ${meta.id}.csv:
+          type: file
+          description: Raw drug table as returned by Drugst.One, downloaded unmodified
+          pattern: ${meta.id}.csv
+  versions_python:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - python:
+          type: string
+          description: The tool name
+      - python --version | sed 's/Python //g':
+          type: eval
+          description: The expression to obtain the version of the tool
+  versions_pandas:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - pandas:
+          type: string
+          description: The tool name
+      - python -c "import pandas; print(pandas.__version__)":
+          type: eval
+          description: The expression to obtain the version of the tool
+  versions_drugstone:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - drugstone:
+          type: string
+          description: The tool name
+      - "pip show drugstone | sed -n 's/^Version: //p'":
+          type: eval
+          description: The expression to obtain the version of the tool
+topics:
+  versions:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - python:
+          type: string
+          description: The tool name
+      - python --version | sed 's/Python //g':
+          type: eval
+          description: The expression to obtain the version of the tool
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - pandas:
+          type: string
+          description: The tool name
+      - python -c "import pandas; print(pandas.__version__)":
+          type: eval
+          description: The expression to obtain the version of the tool
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - drugstone:
+          type: string
+          description: The tool name
+      - "pip show drugstone | sed -n 's/^Version: //p'":
+          type: eval
+          description: The expression to obtain the version of the tool
+authors:
+  - "@lspindler2509"
+  - "@JohannesKersting"
+maintainers:
+  - "@JohannesKersting"
+containers:
+  docker:
+    linux/arm64:
+      name: community.wave.seqera.io/library/modulediscovery_python_dependencies:e3f1e6cd63a4d51c
+      build_id: bd-e3f1e6cd63a4d51c_1
+      scan_id: sc-356cbaaf8190fe85_1
+    linux/amd64:
+      name: community.wave.seqera.io/library/modulediscovery_python_dependencies:0ba80986ead7e04c
+      build_id: bd-0ba80986ead7e04c_1
+      scan_id: sc-9d11c6807a85459d_1
+  singularity:
+    linux/arm64:
+      name: oras://community.wave.seqera.io/library/modulediscovery_python_dependencies:0e69c2b8d4800864
+      build_id: bd-0e69c2b8d4800864_1
+      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/13/13c9084240a678b33199c4d3e6a943ff3d60da386ed5ac5d595da0153914dce7/data
+    linux/amd64:
+      name: oras://community.wave.seqera.io/library/modulediscovery_python_dependencies:9eeae17edb9a5109
+      build_id: bd-9eeae17edb9a5109_1
+      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/49/49f3bf62ff66b8c76807029ac4b555fb3d111326d258ac40b66d906136a9ca7c/data
+  conda:
+    linux/amd64:
+      lock_file: modules/local/drugpredictions/.conda-lock/linux_amd64-bd-0ba80986ead7e04c_1.txt
+    linux/arm64:
+      lock_file: modules/local/drugpredictions/.conda-lock/linux_arm64-bd-e3f1e6cd63a4d51c_1.txt

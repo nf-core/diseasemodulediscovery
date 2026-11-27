@@ -1,0 +1,103 @@
+name: networkperturbation
+description: Rewires the edges of a network while preserving the degree of every node
+keywords:
+  - perturbation
+  - randomization
+  - rewiring
+  - network
+  - robustness
+tools:
+  - graph-tool:
+      description: Efficient Python module for the manipulation and statistical analysis of graphs, implemented in C++ on top of the Boost Graph Library. Its `random_rewire` function is used with the `constrained-configuration` model and 100 full sweeps over all edges to randomize the network without changing the node degrees.
+      homepage: https://graph-tool.skewed.de/
+      documentation: https://graph-tool.skewed.de/static/doc/index.html
+      licence:
+        - LGPL-3.0-or-later
+input:
+  - - meta:
+        type: map
+        description: Groovy Map containing sample information, must contain an `id` field
+    - network:
+        type: file
+        description: Interaction network to rewire, either in one of the graph formats readable by graph-tool (`.gt`, `.graphml`, `.xml`, `.dot`, `.gml`) or as an edge list
+    - output_name:
+        type: string
+        description: Name of the output file. Its extension decides the format the rewired network is written in.
+output:
+  perturbed_network:
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information, must contain an `id` field
+      - ${output_name}:
+          type: file
+          description: The rewired network, holding the same nodes with the same degrees but randomized edges. Rewiring attempts that would create a parallel edge or a self-loop are rejected and reported as a warning.
+          pattern: ${output_name}
+  versions_python:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - python:
+          type: string
+          description: The tool name
+      - python3 --version | sed 's/Python //g':
+          type: eval
+          description: The expression to obtain the version of the tool
+  versions_graphtool:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - graph-tool:
+          type: string
+          description: The tool name
+      - python -c "import graph_tool; print(graph_tool.__version__)" | cut -d" " -f1:
+          type: eval
+          description: The expression to obtain the version of the tool
+topics:
+  versions:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - python:
+          type: string
+          description: The tool name
+      - python3 --version | sed 's/Python //g':
+          type: eval
+          description: The expression to obtain the version of the tool
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - graph-tool:
+          type: string
+          description: The tool name
+      - python -c "import graph_tool; print(graph_tool.__version__)" | cut -d" " -f1:
+          type: eval
+          description: The expression to obtain the version of the tool
+authors:
+  - "@JohannesKersting"
+  - "@ChloeBubu"
+maintainers:
+  - "@JohannesKersting"
+containers:
+  docker:
+    linux/amd64:
+      name: community.wave.seqera.io/library/modulediscovery_python_dependencies:0ba80986ead7e04c
+      build_id: bd-0ba80986ead7e04c_1
+      scan_id: sc-9d11c6807a85459d_1
+    linux/arm64:
+      name: community.wave.seqera.io/library/modulediscovery_python_dependencies:e3f1e6cd63a4d51c
+      build_id: bd-e3f1e6cd63a4d51c_1
+      scan_id: sc-356cbaaf8190fe85_1
+  singularity:
+    linux/amd64:
+      name: oras://community.wave.seqera.io/library/modulediscovery_python_dependencies:9eeae17edb9a5109
+      build_id: bd-9eeae17edb9a5109_1
+      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/49/49f3bf62ff66b8c76807029ac4b555fb3d111326d258ac40b66d906136a9ca7c/data
+    linux/arm64:
+      name: oras://community.wave.seqera.io/library/modulediscovery_python_dependencies:0e69c2b8d4800864
+      build_id: bd-0e69c2b8d4800864_1
+      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/13/13c9084240a678b33199c4d3e6a943ff3d60da386ed5ac5d595da0153914dce7/data
+  conda:
+    linux/amd64:
+      lock_file: modules/local/networkperturbation/.conda-lock/linux_amd64-bd-0ba80986ead7e04c_1.txt
+    linux/arm64:
+      lock_file: modules/local/networkperturbation/.conda-lock/linux_arm64-bd-e3f1e6cd63a4d51c_1.txt

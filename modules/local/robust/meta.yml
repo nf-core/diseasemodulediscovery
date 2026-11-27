@@ -1,0 +1,105 @@
+name: robust
+description: Identifies a disease module by repeatedly connecting the seed nodes through prize-collecting Steiner trees
+keywords:
+  - robust
+  - disease module
+  - module identification
+  - steiner tree
+  - seed genes
+tools:
+  - robust:
+      description: ROBUST computes a number of prize-collecting Steiner trees over the seed nodes, penalizing nodes that were already part of earlier solutions so that the individual trees stay diverse. The module is then formed by the nodes that occur in a sufficient fraction of the solutions. Its initial fraction, reduction factor, number of trees and threshold are passed as positional arguments through `task.ext.args`.
+      homepage: https://github.com/bionetslab/robust
+      documentation: https://github.com/bionetslab/robust
+      licence:
+        - GPL-3.0-only
+  - pcst-fast:
+      description: Fast C++ implementation of the Goemans-Williamson scheme for the prize-collecting Steiner tree problem, exposed to Python.
+      homepage: https://github.com/fraenkel-lab/pcst_fast
+      documentation: https://github.com/fraenkel-lab/pcst_fast
+      licence:
+        - MIT
+  - networkx:
+      description: Python package for the creation, manipulation and study of the structure and dynamics of complex networks.
+      homepage: https://networkx.org/
+      documentation: https://networkx.org/documentation/stable/
+      licence:
+        - BSD-3-Clause
+input:
+  - - meta:
+        type: map
+        description: Groovy Map containing sample information, must contain an `id` field
+    - seeds:
+        type: file
+        description: Seed nodes to build the module from, one node identifier per line. If the file has several tab-separated columns, only the first one is used.
+    - network:
+        type: file
+        description: Interaction network as a tab-separated edge list. Only the first two columns are used.
+output:
+  module:
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information, must contain an `id` field
+      - ${meta.id}.graphml:
+          type: file
+          description: The disease module as a GraphML network. Its nodes carry the seed status (`isSeed`), the number of solutions a node occurred in (`nrOfOccurrences`), the corresponding fraction of all solutions (`significance`), the trees a node was part of (`trees`) and a connected component identifier (`connected_components_id`).
+          pattern: ${meta.id}.graphml
+  versions_python:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - python:
+          type: string
+          description: The tool name
+      - python --version | sed 's/Python //g':
+          type: eval
+          description: The expression to obtain the version of the tool
+  versions_robustpcst:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - robust-pcst:
+          type: string
+          description: The tool name
+      - python -c "from importlib.metadata import version; print(version('robust-pcst'))":
+          type: eval
+          description: The expression to obtain the version of the tool
+topics:
+  versions:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - python:
+          type: string
+          description: The tool name
+      - python --version | sed 's/Python //g':
+          type: eval
+          description: The expression to obtain the version of the tool
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - robust-pcst:
+          type: string
+          description: The tool name
+      - python -c "from importlib.metadata import version; print(version('robust-pcst'))":
+          type: eval
+          description: The expression to obtain the version of the tool
+authors:
+  - "@JohannesKersting"
+  - "@quirinmanz"
+maintainers:
+  - "@JohannesKersting"
+containers:
+  docker:
+    linux/amd64:
+      name: community.wave.seqera.io/library/robust:b45458ff322adfd5
+      build_id: bd-b45458ff322adfd5_1
+      scan_id: sc-1883f92eb6518190_1
+  singularity:
+    linux/amd64:
+      name: oras://community.wave.seqera.io/library/robust:855f6cfd2e3c116d
+      build_id: bd-855f6cfd2e3c116d_1
+      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/1c/1cd575a6e0e48532dba2da91f5f1d435f15c74f82cd3d21088d86210448960a9/data
+  conda:
+    linux/amd64:
+      lock_file: modules/local/robust/.conda-lock/linux_amd64-bd-b45458ff322adfd5_1.txt

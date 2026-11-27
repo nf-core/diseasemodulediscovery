@@ -1,0 +1,15 @@
+name: diamond
+channels:
+  - conda-forge
+  - bioconda
+  - nodefaults
+dependencies:
+  - conda-forge::python=3.12.16
+  - conda-forge::networkx=3.3
+  - conda-forge::numpy=2.1
+  - conda-forge::scipy=1.14
+  - conda-forge::pip=25.3
+  - pip:
+      # DIAMOnD v1.0.0 from the release tarball, until diamond-module is available on PyPI/bioconda
+      # PEP 508 direct reference: pixi (used by the Wave builder) rejects a bare URL
+      - diamond-module @ https://github.com/REPO4EU/DIAMOnD/archive/refs/tags/v1.0.0.tar.gz

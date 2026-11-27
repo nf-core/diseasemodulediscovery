@@ -1,0 +1,111 @@
+name: moduleoverlap
+description: Computes pairwise overlaps between the node sets of several disease modules
+keywords:
+  - overlap
+  - jaccard
+  - similarity
+  - disease module
+  - comparison
+tools:
+  - moduleoverlap:
+      description: In-house Python script (module_overlap.py) that computes the pairwise Jaccard similarity and the pairwise number of shared nodes between the node sets of the given modules, once over all module nodes and once over the added nodes only, i.e. after removing the seed nodes.
+      homepage: https://github.com/nf-core/diseasemodulediscovery
+      documentation: https://nf-co.re/diseasemodulediscovery/output
+      licence:
+        - MIT
+input:
+  - - ids:
+        type: string
+        description: List of identifiers naming the rows and columns of the output matrices, one per input file and in the same order
+  - - inputs:
+        type: file
+        description: List of tab-separated module node lists, each with at least a `name` column holding the node identifiers and an `is_seed` column with values 0 and 1
+output:
+  jaccard_multiqc:
+    - jaccard_similarity_matrix_mqc.tsv:
+        type: file
+        description: Symmetric matrix of the pairwise Jaccard similarities between the full node sets of the modules, tab-separated and indexed by the `ID` column. Rows and columns are sorted by identifier.
+        pattern: jaccard_similarity_matrix_mqc.tsv
+  shared_multiqc:
+    - shared_nodes_matrix_mqc.tsv:
+        type: file
+        description: Symmetric matrix of the pairwise numbers of shared nodes between the full node sets of the modules, tab-separated and indexed by the `ID` column. Rows and columns are sorted by identifier.
+        pattern: shared_nodes_matrix_mqc.tsv
+  jaccard_no_seeds_multiqc:
+    - jaccard_similarity_no_seeds_matrix_mqc.tsv:
+        type: file
+        description: Same as the Jaccard similarity matrix, but restricted to the nodes with `is_seed` equal to 0. Modules that are left without any node after removing the seeds are dropped, and the file is not written if that applies to all of them.
+        pattern: jaccard_similarity_no_seeds_matrix_mqc.tsv
+  shared_no_seeds_multiqc:
+    - shared_nodes_no_seeds_matrix_mqc.tsv:
+        type: file
+        description: Same as the shared nodes matrix, but restricted to the nodes with `is_seed` equal to 0. Modules that are left without any node after removing the seeds are dropped, and the file is not written if that applies to all of them.
+        pattern: shared_nodes_no_seeds_matrix_mqc.tsv
+  versions_python:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - python:
+          type: string
+          description: The tool name
+      - python --version | sed 's/Python //g':
+          type: eval
+          description: The expression to obtain the version of the tool
+  versions_pandas:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - pandas:
+          type: string
+          description: The tool name
+      - python -c "import pandas; print(pandas.__version__)":
+          type: eval
+          description: The expression to obtain the version of the tool
+topics:
+  versions:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - python:
+          type: string
+          description: The tool name
+      - python --version | sed 's/Python //g':
+          type: eval
+          description: The expression to obtain the version of the tool
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - pandas:
+          type: string
+          description: The tool name
+      - python -c "import pandas; print(pandas.__version__)":
+          type: eval
+          description: The expression to obtain the version of the tool
+authors:
+  - "@JohannesKersting"
+maintainers:
+  - "@JohannesKersting"
+containers:
+  docker:
+    linux/amd64:
+      name: community.wave.seqera.io/library/modulediscovery_python_dependencies:0ba80986ead7e04c
+      build_id: bd-0ba80986ead7e04c_1
+      scan_id: sc-9d11c6807a85459d_1
+    linux/arm64:
+      name: community.wave.seqera.io/library/modulediscovery_python_dependencies:e3f1e6cd63a4d51c
+      build_id: bd-e3f1e6cd63a4d51c_1
+      scan_id: sc-356cbaaf8190fe85_1
+  singularity:
+    linux/amd64:
+      name: oras://community.wave.seqera.io/library/modulediscovery_python_dependencies:9eeae17edb9a5109
+      build_id: bd-9eeae17edb9a5109_1
+      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/49/49f3bf62ff66b8c76807029ac4b555fb3d111326d258ac40b66d906136a9ca7c/data
+    linux/arm64:
+      name: oras://community.wave.seqera.io/library/modulediscovery_python_dependencies:0e69c2b8d4800864
+      build_id: bd-0e69c2b8d4800864_1
+      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/13/13c9084240a678b33199c4d3e6a943ff3d60da386ed5ac5d595da0153914dce7/data
+  conda:
+    linux/amd64:
+      lock_file: modules/local/moduleoverlap/.conda-lock/linux_amd64-bd-0ba80986ead7e04c_1.txt
+    linux/arm64:
+      lock_file: modules/local/moduleoverlap/.conda-lock/linux_arm64-bd-e3f1e6cd63a4d51c_1.txt
