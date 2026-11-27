@@ -1,4 +1,3 @@
-
 // Many additional examples for nextflow modules are available at https://github.com/nf-core/modules/tree/master/modules/nf-core
 
 process DIAMOND {                           // Process name, should be all upper case

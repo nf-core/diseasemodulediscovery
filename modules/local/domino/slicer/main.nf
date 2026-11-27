@@ -1,4 +1,3 @@
-
 process DOMINO_SLICER {             // Process name, should be all upper case. Only the part before "_" will be used to define the output folder
     tag "$meta.id"
     label 'process_low'          // Used to allocate resources; see conf/base.config for label definitions
@@ -17,8 +16,6 @@ process DOMINO_SLICER {             // Process name, should be all upper case. O
     tuple val("${task.process}"), val('python-louvain'), eval("pip show python-louvain | sed -n 's/^Version: //p'"), emit: versions_pythonlouvain, topic: versions
     tuple val("${task.process}"), val('networkx'), eval("pip show networkx | sed -n 's/^Version: //p'"), emit: versions_networkx, topic: versions
     tuple val("${task.process}"), val('numpy'), eval("pip show numpy | sed -n 's/^Version: //p'"), emit: versions_numpy, topic: versions
-
-
 
     // The script for executing slicer
     // Access inputs, parameters, etc. with the "$" operator

@@ -28,7 +28,6 @@ nextflow_pipeline {
                 run_network_perturbation = false
                 skip_visualization       = true
 
-
             }
         }
 

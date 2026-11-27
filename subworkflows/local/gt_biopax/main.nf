@@ -1,9 +1,7 @@
-
 include { BIOPAX_PARSER         } from '../../../modules/local/biopax/parser/main'
 include { BIOPAX_VALIDATOR      } from '../../../modules/local/biopax/validator/main'
 
 workflow GT_BIOPAX {
-
     take:                                   // Workflow inputs
     ch_modules
     idspace
@@ -19,7 +17,6 @@ workflow GT_BIOPAX {
     } else {
         module = channel.empty()
     }
-
 
     emit:
     module   = module

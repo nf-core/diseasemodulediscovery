@@ -56,7 +56,6 @@ workflow NFCORE_DISEASEMODULEDISCOVERY {
     visualization_skipped_status    = DISEASEMODULEDISCOVERY.out.visualization_skipped_status  // channel: [id, boolean]
     drugstone_skipped_status        = DISEASEMODULEDISCOVERY.out.drugstone_skipped_status      // channel: [id, boolean]
     multiqc_report                  = DISEASEMODULEDISCOVERY.out.multiqc_report                // channel: /path/to/multiqc_report.html
-
 }
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

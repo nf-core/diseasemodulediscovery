@@ -13,7 +13,6 @@ workflow GT_SEEDPERTURBATION {
     ch_seeds    // channel: [ val(meta[id,seeds_id,network_id]), path(seeds) ]
     ch_network  // channel: [ val(meta[id,network_id]), path(network) ]
 
-
     main:
 
     // Perturbe the input seeds
@@ -39,7 +38,6 @@ workflow GT_SEEDPERTURBATION {
             [ dup, perturbed_seeds]
         }
 
-
     // Run network expansion tools on perturbed seeds
     NETWORKEXPANSION(ch_perturbed_seeds, ch_network)
 
@@ -60,7 +58,6 @@ workflow GT_SEEDPERTURBATION {
         .map{key, _meta, perturbed_modules, perturbed_seeds ->
             [ [ id: key.original_seeds_id + "." + key.network_id + "." + key.amim, module_id: key.original_seeds_id + "." + key.network_id + "." + key.amim, amim: key.amim, seeds_id: key.original_seeds_id, network_id: key.network_id], perturbed_modules, perturbed_seeds]
         }
-
 
     // Combine with original modules, seeds, and network
     // Shape: [val(meta[id,module_id,amim,seeds_id,network_id]), path(original_module), path(original_seeds), [path(perturbed_modules)], [path(perturbed_seeds)], network]
@@ -88,7 +85,6 @@ workflow GT_SEEDPERTURBATION {
             perturbed_modules: perturbed_modules
             network: network
         }
-
 
     // Evaluation
     SEEDPERTURBATIONEVALUATION(
@@ -133,8 +129,6 @@ workflow GT_SEEDPERTURBATION {
         ch_visualization_input.amim.collect(),
         ch_visualization_input.path.collect()
     )
-
-
 
     emit:
     multiqc_summary = ch_multiqc_summary    // channel: [ multiqc_summary ]     emit collected multiqc files

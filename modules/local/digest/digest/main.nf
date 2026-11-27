@@ -7,7 +7,6 @@ process DIGEST_DIGEST {
         ? 'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/d1/d1934dcbe8ceb3238dd78695d37fe3a7eefe5137900035c88d0aaea55fcab696/data'
         : 'community.wave.seqera.io/library/digest:98f5b31fccdef4bf'}" // automatically generated
 
-
     input:
     tuple val(meta), path(target_file)
     val target_type

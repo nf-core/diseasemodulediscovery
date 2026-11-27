@@ -6,7 +6,6 @@ process DIGEST_SETUP {
         ? 'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/d1/d1934dcbe8ceb3238dd78695d37fe3a7eefe5137900035c88d0aaea55fcab696/data'
         : 'community.wave.seqera.io/library/digest:98f5b31fccdef4bf'}" // automatically generated
 
-
     output:
     path "mapping_files", emit: mapping_files
     tuple val("${task.process}"), val('python'), eval("python --version | sed 's/Python //g'"), emit: versions_python, topic: versions

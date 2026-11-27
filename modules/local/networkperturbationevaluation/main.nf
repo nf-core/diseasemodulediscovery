@@ -18,7 +18,6 @@ process NETWORKPERTURBATIONEVALUATION {
     tuple val("${task.process}"), val('graph-tool'), eval('python -c "import graph_tool; print(graph_tool.__version__)" | cut -d" " -f1'), emit: versions_graphtool, topic: versions
     tuple val("${task.process}"), val('numpy'), eval('python -c "import numpy; print(numpy.__version__)"'), emit: versions_numpy, topic: versions
 
-
     script:
     """
     network_perturbation_evaluation.py \\

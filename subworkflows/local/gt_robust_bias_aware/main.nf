@@ -30,8 +30,6 @@ workflow GT_ROBUSTBIASAWARE {
 
     ROBUSTBIASAWARE(ch_robust_bias_aware_input, idspaceUpper)
 
-
-
     emit:
     module   = ROBUSTBIASAWARE.out.module  // channel: [ val(meta[id,module_id,amim,seeds_id,network_id]), path(module) ]
 }

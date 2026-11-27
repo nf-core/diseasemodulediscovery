@@ -15,7 +15,6 @@ workflow NETWORKEXPANSION {
     ch_seeds    // channel: [ val(meta[id,seeds_id,network_id]), path(seeds) ]
     ch_network  // channel: [ val(meta[id,network_id]), path(network) ]
 
-
     main:
     // Params
     diamond_n = channel.value(params.diamond_n)
@@ -26,7 +25,6 @@ workflow NETWORKEXPANSION {
     rwr_r = channel.value(params.rwr_r)
 
     id_space = channel.value(params.id_space)
-
 
     ch_modules  = channel.empty()
     ch_raw_modules = channel.empty()
@@ -85,7 +83,6 @@ workflow NETWORKEXPANSION {
 
     MODULEPARSER(ch_module_parser_input)
     ch_modules = ch_modules.mix(MODULEPARSER.out.module)
-
 
     emit:
     modules  = ch_modules               // channel: [ val(meta[id,module_id,amim,seeds_id,network_id]), path(module) ]

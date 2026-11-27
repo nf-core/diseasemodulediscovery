@@ -10,7 +10,6 @@ workflow GT_ROBUST {
     ch_seeds                                // channel: [ val(meta[id,seeds_id,network_id]), path(seeds) ]
     ch_network                              // channel: [ val(meta[id,network_id]), path(network) ]
 
-
     main:
 
     GRAPHTOOLPARSER(ch_network, "robust")

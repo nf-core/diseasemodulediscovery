@@ -1,4 +1,3 @@
-
 process PREFIXLINES {
     tag "$meta.id"
     label 'process_single'
@@ -12,10 +11,8 @@ process PREFIXLINES {
     tuple val(meta), path(file)
     val prefix
 
-
     output:
     tuple val(meta), path("${file.baseName}.prefixed.${file.extension}")
-
 
     script:
     """

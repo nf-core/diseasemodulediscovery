@@ -18,7 +18,6 @@ process BIOPAX_VALIDATOR {
 
     script:
     """
-
     if [ "${validate_online}" = true ]; then
         echo "Validating online"
         biopax-validator-client . biopax-validator-report.html notstrict

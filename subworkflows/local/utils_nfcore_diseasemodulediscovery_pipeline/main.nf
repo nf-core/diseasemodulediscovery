@@ -118,7 +118,6 @@ workflow PIPELINE_INITIALISATION {
     perturbed_networks_param_set = (param_perturbed_networks != null)
 
     if(param_input){
-
         // check if seeds, network, or perturbed_networks parameters are set and if so, throw an error since they cannot be used together with the sample sheet
         if (seed_param_set || network_param_set || perturbed_networks_param_set){
             error("You need to specify either a sample sheet (--input) OR the seeds (--seeds) and network (--network) files (including perturbed networks). You cannot specify both at the same time.")
@@ -162,7 +161,6 @@ workflow PIPELINE_INITIALISATION {
             }
 
     } else if (seed_param_set && network_param_set){
-
         log.info("Creating network and seeds channels based on the combination of all seed and network files provided")
 
         ch_network = channel.fromList(param_network.split(',').flatten())
@@ -237,7 +235,6 @@ workflow PIPELINE_COMPLETION {
     visualization_skipped_status //  map: Skipped/not skipped status per module
     drugstone_skipped_status     //  map: Skipped/not skipped status per module
 
-
     main:
 
     def seeds_empty = [:]
@@ -266,7 +263,6 @@ workflow PIPELINE_COMPLETION {
         .map{
             id, status -> drugstone_skipped[id] = status
         }
-
 
     //
     // Completion email and summary
@@ -361,7 +357,6 @@ def multiqcTsvFromList(tsv_data, header) {
     }
     return tsv_string
 }
-
 
 //
 // Validate channels from input samplesheet

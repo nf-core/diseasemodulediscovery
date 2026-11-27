@@ -52,9 +52,3 @@ repos:
     rev: "24.1.1"
     hooks:
       - id: black
-        # bin/DIAMOnD.py is vendored upstream code and has to stay byte-identical to
-        # https://github.com/dinaghiassian/DIAMOnD at commit 2437974
-        exclude: |
-          (?x)^(
-              bin/DIAMOnD\.py$
-          )$

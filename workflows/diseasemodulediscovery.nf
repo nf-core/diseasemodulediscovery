@@ -100,7 +100,6 @@ ch_modules: [ val(meta[id,module_id,amim,seeds_id,network_id]), path(module) ]
 
 */
 
-
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     RUN MAIN WORKFLOW
@@ -108,7 +107,6 @@ ch_modules: [ val(meta[id,module_id,amim,seeds_id,network_id]), path(module) ]
 */
 
 workflow DISEASEMODULEDISCOVERY {
-
 
     take:
     multiqc_config
@@ -124,8 +122,6 @@ workflow DISEASEMODULEDISCOVERY {
     // Params
     id_space = channel.value(params.id_space)
     validate_online = channel.value(params.validate_online)
-
-
 
     // Channels
     ch_multiqc_files = channel.empty()
@@ -185,7 +181,6 @@ workflow DISEASEMODULEDISCOVERY {
             [ dup, path ]
         }
 
-
     /*
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         NETWORK EXPANSION
@@ -195,7 +190,6 @@ workflow DISEASEMODULEDISCOVERY {
     // Network expansion tools
     NETWORKEXPANSION(ch_seeds, ch_network_gt)
     ch_modules = ch_modules.mix(NETWORKEXPANSION.out.modules) // channel: [ val(meta[id,module_id,amim,seeds_id,network_id]), path(module)]
-
 
     // Topology evaluation
     TOPOLOGY(ch_modules)
@@ -231,7 +225,6 @@ workflow DISEASEMODULEDISCOVERY {
     NETWORKANNOTATION(ch_module_network)
     ch_modules = NETWORKANNOTATION.out.module
 
-
     // Save modules
     SAVEMODULES(ch_modules)
     ch_nodes_tsv_not_empty = SAVEMODULES.out.nodes_tsv
@@ -265,8 +258,6 @@ workflow DISEASEMODULEDISCOVERY {
             name: "warn_empty_modules_mqc.tsv",
         ).set { ch_modules_empty_multiqc }
     ch_multiqc_files = ch_multiqc_files.mix(ch_modules_empty_multiqc)
-
-
 
     // Visualize modules
     if(!params.skip_visualization){
@@ -348,9 +339,7 @@ workflow DISEASEMODULEDISCOVERY {
         } else {
             log.warn("Ignoring --run_annotation: annotation and BioPAX conversion currently only support uniprot or entrez IDs")
         }
-
     }
-
 
     /*
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -359,7 +348,6 @@ workflow DISEASEMODULEDISCOVERY {
     */
 
     if(!params.skip_evaluation){
-
         GT2TSV_MODULES(ch_modules_not_empty)
         GT2TSV_NETWORK(ch_network_gt)
 
@@ -384,7 +372,6 @@ workflow DISEASEMODULEDISCOVERY {
 
         // Overrepresentation analysis
         if(!params.skip_gprofiler){
-
             ch_gprofiler_input = ch_nodes
                 .map{ meta, path -> [meta.network_id, meta, path]}
                 .combine(GT2TSV_NETWORK.out.nodes.map{meta, path -> [meta.id, path]}, by: 0)
@@ -402,7 +389,6 @@ workflow DISEASEMODULEDISCOVERY {
 
         // Digest
         if(!params.skip_digest){
-
             // Mapping files: use the provided directory or download them once for all DIGEST runs
             if(params.digest_mapping_files){
                 ch_digest_mapping_files = channel.value(file(params.digest_mapping_files, checkIfExists: true))
@@ -413,7 +399,6 @@ workflow DISEASEMODULEDISCOVERY {
 
             // Reference-free evaluation
             if(!params.skip_digest_reference_free){
-
                 ch_digest_reference_free_input = ch_nodes_tsv_not_empty
                 .map{ meta, nodes -> [meta.network_id, meta, nodes]}
                 .combine(ch_network_gt.map{meta, network -> [meta.id, network]}, by: 0)
@@ -432,7 +417,6 @@ workflow DISEASEMODULEDISCOVERY {
                         name: 'digest_reference_free_mqc.tsv',
                         keepHeader: true)
                 )
-
             }
 
             // Reference-based evaluation
@@ -456,11 +440,8 @@ workflow DISEASEMODULEDISCOVERY {
                         name: 'digest_reference_based_mqc.tsv',
                         keepHeader: true)
                 )
-
             }
-
         }
-
     }
 
     // Seed perturbation based evaluation
@@ -498,7 +479,6 @@ workflow DISEASEMODULEDISCOVERY {
             .mix(GT_NETWORKPERTURBATION.out.multiqc_summary)
             .mix(GT_NETWORKPERTURBATION.out.multiqc_jaccard)
     }
-
 
     /*
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -539,7 +519,6 @@ workflow DISEASEMODULEDISCOVERY {
         DRUGPREDICTIONS(ch_drugstone_input.module, id_space, ch_drugstone_input.algorithm, includeIndirectDrugs, includeNonApprovedDrugs, params.result_size)
 
         if(!params.skip_visualization){
-
             ch_drug_visualization_input = DRUGPREDICTIONS.out.drug_predictions
                 .map{ meta, _algorithm, drug_predictions -> [meta, drug_predictions] }
                 .filter{ meta, _drug_predictions -> meta.nodes <= params.visualization_max_nodes }       // Filter out modules with too many nodes

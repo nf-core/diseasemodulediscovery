@@ -12,7 +12,6 @@ workflow GT_DOMINO {                        // Define the subworkflow, usually s
     ch_seeds                                // channel: [ val(meta[id,seeds_id,network_id]), path(seeds) ]
     ch_network                              // channel: [ val(meta[id,network_id]), path(network) ]
 
-
     main:
 
     PREFIXLINES(ch_seeds, "entrez.")                                        // DOMINO interprets entrez ids as integers, so they are prefixed

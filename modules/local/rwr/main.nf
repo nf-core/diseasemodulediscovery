@@ -1,4 +1,3 @@
-
 process RWR {
     tag "$meta.id"
     label 'process_high'

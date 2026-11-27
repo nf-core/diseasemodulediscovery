@@ -1,4 +1,3 @@
-
 process SEEDPERTURBATIONEVALUATION {
     tag "$meta.id"
     label 'process_single'
@@ -26,7 +25,6 @@ process SEEDPERTURBATIONEVALUATION {
     tuple val("${task.process}"), val('numpy'), eval('python -c "import numpy; print(numpy.__version__)"'), emit: versions_numpy, topic: versions
     tuple val("${task.process}"), val('matplotlib'), eval('python -c "import matplotlib; print(matplotlib.__version__)"'), emit: versions_matplotlib, topic: versions
     tuple val("${task.process}"), val('pyintergraph'), eval("pip show pyintergraph | sed -n 's/^Version: //p'"), emit: versions_pyintergraph, topic: versions
-
 
     script:
     """

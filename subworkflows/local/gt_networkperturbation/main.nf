@@ -110,9 +110,6 @@ workflow GT_NETWORKPERTURBATION {
             item -> "  " + item.text
         }
 
-
-
-
     emit:
     multiqc_summary = ch_multiqc_summary    // channel: [ multiqc_summary ]     emit collected multiqc files
     multiqc_jaccard = ch_multiqc_jaccard    // channel: [ multiqc_jaccard ]     emit collected multiqc files

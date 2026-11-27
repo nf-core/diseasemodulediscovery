@@ -1,4 +1,3 @@
-
 process DOMINO_DOMINO {     // Process name, should be all upper case. Only the part before "_" will be used to define the output folder
     tag "$meta.id"
     label 'process_high'     // Used to allocate resources, "process_high" defines this process resource class; for more labels see conf/base.config
@@ -19,7 +18,6 @@ process DOMINO_DOMINO {     // Process name, should be all upper case. Only the 
     tuple val("${task.process}"), val('networkx'), eval("pip show networkx | sed -n 's/^Version: //p'"), emit: versions_networkx, topic: versions
     tuple val("${task.process}"), val('scipy'), eval("pip show scipy | sed -n 's/^Version: //p'"), emit: versions_scipy, topic: versions
     tuple val("${task.process}"), val('numpy'), eval("pip show numpy | sed -n 's/^Version: //p'"), emit: versions_numpy, topic: versions
-
 
     // Run DOMINO, it supports muliple threads, which are set using the "label" keyword and accessed using $task.cpus
     script:

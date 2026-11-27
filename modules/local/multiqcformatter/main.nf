@@ -17,5 +17,4 @@ process MULTIQCFORMATTER {
     """
     multiqc_formatter.py -i $inputFiles -H $header
     """
-
 }

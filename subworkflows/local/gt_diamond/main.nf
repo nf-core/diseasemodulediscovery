@@ -12,7 +12,6 @@ workflow GT_DIAMOND {
     n                                       // DIAMOnD specific parameter "n"
     alpha                                   // DIAMOnD spefific parameter "alpha"
 
-
     main:
 
     GRAPHTOOLPARSER(ch_network, "diamond")                                  // Convert gt file to diamond specific format

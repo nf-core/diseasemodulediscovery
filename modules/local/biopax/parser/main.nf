@@ -7,7 +7,6 @@ process BIOPAX_PARSER {
         ? 'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/49/49f3bf62ff66b8c76807029ac4b555fb3d111326d258ac40b66d906136a9ca7c/data'
         : 'community.wave.seqera.io/library/modulediscovery_python_dependencies:0ba80986ead7e04c'}"
 
-
     input:
     tuple val(meta), path(network)
     val idspace
