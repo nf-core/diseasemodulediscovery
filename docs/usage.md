@@ -259,6 +259,23 @@ nextflow run nf-core/diseasemodulediscovery \
 > [!NOTE]
 > The node IDs in your seed and network files must use the same ID space. Since all steps that depend on `--id_space` are skipped here, the parameter can be left at its default value.
 
+### OS specifics
+
+The pipeline works best in combination with Linux. Furthermore, some Docker images in the pipeline are natively only available for `amd64` but not the `arm` architecture.
+Here are some tips to get the pipeline running with a different OS or architecture:
+
+**macOS**
+
+With macOS and Apple silicon, we had better experiences using the free version of [orbstack](https://orbstack.dev/download) instead of Docker Desktop for deploying the containers.
+
+**Windows**
+
+The most reliable solution is to work with the [Windows Subsystem for Linux (WSL)](https://documentation.ubuntu.com/wsl/latest/howto/install-ubuntu-wsl2/).
+
+**What if it keeps failing?**
+
+Most pipeline steps are not essential. If the pipeline keeps failing because of a specific process, you may be able to just [skip](#skipping-steps) that one.
+
 ### Updating the pipeline
 
 When you run the above command, Nextflow automatically pulls the pipeline code from GitHub and stores it as a cached version. When running the pipeline after this, it will always use the cached version if available - even if the pipeline has been updated since. To make sure that you're running the latest version of the pipeline, make sure that you regularly update the cached version of the pipeline:
