@@ -195,9 +195,9 @@ maintainers:
 containers:
   docker:
     linux/amd64:
-      name: community.wave.seqera.io/library/domino:d7848ba6939a9ab0
-      build_id: bd-d7848ba6939a9ab0_1
-      scan_id: sc-a84c81913a138e70_1
+      name: community.wave.seqera.io/library/domino:17d2700a9e137c73
+      build_id: bd-17d2700a9e137c73_1
+      scan_id: sc-89ff89993ca272b5_1
   singularity:
     linux/amd64:
       name: oras://community.wave.seqera.io/library/domino:c6cf246e01593ebb
@@ -205,4 +205,4 @@ containers:
       https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/d1/d1e127804ca623639fc35b159206b564f3cc3e579ac1cad595c8a84d40609be5/data
   conda:
     linux/amd64:
-      lock_file: modules/local/domino/domino/.conda-lock/linux_amd64-bd-d7848ba6939a9ab0_1.txt
+      lock_file: modules/local/domino/domino/.conda-lock/linux_amd64-bd-17d2700a9e137c73_1.txt

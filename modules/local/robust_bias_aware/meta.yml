@@ -84,14 +84,14 @@ maintainers:
 containers:
   docker:
     linux/amd64:
-      name: community.wave.seqera.io/library/robust_bias_aware:cc068c0e1d52ce0e
-      build_id: bd-cc068c0e1d52ce0e_1
-      scan_id: sc-8f62d9a089ecf025_1
+      name: community.wave.seqera.io/library/robust_bias_aware:839067d9844ef042
+      build_id: bd-839067d9844ef042_1
+      scan_id: sc-29b9337db7a8cb54_1
   singularity:
     linux/amd64:
-      name: oras://community.wave.seqera.io/library/robust_bias_aware:43b9a90dd422dee1
-      build_id: bd-43b9a90dd422dee1_1
-      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/4b/4b151131c90d219fcc7c7a0c2b83149cff2cdaefa61a99882d32cc0b2439d671/data
+      name: oras://community.wave.seqera.io/library/robust_bias_aware:f0be5d234d59e78f
+      build_id: bd-f0be5d234d59e78f_1
+      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/67/67199b2eb61066ca8819cdeac0ae810a96f46d8d77e0697d38371004493d4625/data
   conda:
     linux/amd64:
-      lock_file: modules/local/robust_bias_aware/.conda-lock/linux_amd64-bd-cc068c0e1d52ce0e_1.txt
+      lock_file: modules/local/robust_bias_aware/.conda-lock/linux_amd64-bd-839067d9844ef042_1.txt

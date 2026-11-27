@@ -5,3 +5,4 @@ channels:
   - nodefaults
 dependencies:
   - bioconda::biopax-validator=6.0.0
+  - conda-forge::openjdk=25.0.2

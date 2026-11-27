@@ -64,25 +64,25 @@ maintainers:
   - "@JohannesKersting"
 containers:
   docker:
-    linux/amd64:
-      name: community.wave.seqera.io/library/digest:fb492089d1f42e56
-      build_id: bd-fb492089d1f42e56_1
-      scan_id: sc-24f32fde5dda6aae_1
     linux/arm64:
-      name: community.wave.seqera.io/library/digest:a9bb61f57484f096
-      build_id: bd-a9bb61f57484f096_1
-      scan_id: sc-3c8c0c352628e07e_1
+      name: community.wave.seqera.io/library/digest:38673546e8bd9941
+      build_id: bd-38673546e8bd9941_1
+      scan_id: sc-781c0c2e94082ea6_1
+    linux/amd64:
+      name: community.wave.seqera.io/library/digest:98f5b31fccdef4bf
+      build_id: bd-98f5b31fccdef4bf_1
+      scan_id: sc-fcd2a71adaca8cad_1
   singularity:
-    linux/amd64:
-      name: oras://community.wave.seqera.io/library/digest:5a1012cd229dde5f
-      build_id: bd-5a1012cd229dde5f_1
-      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/9c/9ca49f3db139438fe5f91446e5dad4024602b0b92c9a25bf7f70d35639a7bc9a/data
     linux/arm64:
-      name: oras://community.wave.seqera.io/library/digest:d359eec0804ce5e1
-      build_id: bd-d359eec0804ce5e1_1
-      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/90/90c8b2081b6d8ee8555680b4ab0ca394448d07a36f4aa917fee693a4b85eb4c3/data
+      name: oras://community.wave.seqera.io/library/digest:40a39ee7943e34b5
+      build_id: bd-40a39ee7943e34b5_1
+      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/78/78c25e97dc4c9e67faead3197877d35c3c9edbf832783b5c60673c1c905bf4c4/data
+    linux/amd64:
+      name: oras://community.wave.seqera.io/library/digest:ba706b2a64048814
+      build_id: bd-ba706b2a64048814_1
+      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/d1/d1934dcbe8ceb3238dd78695d37fe3a7eefe5137900035c88d0aaea55fcab696/data
   conda:
     linux/amd64:
-      lock_file: modules/local/digest/setup/.conda-lock/linux_amd64-bd-fb492089d1f42e56_1.txt
+      lock_file: modules/local/digest/setup/.conda-lock/linux_amd64-bd-98f5b31fccdef4bf_1.txt
     linux/arm64:
-      lock_file: modules/local/digest/setup/.conda-lock/linux_arm64-bd-a9bb61f57484f096_1.txt
+      lock_file: modules/local/digest/setup/.conda-lock/linux_arm64-bd-38673546e8bd9941_1.txt

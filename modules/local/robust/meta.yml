@@ -92,14 +92,14 @@ maintainers:
 containers:
   docker:
     linux/amd64:
-      name: community.wave.seqera.io/library/robust:6a0d16d512611aaa
-      build_id: bd-6a0d16d512611aaa_1
-      scan_id: sc-9e9aa13bd1e0f0f4_1
+      name: community.wave.seqera.io/library/robust:b45458ff322adfd5
+      build_id: bd-b45458ff322adfd5_1
+      scan_id: sc-1883f92eb6518190_1
   singularity:
     linux/amd64:
-      name: oras://community.wave.seqera.io/library/robust:cfe2bffa02181540
-      build_id: bd-cfe2bffa02181540_1
-      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/cb/cba1bc45713a153a51cb10a8d34edc68e506a4d47d108db0726aa560ba9c41e1/data
+      name: oras://community.wave.seqera.io/library/robust:855f6cfd2e3c116d
+      build_id: bd-855f6cfd2e3c116d_1
+      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/1c/1cd575a6e0e48532dba2da91f5f1d435f15c74f82cd3d21088d86210448960a9/data
   conda:
     linux/amd64:
-      lock_file: modules/local/robust/.conda-lock/linux_amd64-bd-6a0d16d512611aaa_1.txt
+      lock_file: modules/local/robust/.conda-lock/linux_amd64-bd-b45458ff322adfd5_1.txt

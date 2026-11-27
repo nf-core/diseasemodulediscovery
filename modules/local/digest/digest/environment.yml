@@ -4,4 +4,5 @@ channels:
   - bioconda
   - nodefaults
 dependencies:
+  - conda-forge::python=3.10.22
   - bioconda::biodigest=0.2.16

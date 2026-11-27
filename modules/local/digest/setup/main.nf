@@ -3,8 +3,8 @@ process DIGEST_SETUP {
 
     conda "${moduleDir}/environment.yml"
     container "${workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
-        ? 'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/9c/9ca49f3db139438fe5f91446e5dad4024602b0b92c9a25bf7f70d35639a7bc9a/data'
-        : 'community.wave.seqera.io/library/digest:fb492089d1f42e56'}" // automatically generated
+        ? 'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/d1/d1934dcbe8ceb3238dd78695d37fe3a7eefe5137900035c88d0aaea55fcab696/data'
+        : 'community.wave.seqera.io/library/digest:98f5b31fccdef4bf'}" // automatically generated
 
 
     output:

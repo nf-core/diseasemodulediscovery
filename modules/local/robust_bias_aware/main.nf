@@ -2,9 +2,9 @@ process ROBUSTBIASAWARE {
     tag "$meta.id"
     label 'process_low'
     conda "${moduleDir}/environment.yml"
-    container "${ workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
-?         'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/4b/4b151131c90d219fcc7c7a0c2b83149cff2cdaefa61a99882d32cc0b2439d671/data'
-:         'community.wave.seqera.io/library/robust_bias_aware:cc068c0e1d52ce0e' }" // automatically generated
+    container "${workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
+        ? 'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/67/67199b2eb61066ca8819cdeac0ae810a96f46d8d77e0697d38371004493d4625/data'
+        : 'community.wave.seqera.io/library/robust_bias_aware:839067d9844ef042'}" // automatically generated
 
     input:
     tuple val(meta), path(seeds), path (network)

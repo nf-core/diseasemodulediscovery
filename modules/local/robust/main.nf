@@ -3,9 +3,9 @@ process ROBUST {
     tag "$meta.id"
     label 'process_low'
     conda "${moduleDir}/environment.yml"
-    container "${ workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
-?         'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/cb/cba1bc45713a153a51cb10a8d34edc68e506a4d47d108db0726aa560ba9c41e1/data'
-:         'community.wave.seqera.io/library/robust:6a0d16d512611aaa' }" // automatically generated
+    container "${workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
+        ? 'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/1c/1cd575a6e0e48532dba2da91f5f1d435f15c74f82cd3d21088d86210448960a9/data'
+        : 'community.wave.seqera.io/library/robust:b45458ff322adfd5'}" // automatically generated
 
     input:
     tuple val(meta), path(seeds), path (network)

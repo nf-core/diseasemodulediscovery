@@ -3,9 +3,9 @@ process DOMINO_SLICER {             // Process name, should be all upper case. O
     tag "$meta.id"
     label 'process_low'          // Used to allocate resources; see conf/base.config for label definitions
     conda "${moduleDir}/environment.yml"
-    container "${ workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
-?         'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/d1/d1e127804ca623639fc35b159206b564f3cc3e579ac1cad595c8a84d40609be5/data'
-:         'community.wave.seqera.io/library/domino:d7848ba6939a9ab0' }" // The preferred way to two define a container, if a biocontainer is available
+    container "${workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
+        ? 'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/d1/d1e127804ca623639fc35b159206b564f3cc3e579ac1cad595c8a84d40609be5/data'
+        : 'community.wave.seqera.io/library/domino:17d2700a9e137c73'}" // The preferred way to two define a container, if a biocontainer is available
 
     input:
     tuple val(meta), path (network)                       // The input network

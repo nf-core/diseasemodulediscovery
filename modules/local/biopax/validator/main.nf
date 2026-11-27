@@ -3,8 +3,8 @@ process BIOPAX_VALIDATOR {
 
     conda "${moduleDir}/environment.yml"
     container "${workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
-        ? 'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/da/daf717f9ae2604fcfee3b28c493ee67554b40ebd05e13837ca4fe607f9044703/data'
-        : 'community.wave.seqera.io/library/biopax-validator:ec92f1efa2d11d2e'}" // automatically generated
+        ? 'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/fa/fa13adba157e9c32f42d6a00b70c1a59b0fc5d9309500982317852307793321e/data'
+        : 'community.wave.seqera.io/library/biopax-validator:1e0869ec1612389b'}" // automatically generated
 
     input:
     path biopax_files

@@ -4,5 +4,5 @@ channels:
   - bioconda
   - nodefaults
 dependencies:
-  - conda-forge::python=3.12
+  - conda-forge::python=3.12.16
   - bioconda::robust-pcst=1.0.0

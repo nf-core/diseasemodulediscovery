@@ -5,7 +5,7 @@
                 "DIAMOND": {
                     "networkx": "3.3",
                     "numpy": "2.1.3",
-                    "python": "3.12.13",
+                    "python": "3.12.16",
                     "scipy": "1.14.1"
                 },
                 "DOMINO_DOMINO": {
@@ -26,54 +26,54 @@
                 },
                 "FIRSTNEIGHBOR": {
                     "graph-tool": "2.77",
-                    "python": "3.12.13"
+                    "python": "3.12.16"
                 },
                 "GRAPHTOOLPARSER": {
                     "graph-tool": "2.77",
-                    "python": "3.12.13",
+                    "python": "3.12.16",
                     "pyyaml": "6.0.2"
                 },
                 "INPUTCHECK": {
                     "graph-tool": "2.77",
-                    "python": "3.12.13"
+                    "python": "3.12.16"
                 },
                 "MODULEPARSER": {
                     "graph-tool": "2.77",
                     "numpy": "2.1.3",
-                    "python": "3.12.13"
+                    "python": "3.12.16"
                 },
                 "MULTIQCFORMATTER": {
-                    "python": "3.12.13",
+                    "python": "3.12.16",
                     "pyyaml": "6.0.2"
                 },
                 "NETWORKANNOTATION": {
                     "graph-tool": "2.77",
                     "numpy": "2.1.3",
-                    "python": "3.12.13"
+                    "python": "3.12.16"
                 },
                 "ROBUST": {
-                    "python": "3.12.15",
+                    "python": "3.12.16",
                     "robust-pcst": "1.0.0"
                 },
                 "ROBUSTBIASAWARE": {
-                    "python": "3.12.14",
+                    "python": "3.12.16",
                     "robust-bias-aware": "0.0.1"
                 },
                 "RWR": {
                     "networkx": "3.3",
                     "numpy": "2.1.3",
-                    "python": "3.12.13",
+                    "python": "3.12.16",
                     "scipy": "1.14.1"
                 },
                 "SAVEMODULES": {
                     "graph-tool": "2.77",
                     "pandas": "2.2.3",
-                    "python": "3.12.13"
+                    "python": "3.12.16"
                 },
                 "TOPOLOGY": {
                     "graph-tool": "2.77",
                     "numpy": "2.1.3",
-                    "python": "3.12.13"
+                    "python": "3.12.16"
                 },
                 "Workflow": {
                     "nf-core/diseasemodulediscovery": "v1.0.0"
@@ -326,7 +326,7 @@
                 "warn_empty_modules_mqc.tsv:md5,29e74711f7ca35f312d791a64cb94515"
             ]
         ],
-        "timestamp": "2026-11-25T18:22:54.66106719",
+        "timestamp": "2026-11-27T09:30:03.759216339",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "26.10.6"

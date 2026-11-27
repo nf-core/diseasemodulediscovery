@@ -5,7 +5,7 @@
                 "BIOPAX_PARSER": {
                     "graph-tool": "2.77",
                     "pybiopax": "0.1.4",
-                    "python": "3.12.13",
+                    "python": "3.12.16",
                     "requests": "2.34.2"
                 },
                 "BIOPAX_VALIDATOR": {
@@ -14,31 +14,31 @@
                 },
                 "GRAPHTOOLPARSER": {
                     "graph-tool": "2.77",
-                    "python": "3.12.13",
+                    "python": "3.12.16",
                     "pyyaml": "6.0.2"
                 },
                 "INPUTCHECK": {
                     "graph-tool": "2.77",
-                    "python": "3.12.13"
+                    "python": "3.12.16"
                 },
                 "MULTIQCFORMATTER": {
-                    "python": "3.12.13",
+                    "python": "3.12.16",
                     "pyyaml": "6.0.2"
                 },
                 "NETWORKANNOTATION": {
                     "graph-tool": "2.77",
                     "numpy": "2.1.3",
-                    "python": "3.12.13"
+                    "python": "3.12.16"
                 },
                 "SAVEMODULES": {
                     "graph-tool": "2.77",
                     "pandas": "2.2.3",
-                    "python": "3.12.13"
+                    "python": "3.12.16"
                 },
                 "TOPOLOGY": {
                     "graph-tool": "2.77",
                     "numpy": "2.1.3",
-                    "python": "3.12.13"
+                    "python": "3.12.16"
                 },
                 "Workflow": {
                     "nf-core/diseasemodulediscovery": "v1.0.0"
@@ -119,7 +119,7 @@
                 "node_degree_distribution_mqc.yaml:md5,d6a05ace0a3f6dc518c1106334462049"
             ]
         ],
-        "timestamp": "2026-11-25T18:25:02.599158697",
+        "timestamp": "2026-11-27T09:33:57.82980245",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "26.10.6"
