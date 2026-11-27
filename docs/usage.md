@@ -126,7 +126,7 @@ You can also use the `--seeds` and `--network` parameters to define multiple fil
 
 ```bash
 nextflow run nf-core/diseasemodulediscovery \
-   -profile <docker/singularity> \
+   -profile <docker/singularity/conda> \
    --seeds <SEED_FILE_1,SEED_FILE_2,...> \
    --network <NETWORK_FILE_1,NETWORK_FILE_2,...> \
    --outdir <OUTDIR>
@@ -149,7 +149,7 @@ You can run the pipeline with a samplesheet using the `--input` parameter instea
 
 ```bash
 nextflow run nf-core/diseasemodulediscovery \
-   -profile <docker/singularity> \
+   -profile <docker/singularity/conda> \
    --input samplesheet.csv \
    --outdir <OUTDIR>
 ```
@@ -160,7 +160,7 @@ Most pipeline steps can be skipped using `--skip_<PIPELINE_STEP>`. E.g., if you 
 
 ```bash
 nextflow run nf-core/diseasemodulediscovery \
-   -profile <docker/singularity> \
+   -profile <docker/singularity/conda> \
    --input samplesheet.csv \
    --outdir <OUTDIR> \
    --skip_evaluation
@@ -170,7 +170,7 @@ You can then later continue the pipeline (including evaluation) using the `-resu
 
 ```bash
 nextflow run nf-core/diseasemodulediscovery \
-   -profile <docker/singularity> \
+   -profile <docker/singularity/conda> \
    --input samplesheet.csv \
    --outdir <OUTDIR> \
    -resume
@@ -190,7 +190,7 @@ The pipeline saves the rewired networks (please refer to the [output documentati
 
 ```bash
 nextflow run nf-core/diseasemodulediscovery \
-   -profile <docker/singularity> \
+   -profile <docker/singularity/conda> \
    --seeds <SEED_FILE> \
    --network <NETWORK_FILE_1,NETWORK_FILE_2,...> \
    --perturbed_networks <PATH_TO_PERTURBED_NETWORK_FOLDER_1,PATH_TO_PERTURBED_NETWORK_FOLDER_1,...> \
@@ -212,7 +212,7 @@ DIGEST relies on precomputed mapping files (~720 MB), which the pipeline downloa
 
 ```bash
 nextflow run nf-core/diseasemodulediscovery \
-   -profile <docker/singularity> \
+   -profile <docker/singularity/conda> \
    --input samplesheet.csv \
    --outdir <OUTDIR> \
    --digest_mapping_files <OLD_OUTDIR>/reference/digest/mapping_files
@@ -228,7 +228,7 @@ The resulting BioPAX files are validated with the [BioPAX Validator](https://git
 
 ```bash
 nextflow run nf-core/diseasemodulediscovery \
-   -profile <docker/singularity> \
+   -profile <docker/singularity/conda> \
    --seeds <SEED_FILE> \
    --network <NETWORK_FILE> \
    --run_annotation \
@@ -245,7 +245,7 @@ The pipeline is currently designed for human data, and all [inbuilt networks](#a
 
 ```bash
 nextflow run nf-core/diseasemodulediscovery \
-   -profile <docker/singularity> \
+   -profile <docker/singularity/conda> \
    --seeds <CUSTOM_ID_SPACE_SEED_FILE> \
    --network <CUSTOM_ID_SPACE_NETWORK_FILE> \
    --skip_robust_bias_aware \

@@ -12,8 +12,7 @@
 
 [![Nextflow](https://img.shields.io/badge/version-%E2%89%A526.04.0-green?style=flat&logo=nextflow&logoColor=white&color=%230DC09D&link=https%3A%2F%2Fnextflow.io)](https://www.nextflow.io/)
 [![nf-core template version](https://img.shields.io/badge/nf--core_template-4.2.2-green?style=flat&logo=nfcore&logoColor=white&color=%2324B064&link=https%3A%2F%2Fnf-co.re)](https://github.com/nf-core/tools/releases/tag/4.2.2)
-<!--[![run with conda](http://img.shields.io/badge/run%20with-conda-3EB049?labelColor=000000&logo=anaconda)](https://docs.conda.io/en/latest/)-->
-
+[![run with conda](http://img.shields.io/badge/run%20with-conda-3EB049?labelColor=000000&logo=anaconda)](https://docs.conda.io/en/latest/)
 [![run with docker](https://img.shields.io/badge/run%20with-docker-0db7ed?labelColor=000000&logo=docker)](https://www.docker.com/)
 [![run with singularity](https://img.shields.io/badge/run%20with-singularity-1d355c.svg?labelColor=000000)](https://sylabs.io/docs/)
 [![Launch on Seqera Platform](https://img.shields.io/badge/Launch%20%F0%9F%9A%80-Seqera%20Platform-%234256e7)](https://cloud.seqera.io/launch?pipeline=https://github.com/nf-core/diseasemodulediscovery)
@@ -55,11 +54,11 @@
 
 ```bash
 nextflow run nf-core/diseasemodulediscovery \
-   -profile <docker/singularity>,test \
+   -profile <docker/singularity/conda>,test \
    --outdir <OUTDIR>
 ```
 
-This will run the pipeline with a small test dataset. Results will be saved to the specified `<OUTDIR>`. Use `-profile` to set whether docker or singularity should be used for software deployment.
+This will run the pipeline with a small test dataset. Results will be saved to the specified `<OUTDIR>`. Use `-profile` to set whether docker, singularity or conda should be used for software deployment.
 
 ### Running the pipeline
 
@@ -67,13 +66,13 @@ Now, you can run the pipeline with your own data using:
 
 ```bash
 nextflow run nf-core/diseasemodulediscovery \
-   -profile <docker/singularity> \
+   -profile <docker/singularity/conda> \
    --seeds <SEED_FILE> \
    --network <NETWORK_FILE> \
    --outdir <OUTDIR>
 ```
 
-This will run the pipeline based on the provided `<SEED_FILE>` and `<NETWORK_FILE>`. Results will be saved to the specified `<OUTDIR>`. Use `-profile` to set whether docker or singularity should be used for software deployment.
+This will run the pipeline based on the provided `<SEED_FILE>` and `<NETWORK_FILE>`. Results will be saved to the specified `<OUTDIR>`. Use `-profile` to set whether docker, singularity or conda should be used for software deployment.
 
 > [!WARNING]
 > Please provide pipeline parameters via the CLI or Nextflow `-params-file` option. Custom config files including those provided by the `-c` Nextflow option can be used to provide any configuration _**except for parameters**_; see [docs](https://nf-co.re/docs/running/run-pipelines#using-parameter-files).
