@@ -9,7 +9,7 @@
                     "python": "3.12.16",
                     "scipy": "1.14.1"
                 },
-                "GPROFILER2_GOST\"": {
+                "GPROFILER2_GOST": {
                     "gprofiler-data": "e114_eg62_p19_9dc92ac8",
                     "r-base": "4.3.3",
                     "r-ggplot2": "3.4.3",
@@ -172,7 +172,7 @@
                 "node_degree_distribution_mqc.yaml:md5,2ddf480cd88385fb69af47d0750b6a70"
             ]
         ],
-        "timestamp": "2026-11-27T11:14:40.76091407",
+        "timestamp": "2026-11-27T12:39:17.536195335",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "26.10.6"

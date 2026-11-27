@@ -19,7 +19,7 @@
                     "python": "3.12.16",
                     "requests": "2.34.2"
                 },
-                "GPROFILER2_GOST\"": {
+                "GPROFILER2_GOST": {
                     "gprofiler-data": "e114_eg62_p19_9dc92ac8",
                     "r-base": "4.3.3",
                     "r-ggplot2": "3.4.3",
@@ -253,7 +253,7 @@
                 "node_degree_distribution_mqc.yaml:md5,d6a05ace0a3f6dc518c1106334462049"
             ]
         ],
-        "timestamp": "2026-11-27T11:06:07.529285355",
+        "timestamp": "2026-11-27T12:36:19.222314119",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "26.10.6"
