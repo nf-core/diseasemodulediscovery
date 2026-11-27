@@ -203,7 +203,8 @@ workflow PIPELINE_INITIALISATION {
         }
 
     ch_perturbed_networks = ch_network.map{meta, _network, perturbed_networks ->
-        [meta, perturbed_networks.size() > 0 ? file(perturbed_networks+"/*.gt") : []]
+        // sorted, because the order of the files listed from a directory depends on the file system
+        [meta, perturbed_networks.size() > 0 ? files("${perturbed_networks}/*.gt").sort() : []]
     }
 
     ch_network = ch_network.map{meta, network, _perturbed_networks -> [meta, network]}
