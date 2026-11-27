@@ -28,7 +28,7 @@
 
 - Module inference (all enabled by default):
   - [`DOMINO`](https://github.com/Shamir-Lab/DOMINO)
-  - [`DIAMOnD`](https://github.com/dinaghiassian/DIAMOnD)
+  - [`DIAMOnD`](https://github.com/REPO4EU/DIAMOnD)
   - [`ROBUST`](https://github.com/bionetslab/robust)
   - [`ROBUST (bias-aware)`](https://github.com/bionetslab/robust_bias_aware)
   - `1st Neighbors`

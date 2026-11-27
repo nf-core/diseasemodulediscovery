@@ -10,8 +10,8 @@ keywords:
 tools:
   - diamond:
       description: DIAMOnD (DIseAse MOdule Detection) iteratively grows a module around a set of seed nodes. In each step it adds the node with the highest connectivity significance to the current seed set, determined by a hypergeometric test, until the requested number of nodes has been added.
-      homepage: https://github.com/dinaghiassian/DIAMOnD
-      documentation: https://github.com/dinaghiassian/DIAMOnD
+      homepage: https://github.com/REPO4EU/DIAMOnD
+      documentation: https://github.com/REPO4EU/DIAMOnD
       licence:
         - MIT
   - networkx:
@@ -53,6 +53,16 @@ output:
           type: string
           description: The tool name
       - python --version | sed 's/Python //g':
+          type: eval
+          description: The expression to obtain the version of the tool
+  versions_diamondmodule:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - diamond-module:
+          type: string
+          description: The tool name
+      - python -c "from importlib.metadata import version; print(version('diamond-module'))":
           type: eval
           description: The expression to obtain the version of the tool
   versions_networkx:
@@ -99,6 +109,15 @@ topics:
     - - ${task.process}:
           type: string
           description: The process the versions were collected from
+      - diamond-module:
+          type: string
+          description: The tool name
+      - python -c "from importlib.metadata import version; print(version('diamond-module'))":
+          type: eval
+          description: The expression to obtain the version of the tool
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
       - networkx:
           type: string
           description: The tool name
@@ -130,24 +149,24 @@ maintainers:
 containers:
   docker:
     linux/amd64:
-      name: community.wave.seqera.io/library/modulediscovery_python_dependencies:0ba80986ead7e04c
-      build_id: bd-0ba80986ead7e04c_1
-      scan_id: sc-9d11c6807a85459d_1
+      name: community.wave.seqera.io/library/diamond:81d91024db715757
+      build_id: bd-81d91024db715757_1
+      scan_id: sc-7867c1cd296802a9_1
     linux/arm64:
-      name: community.wave.seqera.io/library/modulediscovery_python_dependencies:e3f1e6cd63a4d51c
-      build_id: bd-e3f1e6cd63a4d51c_1
-      scan_id: sc-356cbaaf8190fe85_1
+      name: community.wave.seqera.io/library/diamond:889dbd1ec1d52724
+      build_id: bd-889dbd1ec1d52724_2
+      scan_id: sc-4e16cdb7099c9b3c_1
   singularity:
     linux/amd64:
-      name: oras://community.wave.seqera.io/library/modulediscovery_python_dependencies:9eeae17edb9a5109
-      build_id: bd-9eeae17edb9a5109_1
-      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/49/49f3bf62ff66b8c76807029ac4b555fb3d111326d258ac40b66d906136a9ca7c/data
+      name: oras://community.wave.seqera.io/library/diamond:05c207e173fc20e6
+      build_id: bd-05c207e173fc20e6_2
+      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/d0/d0e689bb184b23e25ba6ffc8b15c275ae1dcd63780b6e63b64c722db74d77262/data
     linux/arm64:
-      name: oras://community.wave.seqera.io/library/modulediscovery_python_dependencies:0e69c2b8d4800864
-      build_id: bd-0e69c2b8d4800864_1
-      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/13/13c9084240a678b33199c4d3e6a943ff3d60da386ed5ac5d595da0153914dce7/data
+      name: oras://community.wave.seqera.io/library/diamond:ce1893fce88e2884
+      build_id: bd-ce1893fce88e2884_2
+      https: https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/c9/c9f033957b0d2d3e55f0131c99ccd2fa9602e7ee4cce3323edbeb87ea3e1c6d6/data
   conda:
     linux/amd64:
-      lock_file: modules/local/diamond/.conda-lock/linux_amd64-bd-0ba80986ead7e04c_1.txt
+      lock_file: modules/local/diamond/.conda-lock/linux_amd64-bd-81d91024db715757_1.txt
     linux/arm64:
-      lock_file: modules/local/diamond/.conda-lock/linux_arm64-bd-e3f1e6cd63a4d51c_1.txt
+      lock_file: modules/local/diamond/.conda-lock/linux_arm64-bd-889dbd1ec1d52724_2.txt
